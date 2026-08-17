@@ -1,0 +1,248 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        @ViewData["Title"] - Rosalie Coffee
+    </title>
+
+
+    <!-- BOOTSTRAP -->
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+
+    <!-- BOOTSTRAP ICONS -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+
+    <!-- FONT AWESOME -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+
+    <!-- DELIVERY CSS -->
+
+    <link rel="stylesheet"
+          href="~/css/delivery-order.css"
+          asp-append-version="true" />
+
+
+    <style>
+
+            body {
+                margin: 0;
+                min-height: 100vh;
+                background: #f8f5f1;
+                color: #4a3026;
+            }
+
+            .delivery-layout {
+                min-height: 100vh;
+            }
+
+            .delivery-topbar {
+                height: 74px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 34px;
+                background: #4d2d27;
+                color: #ffffff;
+                box-shadow: 0 5px 18px rgba(0,0,0,.12);
+            }
+
+            .delivery-brand {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .delivery-brand-logo {
+                width: 46px;
+                height: 46px;
+                border-radius: 50%;
+                object-fit: cover;
+                background: #ffffff;
+            }
+
+            .delivery-brand strong {
+                display: block;
+                font-size: 15px;
+                font-weight: 800;
+            }
+
+            .delivery-brand span {
+                display: block;
+                margin-top: 2px;
+                opacity: .8;
+                font-size: 11px;
+            }
+
+            .delivery-topbar-right {
+                display: flex;
+                align-items: center;
+                gap: 18px;
+            }
+
+            .delivery-topbar-user {
+                display: flex;
+                align-items: center;
+                gap: 9px;
+                font-size: 13px;
+                font-weight: 700;
+            }
+
+            .delivery-topbar-user i {
+                width: 34px;
+                height: 34px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                background: rgba(255,255,255,.14);
+            }
+
+            .delivery-logout {
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                padding: 9px 13px;
+                border-radius: 9px;
+                background: #ffffff;
+                color: #7b3e35;
+                text-decoration: none;
+                font-size: 12px;
+                font-weight: 800;
+            }
+
+            .delivery-logout:hover {
+                background: #f6ebe7;
+                color: #5b2f28;
+            }
+
+            .delivery-main {
+                min-height: calc(100vh - 74px);
+            }
+
+            @@media (max-width: 700px) {
+
+                .delivery-topbar {
+                    height: auto;
+                    padding: 14px 18px;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 12px;
+                }
+
+                .delivery-topbar-right {
+                    width: 100%;
+                    justify-content: space-between;
+                }
+
+            }
+
+    </style>
+
+
+    @RenderSection(
+        "Styles",
+        required: false
+    )
+
+</head>
+
+
+<body>
+
+    <div class="delivery-layout">
+
+        <header class="delivery-topbar">
+
+            <div class="delivery-brand">
+
+                <img src="~/images/logo/logo.png"
+                     alt="Rosalie Coffee"
+                     class="delivery-brand-logo" />
+
+                <div>
+
+                    <strong>
+                        ROSALIE COFFEE
+                    </strong>
+
+                    <span>
+                        Nhân viên giao hàng
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="delivery-topbar-right">
+
+                <div class="delivery-topbar-user">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    <span>
+                        @User.Identity?.Name
+                    </span>
+
+                </div>
+
+
+                <a asp-area=""
+                   asp-controller="Account"
+                   asp-action="Logout"
+                   class="delivery-logout">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    Đăng xuất
+
+                </a>
+
+            </div>
+
+        </header>
+
+
+        <main class="delivery-main">
+
+            @RenderBody()
+
+        </main>
+
+    </div>
+
+
+    <!-- BOOTSTRAP JS -->
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+
+    @RenderSection(
+        "Scripts",
+        required: false
+    )
+
+</body>
+
+</html>

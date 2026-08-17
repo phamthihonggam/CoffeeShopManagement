@@ -1,12 +1,12 @@
 ﻿using CoffeeShopManagement.Data;
-using Microsoft.AspNetCore.Authorization;
+using CoffeeShopManagement.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeShopManagement.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [AdminAuthorize]
     public class OrderController : Controller
     {
         private readonly CoffeeShopDbContext _context;
@@ -21,13 +21,45 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
         // =========================================================
         // DANH SÁCH ĐƠN HÀNG
+        // SEARCH + FILTER + PAGINATION
         // =========================================================
 
         [HttpGet]
         public async Task<IActionResult> Index(
             string? keyword,
-            string? status)
+            string? status,
+            int page = 1,
+            int pageSize = 10)
         {
+            // =====================================================
+            // PAGE
+            // =====================================================
+
+            if (page < 1)
+            {
+                page = 1;
+            }
+
+
+            var allowedPageSizes =
+                new[]
+                {
+                    10,
+                    20,
+                    50
+                };
+
+
+            if (!allowedPageSizes.Contains(pageSize))
+            {
+                pageSize = 10;
+            }
+
+
+            // =====================================================
+            // QUERY
+            // =====================================================
+
             var query =
                 _context.HoaDons
 
@@ -38,6 +70,8 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                     .Include(
                         x => x.MaTaiKhoanGiaoNavigation
                     )
+
+                    .AsNoTracking()
 
                     .AsQueryable();
 
@@ -55,30 +89,40 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                 query =
                     query.Where(
                         x =>
+
                             x.MaHd
                                 .ToString()
                                 .Contains(keyword)
 
                             ||
 
-                            x.MaKhNavigation
-                                .HoTen
-                                .Contains(keyword)
-
-                            ||
-
                             (
-                                x.MaKhNavigation.Email != null
+                                x.MaKhNavigation != null
                                 &&
-                                x.MaKhNavigation.Email.Contains(keyword)
+                                x.MaKhNavigation.HoTen
+                                    .Contains(keyword)
                             )
 
                             ||
 
                             (
+                                x.MaKhNavigation != null
+                                &&
+                                x.MaKhNavigation.Email != null
+                                &&
+                                x.MaKhNavigation.Email
+                                    .Contains(keyword)
+                            )
+
+                            ||
+
+                            (
+                                x.MaKhNavigation != null
+                                &&
                                 x.MaKhNavigation.DienThoai != null
                                 &&
-                                x.MaKhNavigation.DienThoai.Contains(keyword)
+                                x.MaKhNavigation.DienThoai
+                                    .Contains(keyword)
                             )
 
                             ||
@@ -86,7 +130,8 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                             (
                                 x.HoTenNguoiNhan != null
                                 &&
-                                x.HoTenNguoiNhan.Contains(keyword)
+                                x.HoTenNguoiNhan
+                                    .Contains(keyword)
                             )
 
                             ||
@@ -94,7 +139,8 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                             (
                                 x.DienThoaiNguoiNhan != null
                                 &&
-                                x.DienThoaiNguoiNhan.Contains(keyword)
+                                x.DienThoaiNguoiNhan
+                                    .Contains(keyword)
                             )
                     );
             }
@@ -106,6 +152,10 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
             if (!string.IsNullOrWhiteSpace(status))
             {
+                status =
+                    status.Trim();
+
+
                 query =
                     query.Where(
                         x => x.TrangThai == status
@@ -114,7 +164,29 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             // =====================================================
-            // LẤY DANH SÁCH
+            // TOTAL FILTERED ITEMS
+            // =====================================================
+
+            var totalItems =
+                await query.CountAsync();
+
+
+            var totalPages =
+                (int)Math.Ceiling(
+                    totalItems / (double)pageSize
+                );
+
+
+            if (totalPages > 0 &&
+                page > totalPages)
+            {
+                page =
+                    totalPages;
+            }
+
+
+            // =====================================================
+            // PHÂN TRANG
             // =====================================================
 
             var orders =
@@ -128,11 +200,17 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                         x => x.MaHd
                     )
 
+                    .Skip(
+                        (page - 1) * pageSize
+                    )
+
+                    .Take(pageSize)
+
                     .ToListAsync();
 
 
             // =====================================================
-            // GIỮ GIÁ TRỊ SEARCH / FILTER
+            // GIỮ SEARCH / FILTER
             // =====================================================
 
             ViewBag.Keyword =
@@ -140,6 +218,36 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
             ViewBag.Status =
                 status;
+
+
+            // =====================================================
+            // PAGINATION INFO
+            // =====================================================
+
+            ViewBag.CurrentPage =
+                page;
+
+            ViewBag.PageSize =
+                pageSize;
+
+            ViewBag.TotalItems =
+                totalItems;
+
+            ViewBag.TotalPages =
+                totalPages;
+
+
+            ViewBag.StartItem =
+                totalItems == 0
+                    ? 0
+                    : ((page - 1) * pageSize) + 1;
+
+
+            ViewBag.EndItem =
+                Math.Min(
+                    page * pageSize,
+                    totalItems
+                );
 
 
             // =====================================================
@@ -190,7 +298,8 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                         x =>
                             x.TrangThai == "Yêu cầu hủy"
                             ||
-                            x.TrangThai == "Yêu cầu hủy khi đang giao"
+                            x.TrangThai ==
+                            "Yêu cầu hủy khi đang giao"
                     );
 
 
@@ -244,6 +353,8 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                         .ThenInclude(
                             x => x.MaComboNavigation
                         )
+
+                    .AsNoTracking()
 
                     .FirstOrDefaultAsync(
                         x => x.MaHd == id
@@ -301,7 +412,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             // =====================================================
-            // KHÔNG CHO DÙNG UPDATE STATUS ĐỂ XỬ LÝ HỦY
+            // ĐƠN ĐANG YÊU CẦU HỦY
             // =====================================================
 
             if (
@@ -322,6 +433,10 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                 );
             }
 
+
+            // =====================================================
+            // ĐƠN ĐÃ KẾT THÚC
+            // =====================================================
 
             if (
                 currentStatus == "Đã hủy"
@@ -347,7 +462,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             // =====================================================
-            // DANH SÁCH TRẠNG THÁI ADMIN ĐƯỢC PHÉP CHUYỂN
+            // TRẠNG THÁI ADMIN ĐƯỢC PHÉP
             // =====================================================
 
             var validStatuses =
@@ -382,15 +497,15 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             // =====================================================
             // KIỂM TRA LUỒNG TRẠNG THÁI
             //
-            // Checkout hiện có:
-            // Chờ xác nhận (COD)
-            // Đã thanh toán (VNPAY)
-            //
-            // Sau đó:
+            // Chờ xác nhận / Chờ xử lý / Đã thanh toán
+            //        ↓
             // Đã xác nhận
-            // -> Đang xử lý
-            // -> Đang chuẩn bị
-            // -> Chờ giao hàng
+            //        ↓
+            // Đang xử lý
+            //        ↓
+            // Đang chuẩn bị
+            //        ↓
+            // Chờ giao hàng
             // =====================================================
 
             bool transitionAllowed =
@@ -447,8 +562,8 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             // =====================================================
-            // KHI CHUYỂN SANG CHỜ GIAO HÀNG
-            // RESET THÔNG TIN SHIPPER CŨ NẾU CÓ
+            // CHUYỂN SANG CHỜ GIAO
+            // RESET SHIPPER CŨ
             // =====================================================
 
             if (
@@ -528,7 +643,8 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             if (
                 currentStatus != "Yêu cầu hủy"
                 &&
-                currentStatus != "Yêu cầu hủy khi đang giao"
+                currentStatus !=
+                "Yêu cầu hủy khi đang giao"
             )
             {
                 TempData["ErrorMessage"] =
@@ -557,7 +673,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             // =====================================================
-            // ĐƠN ĐÃ THANH TOÁN ONLINE
+            // VNPAY
             // =====================================================
 
             if (paidOnline)
@@ -574,12 +690,13 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                 order.NgayHoanTien =
                     null;
             }
+
+            // =====================================================
+            // COD
+            // =====================================================
+
             else
             {
-                // =================================================
-                // COD
-                // =================================================
-
                 order.TrangThai =
                     "Đã hủy";
 
@@ -599,7 +716,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
             TempData["SuccessMessage"] =
                 paidOnline
+
                     ? $"Đã duyệt hủy đơn #HD{order.MaHd:D5}. Đơn đang chờ hoàn tiền."
+
                     : $"Đã duyệt hủy đơn #HD{order.MaHd:D5}.";
 
 
@@ -648,7 +767,8 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             if (
                 currentStatus != "Yêu cầu hủy"
                 &&
-                currentStatus != "Yêu cầu hủy khi đang giao"
+                currentStatus !=
+                "Yêu cầu hủy khi đang giao"
             )
             {
                 TempData["ErrorMessage"] =
@@ -665,25 +785,22 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             // =====================================================
-            // KHÔI PHỤC TRẠNG THÁI GẦN NHẤT
-            //
-            // Nếu đang giao và khách xin hủy
-            // => quay lại Đang giao hàng.
-            //
-            // Nếu yêu cầu hủy trước giao
-            // => quay lại Đang xử lý.
-            //
-            // Với đơn VNPAY vừa thanh toán xong mà yêu cầu hủy
-            // => quay lại Đã thanh toán.
+            // YÊU CẦU HỦY KHI ĐANG GIAO
             // =====================================================
 
             if (
-                currentStatus == "Yêu cầu hủy khi đang giao"
+                currentStatus ==
+                "Yêu cầu hủy khi đang giao"
             )
             {
                 order.TrangThai =
                     "Đang giao hàng";
             }
+
+            // =====================================================
+            // VNPAY ĐÃ THANH TOÁN
+            // =====================================================
+
             else if (
                 string.Equals(
                     order.PhuongThucThanhToan,
@@ -697,6 +814,11 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                 order.TrangThai =
                     "Đã thanh toán";
             }
+
+            // =====================================================
+            // TRƯỜNG HỢP KHÁC
+            // =====================================================
+
             else
             {
                 order.TrangThai =
@@ -708,9 +830,13 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                 DateTime.Now;
 
 
-            // Yêu cầu bị từ chối thì không còn trạng thái hoàn tiền
+            // =====================================================
+            // XÓA THÔNG TIN HOÀN TIỀN CŨ
+            // =====================================================
+
             if (
-                order.TrangThaiHoanTien == "Chờ hoàn tiền"
+                order.TrangThaiHoanTien ==
+                "Chờ hoàn tiền"
             )
             {
                 order.TrangThaiHoanTien =
@@ -769,9 +895,11 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             if (
-                order.TrangThai != "Đã hủy - Chờ hoàn tiền"
+                order.TrangThai !=
+                "Đã hủy - Chờ hoàn tiền"
                 ||
-                order.TrangThaiHoanTien != "Chờ hoàn tiền"
+                order.TrangThaiHoanTien !=
+                "Chờ hoàn tiền"
             )
             {
                 TempData["ErrorMessage"] =

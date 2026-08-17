@@ -1,4 +1,5 @@
 ﻿using CoffeeShopManagement.Data;
+using CoffeeShopManagement.Helpers;
 using CoffeeShopManagement.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,34 +7,65 @@ using Microsoft.EntityFrameworkCore;
 namespace CoffeeShopManagement.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AdminAuthorize]
     public class CategoryController : Controller
     {
         private readonly CoffeeShopDbContext _context;
 
-        public CategoryController(CoffeeShopDbContext context)
+        public CategoryController(
+            CoffeeShopDbContext context)
         {
             _context = context;
         }
 
 
-        // =========================================
+        // =====================================================
         // DANH SÁCH DANH MỤC
-        // =========================================
+        // =====================================================
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var categories = await _context.LoaiSanPhams
-                .Include(x => x.SanPhams)
-                .OrderBy(x => x.MaLoai)
-                .ToListAsync();
+            var categories =
+                await _context.LoaiSanPhams
+                    .Include(x => x.SanPhams)
+                    .AsNoTracking()
+                    .OrderBy(x => x.MaLoai)
+                    .ToListAsync();
 
             return View(categories);
         }
 
 
-        // =========================================
+        // =====================================================
+        // XEM CHI TIẾT DANH MỤC
+        // =====================================================
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var category =
+                await _context.LoaiSanPhams
+                    .Include(x => x.SanPhams)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(
+                        x => x.MaLoai == id
+                    );
+
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+
+            return View(category);
+        }
+
+
+        // =====================================================
         // THÊM DANH MỤC - GET
-        // =========================================
+        // =====================================================
 
         [HttpGet]
         public IActionResult Create()
@@ -42,16 +74,18 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
         }
 
 
-        // =========================================
+        // =====================================================
         // THÊM DANH MỤC - POST
-        // =========================================
+        // =====================================================
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
             LoaiSanPham category)
         {
-            if (string.IsNullOrWhiteSpace(category.TenLoai))
+            if (string.IsNullOrWhiteSpace(
+                    category.TenLoai
+                ))
             {
                 ModelState.AddModelError(
                     "TenLoai",
@@ -60,20 +94,29 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             }
 
 
-            // Không cho trùng tên
-            var exists = await _context.LoaiSanPhams
-                .AnyAsync(x =>
-                    x.TenLoai.ToLower() ==
-                    category.TenLoai.Trim().ToLower()
-                );
+            var normalizedName =
+                category.TenLoai?.Trim();
 
 
-            if (exists)
+            if (!string.IsNullOrWhiteSpace(
+                    normalizedName
+                ))
             {
-                ModelState.AddModelError(
-                    "TenLoai",
-                    "Danh mục này đã tồn tại."
-                );
+                var exists =
+                    await _context.LoaiSanPhams
+                        .AnyAsync(x =>
+                            x.TenLoai.ToLower() ==
+                            normalizedName.ToLower()
+                        );
+
+
+                if (exists)
+                {
+                    ModelState.AddModelError(
+                        "TenLoai",
+                        "Danh mục này đã tồn tại."
+                    );
+                }
             }
 
 
@@ -84,10 +127,13 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             category.TenLoai =
-                category.TenLoai.Trim();
+                normalizedName!;
 
 
-            _context.LoaiSanPhams.Add(category);
+            _context.LoaiSanPhams.Add(
+                category
+            );
+
 
             await _context.SaveChangesAsync();
 
@@ -102,9 +148,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
         }
 
 
-        // =========================================
+        // =====================================================
         // SỬA DANH MỤC - GET
-        // =========================================
+        // =====================================================
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
@@ -124,9 +170,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
         }
 
 
-        // =========================================
+        // =====================================================
         // SỬA DANH MỤC - POST
-        // =========================================
+        // =====================================================
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -140,7 +186,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             }
 
 
-            if (string.IsNullOrWhiteSpace(category.TenLoai))
+            if (string.IsNullOrWhiteSpace(
+                    category.TenLoai
+                ))
             {
                 ModelState.AddModelError(
                     "TenLoai",
@@ -149,20 +197,30 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             }
 
 
-            var exists = await _context.LoaiSanPhams
-                .AnyAsync(x =>
-                    x.MaLoai != id &&
-                    x.TenLoai.ToLower() ==
-                    category.TenLoai.Trim().ToLower()
-                );
+            var normalizedName =
+                category.TenLoai?.Trim();
 
 
-            if (exists)
+            if (!string.IsNullOrWhiteSpace(
+                    normalizedName
+                ))
             {
-                ModelState.AddModelError(
-                    "TenLoai",
-                    "Tên danh mục này đã tồn tại."
-                );
+                var exists =
+                    await _context.LoaiSanPhams
+                        .AnyAsync(x =>
+                            x.MaLoai != id &&
+                            x.TenLoai.ToLower() ==
+                            normalizedName.ToLower()
+                        );
+
+
+                if (exists)
+                {
+                    ModelState.AddModelError(
+                        "TenLoai",
+                        "Tên danh mục này đã tồn tại."
+                    );
+                }
             }
 
 
@@ -184,7 +242,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             existingCategory.TenLoai =
-                category.TenLoai.Trim();
+                normalizedName!;
 
 
             await _context.SaveChangesAsync();
@@ -200,9 +258,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
         }
 
 
-        // =========================================
+        // =====================================================
         // XÓA DANH MỤC
-        // =========================================
+        // =====================================================
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -218,15 +276,24 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
             if (category == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] =
+                    "Không tìm thấy danh mục.";
+
+                return RedirectToAction(
+                    nameof(Index)
+                );
             }
 
 
-            // Không cho xóa nếu còn sản phẩm
+            // =================================================
+            // KHÔNG CHO XÓA NẾU CÒN SẢN PHẨM
+            // =================================================
+
             if (category.SanPhams.Any())
             {
                 TempData["ErrorMessage"] =
                     $"Không thể xóa danh mục \"{category.TenLoai}\" vì vẫn còn {category.SanPhams.Count} sản phẩm.";
+
 
                 return RedirectToAction(
                     nameof(Index)
@@ -240,11 +307,12 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                     category
                 );
 
+
                 await _context.SaveChangesAsync();
 
 
                 TempData["SuccessMessage"] =
-                    "Xóa danh mục thành công!";
+                    $"Đã xóa danh mục \"{category.TenLoai}\" thành công!";
             }
             catch (DbUpdateException)
             {

@@ -2,7 +2,18 @@
 
 @{
     ViewData["Title"] = "Quản lý đơn hàng";
+
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int pageSize = ViewBag.PageSize ?? 10;
+    int totalPages = ViewBag.TotalPages ?? 0;
+    int totalItems = ViewBag.TotalItems ?? 0;
+    int startItem = ViewBag.StartItem ?? 0;
+    int endItem = ViewBag.EndItem ?? 0;
+
+    string? keyword = ViewBag.Keyword?.ToString();
+    string? status = ViewBag.Status?.ToString();
 }
+
 
 @section Styles {
 
@@ -40,9 +51,8 @@
 
 
 <!-- =====================================================
-     TOAST
+     TOAST SUCCESS
 ===================================================== -->
-
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="admin-toast admin-toast-success"
@@ -53,6 +63,7 @@
             <i class="fa-solid fa-check"></i>
 
         </div>
+
 
         <div class="admin-toast-body">
 
@@ -66,6 +77,7 @@
 
         </div>
 
+
         <button type="button"
                 class="admin-toast-close"
                 id="adminToastClose">
@@ -78,6 +90,9 @@
 }
 
 
+<!-- =====================================================
+     TOAST ERROR
+===================================================== -->
 @if (TempData["ErrorMessage"] != null)
 {
     <div class="admin-toast admin-toast-error"
@@ -88,6 +103,7 @@
             <i class="fa-solid fa-triangle-exclamation"></i>
 
         </div>
+
 
         <div class="admin-toast-body">
 
@@ -100,6 +116,7 @@
             </span>
 
         </div>
+
 
         <button type="button"
                 class="admin-toast-close"
@@ -118,6 +135,9 @@
 ===================================================== -->
 
 <div class="admin-order-stats">
+
+
+    <!-- TOTAL -->
 
     <div class="admin-order-stat-card">
 
@@ -138,6 +158,8 @@
     </div>
 
 
+    <!-- PENDING -->
+
     <div class="admin-order-stat-card">
 
         <div class="admin-order-stat-icon">
@@ -156,6 +178,8 @@
 
     </div>
 
+
+    <!-- COMPLETED -->
 
     <div class="admin-order-stat-card">
 
@@ -176,6 +200,8 @@
     </div>
 
 
+    <!-- REVENUE -->
+
     <div class="admin-order-stat-card">
 
         <div class="admin-order-stat-icon">
@@ -194,6 +220,7 @@
 
     </div>
 
+
 </div>
 
 
@@ -209,58 +236,123 @@
           asp-action="Index"
           class="admin-order-filter">
 
+
+        <!-- SEARCH -->
+
         <div class="admin-order-search">
 
             <i class="fa-solid fa-magnifying-glass"></i>
 
             <input type="text"
                    name="keyword"
-                   value="@ViewBag.Keyword"
+                   value="@keyword"
                    placeholder="Tìm mã đơn, khách hàng, email, số điện thoại..."
                    autocomplete="off" />
 
         </div>
 
 
+        <!-- STATUS -->
+
         <select name="status"
                 class="admin-order-status-filter">
 
-            <option value="">
+            <option value=""
+                    selected="@(string.IsNullOrWhiteSpace(status))">
                 Tất cả trạng thái
             </option>
 
+            <option value="Chờ xác nhận"
+                    selected="@(status == "Chờ xác nhận")">
+                Chờ xác nhận
+            </option>
+
+            <option value="Chờ thanh toán"
+                    selected="@(status == "Chờ thanh toán")">
+                Chờ thanh toán
+            </option>
+
             <option value="Chờ xử lý"
-                    selected="@(ViewBag.Status?.ToString() == "Chờ xử lý")">
+                    selected="@(status == "Chờ xử lý")">
                 Chờ xử lý
             </option>
 
+            <option value="Đã thanh toán"
+                    selected="@(status == "Đã thanh toán")">
+                Đã thanh toán
+            </option>
+
             <option value="Đã xác nhận"
-                    selected="@(ViewBag.Status?.ToString() == "Đã xác nhận")">
+                    selected="@(status == "Đã xác nhận")">
                 Đã xác nhận
             </option>
 
+            <option value="Đang xử lý"
+                    selected="@(status == "Đang xử lý")">
+                Đang xử lý
+            </option>
+
             <option value="Đang chuẩn bị"
-                    selected="@(ViewBag.Status?.ToString() == "Đang chuẩn bị")">
+                    selected="@(status == "Đang chuẩn bị")">
                 Đang chuẩn bị
             </option>
 
-            <option value="Đang giao"
-                    selected="@(ViewBag.Status?.ToString() == "Đang giao")">
-                Đang giao
+            <option value="Chờ giao hàng"
+                    selected="@(status == "Chờ giao hàng")">
+                Chờ giao hàng
+            </option>
+
+            <option value="Đang giao hàng"
+                    selected="@(status == "Đang giao hàng")">
+                Đang giao hàng
             </option>
 
             <option value="Hoàn thành"
-                    selected="@(ViewBag.Status?.ToString() == "Hoàn thành")">
+                    selected="@(status == "Hoàn thành")">
                 Hoàn thành
             </option>
 
+            <option value="Yêu cầu hủy"
+                    selected="@(status == "Yêu cầu hủy")">
+                Yêu cầu hủy
+            </option>
+
+            <option value="Yêu cầu hủy khi đang giao"
+                    selected="@(status == "Yêu cầu hủy khi đang giao")">
+                Yêu cầu hủy khi đang giao
+            </option>
+
             <option value="Đã hủy"
-                    selected="@(ViewBag.Status?.ToString() == "Đã hủy")">
+                    selected="@(status == "Đã hủy")">
                 Đã hủy
+            </option>
+
+            <option value="Đã hủy - Chờ hoàn tiền"
+                    selected="@(status == "Đã hủy - Chờ hoàn tiền")">
+                Đã hủy - Chờ hoàn tiền
+            </option>
+
+            <option value="Đã hủy - Đã hoàn tiền"
+                    selected="@(status == "Đã hủy - Đã hoàn tiền")">
+                Đã hủy - Đã hoàn tiền
+            </option>
+
+            <option value="Giao thất bại"
+                    selected="@(status == "Giao thất bại")">
+                Giao thất bại
             </option>
 
         </select>
 
+
+        <!-- KEEP PAGE SIZE -->
+
+        <input type="hidden"
+               name="pageSize"
+               value="@pageSize" />
+
+
+        <!-- FILTER -->
 
         <button type="submit"
                 class="admin-order-search-btn">
@@ -272,10 +364,9 @@
         </button>
 
 
-        @if (!string.IsNullOrWhiteSpace(
-            ViewBag.Keyword?.ToString()) ||
-            !string.IsNullOrWhiteSpace(
-                ViewBag.Status?.ToString()))
+        <!-- RESET -->
+        @if (!string.IsNullOrWhiteSpace(keyword) ||
+                     !string.IsNullOrWhiteSpace(status))
         {
             <a asp-area="Admin"
                asp-controller="Order"
@@ -288,6 +379,7 @@
 
             </a>
         }
+
 
     </form>
 
@@ -343,7 +435,30 @@
                 {
                     @foreach (var item in Model)
                     {
+                        var itemStatusClass = item.TrangThai switch
+                        {
+                            "Chờ xác nhận" => "status-pending",
+                            "Chờ thanh toán" => "status-default",
+                            "Chờ xử lý" => "status-pending",
+                            "Đã thanh toán" => "status-confirmed",
+                            "Đã xác nhận" => "status-confirmed",
+                            "Đang xử lý" => "status-preparing",
+                            "Đang chuẩn bị" => "status-preparing",
+                            "Chờ giao hàng" => "status-shipping",
+                            "Đang giao hàng" => "status-shipping",
+                            "Hoàn thành" => "status-completed",
+                            "Yêu cầu hủy" => "status-cancel-request",
+                            "Yêu cầu hủy khi đang giao" => "status-cancel-request",
+                            "Đã hủy" => "status-cancelled",
+                            "Đã hủy - Chờ hoàn tiền" => "status-cancelled",
+                            "Đã hủy - Đã hoàn tiền" => "status-cancelled",
+                            "Giao thất bại" => "status-cancelled",
+                            _ => "status-default"
+                        };
+
+
                         <tr>
+
 
                             <!-- MÃ ĐƠN -->
 
@@ -372,19 +487,27 @@
                                     <div>
 
                                         <strong>
-                                            @item.MaKhNavigation.HoTen
+                                            @(item.MaKhNavigation?.HoTen
+                                                ?? item.HoTenNguoiNhan
+                                                ?? "Khách hàng")
                                         </strong>
 
-                                        @if (!string.IsNullOrWhiteSpace(
-                                            item.MaKhNavigation.DienThoai))
+
+                                        @if (!string.IsNullOrWhiteSpace(item.MaKhNavigation?.DienThoai))
                                         {
                                             <span>
                                                 @item.MaKhNavigation.DienThoai
                                             </span>
                                         }
+                                        else if (!string.IsNullOrWhiteSpace(item.DienThoaiNguoiNhan))
+                                        {
+                                            <span>
+                                                @item.DienThoaiNguoiNhan
+                                            </span>
+                                        }
 
-                                        @if (!string.IsNullOrWhiteSpace(
-                                            item.MaKhNavigation.Email))
+
+                                        @if (!string.IsNullOrWhiteSpace(item.MaKhNavigation?.Email))
                                         {
                                             <small>
                                                 @item.MaKhNavigation.Email
@@ -407,11 +530,11 @@
                                     <div class="admin-order-date">
 
                                         <strong>
-                                            @item.NgayDat.Value.ToString("dd/MM/yyyy")
+                                            @(item.NgayDat.Value.ToString("dd/MM/yyyy"))
                                         </strong>
 
                                         <span>
-                                            @item.NgayDat.Value.ToString("HH:mm")
+                                            @(item.NgayDat.Value.ToString("HH:mm"))
                                         </span>
 
                                     </div>
@@ -431,9 +554,7 @@
                             <td>
 
                                 <strong class="admin-order-total">
-
                                     @((item.TongTien ?? 0).ToString("#,##0"))đ
-
                                 </strong>
 
                             </td>
@@ -443,24 +564,8 @@
 
                             <td>
 
-                                @{
-                                    var statusClass =
-                                        item.TrangThai switch
-                                        {
-                                            "Chờ xử lý" => "status-pending",
-                                            "Đã xác nhận" => "status-confirmed",
-                                            "Đang chuẩn bị" => "status-preparing",
-                                            "Đang giao" => "status-shipping",
-                                            "Hoàn thành" => "status-completed",
-                                            "Đã hủy" => "status-cancelled",
-                                            _ => "status-default"
-                                        };
-                                }
-
-                                <span class="admin-order-status @statusClass">
-
+                                <span class="admin-order-status @itemStatusClass">
                                     @(item.TrangThai ?? "Chưa xác định")
-
                                 </span>
 
                             </td>
@@ -472,7 +577,8 @@
 
                                 <div class="admin-order-actions">
 
-                                    <!-- DETAILS -->
+
+                                    <!-- VIEW -->
 
                                     <a asp-area="Admin"
                                        asp-controller="Order"
@@ -486,7 +592,7 @@
                                     </a>
 
 
-                                    <!-- STATUS -->
+                                    <!-- UPDATE STATUS -->
 
                                     <button type="button"
                                             class="admin-order-action-btn admin-order-status-btn js-order-status"
@@ -498,9 +604,11 @@
 
                                     </button>
 
+
                                 </div>
 
                             </td>
+
 
                         </tr>
                     }
@@ -541,6 +649,246 @@
 
 
 <!-- =====================================================
+     PAGINATION
+===================================================== -->
+@if (totalItems > 0)
+{
+    <div class="admin-order-pagination-wrap">
+
+
+        <!-- INFO -->
+
+        <div class="admin-order-pagination-info">
+
+            Hiển thị
+
+            <strong>
+                @startItem
+            </strong>
+
+            –
+
+            <strong>
+                @endItem
+            </strong>
+
+            trong
+
+            <strong>
+                @totalItems
+            </strong>
+
+            đơn hàng
+
+        </div>
+
+
+        <!-- PAGE SIZE -->
+
+        <form method="get"
+              asp-area="Admin"
+              asp-controller="Order"
+              asp-action="Index"
+              class="admin-order-page-size">
+
+
+            <input type="hidden"
+                   name="keyword"
+                   value="@keyword" />
+
+
+            <input type="hidden"
+                   name="status"
+                   value="@status" />
+
+
+            <span>
+                Hiển thị
+            </span>
+
+
+            <select name="pageSize"
+                    onchange="this.form.submit()">
+
+                @foreach (var size in new[] { 10, 20, 50 })
+                {
+                    if (pageSize == size)
+                    {
+                        <option value="@size"
+                                selected>
+                            @size
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@size">
+                            @size
+                        </option>
+                    }
+                }
+
+            </select>
+
+
+            <span>
+                dòng / trang
+            </span>
+
+
+        </form>
+
+
+        <!-- PAGE LINKS -->
+        @if (totalPages > 1)
+        {
+            <div class="admin-order-pagination">
+
+
+                <!-- PREVIOUS -->
+                @if (currentPage > 1)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Order"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-status="@status"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="@(currentPage - 1)"
+                       class="admin-order-page-link">
+
+                        <i class="fa-solid fa-chevron-left"></i>
+
+                        Trước
+
+                    </a>
+                }
+                else
+                {
+                    <span class="admin-order-page-link disabled">
+
+                        <i class="fa-solid fa-chevron-left"></i>
+
+                        Trước
+
+                    </span>
+                }
+
+
+                @{
+                    int startPage = Math.Max(1, currentPage - 2);
+                    int endPage = Math.Min(totalPages, currentPage + 2);
+                }
+
+
+                <!-- FIRST -->
+                @if (startPage > 1)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Order"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-status="@status"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="1"
+                       class="admin-order-page-link">
+
+                        1
+
+                    </a>
+
+
+                    @if (startPage > 2)
+                    {
+                        <span class="admin-order-page-dots">
+                            ...
+                        </span>
+                    }
+                }
+
+
+                <!-- RANGE -->
+                @for (int i = startPage; i <= endPage; i++)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Order"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-status="@status"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="@i"
+                       class="admin-order-page-link @(i == currentPage ? "active" : "")">
+
+                        @i
+
+                    </a>
+                }
+
+
+                <!-- LAST -->
+                @if (endPage < totalPages)
+                {
+                    @if (endPage < totalPages - 1)
+                    {
+                        <span class="admin-order-page-dots">
+                            ...
+                        </span>
+                    }
+
+
+                    <a asp-area="Admin"
+                       asp-controller="Order"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-status="@status"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="@totalPages"
+                       class="admin-order-page-link">
+
+                        @totalPages
+
+                    </a>
+                }
+
+
+                <!-- NEXT -->
+                @if (currentPage < totalPages)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Order"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-status="@status"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="@(currentPage + 1)"
+                       class="admin-order-page-link">
+
+                        Sau
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+                }
+                else
+                {
+                    <span class="admin-order-page-link disabled">
+
+                        Sau
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </span>
+                }
+
+
+            </div>
+        }
+
+
+    </div>
+}
+
+
+<!-- =====================================================
      UPDATE STATUS MODAL
 ===================================================== -->
 
@@ -567,8 +915,11 @@
 
 
         <p>
+
             Chọn trạng thái mới cho đơn hàng
+
             <strong id="orderStatusOrderId"></strong>
+
         </p>
 
 
@@ -596,28 +947,20 @@
                 <select name="trangThai"
                         id="orderStatusSelect">
 
-                    <option value="Chờ xử lý">
-                        Chờ xử lý
-                    </option>
-
                     <option value="Đã xác nhận">
                         Đã xác nhận
+                    </option>
+
+                    <option value="Đang xử lý">
+                        Đang xử lý
                     </option>
 
                     <option value="Đang chuẩn bị">
                         Đang chuẩn bị
                     </option>
 
-                    <option value="Đang giao">
-                        Đang giao
-                    </option>
-
-                    <option value="Hoàn thành">
-                        Hoàn thành
-                    </option>
-
-                    <option value="Đã hủy">
-                        Đã hủy
+                    <option value="Chờ giao hàng">
+                        Chờ giao hàng
                     </option>
 
                 </select>
@@ -647,6 +990,7 @@
 
             </div>
 
+
         </form>
 
     </div>
@@ -654,13 +998,10 @@
 </div>
 
 
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
-
 @section Scripts {
 
     <script src="~/js/admin-order.js"
-            asp-append-version="true"></script>
+            asp-append-version="true">
+    </script>
 
 }

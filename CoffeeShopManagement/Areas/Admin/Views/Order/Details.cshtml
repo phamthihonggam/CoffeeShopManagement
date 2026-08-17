@@ -3,37 +3,42 @@
 @{
     ViewData["Title"] = "Chi tiết đơn hàng";
 
-    var currentStatus =
-        Model.TrangThai?.Trim()
-        ?? "";
+    string currentStatus = Model.TrangThai?.Trim() ?? "";
 
-    var statusClass =
-        currentStatus switch
-        {
-            "Chờ xác nhận" => "status-pending",
-            "Chờ xử lý" => "status-pending",
-            "Đã thanh toán" => "status-confirmed",
-            "Đã xác nhận" => "status-confirmed",
-            "Đang xử lý" => "status-preparing",
-            "Đang chuẩn bị" => "status-preparing",
-            "Chờ giao hàng" => "status-shipping",
-            "Đang giao hàng" => "status-shipping",
-            "Hoàn thành" => "status-completed",
-            "Yêu cầu hủy" => "status-cancel-request",
-            "Yêu cầu hủy khi đang giao" => "status-cancel-request",
-            "Đã hủy" => "status-cancelled",
-            "Đã hủy - Chờ hoàn tiền" => "status-cancelled",
-            "Đã hủy - Đã hoàn tiền" => "status-cancelled",
-            "Giao thất bại" => "status-cancelled",
-            _ => "status-default"
-        };
+    string statusClass = currentStatus switch
+    {
+        "Chờ xác nhận" => "status-pending",
+        "Chờ thanh toán" => "status-default",
+        "Chờ xử lý" => "status-pending",
 
-    bool isVnPay =
-        string.Equals(
-            Model.PhuongThucThanhToan,
-            "VNPAY",
-            StringComparison.OrdinalIgnoreCase
-        );
+        "Đã thanh toán" => "status-confirmed",
+        "Đã xác nhận" => "status-confirmed",
+
+        "Đang xử lý" => "status-preparing",
+        "Đang chuẩn bị" => "status-preparing",
+
+        "Chờ giao hàng" => "status-shipping",
+        "Đang giao hàng" => "status-shipping",
+
+        "Hoàn thành" => "status-completed",
+
+        "Yêu cầu hủy" => "status-cancel-request",
+        "Yêu cầu hủy khi đang giao" => "status-cancel-request",
+
+        "Đã hủy" => "status-cancelled",
+        "Đã hủy - Chờ hoàn tiền" => "status-cancelled",
+        "Đã hủy - Đã hoàn tiền" => "status-cancelled",
+
+        "Giao thất bại" => "status-cancelled",
+
+        _ => "status-default"
+    };
+
+    bool isVnPay = string.Equals(
+        Model.PhuongThucThanhToan,
+        "VNPAY",
+        StringComparison.OrdinalIgnoreCase
+    );
 
     bool isCancelRequest =
         currentStatus == "Yêu cầu hủy"
@@ -48,17 +53,30 @@
     string receiverName =
         !string.IsNullOrWhiteSpace(Model.HoTenNguoiNhan)
             ? Model.HoTenNguoiNhan
-            : Model.MaKhNavigation.HoTen;
+            : Model.MaKhNavigation?.HoTen ?? "Chưa cập nhật";
 
     string receiverPhone =
         !string.IsNullOrWhiteSpace(Model.DienThoaiNguoiNhan)
             ? Model.DienThoaiNguoiNhan
-            : Model.MaKhNavigation.DienThoai ?? "Chưa cập nhật";
+            : Model.MaKhNavigation?.DienThoai ?? "Chưa cập nhật";
 
     string receiverAddress =
         !string.IsNullOrWhiteSpace(Model.DiaChiGiaoHang)
             ? Model.DiaChiGiaoHang
-            : Model.MaKhNavigation.DiaChi ?? "Chưa cập nhật";
+            : Model.MaKhNavigation?.DiaChi ?? "Chưa cập nhật";
+
+    string invoiceCode =
+        $"HD{Model.MaHd:D5}";
+
+    string orderDateText =
+        Model.NgayDat.HasValue
+            ? Model.NgayDat.Value.ToString("dd/MM/yyyy HH:mm")
+            : "Không xác định";
+
+    string paymentText =
+        isVnPay
+            ? "VNPAY"
+            : "COD";
 }
 
 
@@ -74,6 +92,7 @@
 <!-- =====================================================
      MESSAGE
 ===================================================== -->
+
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success mb-3">
@@ -109,7 +128,7 @@
         <div>
 
             <h2>
-                Chi tiết đơn hàng #HD@(Model.MaHd.ToString("D5"))
+                Chi tiết đơn hàng #@invoiceCode
             </h2>
 
             <p>
@@ -120,16 +139,42 @@
         </div>
 
 
-        <a asp-area="Admin"
-           asp-controller="Order"
-           asp-action="Index"
-           class="admin-order-reset-btn">
+        <div class="admin-order-header-actions">
 
-            <i class="fa-solid fa-arrow-left"></i>
+            <button type="button"
+                    class="admin-order-header-btn print"
+                    id="btnPrintInvoice">
 
-            Quay lại
+                <i class="fa-solid fa-print"></i>
 
-        </a>
+                In hóa đơn
+
+            </button>
+
+
+            <button type="button"
+                    class="admin-order-header-btn pdf"
+                    id="btnDownloadPdf">
+
+                <i class="fa-solid fa-file-pdf"></i>
+
+                Xuất PDF
+
+            </button>
+
+
+            <a asp-area="Admin"
+               asp-controller="Order"
+               asp-action="Index"
+               class="admin-order-reset-btn">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Quay lại
+
+            </a>
+
+        </div>
 
     </div>
 
@@ -143,9 +188,7 @@
 <div class="admin-order-detail-grid">
 
 
-    <!-- =================================================
-         NGƯỜI NHẬN
-    ================================================== -->
+    <!-- RECEIVER -->
 
     <div class="admin-order-detail-card">
 
@@ -156,7 +199,6 @@
                 <i class="fa-solid fa-user"></i>
 
             </div>
-
 
             <div>
 
@@ -208,10 +250,7 @@
                 </span>
 
                 <strong>
-
-                    @(Model.QuanHuyenGiaoHang
-                        ?? "Chưa cập nhật")
-
+                    @(Model.QuanHuyenGiaoHang ?? "Chưa cập nhật")
                 </strong>
 
             </div>
@@ -234,9 +273,7 @@
     </div>
 
 
-    <!-- =================================================
-         THÔNG TIN ĐƠN
-    ================================================== -->
+    <!-- ORDER -->
 
     <div class="admin-order-detail-card">
 
@@ -273,7 +310,7 @@
                 </span>
 
                 <strong>
-                    #HD@(Model.MaHd.ToString("D5"))
+                    #@invoiceCode
                 </strong>
 
             </div>
@@ -286,15 +323,7 @@
                 </span>
 
                 <strong>
-
-                    @(
-                        Model.NgayDat.HasValue
-                            ? Model.NgayDat.Value.ToString(
-                                "dd/MM/yyyy HH:mm"
-                            )
-                            : "Không xác định"
-                    )
-
+                    @orderDateText
                 </strong>
 
             </div>
@@ -318,17 +347,11 @@
             <div>
 
                 <span>
-                    Phương thức thanh toán
+                    Thanh toán
                 </span>
 
                 <strong>
-
-                    @(
-                        isVnPay
-                            ? "VNPAY"
-                            : "COD"
-                    )
-
+                    @paymentText
                 </strong>
 
             </div>
@@ -341,13 +364,13 @@
 
 
 <!-- =====================================================
-     CUSTOMER ACCOUNT + DELIVERY STAFF
+     CUSTOMER + SHIPPER
 ===================================================== -->
 
 <div class="admin-order-detail-grid">
 
 
-    <!-- KHÁCH HÀNG -->
+    <!-- CUSTOMER -->
 
     <div class="admin-order-detail-card">
 
@@ -380,11 +403,11 @@
             <div>
 
                 <span>
-                    Họ tên tài khoản
+                    Họ tên
                 </span>
 
                 <strong>
-                    @Model.MaKhNavigation.HoTen
+                    @(Model.MaKhNavigation?.HoTen ?? "Chưa cập nhật")
                 </strong>
 
             </div>
@@ -397,10 +420,7 @@
                 </span>
 
                 <strong>
-
-                    @(Model.MaKhNavigation.Email
-                        ?? "Chưa cập nhật")
-
+                    @(Model.MaKhNavigation?.Email ?? "Chưa cập nhật")
                 </strong>
 
             </div>
@@ -413,10 +433,7 @@
                 </span>
 
                 <strong>
-
-                    @(Model.MaKhNavigation.DienThoai
-                        ?? "Chưa cập nhật")
-
+                    @(Model.MaKhNavigation?.DienThoai ?? "Chưa cập nhật")
                 </strong>
 
             </div>
@@ -463,11 +480,8 @@
                 </span>
 
                 <strong>
-
-                    @(Model.MaTaiKhoanGiaoNavigation != null
-                        ? Model.MaTaiKhoanGiaoNavigation.HoTen
-                        : "Chưa có nhân viên nhận đơn")
-
+                    @(Model.MaTaiKhoanGiaoNavigation?.HoTen
+                        ?? "Chưa có nhân viên nhận đơn")
                 </strong>
 
             </div>
@@ -480,12 +494,9 @@
                 </span>
 
                 <strong>
-
                     @(Model.NgayNhanGiao.HasValue
-                        ? Model.NgayNhanGiao.Value
-                            .ToString("dd/MM/yyyy HH:mm")
+                        ? Model.NgayNhanGiao.Value.ToString("dd/MM/yyyy HH:mm")
                         : "Chưa nhận")
-
                 </strong>
 
             </div>
@@ -498,12 +509,9 @@
                 </span>
 
                 <strong>
-
                     @(Model.NgayBatDauGiao.HasValue
-                        ? Model.NgayBatDauGiao.Value
-                            .ToString("dd/MM/yyyy HH:mm")
+                        ? Model.NgayBatDauGiao.Value.ToString("dd/MM/yyyy HH:mm")
                         : "Chưa bắt đầu")
-
                 </strong>
 
             </div>
@@ -516,12 +524,9 @@
                 </span>
 
                 <strong>
-
                     @(Model.NgayGiaoThanhCong.HasValue
-                        ? Model.NgayGiaoThanhCong.Value
-                            .ToString("dd/MM/yyyy HH:mm")
+                        ? Model.NgayGiaoThanhCong.Value.ToString("dd/MM/yyyy HH:mm")
                         : "Chưa hoàn thành")
-
                 </strong>
 
             </div>
@@ -534,8 +539,9 @@
 
 
 <!-- =====================================================
-     CANCEL REQUEST
+     CANCEL / REFUND
 ===================================================== -->
+
 @if (
     !string.IsNullOrWhiteSpace(Model.LyDoHuy)
     ||
@@ -571,6 +577,7 @@
 
 
         <div class="admin-order-info-list">
+
 
             @if (!string.IsNullOrWhiteSpace(Model.LyDoHuy))
             {
@@ -611,12 +618,9 @@
                 </span>
 
                 <strong>
-
                     @(Model.NgayYeuCauHuy.HasValue
-                        ? Model.NgayYeuCauHuy.Value
-                            .ToString("dd/MM/yyyy HH:mm")
+                        ? Model.NgayYeuCauHuy.Value.ToString("dd/MM/yyyy HH:mm")
                         : "Chưa có")
-
                 </strong>
 
             </div>
@@ -629,10 +633,7 @@
                 </span>
 
                 <strong>
-
-                    @(Model.TrangThaiHoanTien
-                        ?? "Không có")
-
+                    @(Model.TrangThaiHoanTien ?? "Không có")
                 </strong>
 
             </div>
@@ -651,10 +652,7 @@
                     </span>
 
                     <strong>
-
-                        @Model.SoTienHoan.Value
-                        .ToString("#,##0")đ
-
+                        @(Model.SoTienHoan.Value.ToString("#,##0"))đ
                     </strong>
 
                 </div>
@@ -670,14 +668,12 @@
                     </span>
 
                     <strong>
-
-                        @Model.NgayHoanTien.Value
-                        .ToString("dd/MM/yyyy HH:mm")
-
+                        @(Model.NgayHoanTien.Value.ToString("dd/MM/yyyy HH:mm"))
                     </strong>
 
                 </div>
             }
+
 
         </div>
 
@@ -694,7 +690,6 @@
                       onsubmit="return confirm('Xác nhận duyệt hủy đơn hàng này?');">
 
                     @Html.AntiForgeryToken()
-
 
                     <input type="hidden"
                            name="id"
@@ -721,7 +716,6 @@
 
                     @Html.AntiForgeryToken()
 
-
                     <input type="hidden"
                            name="id"
                            value="@Model.MaHd" />
@@ -738,6 +732,7 @@
 
                 </form>
 
+
             </div>
         }
 
@@ -753,7 +748,6 @@
                       onsubmit="return confirm('Xác nhận cửa hàng đã hoàn tiền cho khách?');">
 
                     @Html.AntiForgeryToken()
-
 
                     <input type="hidden"
                            name="id"
@@ -774,6 +768,7 @@
             </div>
         }
 
+
     </div>
 }
 
@@ -781,6 +776,7 @@
 <!-- =====================================================
      DELIVERY FAILURE
 ===================================================== -->
+
 @if (!string.IsNullOrWhiteSpace(Model.LyDoGiaoThatBai))
 {
     <div class="admin-order-detail-card admin-order-items-card">
@@ -900,28 +896,22 @@
                     Model.ChiTietHoaDons.Any()
                 )
                 {
-                    @foreach (
-                        var item
-                        in Model.ChiTietHoaDons
-                    )
+                    @foreach (var item in Model.ChiTietHoaDons)
                     {
-                        var productName =
+                        string productName =
                             item.MaSpNavigation?.TenSp
                             ??
                             item.MaComboNavigation?.TenCombo
                             ??
                             "Không xác định";
 
-
-                        var itemType =
+                        string itemType =
                             item.MaCombo.HasValue
                                 ? "Combo"
                                 : "Sản phẩm";
 
-
-                        var lineTotal =
-                            item.DonGia
-                            * item.SoLuong;
+                        decimal lineTotal =
+                            item.DonGia * item.SoLuong;
 
 
                         <tr>
@@ -929,9 +919,7 @@
                             <td>
 
                                 <strong class="admin-order-item-name">
-
                                     @productName
-
                                 </strong>
 
                             </td>
@@ -940,36 +928,26 @@
                             <td>
 
                                 <span class="admin-order-item-type">
-
                                     @itemType
-
                                 </span>
 
                             </td>
 
 
                             <td>
-
-                                @(item.DonGia
-                                    .ToString("#,##0"))đ
-
+                                @(item.DonGia.ToString("#,##0"))đ
                             </td>
 
 
                             <td>
-
                                 @item.SoLuong
-
                             </td>
 
 
                             <td>
 
                                 <strong class="admin-order-total">
-
-                                    @(lineTotal
-                                        .ToString("#,##0"))đ
-
+                                    @(lineTotal.ToString("#,##0"))đ
                                 </strong>
 
                             </td>
@@ -1033,17 +1011,13 @@
             @if (isVnPay)
             {
                 <span class="admin-order-payment-method paid">
-
                     VNPAY
-
                 </span>
             }
             else
             {
                 <span class="admin-order-payment-method cod">
-
                     COD
-
                 </span>
             }
 
@@ -1061,10 +1035,7 @@
             </span>
 
             <strong>
-
-                @((Model.TamTinh ?? 0)
-                    .ToString("#,##0"))đ
-
+                @((Model.TamTinh ?? 0).ToString("#,##0"))đ
             </strong>
 
         </div>
@@ -1077,10 +1048,7 @@
             </span>
 
             <strong class="admin-order-discount">
-
-                -@((Model.GiamGia ?? 0)
-                                    .ToString("#,##0"))đ
-
+                -@((Model.GiamGia ?? 0).ToString("#,##0"))đ
             </strong>
 
         </div>
@@ -1093,10 +1061,7 @@
             </span>
 
             <strong>
-
-                @((Model.PhiGiaoHang ?? 0)
-                    .ToString("#,##0"))đ
-
+                @((Model.PhiGiaoHang ?? 0).ToString("#,##0"))đ
             </strong>
 
         </div>
@@ -1109,10 +1074,7 @@
             </span>
 
             <strong>
-
-                @((Model.TongTien ?? 0)
-                    .ToString("#,##0"))đ
-
+                @((Model.TongTien ?? 0).ToString("#,##0"))đ
             </strong>
 
         </div>
@@ -1123,10 +1085,13 @@
 
 
 <!-- =====================================================
-     ORDER STATUS ACTION
+     UPDATE STATUS
 ===================================================== -->
+
 @if (
     !isCancelRequest
+    &&
+    currentStatus != "Chờ thanh toán"
     &&
     currentStatus != "Hoàn thành"
     &&
@@ -1187,11 +1152,9 @@
 
                     @Html.AntiForgeryToken()
 
-
                     <input type="hidden"
                            name="id"
                            value="@Model.MaHd" />
-
 
                     <input type="hidden"
                            name="trangThai"
@@ -1220,11 +1183,9 @@
 
                     @Html.AntiForgeryToken()
 
-
                     <input type="hidden"
                            name="id"
                            value="@Model.MaHd" />
-
 
                     <input type="hidden"
                            name="trangThai"
@@ -1253,11 +1214,9 @@
 
                     @Html.AntiForgeryToken()
 
-
                     <input type="hidden"
                            name="id"
                            value="@Model.MaHd" />
-
 
                     <input type="hidden"
                            name="trangThai"
@@ -1286,11 +1245,9 @@
 
                     @Html.AntiForgeryToken()
 
-
                     <input type="hidden"
                            name="id"
                            value="@Model.MaHd" />
-
 
                     <input type="hidden"
                            name="trangThai"
@@ -1309,7 +1266,372 @@
                 </form>
             }
 
+
         </div>
 
     </div>
+}
+
+
+<!-- =====================================================
+     INVOICE TEMPLATE
+===================================================== -->
+
+<div id="orderInvoicePrint"
+     class="admin-invoice-document"
+     data-css-url="@Url.Content("~/css/admin-order.css")"
+     data-order-code="@invoiceCode">
+
+
+    <!-- HEADER -->
+
+    <div class="admin-invoice-header">
+
+        <div>
+
+            <div class="admin-invoice-brand">
+                ROSALIE COFFEE
+            </div>
+
+            <div class="admin-invoice-subtitle">
+                HÓA ĐƠN BÁN HÀNG
+            </div>
+
+        </div>
+
+
+        <div class="admin-invoice-code">
+
+            <span>
+                MÃ HÓA ĐƠN
+            </span>
+
+            <strong>
+                #@invoiceCode
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- META -->
+
+    <div class="admin-invoice-meta">
+
+        <div>
+
+            <span>
+                Ngày đặt
+            </span>
+
+            <strong>
+                @orderDateText
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Thanh toán
+            </span>
+
+            <strong>
+                @paymentText
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Trạng thái
+            </span>
+
+            <strong>
+                @(Model.TrangThai ?? "Chưa xác định")
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- CUSTOMER -->
+
+    <div class="admin-invoice-section">
+
+        <h3>
+            Thông tin khách hàng
+        </h3>
+
+
+        <div class="admin-invoice-customer-grid">
+
+            <div>
+
+                <span>
+                    Người nhận
+                </span>
+
+                <strong>
+                    @receiverName
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Số điện thoại
+                </span>
+
+                <strong>
+                    @receiverPhone
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Khu vực
+                </span>
+
+                <strong>
+                    @(Model.QuanHuyenGiaoHang ?? "Chưa cập nhật")
+                </strong>
+
+            </div>
+
+
+            <div class="admin-invoice-full">
+
+                <span>
+                    Địa chỉ giao hàng
+                </span>
+
+                <strong>
+                    @receiverAddress
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PRODUCTS -->
+
+    <div class="admin-invoice-section">
+
+        <h3>
+            Chi tiết đơn hàng
+        </h3>
+
+
+        <table class="admin-invoice-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        #
+                    </th>
+
+                    <th>
+                        Sản phẩm
+                    </th>
+
+                    <th>
+                        Đơn giá
+                    </th>
+
+                    <th>
+                        SL
+                    </th>
+
+                    <th>
+                        Thành tiền
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @if (
+                    Model.ChiTietHoaDons != null
+                    &&
+                    Model.ChiTietHoaDons.Any()
+                )
+                {
+                    int invoiceIndex = 1;
+
+                    foreach (var item in Model.ChiTietHoaDons)
+                    {
+                        string invoiceProductName =
+                            item.MaSpNavigation?.TenSp
+                            ??
+                            item.MaComboNavigation?.TenCombo
+                            ??
+                            "Không xác định";
+
+                        decimal invoiceLineTotal =
+                            item.DonGia * item.SoLuong;
+
+
+                        <tr>
+
+                            <td>
+                                @invoiceIndex
+                            </td>
+
+
+                            <td>
+
+                                <strong>
+                                    @invoiceProductName
+                                </strong>
+
+                                @if (item.MaCombo.HasValue)
+                                {
+                                    <small>
+                                        Combo
+                                    </small>
+                                }
+
+                            </td>
+
+
+                            <td>
+                                @(item.DonGia.ToString("#,##0"))đ
+                            </td>
+
+
+                            <td>
+                                @item.SoLuong
+                            </td>
+
+
+                            <td>
+                                @(invoiceLineTotal.ToString("#,##0"))đ
+                            </td>
+
+                        </tr>
+
+                        invoiceIndex++;
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="5">
+                            Không có sản phẩm.
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="admin-invoice-summary">
+
+        <div>
+
+            <span>
+                Tạm tính
+            </span>
+
+            <strong>
+                @((Model.TamTinh ?? 0).ToString("#,##0"))đ
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Giảm giá
+            </span>
+
+            <strong>
+                -@((Model.GiamGia ?? 0).ToString("#,##0"))đ
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Phí giao hàng
+            </span>
+
+            <strong>
+                @((Model.PhiGiaoHang ?? 0).ToString("#,##0"))đ
+            </strong>
+
+        </div>
+
+
+        <div class="admin-invoice-grand-total">
+
+            <span>
+                TỔNG THANH TOÁN
+            </span>
+
+            <strong>
+                @((Model.TongTien ?? 0).ToString("#,##0"))đ
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="admin-invoice-footer">
+
+        <strong>
+            Cảm ơn quý khách đã lựa chọn Rosalie Coffee!
+        </strong>
+
+        <p>
+            Hóa đơn được tạo tự động từ hệ thống Rosalie Coffee.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SCRIPT
+===================================================== -->
+
+@section Scripts {
+
+    <script src="~/js/admin-order-details.js"
+            asp-append-version="true"></script>
+
 }

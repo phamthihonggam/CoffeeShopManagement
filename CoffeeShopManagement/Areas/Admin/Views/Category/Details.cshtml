@@ -1,0 +1,251 @@
+﻿@model CoffeeShopManagement.Models.LoaiSanPham
+
+@{
+    ViewData["Title"] = "Chi tiết danh mục";
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-category.css"
+          asp-append-version="true" />
+
+    <style>
+
+        .category-detail-card {
+            background: #fff;
+            border: 1px solid #eaded6;
+            border-radius: 18px;
+            padding: 30px;
+        }
+
+        .category-detail-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .category-detail-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 14px;
+            background: #f5e8df;
+            color: #8a4f36;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .category-detail-header h2 {
+            margin: 0;
+            color: #552d23;
+            font-size: 28px;
+        }
+
+        .category-detail-header span {
+            display: block;
+            margin-top: 5px;
+            color: #8a7065;
+        }
+
+        .category-detail-grid {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 16px 24px;
+        }
+
+        .category-detail-label {
+            font-weight: 700;
+            color: #795f55;
+        }
+
+        .category-detail-value {
+            color: #4e3027;
+        }
+
+        .category-product-list {
+            margin-top: 28px;
+            border-top: 1px solid #eee1d9;
+            padding-top: 24px;
+        }
+
+            .category-product-list h3 {
+                margin-bottom: 15px;
+                color: #552d23;
+            }
+
+        .category-product-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .category-product-tag {
+            padding: 7px 11px;
+            border-radius: 999px;
+            background: #f7eee8;
+            color: #704333;
+            font-size: 13px;
+        }
+
+        .category-detail-actions {
+            margin-top: 28px;
+            display: flex;
+            gap: 10px;
+        }
+
+    </style>
+}
+
+
+<div class="admin-welcome">
+
+    <div class="category-admin-heading">
+
+        <div>
+
+            <h2>
+                Chi tiết danh mục
+            </h2>
+
+            <p>
+                Xem thông tin và các sản phẩm thuộc danh mục.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="category-detail-card">
+
+    <div class="category-detail-header">
+
+        <div class="category-detail-icon">
+
+            <i class="fa-solid fa-layer-group"></i>
+
+        </div>
+
+        <div>
+
+            <h2>
+                @Model.TenLoai
+            </h2>
+
+            <span>
+                Mã danh mục: #@Model.MaLoai
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="category-detail-grid">
+
+        <div class="category-detail-label">
+            Tên danh mục
+        </div>
+
+        <div class="category-detail-value">
+            @Model.TenLoai
+        </div>
+
+
+        <div class="category-detail-label">
+            Số sản phẩm
+        </div>
+
+        <div class="category-detail-value">
+            @Model.SanPhams.Count sản phẩm
+        </div>
+
+
+        <div class="category-detail-label">
+            Trạng thái
+        </div>
+
+        <div class="category-detail-value">
+
+            @if (Model.SanPhams.Any())
+            {
+                <span>
+                    Đang sử dụng
+                </span>
+            }
+            else
+            {
+                <span>
+                    Chưa có sản phẩm
+                </span>
+            }
+
+        </div>
+
+    </div>
+
+
+    <div class="category-product-list">
+
+        <h3>
+            Sản phẩm thuộc danh mục
+        </h3>
+
+
+        @if (Model.SanPhams.Any())
+        {
+            <div class="category-product-tags">
+
+                @foreach (var product in Model.SanPhams)
+                {
+                    <span class="category-product-tag">
+                        @product.TenSp
+                    </span>
+                }
+
+            </div>
+        }
+        else
+        {
+            <p>
+                Danh mục này hiện chưa có sản phẩm.
+            </p>
+        }
+
+    </div>
+
+
+    <div class="category-detail-actions">
+
+        <a asp-area="Admin"
+           asp-controller="Category"
+           asp-action="Index"
+           class="admin-add-category-btn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Quay lại
+
+        </a>
+
+
+        <a asp-area="Admin"
+           asp-controller="Category"
+           asp-action="Edit"
+           asp-route-id="@Model.MaLoai"
+           class="admin-add-category-btn">
+
+            <i class="fa-solid fa-pen"></i>
+
+            Sửa danh mục
+
+        </a>
+
+    </div>
+
+</div>

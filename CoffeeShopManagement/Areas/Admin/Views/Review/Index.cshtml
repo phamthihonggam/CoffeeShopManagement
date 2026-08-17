@@ -1,0 +1,974 @@
+﻿@model CoffeeShopManagement.Areas.Admin.Controllers.AdminReviewIndexViewModel
+
+@{
+    ViewData["Title"] = "Quản lý đánh giá";
+
+    int startItem =
+        Model.TotalItems == 0
+            ? 0
+            : ((Model.CurrentPage - 1) * Model.PageSize) + 1;
+
+    int endItem =
+        Math.Min(
+            Model.CurrentPage * Model.PageSize,
+            Model.TotalItems
+        );
+
+    int startPage =
+        Math.Max(
+            1,
+            Model.CurrentPage - 2
+        );
+
+    int endPage =
+        Math.Min(
+            Model.TotalPages,
+            Model.CurrentPage + 2
+        );
+}
+
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-review.css"
+          asp-append-version="true" />
+
+}
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="admin-welcome">
+
+    <div class="review-admin-heading">
+
+        <div>
+
+            <span class="review-heading-label">
+
+                <i class="fa-solid fa-star"></i>
+
+                ROSALIE COFFEE
+
+            </span>
+
+
+            <h2>
+                Quản lý đánh giá
+            </h2>
+
+
+            <p>
+                Theo dõi phản hồi của khách hàng
+                dành cho sản phẩm và combo.
+            </p>
+
+        </div>
+
+
+        <div class="review-heading-summary">
+
+            <div>
+
+                <i class="fa-solid fa-comments"></i>
+
+                <span>
+                    @Model.TotalReviews đánh giá
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     QUICK STATISTICS
+===================================================== -->
+
+<div class="admin-review-stat-grid">
+
+
+    <!-- TOTAL -->
+
+    <div class="admin-review-stat-card">
+
+        <div class="review-stat-icon total">
+
+            <i class="fa-solid fa-comments"></i>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Tổng đánh giá
+            </span>
+
+            <strong>
+                @Model.TotalReviews
+            </strong>
+
+            <small>
+                Sản phẩm + combo
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <!-- AVERAGE -->
+
+    <div class="admin-review-stat-card">
+
+        <div class="review-stat-icon average">
+
+            <i class="fa-solid fa-star"></i>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Điểm trung bình
+            </span>
+
+            <strong>
+                @Model.AverageRating.ToString("0.0")
+            </strong>
+
+            <small>
+                Trên thang điểm 5
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <!-- FIVE STAR -->
+
+    <div class="admin-review-stat-card">
+
+        <div class="review-stat-icon five">
+
+            <i class="fa-solid fa-face-smile"></i>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Đánh giá 5 sao
+            </span>
+
+            <strong>
+                @Model.FiveStarReviews
+            </strong>
+
+            <small>
+                Khách hàng hài lòng
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <!-- LOW -->
+
+    <div class="admin-review-stat-card">
+
+        <div class="review-stat-icon low">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Đánh giá thấp
+            </span>
+
+            <strong>
+                @Model.LowRatingReviews
+            </strong>
+
+            <small>
+                Từ 1 đến 2 sao
+            </small>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     TYPE SUMMARY
+===================================================== -->
+
+<div class="admin-review-type-grid">
+
+    <div class="review-type-card">
+
+        <div>
+
+            <span>
+                Sản phẩm
+            </span>
+
+            <strong>
+                @Model.ProductReviews
+            </strong>
+
+        </div>
+
+        <i class="fa-solid fa-mug-hot"></i>
+
+    </div>
+
+
+    <div class="review-type-card">
+
+        <div>
+
+            <span>
+                Combo
+            </span>
+
+            <strong>
+                @Model.ComboReviews
+            </strong>
+
+        </div>
+
+        <i class="fa-solid fa-box-open"></i>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FILTER
+===================================================== -->
+
+<div class="admin-review-filter-card">
+
+    <form asp-area="Admin"
+          asp-controller="Review"
+          asp-action="Index"
+          method="get"
+          class="admin-review-filter-form">
+
+
+        <!-- SEARCH -->
+
+        <div class="review-filter-search">
+
+            <label for="keyword">
+                Tìm kiếm
+            </label>
+
+
+            <div class="review-search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+
+                <input type="text"
+                       id="keyword"
+                       name="keyword"
+                       value="@Model.Keyword"
+                       placeholder="Tên khách, email, món, nội dung, mã đơn..." />
+
+            </div>
+
+        </div>
+
+
+        <!-- TYPE -->
+
+        <div class="review-filter-group">
+
+            <label for="type">
+                Loại đánh giá
+            </label>
+
+
+            <select id="type"
+                    name="type">
+
+                @if (Model.Type == "all")
+                {
+                    <option value="all" selected>
+                        Tất cả
+                    </option>
+                }
+                else
+                {
+                    <option value="all">
+                        Tất cả
+                    </option>
+                }
+
+
+                @if (Model.Type == "product")
+                {
+                    <option value="product" selected>
+                        Sản phẩm
+                    </option>
+                }
+                else
+                {
+                    <option value="product">
+                        Sản phẩm
+                    </option>
+                }
+
+
+                @if (Model.Type == "combo")
+                {
+                    <option value="combo" selected>
+                        Combo
+                    </option>
+                }
+                else
+                {
+                    <option value="combo">
+                        Combo
+                    </option>
+                }
+
+            </select>
+
+        </div>
+
+
+        <!-- STAR -->
+
+        <div class="review-filter-group">
+
+            <label for="star">
+                Số sao
+            </label>
+
+
+            <select id="star"
+                    name="star">
+
+                @if (!Model.Star.HasValue)
+                {
+                    <option value="" selected>
+                        Tất cả số sao
+                    </option>
+                }
+                else
+                {
+                    <option value="">
+                        Tất cả số sao
+                    </option>
+                }
+
+
+                @for (int star = 5; star >= 1; star--)
+                {
+                    if (Model.Star == star)
+                    {
+                        <option value="@star"
+                                selected>
+                            @star sao
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@star">
+                            @star sao
+                        </option>
+                    }
+                }
+
+            </select>
+
+        </div>
+
+
+        <!-- PAGE SIZE -->
+
+        <div class="review-filter-group">
+
+            <label for="pageSize">
+                Hiển thị
+            </label>
+
+
+            <select id="pageSize"
+                    name="pageSize">
+
+                @foreach (var size in new[] { 10, 20, 50 })
+                {
+                    if (Model.PageSize == size)
+                    {
+                        <option value="@size"
+                                selected>
+                            @size dòng
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@size">
+                            @size dòng
+                        </option>
+                    }
+                }
+
+            </select>
+
+        </div>
+
+
+        <!-- ACTION -->
+
+        <div class="review-filter-actions">
+
+            <button type="submit"
+                    class="review-filter-btn">
+
+                <i class="fa-solid fa-filter"></i>
+
+                Lọc
+
+            </button>
+
+
+            <a asp-area="Admin"
+               asp-controller="Review"
+               asp-action="Index"
+               class="review-reset-btn">
+
+                <i class="fa-solid fa-rotate-left"></i>
+
+                Đặt lại
+
+            </a>
+
+        </div>
+
+
+    </form>
+
+</div>
+
+
+<!-- =====================================================
+     REVIEW TABLE
+===================================================== -->
+
+<div class="admin-review-table-card">
+
+
+    <!-- TABLE HEADER -->
+
+    <div class="admin-review-table-heading">
+
+        <div>
+
+            <span>
+                DANH SÁCH
+            </span>
+
+            <h3>
+                Đánh giá khách hàng
+            </h3>
+
+        </div>
+
+
+        <div class="review-result-count">
+
+            @if (Model.TotalItems > 0)
+            {
+                <span>
+                    @startItem - @endItem
+                    /
+                    @Model.TotalItems
+                </span>
+            }
+            else
+            {
+                <span>
+                    0 kết quả
+                </span>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLE -->
+
+    <div class="admin-review-table-wrap">
+
+        <table class="admin-review-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Mã
+                    </th>
+
+                    <th>
+                        Khách hàng
+                    </th>
+
+                    <th>
+                        Đánh giá cho
+                    </th>
+
+                    <th>
+                        Số sao
+                    </th>
+
+                    <th>
+                        Nội dung
+                    </th>
+
+                    <th>
+                        Ngày đánh giá
+                    </th>
+
+                    <th>
+                        Thao tác
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @if (
+                    Model.Reviews != null
+                    &&
+                    Model.Reviews.Any()
+                )
+                {
+                    foreach (var item in Model.Reviews)
+                    {
+                        <tr>
+
+
+                            <!-- ID -->
+
+                            <td>
+
+                                <span class="review-id">
+                                    #DG@item.ReviewId.ToString("D4")
+                                </span>
+
+                            </td>
+
+
+                            <!-- CUSTOMER -->
+
+                            <td>
+
+                                <div class="review-customer">
+
+                                    <div class="review-customer-avatar">
+
+                                        @{
+                                            string customerInitial =
+                                                !string.IsNullOrWhiteSpace(item.CustomerName)
+                                                    ? item.CustomerName.Trim()
+                                                        .Substring(0, 1)
+                                                        .ToUpper()
+                                                    : "R";
+                                        }
+
+                                        @customerInitial
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <strong>
+                                            @item.CustomerName
+                                        </strong>
+
+
+                                        <span>
+                                            @(item.CustomerEmail ?? "Chưa có email")
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- ITEM -->
+
+                            <td>
+
+                                <div class="review-item-info">
+
+                                    <span class="review-type-badge
+                                        @(item.ReviewType == "combo"
+                                              ? "combo"
+                                              : "product")">
+
+                                        @if (item.ReviewType == "combo")
+                                        {
+                                            <i class="fa-solid fa-box-open"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fa-solid fa-mug-hot"></i>
+                                        }
+
+                                        @item.TypeName
+
+                                    </span>
+
+
+                                    <strong>
+                                        @item.ItemName
+                                    </strong>
+
+
+                                    <small>
+                                        Đơn #HD@item.OrderId.ToString("D5")
+                                    </small>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- STAR -->
+
+                            <td>
+
+                                <div class="review-stars">
+
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= item.Stars)
+                                        {
+                                            <i class="fa-solid fa-star active"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fa-regular fa-star"></i>
+                                        }
+                                    }
+
+                                </div>
+
+
+                                <span class="review-star-number">
+                                    @item.Stars/5
+                                </span>
+
+                            </td>
+
+
+                            <!-- CONTENT -->
+
+                            <td>
+
+                                @if (!string.IsNullOrWhiteSpace(item.Content))
+                                {
+                                    <p class="review-content-preview">
+                                        @item.Content
+                                    </p>
+                                }
+                                else
+                                {
+                                    <span class="review-no-content">
+                                        Không có nội dung
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- DATE -->
+
+                            <td>
+
+                                <div class="review-date">
+
+                                    <strong>
+                                        @item.ReviewDate.ToString("dd/MM/yyyy")
+                                    </strong>
+
+                                    <span>
+                                        @item.ReviewDate.ToString("HH:mm")
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- ACTION -->
+
+                            <td>
+
+                                <a asp-area="Admin"
+                                   asp-controller="Review"
+                                   asp-action="Details"
+                                   asp-route-type="@item.ReviewType"
+                                   asp-route-id="@item.ReviewId"
+                                   class="review-view-btn"
+                                   title="Xem chi tiết">
+
+                                    <i class="fa-solid fa-eye"></i>
+
+                                </a>
+
+                            </td>
+
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="7">
+
+                            <div class="review-empty">
+
+                                <div class="review-empty-icon">
+
+                                    <i class="fa-regular fa-star"></i>
+
+                                </div>
+
+
+                                <h3>
+                                    Không tìm thấy đánh giá
+                                </h3>
+
+
+                                <p>
+                                    Chưa có đánh giá phù hợp
+                                    với điều kiện tìm kiếm hiện tại.
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- =================================================
+         PAGINATION
+    ================================================== -->
+    @if (Model.TotalItems > 0)
+    {
+        <div class="admin-review-pagination">
+
+
+            <!-- INFO -->
+
+            <div class="review-pagination-info">
+
+                Hiển thị
+
+                <strong>
+                    @startItem - @endItem
+                </strong>
+
+                trong
+
+                <strong>
+                    @Model.TotalItems
+                </strong>
+
+                đánh giá
+
+            </div>
+
+
+            <!-- PAGES -->
+
+            <div class="review-pagination-pages">
+
+
+                <!-- PREVIOUS -->
+                @if (Model.CurrentPage > 1)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Review"
+                       asp-action="Index"
+                       asp-route-keyword="@Model.Keyword"
+                       asp-route-type="@Model.Type"
+                       asp-route-star="@Model.Star"
+                       asp-route-page="@(Model.CurrentPage - 1)"
+                       asp-route-pageSize="@Model.PageSize"
+                       class="review-page-btn">
+
+                        <i class="fa-solid fa-chevron-left"></i>
+
+                    </a>
+                }
+                else
+                {
+                    <span class="review-page-btn disabled">
+
+                        <i class="fa-solid fa-chevron-left"></i>
+
+                    </span>
+                }
+
+
+                <!-- FIRST -->
+                @if (startPage > 1)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Review"
+                       asp-action="Index"
+                       asp-route-keyword="@Model.Keyword"
+                       asp-route-type="@Model.Type"
+                       asp-route-star="@Model.Star"
+                       asp-route-page="1"
+                       asp-route-pageSize="@Model.PageSize"
+                       class="review-page-btn">
+
+                        1
+
+                    </a>
+
+
+                    @if (startPage > 2)
+                    {
+                        <span class="review-page-dots">
+                            ...
+                        </span>
+                    }
+                }
+
+
+                <!-- PAGE NUMBERS -->
+                @for (int p = startPage; p <= endPage; p++)
+                {
+                    if (p == Model.CurrentPage)
+                    {
+                        <span class="review-page-btn active">
+                            @p
+                        </span>
+                    }
+                    else
+                    {
+                        <a asp-area="Admin"
+                           asp-controller="Review"
+                           asp-action="Index"
+                           asp-route-keyword="@Model.Keyword"
+                           asp-route-type="@Model.Type"
+                           asp-route-star="@Model.Star"
+                           asp-route-page="@p"
+                           asp-route-pageSize="@Model.PageSize"
+                           class="review-page-btn">
+
+                            @p
+
+                        </a>
+                    }
+                }
+
+
+                <!-- LAST -->
+                @if (endPage < Model.TotalPages)
+                {
+                    @if (endPage < Model.TotalPages - 1)
+                    {
+                        <span class="review-page-dots">
+                            ...
+                        </span>
+                    }
+
+
+                    <a asp-area="Admin"
+                       asp-controller="Review"
+                       asp-action="Index"
+                       asp-route-keyword="@Model.Keyword"
+                       asp-route-type="@Model.Type"
+                       asp-route-star="@Model.Star"
+                       asp-route-page="@Model.TotalPages"
+                       asp-route-pageSize="@Model.PageSize"
+                       class="review-page-btn">
+
+                        @Model.TotalPages
+
+                    </a>
+                }
+
+
+                <!-- NEXT -->
+                @if (Model.CurrentPage < Model.TotalPages)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Review"
+                       asp-action="Index"
+                       asp-route-keyword="@Model.Keyword"
+                       asp-route-type="@Model.Type"
+                       asp-route-star="@Model.Star"
+                       asp-route-page="@(Model.CurrentPage + 1)"
+                       asp-route-pageSize="@Model.PageSize"
+                       class="review-page-btn">
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+                }
+                else
+                {
+                    <span class="review-page-btn disabled">
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </span>
+                }
+
+
+            </div>
+
+        </div>
+    }
+
+
+</div>

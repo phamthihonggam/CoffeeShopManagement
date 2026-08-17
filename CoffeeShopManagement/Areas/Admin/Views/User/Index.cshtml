@@ -2,7 +2,18 @@
 
 @{
     ViewData["Title"] = "Quản lý người dùng";
+
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int pageSize = ViewBag.PageSize ?? 10;
+    int totalPages = ViewBag.TotalPages ?? 0;
+    int totalItems = ViewBag.TotalItems ?? 0;
+    int startItem = ViewBag.StartItem ?? 0;
+    int endItem = ViewBag.EndItem ?? 0;
+
+    string? keyword =
+        ViewBag.Keyword?.ToString();
 }
+
 
 @section Styles {
 
@@ -45,6 +56,8 @@
 
 <div class="admin-user-stats">
 
+    <!-- TỔNG KHÁCH HÀNG -->
+
     <div class="admin-user-stat-card">
 
         <div class="admin-user-stat-icon">
@@ -64,6 +77,8 @@
     </div>
 
 
+    <!-- ĐÃ MUA HÀNG -->
+
     <div class="admin-user-stat-card">
 
         <div class="admin-user-stat-icon">
@@ -82,6 +97,8 @@
 
     </div>
 
+
+    <!-- KHÁCH MỚI -->
 
     <div class="admin-user-stat-card">
 
@@ -116,29 +133,42 @@
           asp-action="Index"
           class="admin-user-search-form">
 
+        <!-- SEARCH BOX -->
+
         <div class="admin-user-search">
 
             <i class="fa-solid fa-magnifying-glass"></i>
 
             <input type="text"
                    name="keyword"
-                   value="@ViewBag.Keyword"
+                   value="@keyword"
                    placeholder="Tìm họ tên, email hoặc số điện thoại..."
                    autocomplete="off" />
 
         </div>
 
 
+        <!-- GIỮ SỐ DÒNG / TRANG -->
+
+        <input type="hidden"
+               name="pageSize"
+               value="@pageSize" />
+
+
+        <!-- SEARCH BUTTON -->
+
         <button type="submit"
                 class="admin-user-search-btn">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
 
             Tìm kiếm
 
         </button>
 
 
-        @if (!string.IsNullOrWhiteSpace(
-            ViewBag.Keyword?.ToString()))
+        <!-- RESET -->
+        @if (!string.IsNullOrWhiteSpace(keyword))
         {
             <a asp-area="Admin"
                asp-controller="User"
@@ -208,18 +238,24 @@
                     {
                         <tr>
 
-                            <!-- MÃ -->
+                            <!-- =================================================
+                                 MÃ KHÁCH HÀNG
+                            ================================================== -->
 
                             <td>
 
                                 <span class="admin-user-id">
+
                                     #@item.MaKh
+
                                 </span>
 
                             </td>
 
 
-                            <!-- KHÁCH HÀNG -->
+                            <!-- =================================================
+                                 THÔNG TIN KHÁCH HÀNG
+                            ================================================== -->
 
                             <td>
 
@@ -235,14 +271,21 @@
                                     <div>
 
                                         <strong>
+
                                             @item.HoTen
+
                                         </strong>
+
 
                                         @if (!string.IsNullOrWhiteSpace(
                                             item.DiaChi))
                                         {
                                             <span>
+
+                                                <i class="fa-solid fa-location-dot"></i>
+
                                                 @item.DiaChi
+
                                             </span>
                                         }
 
@@ -253,7 +296,9 @@
                             </td>
 
 
-                            <!-- LIÊN HỆ -->
+                            <!-- =================================================
+                                 LIÊN HỆ
+                            ================================================== -->
 
                             <td>
 
@@ -270,6 +315,7 @@
 
                                         </span>
                                     }
+
 
                                     @if (!string.IsNullOrWhiteSpace(
                                         item.DienThoai))
@@ -288,18 +334,24 @@
                             </td>
 
 
-                            <!-- NGÀY TẠO -->
+                            <!-- =================================================
+                                 NGÀY ĐĂNG KÝ
+                            ================================================== -->
 
                             <td>
 
                                 <div class="admin-user-date">
 
                                     <strong>
+
                                         @item.NgayTao.ToString("dd/MM/yyyy")
+
                                     </strong>
 
                                     <span>
+
                                         @item.NgayTao.ToString("HH:mm")
+
                                     </span>
 
                                 </div>
@@ -307,7 +359,9 @@
                             </td>
 
 
-                            <!-- SỐ ĐƠN -->
+                            <!-- =================================================
+                                 SỐ ĐƠN
+                            ================================================== -->
 
                             <td>
 
@@ -321,7 +375,9 @@
                             </td>
 
 
-                            <!-- THAO TÁC -->
+                            <!-- =================================================
+                                 THAO TÁC
+                            ================================================== -->
 
                             <td>
 
@@ -330,7 +386,7 @@
                                    asp-action="Details"
                                    asp-route-id="@item.MaKh"
                                    class="admin-user-view-btn"
-                                   title="Xem chi tiết">
+                                   title="Xem chi tiết khách hàng">
 
                                     <i class="fa-solid fa-eye"></i>
 
@@ -352,12 +408,32 @@
                                 <i class="fa-solid fa-users"></i>
 
                                 <h3>
+
                                     Không tìm thấy khách hàng
+
                                 </h3>
 
                                 <p>
-                                    Thử nhập từ khóa khác.
+
+                                    Thử nhập từ khóa khác
+                                    hoặc đặt lại tìm kiếm.
+
                                 </p>
+
+
+                                @if (!string.IsNullOrWhiteSpace(keyword))
+                                {
+                                    <a asp-area="Admin"
+                                       asp-controller="User"
+                                       asp-action="Index"
+                                       class="admin-user-reset-btn">
+
+                                        <i class="fa-solid fa-rotate-left"></i>
+
+                                        Đặt lại tìm kiếm
+
+                                    </a>
+                                }
 
                             </div>
 
@@ -373,3 +449,233 @@
     </div>
 
 </div>
+
+
+<!-- =====================================================
+     PAGINATION
+===================================================== -->
+@if (totalItems > 0)
+{
+    <div class="admin-user-pagination-wrap">
+
+        <!-- =================================================
+             THÔNG TIN PHÂN TRANG
+        ================================================== -->
+
+        <div class="admin-user-pagination-info">
+
+            Hiển thị
+
+            <strong>
+                @startItem
+            </strong>
+
+            –
+
+            <strong>
+                @endItem
+            </strong>
+
+            trong
+
+            <strong>
+                @totalItems
+            </strong>
+
+            khách hàng
+
+        </div>
+
+
+        <!-- =================================================
+             PAGE SIZE
+        ================================================== -->
+
+        <form method="get"
+              asp-area="Admin"
+              asp-controller="User"
+              asp-action="Index"
+              class="admin-user-page-size">
+
+            <input type="hidden"
+                   name="keyword"
+                   value="@keyword" />
+
+
+            <span>
+
+                Hiển thị
+
+            </span>
+
+
+            <select name="pageSize"
+                    onchange="this.form.submit()">
+
+                @foreach (var size in new[] { 10, 20, 50 })
+                {
+                    if (pageSize == size)
+                    {
+                        <option value="@size"
+                                selected>
+
+                            @size
+
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@size">
+
+                            @size
+
+                        </option>
+                    }
+                }
+
+            </select>
+
+
+            <span>
+
+                dòng / trang
+
+            </span>
+
+        </form>
+
+
+        <!-- =================================================
+             PAGE LINKS
+        ================================================== -->
+        @if (totalPages > 1)
+        {
+            <div class="admin-user-pagination">
+
+                <!-- PREVIOUS -->
+
+                <a asp-area="Admin"
+                   asp-controller="User"
+                   asp-action="Index"
+                   asp-route-keyword="@keyword"
+                   asp-route-pageSize="@pageSize"
+                   asp-route-page="@(currentPage - 1)"
+                   class="admin-user-page-link @(currentPage <= 1 ? "disabled" : "")">
+
+                    <i class="fa-solid fa-chevron-left"></i>
+
+                    Trước
+
+                </a>
+
+
+                @{
+                    int startPage =
+                        Math.Max(
+                            1,
+                            currentPage - 2
+                        );
+
+                    int endPage =
+                        Math.Min(
+                            totalPages,
+                            currentPage + 2
+                        );
+                }
+
+
+                <!-- PAGE 1 + ... -->
+                @if (startPage > 1)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="User"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="1"
+                       class="admin-user-page-link">
+
+                        1
+
+                    </a>
+
+
+                    @if (startPage > 2)
+                    {
+                        <span class="admin-user-page-dots">
+
+                            ...
+
+                        </span>
+                    }
+                }
+
+
+                <!-- CURRENT RANGE -->
+                @for (int i = startPage;
+                                      i <= endPage;
+                                      i++)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="User"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="@i"
+                       class="admin-user-page-link @(i == currentPage ? "active" : "")">
+
+                        @i
+
+                    </a>
+                }
+
+
+                <!-- ... + LAST PAGE -->
+                @if (endPage < totalPages)
+                {
+                    @if (endPage <
+                         totalPages - 1)
+                    {
+                        <span class="admin-user-page-dots">
+
+                            ...
+
+                        </span>
+                    }
+
+
+                    <a asp-area="Admin"
+                       asp-controller="User"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="@totalPages"
+                       class="admin-user-page-link">
+
+                        @totalPages
+
+                    </a>
+                }
+
+
+                <!-- NEXT -->
+
+                <a asp-area="Admin"
+                   asp-controller="User"
+                   asp-action="Index"
+                   asp-route-keyword="@keyword"
+                   asp-route-pageSize="@pageSize"
+                   asp-route-page="@(currentPage + 1)"
+                   class="admin-user-page-link @(currentPage >= totalPages ? "disabled" : "")">
+
+                    Sau
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+}

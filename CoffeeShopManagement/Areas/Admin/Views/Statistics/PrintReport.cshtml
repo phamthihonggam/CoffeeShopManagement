@@ -1,0 +1,770 @@
+﻿@model CoffeeShopManagement.Areas.Admin.Controllers.StatisticsViewModel
+
+@{
+    Layout = null;
+
+    ViewData["Title"] =
+        "Báo cáo thống kê Rosalie Coffee";
+}
+
+<!DOCTYPE html>
+
+<html lang="vi">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        Rosalie Coffee - Báo cáo thống kê
+    </title>
+
+
+    <style>
+
+            * {
+                box-sizing: border-box;
+            }
+
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                background: #f3efec;
+                color: #3f2b24;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+
+            body {
+                padding: 25px;
+            }
+
+
+            .report-toolbar {
+                width: 210mm;
+                max-width: 100%;
+                margin: 0 auto 15px;
+                display: flex;
+                justify-content: flex-end;
+                gap: 9px;
+            }
+
+
+                .report-toolbar button {
+                    min-height: 40px;
+                    padding: 0 15px;
+                    border: 0;
+                    border-radius: 9px;
+                    cursor: pointer;
+                    font-size: 13px;
+                    font-weight: 700;
+                }
+
+
+            .report-print-btn {
+                background: #654034;
+                color: #ffffff;
+            }
+
+
+            .report-close-btn {
+                background: #ffffff;
+                color: #604a41;
+                border: 1px solid #ddd0c9 !important;
+            }
+
+
+            .statistics-report {
+                width: 210mm;
+                min-height: 297mm;
+                margin: 0 auto;
+                padding: 14mm;
+                background: #ffffff;
+            }
+
+
+            .report-header {
+                padding-bottom: 18px;
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 25px;
+                border-bottom: 2px solid #654034;
+            }
+
+
+            .report-brand {
+                margin-bottom: 5px;
+                color: #8b5943;
+                font-size: 15px;
+                font-weight: 900;
+                letter-spacing: 2px;
+            }
+
+
+            .report-header h1 {
+                margin: 0;
+                color: #3f2921;
+                font-size: 25px;
+            }
+
+
+            .report-header p {
+                margin: 7px 0 0;
+                color: #7d6b63;
+                font-size: 12px;
+            }
+
+
+            .report-period {
+                min-width: 190px;
+                padding: 12px 14px;
+                border-radius: 10px;
+                background: #f8f2ee;
+            }
+
+
+                .report-period span {
+                    display: block;
+                    margin-bottom: 5px;
+                    color: #98796a;
+                    font-size: 10px;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                }
+
+
+                .report-period strong {
+                    display: block;
+                    color: #52362c;
+                    font-size: 13px;
+                }
+
+
+                .report-period small {
+                    display: block;
+                    margin-top: 5px;
+                    color: #8d7a71;
+                    font-size: 10px;
+                }
+
+
+            .report-section {
+                margin-top: 22px;
+            }
+
+
+            .report-section-title {
+                margin-bottom: 11px;
+                color: #5a3a2f;
+                font-size: 14px;
+                font-weight: 900;
+                text-transform: uppercase;
+            }
+
+
+            .report-summary-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 9px;
+            }
+
+
+            .report-summary-card {
+                min-height: 82px;
+                padding: 13px;
+                border: 1px solid #eadfd8;
+                border-radius: 10px;
+                background: #fffdfa;
+            }
+
+
+                .report-summary-card span {
+                    display: block;
+                    color: #89776e;
+                    font-size: 10px;
+                    font-weight: 700;
+                }
+
+
+                .report-summary-card strong {
+                    display: block;
+                    margin-top: 8px;
+                    color: #482e25;
+                    font-size: 17px;
+                    font-weight: 900;
+                }
+
+
+            .report-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+
+                .report-table th {
+                    padding: 9px 10px;
+                    border: 1px solid #ddcec6;
+                    background: #f4e8e0;
+                    color: #624438;
+                    font-size: 10px;
+                    text-align: left;
+                }
+
+
+                .report-table td {
+                    padding: 9px 10px;
+                    border: 1px solid #e8ddd7;
+                    color: #5e4a41;
+                    font-size: 11px;
+                }
+
+
+                    .report-table td:last-child,
+                    .report-table th:last-child {
+                        text-align: right;
+                    }
+
+
+            .report-status-grid {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 8px;
+            }
+
+
+            .report-status {
+                padding: 12px 8px;
+                border: 1px solid #e5d9d3;
+                border-radius: 9px;
+                text-align: center;
+            }
+
+
+                .report-status span {
+                    display: block;
+                    color: #88756c;
+                    font-size: 9px;
+                    font-weight: 700;
+                }
+
+
+                .report-status strong {
+                    display: block;
+                    margin-top: 5px;
+                    color: #482e25;
+                    font-size: 17px;
+                }
+
+
+            .report-footer {
+                margin-top: 28px;
+                padding-top: 14px;
+                border-top: 1px solid #e5d9d3;
+                text-align: center;
+                color: #95847b;
+                font-size: 10px;
+            }
+
+
+                .report-footer strong {
+                    display: block;
+                    margin-bottom: 4px;
+                    color: #6d4d40;
+                }
+
+
+            @@media print {
+
+                html,
+                body {
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    background: #ffffff !important;
+                }
+
+
+                .report-toolbar {
+                    display: none !important;
+                }
+
+
+                .statistics-report {
+                    width: 100% !important;
+                    min-height: 0 !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+
+
+                .report-header,
+                .report-summary-grid,
+                .report-status-grid,
+                .report-table,
+                .report-footer {
+                    break-inside: avoid;
+                    page-break-inside: avoid;
+                }
+
+
+                    .report-table tr {
+                        break-inside: avoid;
+                        page-break-inside: avoid;
+                    }
+
+
+                @@page {
+                    size: A4 portrait;
+                    margin: 12mm;
+                }
+            }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =================================================
+         TOOLBAR
+    ================================================== -->
+
+    <div class="report-toolbar">
+
+        <button type="button"
+                class="report-print-btn"
+                onclick="window.print();">
+
+            In / Lưu PDF
+
+        </button>
+
+
+        <button type="button"
+                class="report-close-btn"
+                onclick="window.close();">
+
+            Đóng
+
+        </button>
+
+    </div>
+
+
+    <!-- =================================================
+         REPORT
+    ================================================== -->
+
+    <main class="statistics-report">
+
+
+        <!-- HEADER -->
+
+        <header class="report-header">
+
+            <div>
+
+                <div class="report-brand">
+                    ROSALIE COFFEE
+                </div>
+
+
+                <h1>
+                    Báo cáo thống kê kinh doanh
+                </h1>
+
+
+                <p>
+                    Báo cáo được tạo từ hệ thống
+                    quản lý Rosalie Coffee.
+                </p>
+
+            </div>
+
+
+            <div class="report-period">
+
+                <span>
+                    Kỳ báo cáo
+                </span>
+
+
+                <strong>
+                    @Model.PeriodTitle
+                </strong>
+
+
+                <small>
+                    @Model.FromDate.ToString("dd/MM/yyyy")
+                    -
+                    @Model.ToDate.ToString("dd/MM/yyyy")
+                </small>
+
+            </div>
+
+        </header>
+
+
+        <!-- SUMMARY -->
+
+        <section class="report-section">
+
+            <div class="report-section-title">
+                Tổng quan
+            </div>
+
+
+            <div class="report-summary-grid">
+
+
+                <div class="report-summary-card">
+
+                    <span>
+                        Doanh thu
+                    </span>
+
+                    <strong>
+                        @(Model.TotalRevenue.ToString("#,##0"))đ
+                    </strong>
+
+                </div>
+
+
+                <div class="report-summary-card">
+
+                    <span>
+                        Tổng đơn
+                    </span>
+
+                    <strong>
+                        @Model.TotalOrders
+                    </strong>
+
+                </div>
+
+
+                <div class="report-summary-card">
+
+                    <span>
+                        Khách phát sinh đơn
+                    </span>
+
+                    <strong>
+                        @Model.UniqueCustomers
+                    </strong>
+
+                </div>
+
+
+                <div class="report-summary-card">
+
+                    <span>
+                        Trung bình / đơn
+                    </span>
+
+                    <strong>
+                        @(Model.AverageOrderValue.ToString("#,##0"))đ
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- STATUS -->
+
+        <section class="report-section">
+
+            <div class="report-section-title">
+                Trạng thái đơn hàng
+            </div>
+
+
+            <div class="report-status-grid">
+
+
+                <div class="report-status">
+
+                    <span>
+                        Chờ xử lý
+                    </span>
+
+                    <strong>
+                        @Model.PendingOrders
+                    </strong>
+
+                </div>
+
+
+                <div class="report-status">
+
+                    <span>
+                        Đang xử lý
+                    </span>
+
+                    <strong>
+                        @Model.ProcessingOrders
+                    </strong>
+
+                </div>
+
+
+                <div class="report-status">
+
+                    <span>
+                        Đang giao
+                    </span>
+
+                    <strong>
+                        @Model.ShippingOrders
+                    </strong>
+
+                </div>
+
+
+                <div class="report-status">
+
+                    <span>
+                        Hoàn thành
+                    </span>
+
+                    <strong>
+                        @Model.CompletedOrders
+                    </strong>
+
+                </div>
+
+
+                <div class="report-status">
+
+                    <span>
+                        Đã hủy
+                    </span>
+
+                    <strong>
+                        @Model.CancelledOrders
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- TOP PRODUCTS -->
+
+        <section class="report-section">
+
+            <div class="report-section-title">
+                Top 5 món bán chạy
+            </div>
+
+
+            <table class="report-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Hạng
+                        </th>
+
+                        <th>
+                            Tên món
+                        </th>
+
+                        <th>
+                            Loại
+                        </th>
+
+                        <th>
+                            Số lượng
+                        </th>
+
+                        <th>
+                            Doanh thu
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @if (
+                        Model.TopProducts != null
+                        &&
+                        Model.TopProducts.Any()
+                    )
+                    {
+                        int rank = 1;
+
+
+                        foreach (
+                            var item
+                            in Model.TopProducts
+                        )
+                        {
+                            <tr>
+
+                                <td>
+                                    @rank
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        @item.Name
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    @item.Type
+                                </td>
+
+                                <td>
+                                    @item.Quantity
+                                </td>
+
+                                <td>
+                                    @(item.Revenue.ToString("#,##0"))đ
+                                </td>
+
+                            </tr>
+
+
+                            rank++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="5"
+                                style="text-align:center;">
+
+                                Không có dữ liệu bán hàng
+                                trong kỳ này.
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+        <!-- REVENUE DETAIL -->
+
+        <section class="report-section">
+
+            <div class="report-section-title">
+                Chi tiết doanh thu
+            </div>
+
+
+            <table class="report-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Thời gian
+                        </th>
+
+                        <th>
+                            Doanh thu
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @for (
+                        int i = 0;
+                        i < Model.RevenueLabels.Count;
+                        i++
+                    )
+                    {
+                        <tr>
+
+                            <td>
+                                @Model.RevenueLabels[i]
+                            </td>
+
+                            <td>
+                                @(Model.RevenueValues[i].ToString("#,##0"))đ
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+        <!-- FOOTER -->
+
+        <footer class="report-footer">
+
+            <strong>
+                ROSALIE COFFEE
+            </strong>
+
+            Báo cáo thống kê được tạo tự động
+            từ hệ thống quản lý.
+
+        </footer>
+
+
+    </main>
+
+
+    <script>
+
+            window.addEventListener(
+                "load",
+                function () {
+
+                    setTimeout(
+                        function () {
+
+                            window.print();
+
+                        },
+                        350
+                    );
+
+                }
+            );
+
+    </script>
+
+
+</body>
+
+</html>

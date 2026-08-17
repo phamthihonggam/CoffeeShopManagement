@@ -1,12 +1,12 @@
 ﻿using CoffeeShopManagement.Data;
-using Microsoft.AspNetCore.Authorization;
+using CoffeeShopManagement.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeShopManagement.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [AdminAuthorize]
     public class DashboardController : Controller
     {
         private readonly CoffeeShopDbContext _context;
@@ -17,53 +17,65 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             _context = context;
         }
 
+
+        // =====================================================
+        // DASHBOARD ADMIN
+        // =====================================================
+
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            // =========================================
+            // =================================================
             // TỔNG SẢN PHẨM
-            // =========================================
+            // =================================================
 
             var totalProducts =
-                await _context.SanPhams.CountAsync();
+                await _context.SanPhams
+                    .CountAsync();
 
 
-            // =========================================
+            // =================================================
             // TỔNG ĐƠN HÀNG
-            // =========================================
+            // =================================================
 
             var totalOrders =
-                await _context.HoaDons.CountAsync();
+                await _context.HoaDons
+                    .CountAsync();
 
 
-            // =========================================
+            // =================================================
             // TỔNG KHÁCH HÀNG
-            // =========================================
+            // =================================================
 
             var totalCustomers =
-                await _context.KhachHangs.CountAsync();
+                await _context.KhachHangs
+                    .CountAsync();
 
 
-            // =========================================
+            // =================================================
             // TỔNG DOANH THU
-            // =========================================
+            // =================================================
 
             var totalRevenue =
                 await _context.HoaDons
-                    .SumAsync(x => (decimal?)x.TongTien)
+                    .SumAsync(
+                        x => (decimal?)x.TongTien
+                    )
                 ?? 0;
 
 
-            // =========================================
+            // =================================================
             // TỔNG NHÂN VIÊN
-            // =========================================
+            // =================================================
 
             var totalStaff =
-                await _context.NhanViens.CountAsync();
+                await _context.NhanViens
+                    .CountAsync();
 
 
-            // =========================================
+            // =================================================
             // GỬI DỮ LIỆU QUA VIEW
-            // =========================================
+            // =================================================
 
             ViewBag.TotalProducts =
                 totalProducts;

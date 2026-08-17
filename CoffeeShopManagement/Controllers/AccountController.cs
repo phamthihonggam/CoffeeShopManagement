@@ -369,7 +369,58 @@ namespace CoffeeShopManagement.Controllers
                 );
 
                 // =================================================
-                // SESSION
+                // SESSION RIÊNG CHO KHU VỰC ADMIN / NHÂN VIÊN
+                // =================================================
+
+                if (role == "Admin" || role == "NhanVien")
+                {
+                    var permissions = await _context.VaiTros
+                        .Where(x => x.MaVaiTro == taiKhoan.MaVaiTro)
+                        .SelectMany(x => x.MaQuyens)
+                        .Where(x => x.IsActive)
+                        .Select(x => x.TenQuyen)
+                        .ToListAsync();
+
+                    HttpContext.Session.SetString(
+                        "AdminLoggedIn",
+                        "true"
+                    );
+
+                    HttpContext.Session.SetInt32(
+                        "AdminAccountId",
+                        taiKhoan.MaTaiKhoan
+                    );
+
+                    HttpContext.Session.SetString(
+                        "AdminUsername",
+                        taiKhoan.TenDangNhap
+                    );
+
+                    HttpContext.Session.SetString(
+                        "AdminFullName",
+                        taiKhoan.HoTen
+                    );
+
+                    HttpContext.Session.SetString(
+                        "AdminRole",
+                        role == "Admin"
+                            ? "Admin"
+                            : "Nhân viên"
+                    );
+
+                    HttpContext.Session.SetString(
+                        "AdminAvatar",
+                        taiKhoan.HinhAnh ?? ""
+                    );
+
+                    HttpContext.Session.SetString(
+                        "AdminPermissions",
+                        string.Join("|", permissions)
+                    );
+                }
+
+                // =================================================
+                // SESSION CHUNG
                 // =================================================
 
                 HttpContext.Session.SetInt32(

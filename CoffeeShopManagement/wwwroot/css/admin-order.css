@@ -47,7 +47,13 @@
     border: 1px solid #eadfd8;
     border-radius: 17px;
     box-shadow: 0 9px 24px rgba(70, 43, 34, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+    .admin-order-stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(70, 43, 34, 0.09);
+    }
 
 .admin-order-stat-icon {
     width: 43px;
@@ -132,6 +138,10 @@
         transition: 0.2s ease;
     }
 
+        .admin-order-search input::placeholder {
+            color: #aa9a92;
+        }
+
         .admin-order-search input:focus {
             background: #ffffff;
             border-color: #9c6649;
@@ -145,7 +155,7 @@
 
 .admin-order-status-filter {
     height: 44px;
-    min-width: 175px;
+    min-width: 190px;
     padding: 0 13px;
     border: 1px solid #ded1ca;
     border-radius: 11px;
@@ -157,9 +167,15 @@
     cursor: pointer;
 }
 
+    .admin-order-status-filter:focus {
+        background: #ffffff;
+        border-color: #9c6649;
+        box-shadow: 0 0 0 3px rgba(156, 102, 73, 0.08);
+    }
+
 
 /* =====================================================
-   FILTER BUTTON
+   SEARCH / FILTER BUTTON
 ===================================================== */
 
 .admin-order-search-btn {
@@ -181,11 +197,12 @@
 
     .admin-order-search-btn:hover {
         background: #5c3728;
+        transform: translateY(-1px);
     }
 
 
 /* =====================================================
-   RESET
+   RESET BUTTON
 ===================================================== */
 
 .admin-order-reset-btn {
@@ -207,7 +224,9 @@
 
     .admin-order-reset-btn:hover {
         background: #f6efeb;
+        border-color: #cbb8ae;
         color: #56382b;
+        transform: translateY(-1px);
     }
 
 
@@ -231,7 +250,7 @@
 
 
 /* =====================================================
-   TABLE
+   ORDER TABLE
 ===================================================== */
 
 .admin-order-table {
@@ -264,7 +283,7 @@
     }
 
     .admin-order-table tbody tr {
-        transition: 0.18s ease;
+        transition: background 0.18s ease;
     }
 
         .admin-order-table tbody tr:hover {
@@ -374,6 +393,7 @@
 .admin-order-status {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     padding: 6px 10px;
     border-radius: 20px;
     font-size: 11px;
@@ -404,6 +424,11 @@
 .status-completed {
     background: #eaf7ee;
     color: #3f7950;
+}
+
+.status-cancel-request {
+    background: #fff0df;
+    color: #b96a1f;
 }
 
 .status-cancelled {
@@ -441,7 +466,9 @@
 }
 
 
-/* VIEW */
+/* =====================================================
+   VIEW
+===================================================== */
 
 .admin-order-view-btn {
     border: 1px solid #cdd9e6;
@@ -453,10 +480,13 @@
         background: #50769b;
         border-color: #50769b;
         color: #ffffff;
+        transform: translateY(-1px);
     }
 
 
-/* UPDATE STATUS */
+/* =====================================================
+   UPDATE STATUS
+===================================================== */
 
 .admin-order-status-btn {
     border: 1px solid #d8c5b8;
@@ -468,6 +498,7 @@
         background: #81543d;
         border-color: #81543d;
         color: #ffffff;
+        transform: translateY(-1px);
     }
 
 
@@ -637,8 +668,7 @@
     transition: 0.25s ease;
 }
 
-.admin-order-modal.show
-.admin-order-modal-box {
+.admin-order-modal.show .admin-order-modal-box {
     transform: translateY(0) scale(1);
 }
 
@@ -737,6 +767,10 @@
     color: #745548;
 }
 
+    .admin-order-modal-cancel:hover {
+        background: #f6efeb;
+    }
+
 .admin-order-modal-confirm {
     border: none;
     background: #754833;
@@ -758,55 +792,127 @@
 
 
 /* =====================================================
-   RESPONSIVE
+   PAGINATION
 ===================================================== */
 
-@media (max-width: 1100px) {
+.admin-order-pagination-wrap {
+    margin-top: 18px;
+    padding: 17px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    background: #ffffff;
+    border: 1px solid #eadfd8;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(76, 45, 37, 0.05);
+}
 
-    .admin-order-stats {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+.admin-order-pagination-info {
+    color: #806e65;
+    font-size: 13px;
+}
+
+    .admin-order-pagination-info strong {
+        color: #4c2d25;
+        font-weight: 800;
     }
+
+.admin-order-page-size {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #806e65;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+    .admin-order-page-size select {
+        height: 38px;
+        min-width: 68px;
+        padding: 0 10px;
+        border: 1px solid #ded1ca;
+        border-radius: 9px;
+        outline: none;
+        background: #fbf9f7;
+        color: #57392f;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+        .admin-order-page-size select:focus {
+            background: #ffffff;
+            border-color: #9c6649;
+            box-shadow: 0 0 0 3px rgba(156, 102, 73, 0.08);
+        }
+
+.admin-order-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.admin-order-page-link {
+    min-width: 38px;
+    height: 38px;
+    padding: 0 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 1px solid #dfcec3;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #6a4435;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+    .admin-order-page-link:hover {
+        background: #f6ede8;
+        border-color: #c9a998;
+        color: #5a3429;
+        transform: translateY(-1px);
+    }
+
+    .admin-order-page-link.active {
+        background: #754833;
+        border-color: #754833;
+        color: #ffffff;
+        box-shadow: 0 5px 14px rgba(117, 72, 51, 0.18);
+    }
+
+        .admin-order-page-link.active:hover {
+            background: #5c3728;
+            border-color: #5c3728;
+            color: #ffffff;
+        }
+
+    .admin-order-page-link.disabled {
+        opacity: 0.42;
+        pointer-events: none;
+        background: #f7f4f2;
+        color: #9b8c85;
+        transform: none;
+    }
+
+.admin-order-page-dots {
+    min-width: 28px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #9a8075;
+    font-weight: 800;
 }
 
 
-@media (max-width: 750px) {
-
-    .admin-order-filter {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .admin-order-search,
-    .admin-order-status-filter,
-    .admin-order-search-btn,
-    .admin-order-reset-btn {
-        width: 100%;
-    }
-}
-
-
-@media (max-width: 600px) {
-
-    .admin-order-stats {
-        grid-template-columns: 1fr;
-    }
-
-    .admin-toast {
-        top: 85px;
-        left: 15px;
-        right: 15px;
-        width: auto;
-    }
-
-    .admin-order-modal-actions {
-        flex-direction: column;
-    }
-
-    .admin-order-modal-cancel,
-    .admin-order-modal-confirm {
-        width: 100%;
-    }
-}
 /* =====================================================
    ORDER DETAILS
 ===================================================== */
@@ -818,7 +924,6 @@
     gap: 18px;
 }
 
-
 .admin-order-detail-card,
 .admin-order-payment-card {
     background: #ffffff;
@@ -827,11 +932,20 @@
     box-shadow: 0 10px 28px rgba(70, 43, 34, 0.06);
 }
 
-
 .admin-order-detail-card {
     padding: 22px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+    .admin-order-detail-card:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 30px rgba(70, 43, 34, 0.075);
+    }
+
+
+/* =====================================================
+   DETAIL TITLE
+===================================================== */
 
 .admin-order-detail-title {
     display: flex;
@@ -840,10 +954,10 @@
     margin-bottom: 20px;
 }
 
-
 .admin-order-detail-icon {
     width: 44px;
     height: 44px;
+    flex: 0 0 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -852,7 +966,6 @@
     color: #875238;
     font-size: 16px;
 }
-
 
 .admin-order-detail-title span,
 .admin-order-payment-title span {
@@ -863,7 +976,6 @@
     font-weight: 800;
     letter-spacing: 1.2px;
 }
-
 
 .admin-order-detail-title h3,
 .admin-order-payment-title h3 {
@@ -883,7 +995,6 @@
     flex-direction: column;
 }
 
-
     .admin-order-info-list > div {
         padding: 12px 0;
         display: flex;
@@ -893,23 +1004,23 @@
         border-bottom: 1px solid #f0e7e2;
     }
 
-
         .admin-order-info-list > div:last-child {
             border-bottom: none;
         }
-
 
         .admin-order-info-list > div > span:first-child {
             color: #918078;
             font-size: 12px;
         }
 
-
     .admin-order-info-list strong {
+        max-width: 65%;
         color: #50352b;
         font-size: 13px;
         font-weight: 700;
+        line-height: 1.5;
         text-align: right;
+        word-break: break-word;
     }
 
 
@@ -921,19 +1032,16 @@
     margin-top: 18px;
 }
 
-
 .admin-order-detail-table-wrap {
     width: 100%;
     overflow-x: auto;
 }
-
 
 .admin-order-detail-table {
     width: 100%;
     min-width: 700px;
     border-collapse: collapse;
 }
-
 
     .admin-order-detail-table th {
         padding: 13px 14px;
@@ -942,22 +1050,24 @@
         font-size: 11px;
         font-weight: 800;
         text-align: left;
+        border-bottom: 1px solid #e5d8d0;
     }
-
 
     .admin-order-detail-table td {
         padding: 14px;
-        border-bottom: 1px solid #f0e7e2;
         color: #5d4a41;
         font-size: 12px;
+        border-bottom: 1px solid #f0e7e2;
     }
 
+    .admin-order-detail-table tbody tr:last-child td {
+        border-bottom: none;
+    }
 
 .admin-order-item-name {
     color: #482c23;
     font-weight: 800;
 }
-
 
 .admin-order-item-type {
     display: inline-flex;
@@ -971,7 +1081,7 @@
 
 
 /* =====================================================
-   PAYMENT
+   PAYMENT CARD
 ===================================================== */
 
 .admin-order-payment-card {
@@ -981,11 +1091,13 @@
     padding: 22px;
 }
 
-
 .admin-order-payment-title {
     margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
 }
-
 
 .admin-order-payment-list > div {
     padding: 11px 0;
@@ -996,23 +1108,19 @@
     border-bottom: 1px solid #f0e7e2;
 }
 
-
 .admin-order-payment-list span {
     color: #88766e;
     font-size: 12px;
 }
-
 
 .admin-order-payment-list strong {
     color: #50352b;
     font-size: 13px;
 }
 
-
 .admin-order-discount {
     color: #4b865e !important;
 }
-
 
 .admin-order-payment-total {
     margin-top: 4px;
@@ -1020,13 +1128,11 @@
     border-bottom: none !important;
 }
 
-
     .admin-order-payment-total span {
         color: #4b2e25;
         font-size: 14px;
         font-weight: 800;
     }
-
 
     .admin-order-payment-total strong {
         color: #8a4e32;
@@ -1035,26 +1141,35 @@
     }
 
 
-@media (max-width: 850px) {
-
-    .admin-order-detail-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-
 /* =====================================================
-   EXTENDED STATUS
+   PAYMENT METHOD
 ===================================================== */
 
-.status-cancel-request {
-    background: #fff0df;
-    color: #b96a1f;
+.admin-order-payment-method {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 30px;
+    padding: 0 11px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.4px;
 }
+
+    .admin-order-payment-method.paid {
+        background: #e8f7ed;
+        color: #2e8550;
+    }
+
+    .admin-order-payment-method.cod {
+        background: #fff1da;
+        color: #a56a17;
+    }
 
 
 /* =====================================================
-   ORDER DETAIL ACTIONS - EXTENDED
+   DETAIL ACTIONS
 ===================================================== */
 
 .admin-order-detail-card .admin-order-actions {
@@ -1072,11 +1187,6 @@
         margin: 0;
     }
 
-
-/* =====================================================
-   DETAIL ACTION BUTTONS
-===================================================== */
-
 .admin-order-detail-card .admin-order-action-btn {
     width: auto;
     min-width: 135px;
@@ -1091,6 +1201,11 @@
     font-weight: 800;
     white-space: nowrap;
 }
+
+
+/* =====================================================
+   ACTION COLORS
+===================================================== */
 
 .admin-order-action-btn.primary {
     border: 1px solid #7b513d;
@@ -1139,46 +1254,7 @@
 
 
 /* =====================================================
-   PAYMENT TITLE FLEX
-===================================================== */
-
-.admin-order-payment-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-}
-
-
-/* =====================================================
-   PAYMENT METHOD BADGE
-===================================================== */
-
-.admin-order-payment-method {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 30px;
-    padding: 0 11px;
-    border-radius: 999px;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 0.4px;
-}
-
-    .admin-order-payment-method.paid {
-        background: #e8f7ed;
-        color: #2e8550;
-    }
-
-    .admin-order-payment-method.cod {
-        background: #fff1da;
-        color: #a56a17;
-    }
-
-
-/* =====================================================
-   CANCEL / REFUND DETAIL CARD
+   CANCEL / REFUND
 ===================================================== */
 
 .admin-order-items-card .admin-order-info-list {
@@ -1197,32 +1273,7 @@
 
 
 /* =====================================================
-   DELIVERY INFO DETAIL
-===================================================== */
-
-.admin-order-detail-card .admin-order-info-list strong {
-    max-width: 65%;
-    line-height: 1.5;
-    word-break: break-word;
-}
-
-
-/* =====================================================
-   DETAIL CARD EMPHASIS
-===================================================== */
-
-.admin-order-detail-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-    .admin-order-detail-card:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 12px 30px rgba(70, 43, 34, 0.075);
-    }
-
-
-/* =====================================================
-   ALERT FIX INSIDE ADMIN
+   ALERT
 ===================================================== */
 
 .alert {
@@ -1233,10 +1284,367 @@
 
 
 /* =====================================================
-   DETAILS RESPONSIVE EXTENDED
+   DETAIL HEADER BUTTONS
+===================================================== */
+
+.admin-order-header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 9px;
+    flex-wrap: wrap;
+}
+
+.admin-order-header-btn {
+    height: 44px;
+    padding: 0 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+    /* PRINT */
+
+    .admin-order-header-btn.print {
+        border: 1px solid #d7c4b8;
+        background: #fff8f3;
+        color: #744a36;
+    }
+
+        .admin-order-header-btn.print:hover {
+            background: #744a36;
+            border-color: #744a36;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(116, 74, 54, 0.16);
+        }
+
+
+    /* PDF */
+
+    .admin-order-header-btn.pdf {
+        border: 1px solid #e1bdbb;
+        background: #fff5f4;
+        color: #aa4d48;
+    }
+
+        .admin-order-header-btn.pdf:hover {
+            background: #aa4d48;
+            border-color: #aa4d48;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(170, 77, 72, 0.16);
+        }
+
+
+/* =====================================================
+   INVOICE
+===================================================== */
+
+.admin-invoice-document {
+    display: none;
+    width: 794px;
+    max-width: 794px;
+    margin: 0;
+    padding: 36px;
+    box-sizing: border-box;
+    background: #ffffff;
+    color: #392720;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* =====================================================
+   INVOICE HEADER
+===================================================== */
+
+.admin-invoice-header {
+    padding-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 30px;
+    border-bottom: 2px solid #724735;
+}
+
+.admin-invoice-brand {
+    color: #5e382b;
+    font-size: 27px;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: 1.5px;
+}
+
+.admin-invoice-subtitle {
+    margin-top: 7px;
+    color: #9a796a;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.admin-invoice-code {
+    text-align: right;
+}
+
+    .admin-invoice-code span {
+        display: block;
+        margin-bottom: 5px;
+        color: #9a8176;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    .admin-invoice-code strong {
+        color: #5e382b;
+        font-size: 19px;
+        font-weight: 900;
+    }
+
+
+/* =====================================================
+   INVOICE META
+===================================================== */
+
+.admin-invoice-meta {
+    padding: 16px 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    border-bottom: 1px solid #eadfd8;
+}
+
+    .admin-invoice-meta > div {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .admin-invoice-meta span {
+        color: #938078;
+        font-size: 9px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .admin-invoice-meta strong {
+        color: #432b22;
+        font-size: 11px;
+        font-weight: 800;
+        word-break: break-word;
+    }
+
+
+/* =====================================================
+   INVOICE SECTION
+===================================================== */
+
+.admin-invoice-section {
+    margin-top: 22px;
+}
+
+    .admin-invoice-section h3 {
+        margin: 0 0 12px;
+        color: #563428;
+        font-size: 14px;
+        font-weight: 900;
+    }
+
+
+/* =====================================================
+   INVOICE CUSTOMER
+===================================================== */
+
+.admin-invoice-customer-grid {
+    padding: 14px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    background: #faf6f3;
+    border: 1px solid #eee2db;
+    border-radius: 9px;
+}
+
+    .admin-invoice-customer-grid > div {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .admin-invoice-customer-grid span {
+        color: #938078;
+        font-size: 9px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .admin-invoice-customer-grid strong {
+        color: #432b22;
+        font-size: 11px;
+        font-weight: 800;
+        line-height: 1.4;
+        word-break: break-word;
+    }
+
+.admin-invoice-full {
+    grid-column: 1 / -1;
+}
+
+
+/* =====================================================
+   INVOICE TABLE
+===================================================== */
+
+.admin-invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .admin-invoice-table th {
+        padding: 10px 9px;
+        background: #f3eae5;
+        color: #644536;
+        font-size: 9px;
+        font-weight: 900;
+        text-align: left;
+        border-bottom: 1px solid #dbc9bf;
+    }
+
+    .admin-invoice-table td {
+        padding: 10px 9px;
+        color: #58443b;
+        font-size: 10px;
+        line-height: 1.35;
+        vertical-align: top;
+        border-bottom: 1px solid #eee5df;
+    }
+
+    .admin-invoice-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .admin-invoice-table th:nth-child(3),
+    .admin-invoice-table th:nth-child(4),
+    .admin-invoice-table th:nth-child(5),
+    .admin-invoice-table td:nth-child(3),
+    .admin-invoice-table td:nth-child(4),
+    .admin-invoice-table td:nth-child(5) {
+        text-align: right;
+    }
+
+    .admin-invoice-table td strong {
+        display: block;
+        color: #452d24;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .admin-invoice-table td small {
+        display: block;
+        margin-top: 3px;
+        color: #9b8277;
+        font-size: 8px;
+    }
+
+
+/* =====================================================
+   INVOICE SUMMARY
+===================================================== */
+
+.admin-invoice-summary {
+    width: 315px;
+    max-width: 100%;
+    margin: 20px 0 0 auto;
+}
+
+    .admin-invoice-summary > div {
+        padding: 7px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        color: #79675f;
+        font-size: 10px;
+    }
+
+    .admin-invoice-summary strong {
+        color: #4a3026;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+.admin-invoice-grand-total {
+    margin-top: 4px;
+    padding-top: 11px !important;
+    border-top: 2px solid #6b4232;
+}
+
+    .admin-invoice-grand-total span {
+        color: #4d3025;
+        font-size: 11px;
+        font-weight: 900;
+    }
+
+    .admin-invoice-grand-total strong {
+        color: #8d4d32;
+        font-size: 17px;
+        font-weight: 900;
+    }
+
+
+/* =====================================================
+   INVOICE FOOTER
+===================================================== */
+
+.admin-invoice-footer {
+    margin-top: 28px;
+    padding-top: 15px;
+    text-align: center;
+    border-top: 1px solid #eadfd8;
+}
+
+    .admin-invoice-footer strong {
+        color: #674234;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .admin-invoice-footer p {
+        margin: 5px 0 0;
+        color: #9b8b83;
+        font-size: 8px;
+    }
+
+
+/* =====================================================
+   RESPONSIVE 1100
+===================================================== */
+
+@media (max-width: 1100px) {
+
+    .admin-order-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* =====================================================
+   RESPONSIVE 850
 ===================================================== */
 
 @media (max-width: 850px) {
+
+    .admin-order-detail-grid {
+        grid-template-columns: 1fr;
+    }
 
     .admin-order-payment-card {
         width: 100%;
@@ -1248,6 +1656,70 @@
 }
 
 
+/* =====================================================
+   RESPONSIVE 800
+===================================================== */
+
+@media (max-width: 800px) {
+
+    .admin-order-pagination-wrap {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-order-pagination {
+        justify-content: flex-start;
+    }
+}
+
+
+/* =====================================================
+   RESPONSIVE 750
+===================================================== */
+
+@media (max-width: 750px) {
+
+    .admin-order-filter {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .admin-order-search,
+    .admin-order-status-filter,
+    .admin-order-search-btn,
+    .admin-order-reset-btn {
+        width: 100%;
+    }
+
+    .admin-order-search {
+        min-width: 0;
+    }
+}
+
+
+/* =====================================================
+   RESPONSIVE 700
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .admin-order-header-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+        .admin-order-header-btn,
+        .admin-order-header-actions .admin-order-reset-btn {
+            flex: 1;
+            min-width: 145px;
+        }
+}
+
+
+/* =====================================================
+   RESPONSIVE 600
+===================================================== */
+
 @media (max-width: 600px) {
 
     .order-admin-heading {
@@ -1255,9 +1727,25 @@
         align-items: flex-start;
     }
 
-        .order-admin-heading .admin-order-reset-btn {
-            width: 100%;
-        }
+    .admin-order-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-toast {
+        top: 85px;
+        left: 15px;
+        right: 15px;
+        width: auto;
+    }
+
+    .admin-order-modal-actions {
+        flex-direction: column;
+    }
+
+    .admin-order-modal-cancel,
+    .admin-order-modal-confirm {
+        width: 100%;
+    }
 
     .admin-order-detail-card,
     .admin-order-payment-card {
@@ -1293,5 +1781,74 @@
     .admin-order-payment-title {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+    .admin-order-page-size {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .admin-order-page-link {
+        min-width: 35px;
+        height: 35px;
+        padding: 0 8px;
+        font-size: 12px;
+    }
+
+    .admin-order-header-actions {
+        flex-direction: column;
+    }
+
+        .admin-order-header-btn,
+        .admin-order-header-actions .admin-order-reset-btn {
+            width: 100%;
+            flex: none;
+        }
+}
+
+
+/* =====================================================
+   PRINT
+   Dùng cho cửa sổ hóa đơn riêng trong Details.cshtml
+===================================================== */
+
+@media print {
+
+    html,
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+    }
+
+    .admin-invoice-document {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 10mm !important;
+        box-sizing: border-box !important;
+        background: #ffffff !important;
+        color: #392720 !important;
+    }
+
+    .admin-invoice-header,
+    .admin-invoice-meta,
+    .admin-invoice-customer-grid,
+    .admin-invoice-summary,
+    .admin-invoice-footer {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    .admin-invoice-table tr {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    @page {
+        size: A4;
+        margin: 0;
     }
 }

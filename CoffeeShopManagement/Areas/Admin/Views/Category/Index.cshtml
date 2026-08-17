@@ -299,6 +299,18 @@
 
                                 <div class="category-actions">
 
+                                    <!-- VIEW -->
+
+                                    <a asp-area="Admin"
+                                       asp-controller="Category"
+                                       asp-action="Details"
+                                       asp-route-id="@item.MaLoai"
+                                       class="category-action-btn category-view-btn"
+                                       title="Xem danh mục">
+
+                                        <i class="fa-solid fa-eye"></i>
+
+                                    </a>
 
                                     <!-- EDIT -->
 

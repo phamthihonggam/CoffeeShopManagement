@@ -2,7 +2,19 @@
 
 @{
     ViewData["Title"] = "Quản lý sản phẩm";
+
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int pageSize = ViewBag.PageSize ?? 10;
+    int totalPages = ViewBag.TotalPages ?? 0;
+    int totalItems = ViewBag.TotalItems ?? 0;
+    int startItem = ViewBag.StartItem ?? 0;
+    int endItem = ViewBag.EndItem ?? 0;
+
+    string? keyword = ViewBag.Keyword?.ToString();
+    int? categoryId = ViewBag.CategoryId;
+    string? promotion = ViewBag.Promotion?.ToString();
 }
+
 
 @section Styles {
 
@@ -10,12 +22,234 @@
           href="~/css/admin-product.css"
           asp-append-version="true" />
 
+    <style>
+
+        /* =====================================================
+                   FILTER
+                ===================================================== */
+
+        .admin-product-filter-form {
+            width: 100%;
+            display: grid;
+            grid-template-columns: minmax(280px, 2fr) 190px 190px auto auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .admin-filter-select {
+            height: 44px;
+            padding: 0 14px;
+            border: 1px solid #e3d1c5;
+            border-radius: 10px;
+            background: #fff;
+            color: #5b3026;
+            outline: none;
+        }
+
+        .admin-page-size {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+            .admin-page-size select {
+                height: 38px;
+                padding: 0 10px;
+                border: 1px solid #dfcfc4;
+                border-radius: 8px;
+                background: white;
+            }
+
+
+        /* =====================================================
+                   VIEW BUTTON
+                ===================================================== */
+
+        .admin-view-btn {
+            color: #2875a8;
+            border-color: #bcd8eb;
+            background: #f5fbff;
+        }
+
+
+        /* =====================================================
+                   PAGINATION
+                ===================================================== */
+
+        .admin-pagination-wrap {
+            margin-top: 18px;
+            padding: 18px 20px;
+            border-radius: 14px;
+            background: #fff;
+            border: 1px solid #eaded6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .admin-pagination-info {
+            color: #80685e;
+            font-size: 14px;
+        }
+
+        .admin-pagination {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .admin-page-link {
+            min-width: 38px;
+            height: 38px;
+            padding: 0 11px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9px;
+            border: 1px solid #dfcec3;
+            background: #fff;
+            color: #66372b;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+            .admin-page-link:hover {
+                background: #f7ede7;
+                color: #66372b;
+            }
+
+            .admin-page-link.active {
+                background: #7b4532;
+                color: #fff;
+                border-color: #7b4532;
+            }
+
+            .admin-page-link.disabled {
+                opacity: .45;
+                pointer-events: none;
+            }
+
+
+        /* =====================================================
+                   DELETE MODAL
+                ===================================================== */
+
+        .admin-delete-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+            .admin-delete-modal.show {
+                display: flex;
+            }
+
+        .admin-delete-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(49, 28, 22, .48);
+            backdrop-filter: blur(3px);
+        }
+
+        .admin-delete-dialog {
+            position: relative;
+            z-index: 2;
+            width: min(460px, 100%);
+            padding: 30px;
+            border-radius: 20px;
+            background: #fff;
+            box-shadow: 0 25px 70px rgba(62, 35, 27, .25);
+            text-align: center;
+        }
+
+        .admin-delete-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff0ef;
+            color: #c54949;
+            font-size: 24px;
+        }
+
+        .admin-delete-dialog h3 {
+            margin: 0 0 10px;
+            color: #542c22;
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .admin-delete-dialog p {
+            margin: 0;
+            color: #806a62;
+            line-height: 1.6;
+        }
+
+        .admin-delete-product-name {
+            display: block;
+            margin-top: 8px;
+            color: #542c22;
+            font-weight: 800;
+        }
+
+        .admin-delete-actions {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .admin-modal-cancel,
+        .admin-modal-delete {
+            min-width: 130px;
+            height: 43px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .admin-modal-cancel {
+            border: 1px solid #ded0c7;
+            background: #fff;
+            color: #65473d;
+        }
+
+        .admin-modal-delete {
+            border: none;
+            background: #c54949;
+            color: #fff;
+        }
+
+        @@media (max-width: 1000px) {
+            .admin-product-filter-form {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @@media (max-width: 650px) {
+            .admin-product-filter-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
 }
 
 
-<!-- =========================================
+<!-- =====================================================
      HEADER
-========================================= -->
+===================================================== -->
 
 <div class="admin-welcome">
 
@@ -51,9 +285,9 @@
 </div>
 
 
-<!-- =========================================
-     SUCCESS TOAST
-========================================= -->
+<!-- =====================================================
+     SUCCESS
+===================================================== -->
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="admin-toast"
@@ -64,7 +298,6 @@
             <i class="fa-solid fa-check"></i>
 
         </div>
-
 
         <div class="admin-toast-content">
 
@@ -78,7 +311,6 @@
 
         </div>
 
-
         <button type="button"
                 class="admin-toast-close"
                 id="adminToastClose"
@@ -92,9 +324,6 @@
 }
 
 
-<!-- =========================================
-     ERROR TOAST
-========================================= -->
 @if (TempData["ErrorMessage"] != null)
 {
     <div class="admin-toast admin-toast-error"
@@ -105,7 +334,6 @@
             <i class="fa-solid fa-triangle-exclamation"></i>
 
         </div>
-
 
         <div class="admin-toast-content">
 
@@ -119,7 +347,6 @@
 
         </div>
 
-
         <button type="button"
                 class="admin-toast-close"
                 id="adminToastClose"
@@ -133,9 +360,9 @@
 }
 
 
-<!-- =========================================
-     TOOLBAR
-========================================= -->
+<!-- =====================================================
+     SEARCH + FILTER
+===================================================== -->
 
 <div class="admin-product-toolbar">
 
@@ -143,7 +370,7 @@
           asp-area="Admin"
           asp-controller="Product"
           asp-action="Index"
-          class="admin-product-search">
+          class="admin-product-filter-form">
 
         <div class="admin-search-box">
 
@@ -151,34 +378,84 @@
 
             <input type="text"
                    name="keyword"
-                   value="@ViewBag.Keyword"
+                   value="@keyword"
                    placeholder="Tìm tên hoặc mô tả sản phẩm..."
                    autocomplete="off" />
 
         </div>
 
 
+        <select name="categoryId"
+                class="admin-filter-select">
+
+            <option value="">
+                Tất cả danh mục
+            </option>
+
+            @foreach (var category in ViewBag.FilterCategories)
+            {
+                if (categoryId == category.MaLoai)
+                {
+                    <option value="@category.MaLoai"
+                            selected>
+                        @category.TenLoai
+                    </option>
+                }
+                else
+                {
+                    <option value="@category.MaLoai">
+                        @category.TenLoai
+                    </option>
+                }
+            }
+
+        </select>
+
+
+        <select name="promotion"
+                class="admin-filter-select">
+
+            <option value=""
+                    selected="@(string.IsNullOrWhiteSpace(promotion))">
+                Tất cả trạng thái
+            </option>
+
+            <option value="sale"
+                    selected="@(promotion == "sale")">
+                Đang khuyến mãi
+            </option>
+
+            <option value="normal"
+                    selected="@(promotion == "normal")">
+                Bình thường
+            </option>
+
+        </select>
+
+
+        <input type="hidden"
+               name="pageSize"
+               value="@pageSize" />
+
+
         <button type="submit"
                 class="admin-search-btn">
 
-            Tìm kiếm
+            <i class="fa-solid fa-filter"></i>
+            Lọc
 
         </button>
 
 
-        @if (!string.IsNullOrWhiteSpace(ViewBag.Keyword?.ToString()))
-        {
-            <a asp-area="Admin"
-               asp-controller="Product"
-               asp-action="Index"
-               class="admin-reset-search">
+        <a asp-area="Admin"
+           asp-controller="Product"
+           asp-action="Index"
+           class="admin-reset-search">
 
-                <i class="fa-solid fa-rotate-left"></i>
+            <i class="fa-solid fa-rotate-left"></i>
+            Đặt lại
 
-                Đặt lại
-
-            </a>
-        }
+        </a>
 
     </form>
 
@@ -192,7 +469,7 @@
             Tổng:
 
             <strong>
-                @Model.Count()
+                @totalItems
             </strong>
 
             sản phẩm
@@ -204,9 +481,9 @@
 </div>
 
 
-<!-- =========================================
-     PRODUCT TABLE
-========================================= -->
+<!-- =====================================================
+     TABLE
+===================================================== -->
 
 <div class="admin-table-card">
 
@@ -255,10 +532,6 @@
                     {
                         <tr>
 
-                            <!-- =================================
-                                 MÃ
-                            ================================== -->
-
                             <td>
 
                                 <span class="admin-product-id">
@@ -267,10 +540,6 @@
 
                             </td>
 
-
-                            <!-- =================================
-                                 SẢN PHẨM
-                            ================================== -->
 
                             <td>
 
@@ -326,10 +595,6 @@
                             </td>
 
 
-                            <!-- =================================
-                                 DANH MỤC
-                            ================================== -->
-
                             <td>
 
                                 <span class="admin-category-badge">
@@ -341,10 +606,6 @@
 
                             </td>
 
-
-                            <!-- =================================
-                                 GIÁ
-                            ================================== -->
 
                             <td>
 
@@ -372,10 +633,6 @@
 
                             </td>
 
-
-                            <!-- =================================
-                                 KHUYẾN MÃI
-                            ================================== -->
 
                             <td>
 
@@ -410,13 +667,23 @@
                             </td>
 
 
-                            <!-- =================================
-                                 THAO TÁC
-                            ================================== -->
-
                             <td>
 
                                 <div class="admin-table-actions">
+
+                                    <!-- VIEW -->
+
+                                    <a asp-area="Admin"
+                                       asp-controller="Product"
+                                       asp-action="Details"
+                                       asp-route-id="@item.MaSp"
+                                       class="admin-action-btn admin-view-btn"
+                                       title="Xem sản phẩm">
+
+                                        <i class="fa-solid fa-eye"></i>
+
+                                    </a>
+
 
                                     <!-- EDIT -->
 
@@ -434,25 +701,15 @@
 
                                     <!-- DELETE -->
 
-                                    <form asp-area="Admin"
-                                          asp-controller="Product"
-                                          asp-action="Delete"
-                                          asp-route-id="@item.MaSp"
-                                          method="post"
-                                          class="admin-delete-form"
-                                          onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm @item.TenSp không?');">
+                                    <button type="button"
+                                            class="admin-action-btn admin-delete-btn js-delete-product"
+                                            data-id="@item.MaSp"
+                                            data-name="@item.TenSp"
+                                            title="Xóa sản phẩm">
 
-                                        @Html.AntiForgeryToken()
+                                        <i class="fa-solid fa-trash"></i>
 
-                                        <button type="submit"
-                                                class="admin-action-btn admin-delete-btn"
-                                                title="Xóa sản phẩm">
-
-                                            <i class="fa-solid fa-trash"></i>
-
-                                        </button>
-
-                                    </form>
+                                    </button>
 
                                 </div>
 
@@ -463,10 +720,6 @@
                 }
                 else
                 {
-                    <!-- =================================
-                         KHÔNG CÓ SẢN PHẨM
-                    ================================== -->
-
                     <tr>
 
                         <td colspan="6">
@@ -480,8 +733,8 @@
                                 </h3>
 
                                 <p>
-                                    Thử nhập từ khóa khác
-                                    hoặc đặt lại tìm kiếm.
+                                    Thử thay đổi từ khóa hoặc
+                                    điều kiện lọc.
                                 </p>
 
                             </div>
@@ -500,13 +753,378 @@
 </div>
 
 
-<!-- =========================================
-     SCRIPT
-========================================= -->
+<!-- =====================================================
+     PAGINATION
+===================================================== -->
+@if (totalItems > 0)
+{
+    <div class="admin-pagination-wrap">
+
+        <div class="admin-pagination-info">
+
+            Hiển thị
+            <strong>@startItem</strong>
+            –
+            <strong>@endItem</strong>
+            trong
+            <strong>@totalItems</strong>
+            sản phẩm
+
+        </div>
+
+
+        <form method="get"
+              asp-area="Admin"
+              asp-controller="Product"
+              asp-action="Index"
+              class="admin-page-size">
+
+            <input type="hidden"
+                   name="keyword"
+                   value="@keyword" />
+
+            <input type="hidden"
+                   name="categoryId"
+                   value="@categoryId" />
+
+            <input type="hidden"
+                   name="promotion"
+                   value="@promotion" />
+
+
+            <span>Hiển thị</span>
+
+            <select name="pageSize"
+                    onchange="this.form.submit()">
+
+                @foreach (var size in new[] { 10, 20, 50 })
+                {
+                    if (pageSize == size)
+                    {
+                        <option value="@size"
+                                selected>
+                            @size
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@size">
+                            @size
+                        </option>
+                    }
+                }
+
+            </select>
+
+            <span>dòng / trang</span>
+
+        </form>
+
+
+        @if (totalPages > 1)
+        {
+            <div class="admin-pagination">
+
+                <a asp-area="Admin"
+                   asp-controller="Product"
+                   asp-action="Index"
+                   asp-route-keyword="@keyword"
+                   asp-route-categoryId="@categoryId"
+                   asp-route-promotion="@promotion"
+                   asp-route-pageSize="@pageSize"
+                   asp-route-page="@(currentPage - 1)"
+                   class="admin-page-link @(currentPage <= 1 ? "disabled" : "")">
+
+                    <i class="fa-solid fa-chevron-left"></i>
+                    Trước
+
+                </a>
+
+
+                @{
+                    int startPage =
+                        Math.Max(
+                            1,
+                            currentPage - 2
+                        );
+
+                    int endPage =
+                        Math.Min(
+                            totalPages,
+                            currentPage + 2
+                        );
+                }
+
+
+                @if (startPage > 1)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Product"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-categoryId="@categoryId"
+                       asp-route-promotion="@promotion"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="1"
+                       class="admin-page-link">
+
+                        1
+
+                    </a>
+
+                    @if (startPage > 2)
+                    {
+                        <span>...</span>
+                    }
+                }
+
+
+                @for (int i = startPage;
+                      i <= endPage;
+                      i++)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Product"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-categoryId="@categoryId"
+                       asp-route-promotion="@promotion"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="@i"
+                       class="admin-page-link @(i == currentPage ? "active" : "")">
+
+                        @i
+
+                    </a>
+                }
+
+
+                @if (endPage < totalPages)
+                {
+                    @if (endPage <
+                         totalPages - 1)
+                    {
+                        <span>...</span>
+                    }
+
+                    <a asp-area="Admin"
+                       asp-controller="Product"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-categoryId="@categoryId"
+                       asp-route-promotion="@promotion"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="@totalPages"
+                       class="admin-page-link">
+
+                        @totalPages
+
+                    </a>
+                }
+
+
+                <a asp-area="Admin"
+                   asp-controller="Product"
+                   asp-action="Index"
+                   asp-route-keyword="@keyword"
+                   asp-route-categoryId="@categoryId"
+                   asp-route-promotion="@promotion"
+                   asp-route-pageSize="@pageSize"
+                   asp-route-page="@(currentPage + 1)"
+                   class="admin-page-link @(currentPage >= totalPages ? "disabled" : "")">
+
+                    Sau
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+}
+
+
+<!-- =====================================================
+     DELETE MODAL
+===================================================== -->
+
+<div class="admin-delete-modal"
+     id="deleteProductModal">
+
+    <div class="admin-delete-overlay"
+         id="deleteModalOverlay">
+    </div>
+
+
+    <div class="admin-delete-dialog">
+
+        <div class="admin-delete-icon">
+
+            <i class="fa-solid fa-trash"></i>
+
+        </div>
+
+
+        <h3>
+            Xóa sản phẩm?
+        </h3>
+
+
+        <p>
+
+            Bạn có chắc muốn xóa sản phẩm này không?
+
+            <span class="admin-delete-product-name"
+                  id="deleteProductName">
+            </span>
+
+        </p>
+
+
+        <div class="admin-delete-actions">
+
+            <button type="button"
+                    class="admin-modal-cancel"
+                    id="cancelDeleteProduct">
+
+                Hủy
+
+            </button>
+
+
+            <form asp-area="Admin"
+                  asp-controller="Product"
+                  asp-action="Delete"
+                  method="post"
+                  id="deleteProductForm">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       name="id"
+                       id="deleteProductId" />
+
+
+                <button type="submit"
+                        class="admin-modal-delete">
+
+                    <i class="fa-solid fa-trash"></i>
+                    Xóa sản phẩm
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 @section Scripts {
 
     <script src="~/js/admin-product.js"
             asp-append-version="true">
     </script>
 
+
+    <script>
+
+        (() => {
+
+            const modal =
+                document.getElementById(
+                    "deleteProductModal"
+                );
+
+            const productId =
+                document.getElementById(
+                    "deleteProductId"
+                );
+
+            const productName =
+                document.getElementById(
+                    "deleteProductName"
+                );
+
+            const cancelButton =
+                document.getElementById(
+                    "cancelDeleteProduct"
+                );
+
+            const overlay =
+                document.getElementById(
+                    "deleteModalOverlay"
+                );
+
+
+            document
+                .querySelectorAll(
+                    ".js-delete-product"
+                )
+                .forEach(button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            productId.value =
+                                button.dataset.id;
+
+                            productName.textContent =
+                                `"${button.dataset.name}"`;
+
+                            modal.classList.add(
+                                "show"
+                            );
+
+                            document.body.style
+                                .overflow = "hidden";
+                        }
+                    );
+
+                });
+
+
+            function closeModal() {
+
+                modal.classList.remove(
+                    "show"
+                );
+
+                document.body.style
+                    .overflow = "";
+
+            }
+
+
+            cancelButton.addEventListener(
+                "click",
+                closeModal
+            );
+
+
+            overlay.addEventListener(
+                "click",
+                closeModal
+            );
+
+
+            document.addEventListener(
+                "keydown",
+                event => {
+
+                    if (event.key === "Escape")
+                    {
+                        closeModal();
+                    }
+
+                }
+            );
+
+        })();
+
+    </script>
 }

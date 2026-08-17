@@ -1,4 +1,5 @@
 ﻿using CoffeeShopManagement.Data;
+using CoffeeShopManagement.Helpers;
 using CoffeeShopManagement.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CoffeeShopManagement.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AdminAuthorize]
     public class ProductController : Controller
     {
         private readonly CoffeeShopDbContext _context;
@@ -23,13 +25,40 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
         // =====================================================
         // DANH SÁCH SẢN PHẨM
+        // SEARCH + FILTER + PAGINATION
         // =====================================================
 
-        public async Task<IActionResult> Index(string? keyword)
+        [HttpGet]
+        public async Task<IActionResult> Index(
+            string? keyword,
+            int? categoryId,
+            string? promotion,
+            int page = 1,
+            int pageSize = 10)
         {
-            var query = _context.SanPhams
-                .Include(x => x.MaLoaiNavigation)
-                .AsQueryable();
+            if (page < 1)
+            {
+                page = 1;
+            }
+
+            var allowedPageSizes = new[] { 10, 20, 50 };
+
+            if (!allowedPageSizes.Contains(pageSize))
+            {
+                pageSize = 10;
+            }
+
+
+            var query =
+                _context.SanPhams
+                    .Include(x => x.MaLoaiNavigation)
+                    .AsNoTracking()
+                    .AsQueryable();
+
+
+            // =================================================
+            // TÌM KIẾM
+            // =================================================
 
             if (!string.IsNullOrWhiteSpace(keyword))
             {
@@ -42,13 +71,137 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                 );
             }
 
-            var products = await query
-                .OrderBy(x => x.MaSp)
-                .ToListAsync();
+
+            // =================================================
+            // LỌC DANH MỤC
+            // =================================================
+
+            if (categoryId.HasValue &&
+                categoryId.Value > 0)
+            {
+                query = query.Where(
+                    x => x.MaLoai == categoryId.Value
+                );
+            }
+
+
+            // =================================================
+            // LỌC KHUYẾN MÃI
+            // =================================================
+
+            if (!string.IsNullOrWhiteSpace(promotion))
+            {
+                if (promotion == "sale")
+                {
+                    query = query.Where(
+                        x => x.DangKhuyenMai
+                    );
+                }
+                else if (promotion == "normal")
+                {
+                    query = query.Where(
+                        x => !x.DangKhuyenMai
+                    );
+                }
+            }
+
+
+            // =================================================
+            // TỔNG KẾT QUẢ SAU KHI LỌC
+            // =================================================
+
+            var totalItems =
+                await query.CountAsync();
+
+
+            var totalPages =
+                (int)Math.Ceiling(
+                    totalItems / (double)pageSize
+                );
+
+
+            if (totalPages > 0 &&
+                page > totalPages)
+            {
+                page = totalPages;
+            }
+
+
+            // =================================================
+            // PHÂN TRANG
+            // =================================================
+
+            var products =
+                await query
+                    .OrderBy(x => x.MaSp)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+
+            // =================================================
+            // LOAD DANH MỤC CHO FILTER
+            // =================================================
+
+            ViewBag.FilterCategories =
+                await _context.LoaiSanPhams
+                    .AsNoTracking()
+                    .OrderBy(x => x.TenLoai)
+                    .ToListAsync();
+
+
+            // =================================================
+            // VIEWBAG
+            // =================================================
 
             ViewBag.Keyword = keyword;
+            ViewBag.CategoryId = categoryId;
+            ViewBag.Promotion = promotion;
+
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalItems = totalItems;
+            ViewBag.TotalPages = totalPages;
+
+            ViewBag.StartItem =
+                totalItems == 0
+                    ? 0
+                    : ((page - 1) * pageSize) + 1;
+
+            ViewBag.EndItem =
+                Math.Min(
+                    page * pageSize,
+                    totalItems
+                );
+
 
             return View(products);
+        }
+
+
+        // =====================================================
+        // XEM CHI TIẾT SẢN PHẨM
+        // =====================================================
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var product =
+                await _context.SanPhams
+                    .Include(x => x.MaLoaiNavigation)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(
+                        x => x.MaSp == id
+                    );
+
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+
+            return View(product);
         }
 
 
@@ -75,20 +228,24 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             SanPham product,
             IFormFile? imageFile)
         {
-            // Navigation không nhập từ form
-            ModelState.Remove("MaLoaiNavigation");
+            ModelState.Remove(
+                "MaLoaiNavigation"
+            );
+
 
             if (!ModelState.IsValid)
             {
-                await LoadCategories(product.MaLoai);
+                await LoadCategories(
+                    product.MaLoai
+                );
 
                 return View(product);
             }
 
 
-            // =============================
+            // =================================================
             // UPLOAD ẢNH
-            // =============================
+            // =================================================
 
             if (imageFile != null &&
                 imageFile.Length > 0)
@@ -98,7 +255,10 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             }
 
 
-            _context.SanPhams.Add(product);
+            _context.SanPhams.Add(
+                product
+            );
+
 
             await _context.SaveChangesAsync();
 
@@ -123,6 +283,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             var product =
                 await _context.SanPhams
                     .FindAsync(id);
+
 
             if (product == null)
             {
@@ -182,9 +343,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             }
 
 
-            // =============================
+            // =================================================
             // UPDATE THÔNG TIN
-            // =============================
+            // =================================================
 
             existingProduct.TenSp =
                 product.TenSp;
@@ -217,9 +378,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                 product.NgayKetThuc;
 
 
-            // =============================
+            // =================================================
             // ẢNH MỚI
-            // =============================
+            // =================================================
 
             if (imageFile != null &&
                 imageFile.Length > 0)
@@ -257,7 +418,12 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
             if (product == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] =
+                    "Không tìm thấy sản phẩm.";
+
+                return RedirectToAction(
+                    nameof(Index)
+                );
             }
 
 
@@ -267,17 +433,17 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                     product
                 );
 
-                await _context
-                    .SaveChangesAsync();
+
+                await _context.SaveChangesAsync();
 
 
                 TempData["SuccessMessage"] =
-                    "Xóa sản phẩm thành công!";
+                    $"Đã xóa sản phẩm \"{product.TenSp}\" thành công!";
             }
             catch (DbUpdateException)
             {
                 TempData["ErrorMessage"] =
-                    "Không thể xóa sản phẩm này vì sản phẩm đang được sử dụng trong dữ liệu khác.";
+                    "Không thể xóa sản phẩm này vì sản phẩm đang được sử dụng trong đơn hàng hoặc dữ liệu khác.";
             }
 
 
@@ -317,14 +483,48 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
         private async Task<string> SaveImage(
             IFormFile imageFile)
         {
+            var allowedExtensions =
+                new[]
+                {
+                    ".jpg",
+                    ".jpeg",
+                    ".png",
+                    ".webp"
+                };
+
+
             var extension =
                 Path.GetExtension(
                     imageFile.FileName
+                )
+                .ToLowerInvariant();
+
+
+            if (!allowedExtensions.Contains(
+                    extension
+                ))
+            {
+                throw new InvalidOperationException(
+                    "Định dạng ảnh không hợp lệ."
                 );
+            }
+
+
+            const long maxFileSize =
+                5 * 1024 * 1024;
+
+
+            if (imageFile.Length >
+                maxFileSize)
+            {
+                throw new InvalidOperationException(
+                    "Ảnh sản phẩm không được vượt quá 5MB."
+                );
+            }
 
 
             var fileName =
-                $"{Guid.NewGuid()}{extension}";
+                $"{Guid.NewGuid():N}{extension}";
 
 
             var folder =
@@ -350,7 +550,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                 );
 
 
-            using var stream =
+            await using var stream =
                 new FileStream(
                     filePath,
                     FileMode.Create

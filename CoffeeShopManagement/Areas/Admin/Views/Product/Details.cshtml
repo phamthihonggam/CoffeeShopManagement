@@ -1,0 +1,269 @@
+﻿@model CoffeeShopManagement.Models.SanPham
+
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+}
+
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-product.css"
+          asp-append-version="true" />
+
+    <style>
+
+        .admin-product-detail-card {
+            background: #fff;
+            border: 1px solid #eaded6;
+            border-radius: 18px;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 35px;
+        }
+
+        .admin-product-detail-image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #f7f1ed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .admin-product-detail-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .admin-product-detail-image i {
+                font-size: 65px;
+                color: #b8927c;
+            }
+
+        .admin-product-detail-info h2 {
+            margin: 0 0 8px;
+            color: #542c22;
+            font-size: 30px;
+            font-weight: 850;
+        }
+
+        .admin-detail-code {
+            display: inline-block;
+            margin-bottom: 22px;
+            color: #9b7566;
+        }
+
+        .admin-detail-grid {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 14px 20px;
+        }
+
+        .admin-detail-label {
+            color: #82685d;
+            font-weight: 700;
+        }
+
+        .admin-detail-value {
+            color: #4f3027;
+        }
+
+        .admin-detail-actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+        }
+
+        @@media(max-width: 850px) {
+
+            .admin-product-detail-card {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-product-detail-image {
+                max-width: 360px;
+            }
+        }
+
+    </style>
+}
+
+
+<div class="admin-welcome">
+
+    <div class="product-admin-heading">
+
+        <div>
+
+            <h2>
+                Chi tiết sản phẩm
+            </h2>
+
+            <p>
+                Xem đầy đủ thông tin sản phẩm Rosalie Coffee.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="admin-product-detail-card">
+
+    <div class="admin-product-detail-image">
+
+        @if (!string.IsNullOrWhiteSpace(Model.HinhAnh))
+        {
+            <img src="~/images/menu/@Model.HinhAnh"
+                 alt="@Model.TenSp" />
+        }
+        else
+        {
+            <i class="fa-solid fa-mug-hot"></i>
+        }
+
+    </div>
+
+
+    <div class="admin-product-detail-info">
+
+        <h2>
+            @Model.TenSp
+        </h2>
+
+        <span class="admin-detail-code">
+            Mã sản phẩm: #@Model.MaSp
+        </span>
+
+
+        <div class="admin-detail-grid">
+
+            <div class="admin-detail-label">
+                Danh mục
+            </div>
+
+            <div class="admin-detail-value">
+                @(Model.MaLoaiNavigation?.TenLoai
+                    ?? "Chưa phân loại")
+            </div>
+
+
+            <div class="admin-detail-label">
+                Giá bán
+            </div>
+
+            <div class="admin-detail-value">
+                @Model.DonGia.ToString("#,##0")đ
+            </div>
+
+
+            <div class="admin-detail-label">
+                Mô tả
+            </div>
+
+            <div class="admin-detail-value">
+                @(string.IsNullOrWhiteSpace(Model.MoTa)
+                    ? "Chưa có mô tả."
+                    : Model.MoTa)
+            </div>
+
+
+            <div class="admin-detail-label">
+                Khuyến mãi
+            </div>
+
+            <div class="admin-detail-value">
+
+                @if (Model.DangKhuyenMai)
+                {
+                    <span>
+                        Đang khuyến mãi
+                        @(Model.PhanTramGiam.HasValue
+                            ? $"{Model.PhanTramGiam}%"
+                            : "")
+                    </span>
+                }
+                else
+                {
+                    <span>
+                        Không
+                    </span>
+                }
+
+            </div>
+
+
+            @if (Model.GiaKhuyenMai.HasValue)
+            {
+                <div class="admin-detail-label">
+                    Giá khuyến mãi
+                </div>
+
+                <div class="admin-detail-value">
+                    @Model.GiaKhuyenMai.Value.ToString("#,##0")đ
+                </div>
+            }
+
+
+            @if (Model.NgayBatDau.HasValue)
+            {
+                <div class="admin-detail-label">
+                    Bắt đầu
+                </div>
+
+                <div class="admin-detail-value">
+                    @Model.NgayBatDau.Value.ToString("dd/MM/yyyy HH:mm")
+                </div>
+            }
+
+
+            @if (Model.NgayKetThuc.HasValue)
+            {
+                <div class="admin-detail-label">
+                    Kết thúc
+                </div>
+
+                <div class="admin-detail-value">
+                    @Model.NgayKetThuc.Value.ToString("dd/MM/yyyy HH:mm")
+                </div>
+            }
+
+        </div>
+
+
+        <div class="admin-detail-actions">
+
+            <a asp-area="Admin"
+               asp-controller="Product"
+               asp-action="Index"
+               class="admin-reset-search">
+
+                <i class="fa-solid fa-arrow-left"></i>
+                Quay lại
+
+            </a>
+
+
+            <a asp-area="Admin"
+               asp-controller="Product"
+               asp-action="Edit"
+               asp-route-id="@Model.MaSp"
+               class="admin-add-btn">
+
+                <i class="fa-solid fa-pen"></i>
+                Sửa sản phẩm
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

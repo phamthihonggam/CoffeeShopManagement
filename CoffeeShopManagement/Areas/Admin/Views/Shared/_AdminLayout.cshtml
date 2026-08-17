@@ -320,6 +320,24 @@
                     </a>
                 }
 
+                <!-- =============================================
+                     REVIEW
+                ============================================== -->
+                @if (isAdmin)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Review"
+                       asp-action="Index"
+                       class="admin-menu-item">
+
+                        <i class="fa-solid fa-star"></i>
+
+                        <span>
+                            Đánh giá
+                        </span>
+
+                    </a>
+                }
 
 
                 <!-- =============================================

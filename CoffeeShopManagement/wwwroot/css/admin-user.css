@@ -47,7 +47,14 @@
     border: 1px solid #eadfd8;
     border-radius: 17px;
     box-shadow: 0 9px 24px rgba(70, 43, 34, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
+
+    .admin-user-stat-card:hover {
+        transform: translateY(-2px);
+        border-color: #dfc9bd;
+        box-shadow: 0 12px 30px rgba(70, 43, 34, 0.09);
+    }
 
 .admin-user-stat-icon {
     width: 43px;
@@ -93,7 +100,7 @@
 
 
 /* =====================================================
-   SEARCH
+   SEARCH FORM
 ===================================================== */
 
 .admin-user-search-form {
@@ -102,6 +109,11 @@
     gap: 10px;
     flex-wrap: wrap;
 }
+
+
+/* =====================================================
+   SEARCH BOX
+===================================================== */
 
 .admin-user-search {
     position: relative;
@@ -129,7 +141,7 @@
         background: #fbf9f7;
         color: #493029;
         font-size: 13px;
-        transition: 0.2s ease;
+        transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
         .admin-user-search input::placeholder {
@@ -150,6 +162,10 @@
 .admin-user-search-btn {
     height: 44px;
     padding: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
     border: none;
     border-radius: 11px;
     background: #754833;
@@ -157,16 +173,18 @@
     font-size: 13px;
     font-weight: 700;
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
     .admin-user-search-btn:hover {
         background: #5c3728;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 14px rgba(92, 55, 40, 0.18);
     }
 
 
 /* =====================================================
-   RESET
+   RESET BUTTON
 ===================================================== */
 
 .admin-user-reset-btn {
@@ -183,12 +201,14 @@
     text-decoration: none;
     font-size: 13px;
     font-weight: 700;
-    transition: 0.2s ease;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
     .admin-user-reset-btn:hover {
         background: #f6efeb;
+        border-color: #cbb8ad;
         color: #56382b;
+        transform: translateY(-1px);
     }
 
 
@@ -245,7 +265,7 @@
     }
 
     .admin-user-table tbody tr {
-        transition: 0.18s ease;
+        transition: background 0.18s ease;
     }
 
         .admin-user-table tbody tr:hover {
@@ -310,6 +330,11 @@
     white-space: nowrap;
 }
 
+    .admin-user-info span i {
+        margin-right: 4px;
+        color: #a0745f;
+    }
+
 
 /* =====================================================
    CONTACT
@@ -364,11 +389,11 @@
 ===================================================== */
 
 .admin-user-order-count {
+    min-width: 60px;
+    padding: 6px 10px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 60px;
-    padding: 6px 10px;
     border-radius: 20px;
     background: #f4ebe5;
     color: #77503d;
@@ -393,13 +418,15 @@
     background: #f4f8fc;
     color: #50769b;
     text-decoration: none;
-    transition: 0.2s ease;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
     .admin-user-view-btn:hover {
         background: #50769b;
         border-color: #50769b;
         color: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 5px 12px rgba(80, 118, 155, 0.18);
     }
 
 
@@ -426,46 +453,12 @@
     }
 
     .admin-user-empty p {
-        margin: 0;
+        margin: 0 0 14px;
         color: #998b84;
         font-size: 13px;
     }
 
 
-/* =====================================================
-   RESPONSIVE
-===================================================== */
-
-@media (max-width: 950px) {
-
-    .admin-user-stats {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-
-@media (max-width: 700px) {
-
-    .admin-user-search-form {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-
-    .admin-user-search,
-    .admin-user-search-btn,
-    .admin-user-reset-btn {
-        width: 100%;
-    }
-}
-
-
-@media (max-width: 560px) {
-
-    .admin-user-stats {
-        grid-template-columns: 1fr;
-    }
-}
 /* =====================================================
    USER DETAILS
 ===================================================== */
@@ -477,7 +470,6 @@
     gap: 18px;
 }
 
-
 .admin-user-detail-card,
 .admin-user-detail-stats,
 .admin-user-order-history {
@@ -488,10 +480,13 @@
 }
 
 
+/* =====================================================
+   DETAIL CARD
+===================================================== */
+
 .admin-user-detail-card {
     padding: 24px;
 }
-
 
 .admin-user-detail-header {
     display: flex;
@@ -500,7 +495,6 @@
     padding-bottom: 20px;
     border-bottom: 1px solid #f0e7e2;
 }
-
 
 .admin-user-detail-avatar {
     width: 60px;
@@ -515,7 +509,6 @@
     font-size: 21px;
 }
 
-
 .admin-user-detail-header span,
 .admin-user-order-history-header span {
     display: block;
@@ -524,8 +517,8 @@
     font-size: 10px;
     font-weight: 800;
     letter-spacing: 1.2px;
+    text-transform: uppercase;
 }
-
 
 .admin-user-detail-header h3,
 .admin-user-order-history-header h3 {
@@ -534,7 +527,6 @@
     font-size: 20px;
     font-weight: 800;
 }
-
 
 .admin-user-detail-header p {
     margin: 4px 0 0;
@@ -551,7 +543,6 @@
     margin-top: 8px;
 }
 
-
     .admin-user-detail-info > div {
         padding: 13px 0;
         display: flex;
@@ -561,17 +552,14 @@
         border-bottom: 1px solid #f0e7e2;
     }
 
-
         .admin-user-detail-info > div:last-child {
             border-bottom: none;
         }
-
 
     .admin-user-detail-info span {
         color: #8d7c74;
         font-size: 12px;
     }
-
 
     .admin-user-detail-info strong {
         max-width: 60%;
@@ -579,6 +567,7 @@
         font-size: 13px;
         font-weight: 700;
         text-align: right;
+        word-break: break-word;
     }
 
 
@@ -593,14 +582,12 @@
     gap: 14px;
 }
 
-
 .admin-user-detail-stat {
     flex: 1;
     padding: 18px;
     border-radius: 14px;
     background: #fbf7f4;
 }
-
 
 .admin-user-detail-stat-icon {
     width: 40px;
@@ -614,14 +601,12 @@
     color: #885238;
 }
 
-
 .admin-user-detail-stat span {
     display: block;
     color: #8b7a72;
     font-size: 11px;
     font-weight: 700;
 }
-
 
 .admin-user-detail-stat strong {
     display: block;
@@ -641,18 +626,15 @@
     overflow: hidden;
 }
 
-
 .admin-user-order-history-header {
     padding: 20px 22px;
     border-bottom: 1px solid #eee4df;
 }
 
-
 .admin-user-order-table-wrap {
     width: 100%;
     overflow-x: auto;
 }
-
 
 .admin-user-order-table {
     width: 100%;
@@ -660,11 +642,9 @@
     border-collapse: collapse;
 }
 
-
     .admin-user-order-table thead {
         background: #f6efea;
     }
-
 
     .admin-user-order-table th {
         padding: 14px 17px;
@@ -675,7 +655,6 @@
         border-bottom: 1px solid #e6d9d2;
     }
 
-
     .admin-user-order-table td {
         padding: 14px 17px;
         color: #55423a;
@@ -684,12 +663,14 @@
         border-bottom: 1px solid #f0e8e3;
     }
 
+    .admin-user-order-table tbody tr:last-child td {
+        border-bottom: none;
+    }
 
 .admin-user-order-id {
     color: #8d6c5d;
     font-weight: 800;
 }
-
 
 .admin-user-order-total {
     color: #6d3f2d;
@@ -703,51 +684,44 @@
 ===================================================== */
 
 .admin-user-order-status {
+    padding: 6px 10px;
     display: inline-flex;
     align-items: center;
-    padding: 6px 10px;
     border-radius: 20px;
     font-size: 10px;
     font-weight: 700;
     white-space: nowrap;
 }
 
-
     .admin-user-order-status.status-pending {
         background: #fff4d9;
         color: #a46d00;
     }
-
 
     .admin-user-order-status.status-confirmed {
         background: #eaf1ff;
         color: #3f67a8;
     }
 
-
     .admin-user-order-status.status-preparing {
         background: #f2eafd;
         color: #7650a8;
     }
-
 
     .admin-user-order-status.status-shipping {
         background: #e8f5fa;
         color: #31788f;
     }
 
-
     .admin-user-order-status.status-completed {
         background: #eaf7ee;
         color: #3f7950;
     }
 
-
     .admin-user-order-status.status-cancelled {
         background: #fdecec;
         color: #c64a4a;
     }
-
 
     .admin-user-order-status.status-default {
         background: #f2ece8;
@@ -755,9 +729,294 @@
     }
 
 
-@media (max-width: 900px) {
+/* =====================================================
+   USER PAGINATION
+===================================================== */
+
+.admin-user-pagination-wrap {
+    margin-top: 18px;
+    padding: 17px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    background: #ffffff;
+    border: 1px solid #eadfd8;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(76, 45, 37, 0.05);
+}
+
+
+/* =====================================================
+   PAGINATION INFO
+===================================================== */
+
+.admin-user-pagination-info {
+    color: #806e65;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+    .admin-user-pagination-info strong {
+        color: #4c2d25;
+        font-weight: 800;
+    }
+
+
+/* =====================================================
+   PAGE SIZE
+===================================================== */
+
+.admin-user-page-size {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #806e65;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+    .admin-user-page-size select {
+        height: 38px;
+        min-width: 68px;
+        padding: 0 10px;
+        border: 1px solid #ded1ca;
+        border-radius: 9px;
+        background: #fbf9f7;
+        color: #57392f;
+        font-size: 13px;
+        font-weight: 700;
+        outline: none;
+        cursor: pointer;
+        transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .admin-user-page-size select:hover {
+            border-color: #b68b76;
+            background: #ffffff;
+        }
+
+        .admin-user-page-size select:focus {
+            border-color: #9c6649;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(156, 102, 73, 0.08);
+        }
+
+
+/* =====================================================
+   PAGE LINKS
+===================================================== */
+
+.admin-user-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.admin-user-page-link {
+    min-width: 38px;
+    height: 38px;
+    padding: 0 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 1px solid #dfcec3;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #6a4435;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .admin-user-page-link:hover {
+        background: #f6ede8;
+        border-color: #c9a998;
+        color: #5a3429;
+        transform: translateY(-1px);
+    }
+
+
+    /* =====================================================
+   ACTIVE PAGE
+===================================================== */
+
+    .admin-user-page-link.active {
+        background: #754833;
+        border-color: #754833;
+        color: #ffffff;
+        box-shadow: 0 5px 14px rgba(117, 72, 51, 0.18);
+    }
+
+        .admin-user-page-link.active:hover {
+            background: #5c3728;
+            border-color: #5c3728;
+            color: #ffffff;
+        }
+
+
+    /* =====================================================
+   DISABLED PAGE
+===================================================== */
+
+    .admin-user-page-link.disabled {
+        opacity: 0.42;
+        pointer-events: none;
+        background: #f7f4f2;
+        border-color: #e8ddd7;
+        color: #9b8c85;
+        box-shadow: none;
+        transform: none;
+    }
+
+
+/* =====================================================
+   DOTS
+===================================================== */
+
+.admin-user-page-dots {
+    min-width: 28px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #9a8075;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+
+/* =====================================================
+   RESPONSIVE - 950PX
+===================================================== */
+
+@media (max-width: 950px) {
+
+    .admin-user-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
     .admin-user-detail-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+
+/* =====================================================
+   RESPONSIVE - 800PX
+===================================================== */
+
+@media (max-width: 800px) {
+
+    .admin-user-pagination-wrap {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-user-pagination {
+        justify-content: flex-start;
+    }
+}
+
+
+/* =====================================================
+   RESPONSIVE - 700PX
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .user-admin-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-user-search-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .admin-user-search,
+    .admin-user-search-btn,
+    .admin-user-reset-btn {
+        width: 100%;
+    }
+
+    .admin-user-search {
+        min-width: 0;
+    }
+}
+
+
+/* =====================================================
+   RESPONSIVE - 600PX
+===================================================== */
+
+@media (max-width: 600px) {
+
+    .admin-user-pagination-wrap {
+        margin-top: 14px;
+        padding: 15px;
+    }
+
+    .admin-user-page-size {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .admin-user-pagination {
+        width: 100%;
+        gap: 5px;
+    }
+
+    .admin-user-page-link {
+        min-width: 35px;
+        height: 35px;
+        padding: 0 8px;
+        font-size: 12px;
+    }
+
+    .admin-user-page-dots {
+        min-width: 22px;
+        height: 35px;
+    }
+}
+
+
+/* =====================================================
+   RESPONSIVE - 560PX
+===================================================== */
+
+@media (max-width: 560px) {
+
+    .admin-user-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-user-stat-card {
+        padding: 18px;
+    }
+
+    .admin-user-detail-card {
+        padding: 18px;
+    }
+
+    .admin-user-detail-header {
+        align-items: flex-start;
+    }
+
+    .admin-user-detail-info > div {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .admin-user-detail-info strong {
+        max-width: 100%;
+        text-align: left;
     }
 }

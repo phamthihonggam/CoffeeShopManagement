@@ -1,6 +1,9 @@
-﻿@{
+﻿@model CoffeeShopManagement.Areas.Admin.Controllers.StatisticsViewModel
+
+@{
     ViewData["Title"] = "Thống kê";
 }
+
 
 @section Styles {
 
@@ -19,198 +22,1128 @@
 
     <div class="statistics-admin-heading">
 
+
+        <!-- =================================================
+             LEFT
+        ================================================== -->
+
         <div>
+
+            <span class="statistics-heading-label">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                ROSALIE COFFEE
+
+            </span>
+
 
             <h2>
                 Thống kê kinh doanh
             </h2>
 
+
             <p>
-                Theo dõi tình hình đơn hàng, khách hàng
-                và doanh thu của Rosalie Coffee.
+                Theo dõi doanh thu, đơn hàng,
+                khách hàng và hiệu quả kinh doanh.
             </p>
 
         </div>
 
+
+        <!-- =================================================
+             RIGHT
+        ================================================== -->
+
+        <div class="statistics-header-right">
+
+
+            <!-- SYSTEM INFO -->
+
+            <div class="statistics-system-info">
+
+
+                <div>
+
+                    <i class="fa-solid fa-users"></i>
+
+                    <span>
+                        @Model.TotalCustomers khách hàng
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <i class="fa-solid fa-mug-hot"></i>
+
+                    <span>
+                        @Model.TotalProducts sản phẩm
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 EXPORT
+            ================================================== -->
+
+            <div class="statistics-export-actions">
+
+
+                <!-- EXCEL -->
+
+                <a asp-area="Admin"
+                   asp-controller="Statistics"
+                   asp-action="ExportExcel"
+                   asp-route-period="@Model.Period"
+                   asp-route-month="@Model.SelectedMonth"
+                   asp-route-year="@Model.SelectedYear"
+                   asp-route-fromDate="@Model.FromDate.ToString("yyyy-MM-dd")"
+                   asp-route-toDate="@Model.ToDate.ToString("yyyy-MM-dd")"
+                   class="statistics-export-btn excel">
+
+                    <i class="fa-solid fa-file-excel"></i>
+
+                    Xuất Excel
+
+                </a>
+
+
+                <!-- PDF -->
+
+                <a asp-area="Admin"
+                   asp-controller="Statistics"
+                   asp-action="PrintReport"
+                   asp-route-period="@Model.Period"
+                   asp-route-month="@Model.SelectedMonth"
+                   asp-route-year="@Model.SelectedYear"
+                   asp-route-fromDate="@Model.FromDate.ToString("yyyy-MM-dd")"
+                   asp-route-toDate="@Model.ToDate.ToString("yyyy-MM-dd")"
+                   target="_blank"
+                   class="statistics-export-btn pdf">
+
+                    <i class="fa-solid fa-file-pdf"></i>
+
+                    Xuất PDF
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
     </div>
 
 </div>
 
 
 <!-- =====================================================
-     QUICK STATS
+     PERIOD SELECTOR
+===================================================== -->
+
+<div class="statistics-period-card">
+
+
+    <!-- =================================================
+         TABS
+    ================================================== -->
+
+    <div class="statistics-period-tabs">
+
+
+        <!-- 7 DAYS -->
+
+        <a asp-area="Admin"
+           asp-controller="Statistics"
+           asp-action="Index"
+           asp-route-period="7days"
+           class="statistics-period-tab @(Model.Period == "7days" ? "active" : "")">
+
+            <i class="fa-solid fa-calendar-week"></i>
+
+            7 ngày gần nhất
+
+        </a>
+
+
+        <!-- MONTH -->
+
+        <a asp-area="Admin"
+           asp-controller="Statistics"
+           asp-action="Index"
+           asp-route-period="month"
+           asp-route-month="@Model.SelectedMonth"
+           asp-route-year="@Model.SelectedYear"
+           class="statistics-period-tab @(Model.Period == "month" ? "active" : "")">
+
+            <i class="fa-regular fa-calendar"></i>
+
+            Theo tháng
+
+        </a>
+
+
+        <!-- YEAR -->
+
+        <a asp-area="Admin"
+           asp-controller="Statistics"
+           asp-action="Index"
+           asp-route-period="year"
+           asp-route-year="@Model.SelectedYear"
+           class="statistics-period-tab @(Model.Period == "year" ? "active" : "")">
+
+            <i class="fa-solid fa-calendar-days"></i>
+
+            Theo năm
+
+        </a>
+
+
+        <!-- CUSTOM -->
+
+        <a asp-area="Admin"
+           asp-controller="Statistics"
+           asp-action="Index"
+           asp-route-period="custom"
+           asp-route-fromDate="@Model.FromDate.ToString("yyyy-MM-dd")"
+           asp-route-toDate="@Model.ToDate.ToString("yyyy-MM-dd")"
+           class="statistics-period-tab @(Model.Period == "custom" ? "active" : "")">
+
+            <i class="fa-solid fa-sliders"></i>
+
+            Tùy chọn
+
+        </a>
+
+
+    </div>
+
+
+    <!-- =================================================
+         MONTH FILTER
+    ================================================== -->
+
+    @if (Model.Period == "month")
+    {
+        <form asp-area="Admin"
+              asp-controller="Statistics"
+              asp-action="Index"
+              method="get"
+              class="statistics-period-filter">
+
+
+            <input type="hidden"
+                   name="period"
+                   value="month" />
+
+
+            <!-- MONTH -->
+
+            <div class="statistics-filter-group">
+
+                <label for="month">
+
+                    <i class="fa-regular fa-calendar"></i>
+
+                    Tháng
+
+                </label>
+
+
+                <select id="month"
+                        name="month">
+
+                    @for (int m = 1; m <= 12; m++)
+                    {
+                        if (Model.SelectedMonth == m)
+                        {
+                            <option value="@m"
+                                    selected>
+                                Tháng @m
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@m">
+                                Tháng @m
+                            </option>
+                        }
+                    }
+
+                </select>
+
+            </div>
+
+
+            <!-- YEAR -->
+
+            <div class="statistics-filter-group">
+
+                <label for="monthYear">
+
+                    <i class="fa-solid fa-calendar-days"></i>
+
+                    Năm
+
+                </label>
+
+
+                <select id="monthYear"
+                        name="year">
+
+                    @foreach (var y in Model.AvailableYears)
+                    {
+                        if (Model.SelectedYear == y)
+                        {
+                            <option value="@y"
+                                    selected>
+                                @y
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@y">
+                                @y
+                            </option>
+                        }
+                    }
+
+                </select>
+
+            </div>
+
+
+            <!-- BUTTON -->
+
+            <button type="submit"
+                    class="statistics-filter-btn">
+
+                <i class="fa-solid fa-filter"></i>
+
+                Xem thống kê
+
+            </button>
+
+
+        </form>
+    }
+
+
+    <!-- =================================================
+         YEAR FILTER
+    ================================================== -->
+
+    @if (Model.Period == "year")
+    {
+        <form asp-area="Admin"
+              asp-controller="Statistics"
+              asp-action="Index"
+              method="get"
+              class="statistics-period-filter statistics-year-filter">
+
+
+            <input type="hidden"
+                   name="period"
+                   value="year" />
+
+
+            <div class="statistics-filter-group">
+
+                <label for="year">
+
+                    <i class="fa-solid fa-calendar-days"></i>
+
+                    Năm thống kê
+
+                </label>
+
+
+                <select id="year"
+                        name="year">
+
+                    @foreach (var y in Model.AvailableYears)
+                    {
+                        if (Model.SelectedYear == y)
+                        {
+                            <option value="@y"
+                                    selected>
+                                Năm @y
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@y">
+                                Năm @y
+                            </option>
+                        }
+                    }
+
+                </select>
+
+            </div>
+
+
+            <button type="submit"
+                    class="statistics-filter-btn">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                Xem năm
+
+            </button>
+
+
+        </form>
+    }
+
+
+    <!-- =================================================
+         CUSTOM FILTER
+    ================================================== -->
+
+    @if (Model.Period == "custom")
+    {
+        <form asp-area="Admin"
+              asp-controller="Statistics"
+              asp-action="Index"
+              method="get"
+              class="statistics-period-filter statistics-custom-filter">
+
+
+            <input type="hidden"
+                   name="period"
+                   value="custom" />
+
+
+            <!-- FROM -->
+
+            <div class="statistics-filter-group">
+
+                <label for="fromDate">
+
+                    <i class="fa-regular fa-calendar"></i>
+
+                    Từ ngày
+
+                </label>
+
+
+                <input type="date"
+                       id="fromDate"
+                       name="fromDate"
+                       value="@Model.FromDate.ToString("yyyy-MM-dd")" />
+
+            </div>
+
+
+            <!-- TO -->
+
+            <div class="statistics-filter-group">
+
+                <label for="toDate">
+
+                    <i class="fa-regular fa-calendar-check"></i>
+
+                    Đến ngày
+
+                </label>
+
+
+                <input type="date"
+                       id="toDate"
+                       name="toDate"
+                       value="@Model.ToDate.ToString("yyyy-MM-dd")" />
+
+            </div>
+
+
+            <button type="submit"
+                    class="statistics-filter-btn">
+
+                <i class="fa-solid fa-filter"></i>
+
+                Lọc dữ liệu
+
+            </button>
+
+
+        </form>
+    }
+
+
+    <!-- =================================================
+         CURRENT PERIOD
+    ================================================== -->
+
+    <div class="statistics-current-period">
+
+
+        <div>
+
+            <i class="fa-solid fa-calendar-check"></i>
+
+            <span>
+                Đang xem:
+            </span>
+
+            <strong>
+                @Model.PeriodTitle
+            </strong>
+
+        </div>
+
+
+        <span class="statistics-period-date">
+
+            @Model.FromDate.ToString("dd/MM/yyyy")
+            -
+            @Model.ToDate.ToString("dd/MM/yyyy")
+
+        </span>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     MAIN STATS
 ===================================================== -->
 
 <div class="admin-statistics-grid">
 
+
+    <!-- =================================================
+         REVENUE
+    ================================================== -->
+
     <div class="admin-statistics-card">
 
-        <div class="admin-statistics-icon">
-            <i class="fa-solid fa-coins"></i>
+        <div class="admin-statistics-card-top">
+
+            <div class="admin-statistics-icon revenue">
+
+                <i class="fa-solid fa-coins"></i>
+
+            </div>
+
+
+            <span class="statistics-card-badge">
+                Doanh thu
+            </span>
+
         </div>
 
-        <span>
-            Tổng doanh thu
+
+        <span class="statistics-card-label">
+            Doanh thu trong kỳ
         </span>
 
-        <strong>
-            @(((decimal)ViewBag.TotalRevenue).ToString("#,##0"))đ
+
+        <strong class="statistics-card-value">
+            @(Model.TotalRevenue.ToString("#,##0"))đ
         </strong>
+
+
+        <small>
+            Chỉ tính các đơn đã hoàn thành
+        </small>
 
     </div>
 
 
+    <!-- =================================================
+         ORDERS
+    ================================================== -->
+
     <div class="admin-statistics-card">
 
-        <div class="admin-statistics-icon">
-            <i class="fa-solid fa-receipt"></i>
+        <div class="admin-statistics-card-top">
+
+            <div class="admin-statistics-icon order">
+
+                <i class="fa-solid fa-receipt"></i>
+
+            </div>
+
+
+            <span class="statistics-card-badge">
+                Đơn hàng
+            </span>
+
         </div>
 
-        <span>
-            Tổng đơn hàng
+
+        <span class="statistics-card-label">
+            Tổng đơn trong kỳ
         </span>
 
-        <strong>
-            @ViewBag.TotalOrders
+
+        <strong class="statistics-card-value">
+            @Model.TotalOrders
         </strong>
+
+
+        <small>
+            Bao gồm tất cả trạng thái đơn
+        </small>
 
     </div>
 
 
+    <!-- =================================================
+         CUSTOMERS
+    ================================================== -->
+
     <div class="admin-statistics-card">
 
-        <div class="admin-statistics-icon">
-            <i class="fa-solid fa-users"></i>
+        <div class="admin-statistics-card-top">
+
+            <div class="admin-statistics-icon customer">
+
+                <i class="fa-solid fa-users"></i>
+
+            </div>
+
+
+            <span class="statistics-card-badge">
+                Khách hàng
+            </span>
+
         </div>
 
-        <span>
-            Khách hàng
+
+        <span class="statistics-card-label">
+            Khách phát sinh đơn
         </span>
 
-        <strong>
-            @ViewBag.TotalCustomers
+
+        <strong class="statistics-card-value">
+            @Model.UniqueCustomers
         </strong>
+
+
+        <small>
+            Khách hàng có đơn trong kỳ
+        </small>
 
     </div>
 
 
+    <!-- =================================================
+         AVERAGE
+    ================================================== -->
+
     <div class="admin-statistics-card">
 
-        <div class="admin-statistics-icon">
-            <i class="fa-solid fa-mug-hot"></i>
+        <div class="admin-statistics-card-top">
+
+            <div class="admin-statistics-icon average">
+
+                <i class="fa-solid fa-wallet"></i>
+
+            </div>
+
+
+            <span class="statistics-card-badge">
+                Trung bình
+            </span>
+
         </div>
 
-        <span>
-            Sản phẩm
+
+        <span class="statistics-card-label">
+            Giá trị trung bình / đơn
         </span>
 
-        <strong>
-            @ViewBag.TotalProducts
+
+        <strong class="statistics-card-value">
+            @(Model.AverageOrderValue.ToString("#,##0"))đ
         </strong>
 
+
+        <small>
+            Trung bình trên đơn hoàn thành
+        </small>
+
     </div>
+
 
 </div>
 
 
 <!-- =====================================================
-     ORDER STATUS
+     STATUS TITLE
 ===================================================== -->
 
-<div class="admin-statistics-grid admin-statistics-status-grid">
+<div class="statistics-section-heading">
+
+    <span>
+        ĐƠN HÀNG
+    </span>
+
+    <h3>
+        Trạng thái đơn trong kỳ
+    </h3>
+
+</div>
+
+
+<!-- =====================================================
+     STATUS CARDS
+===================================================== -->
+
+<div class="admin-statistics-status-grid">
+
+
+    <!-- PENDING -->
 
     <div class="admin-statistics-small-card status-pending-card">
-
-        <span>
-            Chờ xử lý
-        </span>
-
-        <strong>
-            @ViewBag.PendingOrders
-        </strong>
-
-    </div>
-
-
-    <div class="admin-statistics-small-card status-completed-card">
-
-        <span>
-            Hoàn thành
-        </span>
-
-        <strong>
-            @ViewBag.CompletedOrders
-        </strong>
-
-    </div>
-
-
-    <div class="admin-statistics-small-card status-cancelled-card">
-
-        <span>
-            Đã hủy
-        </span>
-
-        <strong>
-            @ViewBag.CancelledOrders
-        </strong>
-
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-     REVENUE CHART
-===================================================== -->
-
-<div class="admin-statistics-chart-card">
-
-    <div class="admin-statistics-chart-header">
 
         <div>
 
             <span>
-                DOANH THU
+                Chờ xử lý
+            </span>
+
+            <strong>
+                @Model.PendingOrders
+            </strong>
+
+        </div>
+
+
+        <i class="fa-solid fa-clock"></i>
+
+    </div>
+
+
+    <!-- PROCESSING -->
+
+    <div class="admin-statistics-small-card status-processing-card">
+
+        <div>
+
+            <span>
+                Đang xử lý
+            </span>
+
+            <strong>
+                @Model.ProcessingOrders
+            </strong>
+
+        </div>
+
+
+        <i class="fa-solid fa-gears"></i>
+
+    </div>
+
+
+    <!-- SHIPPING -->
+
+    <div class="admin-statistics-small-card status-shipping-card">
+
+        <div>
+
+            <span>
+                Đang giao
+            </span>
+
+            <strong>
+                @Model.ShippingOrders
+            </strong>
+
+        </div>
+
+
+        <i class="fa-solid fa-motorcycle"></i>
+
+    </div>
+
+
+    <!-- COMPLETED -->
+
+    <div class="admin-statistics-small-card status-completed-card">
+
+        <div>
+
+            <span>
+                Hoàn thành
+            </span>
+
+            <strong>
+                @Model.CompletedOrders
+            </strong>
+
+        </div>
+
+
+        <i class="fa-solid fa-circle-check"></i>
+
+    </div>
+
+
+    <!-- CANCELLED -->
+
+    <div class="admin-statistics-small-card status-cancelled-card">
+
+        <div>
+
+            <span>
+                Đã hủy
+            </span>
+
+            <strong>
+                @Model.CancelledOrders
+            </strong>
+
+        </div>
+
+
+        <i class="fa-solid fa-circle-xmark"></i>
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     CHARTS
+===================================================== -->
+
+<div class="admin-statistics-chart-grid">
+
+
+    <!-- =================================================
+         REVENUE CHART
+    ================================================== -->
+
+    <div class="admin-statistics-chart-card">
+
+        <div class="admin-statistics-chart-header">
+
+            <div>
+
+                <span>
+                    DOANH THU
+                </span>
+
+                <h3>
+                    @Model.RevenuePeriodTitle
+                </h3>
+
+                <p>
+                    @Model.FromDate.ToString("dd/MM/yyyy")
+                    -
+                    @Model.ToDate.ToString("dd/MM/yyyy")
+                </p>
+
+            </div>
+
+
+            <div class="statistics-chart-header-icon">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-statistics-chart-wrap revenue-chart-wrap">
+
+            <canvas id="revenueChart"></canvas>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         STATUS CHART
+    ================================================== -->
+
+    <div class="admin-statistics-chart-card">
+
+        <div class="admin-statistics-chart-header">
+
+            <div>
+
+                <span>
+                    TRẠNG THÁI
+                </span>
+
+                <h3>
+                    Tỷ lệ đơn hàng
+                </h3>
+
+                <p>
+                    Phân bố trạng thái đơn trong kỳ
+                </p>
+
+            </div>
+
+
+            <div class="statistics-chart-header-icon">
+
+                <i class="fa-solid fa-chart-pie"></i>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-statistics-chart-wrap status-chart-wrap">
+
+            <canvas id="statusChart"></canvas>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     TOP PRODUCTS
+===================================================== -->
+
+<div class="admin-statistics-table-card">
+
+
+    <!-- =================================================
+         TABLE HEADER
+    ================================================== -->
+
+    <div class="admin-statistics-table-header">
+
+        <div>
+
+            <span>
+                SẢN PHẨM
             </span>
 
             <h3>
-                7 ngày gần nhất
+                Top 5 món bán chạy
             </h3>
+
+            <p>
+                Xếp hạng theo số lượng bán
+                trong các đơn đã hoàn thành.
+            </p>
+
+        </div>
+
+
+        <div class="statistics-table-icon">
+
+            <i class="fa-solid fa-trophy"></i>
 
         </div>
 
     </div>
 
 
-    <div class="admin-statistics-chart-wrap">
+    <!-- =================================================
+         TABLE
+    ================================================== -->
 
-        <canvas id="revenueChart"></canvas>
+    <div class="admin-statistics-table-wrap">
+
+        <table class="admin-statistics-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Hạng
+                    </th>
+
+                    <th>
+                        Tên món
+                    </th>
+
+                    <th>
+                        Loại
+                    </th>
+
+                    <th>
+                        Số lượng bán
+                    </th>
+
+                    <th>
+                        Doanh thu
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @if (
+                    Model.TopProducts != null
+                    &&
+                    Model.TopProducts.Any()
+                )
+                {
+                    int rank = 1;
+
+
+                    foreach (var item in Model.TopProducts)
+                    {
+                        <tr>
+
+
+                            <!-- RANK -->
+
+                            <td>
+
+                                <span class="statistics-rank
+                                    @(rank == 1 ? "rank-one" :
+                                      rank == 2 ? "rank-two" :
+                                      rank == 3 ? "rank-three" : "")">
+
+                                    @rank
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- NAME -->
+
+                            <td>
+
+                                <strong class="statistics-product-name">
+
+                                    @item.Name
+
+                                </strong>
+
+                            </td>
+
+
+                            <!-- TYPE -->
+
+                            <td>
+
+                                <span class="statistics-product-type">
+
+                                    @item.Type
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- QUANTITY -->
+
+                            <td>
+
+                                <strong>
+
+                                    @item.Quantity
+
+                                </strong>
+
+                            </td>
+
+
+                            <!-- REVENUE -->
+
+                            <td>
+
+                                <strong class="statistics-product-revenue">
+
+                                    @(item.Revenue.ToString("#,##0"))đ
+
+                                </strong>
+
+                            </td>
+
+
+                        </tr>
+
+
+                        rank++;
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="5">
+
+                            <div class="statistics-empty">
+
+                                <i class="fa-solid fa-chart-column"></i>
+
+                                <strong>
+                                    Chưa có dữ liệu bán hàng
+                                </strong>
+
+                                <span>
+                                    Kỳ này chưa có đơn hàng hoàn thành.
+                                </span>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
 
     </div>
+
 
 </div>
 
 
 <!-- =====================================================
-     DATA FOR JS
+     DATA FOR JAVASCRIPT
 ===================================================== -->
 
 <script id="statisticsData"
         type="application/json">
-
-    @Html.Raw(
-        System.Text.Json.JsonSerializer.Serialize(
-            new
-            {
-                labels = ViewBag.RevenueLabels,
-                values = ViewBag.RevenueValues
-            }
-        )
+@Html.Raw(
+    System.Text.Json.JsonSerializer.Serialize(
+        new
+        {
+            revenueLabels = Model.RevenueLabels,
+            revenueValues = Model.RevenueValues,
+            statusLabels = Model.StatusLabels,
+            statusValues = Model.StatusValues
+        }
     )
-
+)
 </script>
 
+
+<!-- =====================================================
+     SCRIPTS
+===================================================== -->
 
 @section Scripts {
 

@@ -1,0 +1,472 @@
+﻿@model CoffeeShopManagement.Areas.Admin.Controllers.AdminReviewDetailsViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết đánh giá";
+
+    string customerInitial =
+        !string.IsNullOrWhiteSpace(Model.CustomerName)
+            ? Model.CustomerName.Trim()
+                .Substring(0, 1)
+                .ToUpper()
+            : "R";
+}
+
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-review.css"
+          asp-append-version="true" />
+
+}
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="admin-welcome">
+
+    <div class="review-admin-heading">
+
+        <div>
+
+            <span class="review-heading-label">
+
+                <i class="fa-solid fa-star"></i>
+
+                ROSALIE COFFEE
+
+            </span>
+
+
+            <h2>
+                Chi tiết đánh giá #DG@Model.ReviewId.ToString("D4")
+            </h2>
+
+
+            <p>
+                Thông tin phản hồi của khách hàng
+                dành cho @Model.TypeName.ToLower().
+            </p>
+
+        </div>
+
+
+        <a asp-area="Admin"
+           asp-controller="Review"
+           asp-action="Index"
+           class="review-back-btn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Quay lại
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     DETAILS GRID
+===================================================== -->
+
+<div class="admin-review-details-grid">
+
+
+    <!-- =================================================
+         CUSTOMER
+    ================================================== -->
+
+    <div class="admin-review-detail-card">
+
+        <div class="review-detail-title">
+
+            <div class="review-detail-icon">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    KHÁCH HÀNG
+                </span>
+
+                <h3>
+                    Người đánh giá
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="review-detail-customer">
+
+            <div class="review-detail-avatar">
+                @customerInitial
+            </div>
+
+
+            <div>
+
+                <strong>
+                    @Model.CustomerName
+                </strong>
+
+                <span>
+                    Khách hàng #KH@Model.CustomerId.ToString("D4")
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="review-detail-info-list">
+
+            <div>
+
+                <span>
+                    Email
+                </span>
+
+                <strong>
+                    @(Model.CustomerEmail ?? "Chưa cập nhật")
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Số điện thoại
+                </span>
+
+                <strong>
+                    @(Model.CustomerPhone ?? "Chưa cập nhật")
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         REVIEW INFO
+    ================================================== -->
+
+    <div class="admin-review-detail-card">
+
+        <div class="review-detail-title">
+
+            <div class="review-detail-icon">
+
+                <i class="fa-solid fa-clipboard-check"></i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    ĐÁNH GIÁ
+                </span>
+
+                <h3>
+                    Thông tin đánh giá
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="review-detail-info-list">
+
+            <div>
+
+                <span>
+                    Loại
+                </span>
+
+                <strong>
+
+                    <span class="review-type-badge
+                        @(Model.ReviewType == "combo"
+                              ? "combo"
+                              : "product")">
+
+                        @Model.TypeName
+
+                    </span>
+
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Mã đánh giá
+                </span>
+
+                <strong>
+                    #DG@Model.ReviewId.ToString("D4")
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Mã hóa đơn
+                </span>
+
+                <strong>
+                    #HD@Model.OrderId.ToString("D5")
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Ngày đánh giá
+                </span>
+
+                <strong>
+                    @Model.ReviewDate.ToString("dd/MM/yyyy HH:mm")
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     PRODUCT / COMBO
+===================================================== -->
+
+<div class="admin-review-detail-card review-detail-full">
+
+    <div class="review-detail-title">
+
+        <div class="review-detail-icon">
+
+            @if (Model.ReviewType == "combo")
+            {
+                <i class="fa-solid fa-box-open"></i>
+            }
+            else
+            {
+                <i class="fa-solid fa-mug-hot"></i>
+            }
+
+        </div>
+
+
+        <div>
+
+            <span>
+                @Model.TypeName.ToUpper()
+            </span>
+
+            <h3>
+                Nội dung được đánh giá
+            </h3>
+
+        </div>
+
+    </div>
+
+
+    <div class="review-detail-product">
+
+        <div>
+
+            <span>
+                Tên @Model.TypeName.ToLower()
+            </span>
+
+            <strong>
+                @Model.ItemName
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Mã
+            </span>
+
+            <strong>
+                #@Model.ItemId
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     RATING
+===================================================== -->
+
+<div class="admin-review-detail-card review-detail-full review-rating-card">
+
+    <div class="review-rating-score">
+
+        <span class="review-rating-number">
+            @Model.Stars.0
+        </span>
+
+
+        <div>
+
+            <div class="review-detail-stars">
+
+                @for (int i = 1; i <= 5; i++)
+                {
+                    if (i <= Model.Stars)
+                    {
+                        <i class="fa-solid fa-star"></i>
+                    }
+                    else
+                    {
+                        <i class="fa-regular fa-star"></i>
+                    }
+                }
+
+            </div>
+
+
+            <strong>
+                @Model.Stars / 5 sao
+            </strong>
+
+
+            <span>
+                Đánh giá từ khách hàng đã mua hàng
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     COMMENT
+===================================================== -->
+
+<div class="admin-review-detail-card review-detail-full">
+
+    <div class="review-detail-title">
+
+        <div class="review-detail-icon">
+
+            <i class="fa-solid fa-comment-dots"></i>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                NHẬN XÉT
+            </span>
+
+            <h3>
+                Nội dung phản hồi
+            </h3>
+
+        </div>
+
+    </div>
+
+
+    @if (!string.IsNullOrWhiteSpace(Model.Content))
+    {
+        <div class="review-detail-comment">
+
+            <i class="fa-solid fa-quote-left"></i>
+
+
+            <p>
+                @Model.Content
+            </p>
+
+        </div>
+    }
+    else
+    {
+        <div class="review-detail-comment empty">
+
+            <i class="fa-regular fa-comment"></i>
+
+
+            <p>
+                Khách hàng chỉ chấm
+                @Model.Stars sao
+                và không để lại nội dung nhận xét.
+            </p>
+
+        </div>
+    }
+
+</div>
+
+
+<!-- =====================================================
+     FOOTER ACTION
+===================================================== -->
+
+<div class="review-detail-footer">
+
+    <a asp-area="Admin"
+       asp-controller="Order"
+       asp-action="Details"
+       asp-route-id="@Model.OrderId"
+       class="review-order-btn">
+
+        <i class="fa-solid fa-receipt"></i>
+
+        Xem đơn #HD@Model.OrderId.ToString("D5")
+
+    </a>
+
+
+    <a asp-area="Admin"
+       asp-controller="Review"
+       asp-action="Index"
+       class="review-back-secondary-btn">
+
+        <i class="fa-solid fa-arrow-left"></i>
+
+        Danh sách đánh giá
+
+    </a>
+
+</div>
