@@ -1,0 +1,38 @@
+﻿@model CoffeeShopManagement.Models.SanPham
+
+<h2>Sửa sản phẩm</h2>
+
+<form asp-action="Edit" method="post">
+
+    <input type="hidden" asp-for="MaSp" />
+
+    <div class="mb-3">
+        <label>Tên sản phẩm</label>
+        <input asp-for="TenSp" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Đơn giá</label>
+        <input asp-for="DonGia" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Hình ảnh</label>
+        <input asp-for="HinhAnh" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Mô tả</label>
+        <input asp-for="MoTa" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Mã loại</label>
+        <input asp-for="MaLoai" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Lưu thay đổi
+    </button>
+
+</form>

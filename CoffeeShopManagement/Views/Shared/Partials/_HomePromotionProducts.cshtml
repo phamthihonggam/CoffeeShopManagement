@@ -1,0 +1,246 @@
+﻿@model IEnumerable<CoffeeShopManagement.Models.SanPham>
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+
+<section class="home-promotion-products">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="home-promotion-header">
+
+        <span class="home-promotion-label">
+
+            <i class="bi bi-fire"></i>
+
+            @T["SpecialOffer"]
+
+        </span>
+
+
+        <h2>
+            @T["PromotionProductsTitle"]
+        </h2>
+
+
+        <p>
+            @T["PromotionProductsDescription"]
+        </p>
+
+    </div>
+
+
+    @{
+        var promotionProducts =
+            Model
+
+                .Where(
+                    x =>
+                        x.DangKhuyenMai == true
+                        &&
+                        x.GiaKhuyenMai.HasValue
+                )
+
+                .Take(4)
+
+                .ToList();
+    }
+
+
+    <!-- =====================================================
+         PRODUCT GRID
+    ====================================================== -->
+
+    <div class="home-promotion-grid">
+
+
+        @foreach (var item in promotionProducts)
+        {
+            var salePrice =
+                item.GiaKhuyenMai
+                ??
+                item.DonGia;
+
+
+            var discount =
+                item.PhanTramGiam
+                ??
+                (
+                    item.DonGia > 0
+
+                        ? (int)Math.Round(
+                            (
+                                item.DonGia
+                                -
+                                salePrice
+                            )
+                            /
+                            item.DonGia
+                            *
+                            100
+                        )
+
+                        : 0
+                );
+
+
+            <!-- =================================================
+                 PRODUCT CARD
+                 SOURCE = PROMOTION
+            ================================================== -->
+
+            <a asp-controller="Menu"
+               asp-action="Details"
+               asp-route-id="@item.MaSp"
+               asp-route-source="promotion"
+               class="home-promotion-card">
+
+
+                <!-- =================================================
+                     IMAGE
+                ================================================== -->
+
+                <div class="home-promotion-image">
+
+                    <img src="~/images/menu/@item.HinhAnh"
+                         asp-append-version="true"
+                         alt="@item.TenSp" />
+
+
+                    @if (discount > 0)
+                    {
+                        <span class="home-promotion-badge">
+
+                            <i class="bi bi-lightning-fill"></i>
+
+                            -@discount%
+
+                        </span>
+                    }
+
+                </div>
+
+
+                <!-- =================================================
+                     CONTENT
+                ================================================== -->
+
+                <div class="home-promotion-info">
+
+
+                    <!-- PRODUCT NAME -->
+
+                    <h3>
+
+                        @item.TenSp
+
+                    </h3>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <p class="home-promotion-description">
+
+                        @item.MoTa
+
+                    </p>
+
+
+                    <!-- =================================================
+                         BOTTOM
+                    ================================================== -->
+
+                    <div class="home-promotion-bottom">
+
+
+                        <!-- =============================================
+                             PRICE
+                        ============================================== -->
+
+                        <div class="home-sale-price">
+
+
+                            @if (
+                                salePrice
+                                <
+                                item.DonGia
+                            )
+                            {
+                                <!-- GIÁ GỐC -->
+
+                                <span class="home-old-price">
+
+                                    @item.DonGia.ToString("N0")đ
+
+                                </span>
+
+
+                                <!-- GIÁ KHUYẾN MÃI -->
+
+                                <span class="home-new-price">
+
+                                    @salePrice.ToString("N0")đ
+
+                                </span>
+                            }
+                            else
+                            {
+                                <!-- GIÁ BÌNH THƯỜNG -->
+
+                                <span class="home-new-price">
+
+                                    @item.DonGia.ToString("N0")đ
+
+                                </span>
+                            }
+
+                        </div>
+
+
+                        <!-- =============================================
+                             DETAIL BUTTON
+                        ============================================== -->
+
+                        <span class="home-promotion-detail">
+
+                            <i class="bi bi-eye-fill"></i>
+
+                            @T["ViewDetails"]
+
+                        </span>
+
+
+                    </div>
+
+                </div>
+
+            </a>
+        }
+
+
+    </div>
+
+
+    <!-- =====================================================
+         VIEW ALL PROMOTIONS
+    ====================================================== -->
+
+    <div class="home-promotion-action">
+
+        <a asp-controller="Promotion"
+           asp-action="Index"
+           class="home-promotion-btn">
+
+            @T["ViewAllOffers"]
+
+            <i class="bi bi-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+
+</section>

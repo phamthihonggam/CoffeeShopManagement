@@ -1,0 +1,841 @@
+﻿@{
+    var title =
+        ViewData["Title"]?.ToString()
+        ?? "Admin";
+
+
+    // =====================================================
+    // ACCOUNT SESSION
+    // DÙNG SESSION MỚI TỪ ACCOUNTCONTROLLER
+    // VẪN FALLBACK SESSION CŨ ĐỂ KHÔNG LỖI
+    // =====================================================
+
+    var adminFullName =
+        Context.Session.GetString("HoTen")
+        ?? Context.Session.GetString("AdminFullName")
+        ?? User.Identity?.Name
+        ?? "Quản trị viên";
+
+
+    var adminRole =
+        Context.Session.GetString("VaiTro")
+        ?? Context.Session.GetString("AdminRole")
+        ?? "Admin";
+
+
+    var adminUsername =
+        Context.Session.GetString("TenDangNhap")
+        ?? Context.Session.GetString("AdminUsername")
+        ?? User.Identity?.Name
+        ?? "admin";
+
+
+    var adminAvatar =
+        Context.Session.GetString("AdminAvatar");
+
+
+    var permissionString =
+        Context.Session.GetString("AdminPermissions")
+        ?? "";
+
+
+    // =====================================================
+    // KIỂM TRA ADMIN
+    // =====================================================
+
+    var isAdmin =
+        User.IsInRole("Admin")
+        ||
+        adminRole.Equals(
+            "Admin",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+
+    // =====================================================
+    // PERMISSIONS
+    // =====================================================
+
+    var permissions =
+        permissionString
+            .Split(
+                '|',
+                StringSplitOptions.RemoveEmptyEntries
+            );
+
+
+    bool HasPermission(string permission)
+    {
+        // Admin luôn có toàn quyền
+        if (isAdmin)
+        {
+            return true;
+        }
+
+
+        // Nếu sau này có role khác dùng layout này
+        // thì kiểm tra quyền cụ thể
+
+        return permissions.Any(
+            x => string.Equals(
+                x,
+                permission,
+                StringComparison.OrdinalIgnoreCase
+            )
+        );
+    }
+
+
+    // =====================================================
+    // AVATAR LETTER FALLBACK
+    // =====================================================
+
+    var avatarLetter =
+        !string.IsNullOrWhiteSpace(adminFullName)
+            ? adminFullName.Substring(0, 1).ToUpper()
+            : "A";
+}
+
+
+<!DOCTYPE html>
+
+<html lang="vi">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+
+    <title>
+        @title - Rosalie Coffee Admin
+    </title>
+
+
+    <!-- =====================================================
+         BOOTSTRAP
+    ====================================================== -->
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+
+    <!-- =====================================================
+         ADMIN CSS
+    ====================================================== -->
+
+    <link rel="stylesheet"
+          href="~/css/admin.css"
+          asp-append-version="true" />
+
+
+    <!-- =====================================================
+         PAGE CSS
+    ====================================================== -->
+    @RenderSection(
+            "Styles",
+            required: false
+        )
+
+</head>
+
+
+<body>
+
+
+    <div class="admin-wrapper">
+
+
+        <!-- =====================================================
+             SIDEBAR
+        ====================================================== -->
+
+        <aside class="admin-sidebar">
+
+
+            <!-- =================================================
+                 LOGO
+            ================================================== -->
+
+            <div class="admin-logo">
+
+                <img src="~/images/logo/logo.png"
+                     alt="Rosalie Coffee" />
+
+
+                <div>
+
+                    <h2>
+                        ROSALIE
+                    </h2>
+
+                    <span>
+                        ADMIN
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 MENU
+            ================================================== -->
+
+            <nav class="admin-menu">
+
+
+                <!-- =============================================
+                     DASHBOARD
+                ============================================== -->
+                @if (HasPermission("DASHBOARD_VIEW"))
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Dashboard"
+                       asp-action="Index"
+                       class="admin-menu-item">
+
+                        <i class="fa-solid fa-chart-pie"></i>
+
+                        <span>
+                            Tổng quan
+                        </span>
+
+                    </a>
+                }
+
+
+
+                <!-- =============================================
+                     PRODUCT
+                ============================================== -->
+                @if (HasPermission("PRODUCT_MANAGE"))
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Product"
+                       asp-action="Index"
+                       class="admin-menu-item">
+
+                        <i class="fa-solid fa-mug-hot"></i>
+
+                        <span>
+                            Sản phẩm
+                        </span>
+
+                    </a>
+                }
+
+
+
+                <!-- =============================================
+                     CATEGORY
+                ============================================== -->
+                @if (HasPermission("CATEGORY_MANAGE"))
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Category"
+                       asp-action="Index"
+                       class="admin-menu-item">
+
+                        <i class="fa-solid fa-layer-group"></i>
+
+                        <span>
+                            Danh mục
+                        </span>
+
+                    </a>
+                }
+
+
+
+                <!-- =============================================
+                     ORDER
+                ============================================== -->
+                @if (HasPermission("ORDER_MANAGE"))
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Order"
+                       asp-action="Index"
+                       class="admin-menu-item">
+
+                        <i class="fa-solid fa-receipt"></i>
+
+                        <span>
+                            Đơn hàng
+                        </span>
+
+                    </a>
+                }
+
+
+
+                <!-- =============================================
+                     USER
+                ============================================== -->
+                @if (HasPermission("CUSTOMER_VIEW"))
+                {
+                    <a asp-area="Admin"
+                       asp-controller="User"
+                       asp-action="Index"
+                       class="admin-menu-item">
+
+                        <i class="fa-solid fa-users"></i>
+
+                        <span>
+                            Người dùng
+                        </span>
+
+                    </a>
+                }
+
+
+
+                <!-- =============================================
+                     STATISTICS
+                ============================================== -->
+                @if (HasPermission("STATISTICS_VIEW"))
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Statistics"
+                       asp-action="Index"
+                       class="admin-menu-item">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                        <span>
+                            Thống kê
+                        </span>
+
+                    </a>
+                }
+
+
+
+                <!-- =============================================
+                     ACCOUNT MANAGEMENT
+                ============================================== -->
+                @if (HasPermission("ACCOUNT_MANAGE"))
+                {
+                    <a asp-area="Admin"
+                       asp-controller="AccountManagement"
+                       asp-action="Index"
+                       class="admin-menu-item">
+
+                        <i class="fa-solid fa-user-gear"></i>
+
+                        <span>
+                            Tài khoản
+                        </span>
+
+                    </a>
+                }
+
+
+
+                <!-- =============================================
+                     ROLE
+                ============================================== -->
+                @if (HasPermission("ROLE_MANAGE"))
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Role"
+                       asp-action="Index"
+                       class="admin-menu-item">
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                        <span>
+                            Vai trò & quyền
+                        </span>
+
+                    </a>
+                }
+
+
+            </nav>
+
+
+
+            <!-- =================================================
+                 SIDEBAR BOTTOM
+            ================================================== -->
+
+            <div class="admin-sidebar-bottom">
+
+
+                <!-- QUAY VỀ WEBSITE -->
+
+                <a asp-area=""
+                   asp-controller="Home"
+                   asp-action="Index"
+                   class="admin-sidebar-logout">
+
+                    <i class="fa-solid fa-house"></i>
+
+                    <span>
+                        Website
+                    </span>
+
+                </a>
+
+
+                <!-- ĐĂNG XUẤT -->
+
+                <a asp-area=""
+                   asp-controller="Account"
+                   asp-action="Logout"
+                   class="admin-sidebar-logout">
+
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                    <span>
+                        Thoát
+                    </span>
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =====================================================
+             MAIN
+        ====================================================== -->
+
+        <main class="admin-main">
+
+
+            <!-- =================================================
+                 HEADER
+            ================================================== -->
+
+            <header class="admin-header">
+
+
+                <!-- =============================================
+                     LEFT
+                ============================================== -->
+
+                <div class="admin-header-left">
+
+                    <span class="admin-header-label">
+                        ROSALIE COFFEE
+                    </span>
+
+                    <h1>
+                        @title
+                    </h1>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     RIGHT
+                ============================================== -->
+
+                <div class="admin-header-right">
+
+
+                    <!-- =========================================
+                         VIEW WEBSITE
+                    ========================================== -->
+
+                    <a asp-area=""
+                       asp-controller="Home"
+                       asp-action="Index"
+                       class="admin-view-site">
+
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                        <span>
+                            Xem website
+                        </span>
+
+                    </a>
+
+
+
+                    <!-- =========================================
+                         ACCOUNT DROPDOWN
+                    ========================================== -->
+
+                    <div class="admin-account-dropdown">
+
+
+                        <!-- =====================================
+                             ACCOUNT BUTTON
+                        ====================================== -->
+
+                        <button type="button"
+                                class="admin-account admin-account-button"
+                                id="adminAccountButton"
+                                aria-expanded="false">
+
+
+                            <!-- AVATAR -->
+
+                            <div class="admin-avatar">
+
+                                @if (!string.IsNullOrWhiteSpace(adminAvatar))
+                                {
+                                    <img src="~/images/avatars/@adminAvatar"
+                                         alt="@adminFullName"
+                                         class="admin-avatar-image" />
+                                }
+                                else
+                                {
+                                    <i class="fa-solid fa-user-shield"></i>
+                                }
+
+                            </div>
+
+
+
+                            <!-- INFO -->
+
+                            <div class="admin-account-info">
+
+                                <strong>
+                                    @adminFullName
+                                </strong>
+
+                                <span>
+                                    Admin
+                                </span>
+
+                            </div>
+
+
+
+                            <!-- ARROW -->
+
+                            <i class="fa-solid fa-chevron-down admin-account-arrow"></i>
+
+                        </button>
+
+
+
+                        <!-- =====================================
+                             ACCOUNT MENU
+                        ====================================== -->
+
+                        <div class="admin-account-menu"
+                             id="adminAccountMenu">
+
+
+                            <!-- =================================
+                                 USER HEADER
+                            ================================== -->
+
+                            <div class="admin-account-menu-header">
+
+
+                                <!-- AVATAR -->
+
+                                <div class="admin-dropdown-avatar">
+
+                                    @if (!string.IsNullOrWhiteSpace(adminAvatar))
+                                    {
+                                        <img src="~/images/avatars/@adminAvatar"
+                                             alt="@adminFullName"
+                                             class="admin-dropdown-avatar-image" />
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            @avatarLetter
+                                        </span>
+                                    }
+
+                                </div>
+
+
+
+                                <!-- USER INFO -->
+
+                                <div>
+
+                                    <strong>
+                                        @adminFullName
+                                    </strong>
+
+                                    <span>
+                                        @@adminUsername
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- =================================
+                                 ROLE
+                            ================================== -->
+
+                            <div class="admin-account-role">
+
+                                <span>
+                                    Vai trò
+                                </span>
+
+                                <strong>
+                                    Admin
+                                </strong>
+
+                            </div>
+
+
+
+                            <div class="admin-account-divider"></div>
+
+
+
+                            <!-- =================================
+                                 DASHBOARD
+                            ================================== -->
+
+                            <a asp-area="Admin"
+                               asp-controller="Dashboard"
+                               asp-action="Index"
+                               class="admin-account-menu-item">
+
+                                <i class="fa-solid fa-chart-pie"></i>
+
+                                <span>
+                                    Trang quản trị
+                                </span>
+
+                            </a>
+
+
+
+                            <!-- =================================
+                                 WEBSITE
+                            ================================== -->
+
+                            <a asp-area=""
+                               asp-controller="Home"
+                               asp-action="Index"
+                               class="admin-account-menu-item">
+
+                                <i class="fa-solid fa-house"></i>
+
+                                <span>
+                                    Xem website
+                                </span>
+
+                            </a>
+
+
+
+                            <div class="admin-account-divider"></div>
+
+
+
+                            <!-- =================================
+                                 ĐỔI TÀI KHOẢN
+                            ================================== -->
+
+                            <a asp-area=""
+                               asp-controller="Account"
+                               asp-action="Logout"
+                               class="admin-account-menu-item">
+
+                                <i class="fa-solid fa-right-left"></i>
+
+                                <span>
+                                    Đổi tài khoản
+                                </span>
+
+                            </a>
+
+
+
+                            <!-- =================================
+                                 LOGOUT
+                            ================================== -->
+
+                            <a asp-area=""
+                               asp-controller="Account"
+                               asp-action="Logout"
+                               class="admin-account-menu-item">
+
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                                <span>
+                                    Đăng xuất
+                                </span>
+
+                            </a>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+
+            <!-- =================================================
+                 CONTENT
+            ================================================== -->
+
+            <section class="admin-content">
+
+                @RenderBody()
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+    <!-- =====================================================
+         ACCOUNT DROPDOWN
+    ====================================================== -->
+
+    <script>
+
+        document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+
+        const button =
+        document.getElementById(
+        "adminAccountButton"
+        );
+
+
+        const menu =
+        document.getElementById(
+        "adminAccountMenu"
+        );
+
+
+        if (!button || !menu) {
+        return;
+        }
+
+
+
+        // =================================================
+        // OPEN / CLOSE
+        // =================================================
+
+        button.addEventListener(
+        "click",
+        function (event) {
+
+        event.stopPropagation();
+
+
+        const isOpen =
+        menu.classList.toggle(
+        "show"
+        );
+
+
+        button.classList.toggle(
+        "active",
+        isOpen
+        );
+
+
+        button.setAttribute(
+        "aria-expanded",
+        isOpen
+        ? "true"
+        : "false"
+        );
+
+        }
+        );
+
+
+
+        // =================================================
+        // CLICK OUTSIDE
+        // =================================================
+
+        document.addEventListener(
+        "click",
+        function (event) {
+
+        if (
+        !menu.contains(event.target)
+        &&
+        !button.contains(event.target)
+        )
+        {
+
+        menu.classList.remove(
+        "show"
+        );
+
+
+        button.classList.remove(
+        "active"
+        );
+
+
+        button.setAttribute(
+        "aria-expanded",
+        "false"
+        );
+
+        }
+
+        }
+        );
+
+        }
+        );
+
+    </script>
+
+
+
+    <!-- =====================================================
+         PAGE JS
+    ====================================================== -->
+    @await RenderSectionAsync(
+            "Scripts",
+            required: false
+        )
+
+
+</body>
+
+</html>

@@ -1,0 +1,124 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+<div class="promotion-title">
+
+    <span class="promotion-gallery-label">
+        <i class="fa-solid fa-mug-hot"></i>
+        @T["GalleryLabel"]
+    </span>
+
+    <h2>
+        @T["GalleryTitle"]
+    </h2>
+
+    <p>
+        @T["GalleryDescription"]
+    </p>
+
+    <div class="promotion-gallery-line"></div>
+
+</div>
+
+
+<div class="promotion-gallery-grid">
+
+    <!-- =========================
+         CARD 01
+    ========================== -->
+    <div class="promotion-gallery-card">
+
+        <img src="~/images/home/coffee1.png"
+             alt="@T["GalleryCard1Title"]">
+
+        <div class="promotion-gallery-overlay">
+
+            <span>01</span>
+
+            <h3>
+                @T["GalleryCard1Title"]
+            </h3>
+
+            <p>
+                @T["GalleryCard1Description"]
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         CARD 02
+    ========================== -->
+    <div class="promotion-gallery-card">
+
+        <img src="~/images/home/coffee2.png"
+             alt="@T["GalleryCard2Title"]">
+
+        <div class="promotion-gallery-overlay">
+
+            <span>02</span>
+
+            <h3>
+                @T["GalleryCard2Title"]
+            </h3>
+
+            <p>
+                @T["GalleryCard2Description"]
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         CARD 03
+    ========================== -->
+    <div class="promotion-gallery-card">
+
+        <img src="~/images/home/coffee3.png"
+             alt="@T["GalleryCard3Title"]">
+
+        <div class="promotion-gallery-overlay">
+
+            <span>03</span>
+
+            <h3>
+                @T["GalleryCard3Title"]
+            </h3>
+
+            <p>
+                @T["GalleryCard3Description"]
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         CARD 04
+    ========================== -->
+    <div class="promotion-gallery-card">
+
+        <img src="~/images/home/coffee4.png"
+             alt="@T["GalleryCard4Title"]">
+
+        <div class="promotion-gallery-overlay">
+
+            <span>04</span>
+
+            <h3>
+                @T["GalleryCard4Title"]
+            </h3>
+
+            <p>
+                @T["GalleryCard4Description"]
+            </p>
+
+        </div>
+
+    </div>
+
+</div>

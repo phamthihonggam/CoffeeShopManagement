@@ -1,0 +1,221 @@
+﻿/* =====================================================
+   PROMOTION GALLERY TITLE
+===================================================== */
+
+.promotion-title {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.promotion-gallery-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: #a66a3d;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.promotion-title h2 {
+    margin: 0 0 14px;
+    color: #5a332d;
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.promotion-title p {
+    margin: 0;
+    color: #756860;
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+.promotion-gallery-line {
+    width: 55px;
+    height: 3px;
+    margin: 18px auto 0;
+    background: #a66a3d;
+    border-radius: 10px;
+}
+
+
+/* =====================================================
+   GALLERY GRID
+===================================================== */
+
+.promotion-gallery-grid {
+    width: 92%;
+    max-width: 1500px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+
+/* =====================================================
+   GALLERY CARD
+===================================================== */
+
+.promotion-gallery-card {
+    position: relative;
+    width: 100%;
+    height: 550px;
+    overflow: hidden;
+    border-radius: 22px;
+    background: #ffffff;
+    box-shadow: 0 12px 30px rgba(73, 46, 37, 0.10);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+    /* =====================================================
+   IMAGE
+===================================================== */
+
+    .promotion-gallery-card img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        transition: transform 0.5s ease, filter 0.5s ease;
+    }
+
+
+    /* =====================================================
+   DARK OVERLAY
+===================================================== */
+
+    .promotion-gallery-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient( to top, rgba(45, 25, 20, 0.82) 0%, rgba(45, 25, 20, 0.24) 48%, rgba(45, 25, 20, 0.02) 78% );
+        opacity: 0;
+        transition: opacity 0.35s ease;
+    }
+
+
+/* =====================================================
+   CONTENT OVER IMAGE
+===================================================== */
+
+.promotion-gallery-overlay {
+    position: absolute;
+    left: 25px;
+    right: 25px;
+    bottom: 24px;
+    z-index: 2;
+    color: #ffffff;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+    .promotion-gallery-overlay > span {
+        display: block;
+        margin-bottom: 7px;
+        color: #e6b388;
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 2px;
+    }
+
+    .promotion-gallery-overlay h3 {
+        margin: 0 0 8px;
+        color: #ffffff;
+        font-size: 23px;
+        font-weight: 900;
+        line-height: 1.25;
+    }
+
+    .promotion-gallery-overlay p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.86);
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+
+/* =====================================================
+   HOVER
+===================================================== */
+
+.promotion-gallery-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 38px rgba(73, 46, 37, 0.14);
+}
+
+    .promotion-gallery-card:hover img {
+        transform: scale(1.06);
+        filter: brightness(0.82);
+    }
+
+    .promotion-gallery-card:hover::after {
+        opacity: 1;
+    }
+
+    .promotion-gallery-card:hover
+    .promotion-gallery-overlay {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1100px) {
+
+    .promotion-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 22px;
+    }
+
+    .promotion-gallery-card {
+        height: 460px;
+    }
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 650px) {
+
+    .promotion-title {
+        margin-bottom: 28px;
+    }
+
+        .promotion-title h2 {
+            font-size: 34px;
+        }
+
+        .promotion-title p {
+            font-size: 15px;
+        }
+
+    .promotion-gallery-grid {
+        width: 90%;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .promotion-gallery-card {
+        height: 400px;
+    }
+
+    .promotion-gallery-overlay {
+        opacity: 1;
+        transform: none;
+    }
+
+    .promotion-gallery-card::after {
+        opacity: 1;
+    }
+}

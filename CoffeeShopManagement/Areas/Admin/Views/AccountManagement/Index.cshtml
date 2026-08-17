@@ -1,0 +1,842 @@
+﻿@model List<CoffeeShopManagement.Models.TaiKhoan>
+
+@{
+    ViewData["Title"] = "Quản lý tài khoản";
+
+    var keyword =
+        ViewBag.Keyword?.ToString() ?? "";
+
+    int totalAccounts =
+        ViewBag.TotalAccounts ?? 0;
+
+    int activeAccounts =
+        ViewBag.ActiveAccounts ?? 0;
+
+    int lockedAccounts =
+        ViewBag.LockedAccounts ?? 0;
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-account.css"
+          asp-append-version="true" />
+
+}
+
+
+<!-- =====================================================
+     PAGE
+===================================================== -->
+
+<div class="account-page">
+
+
+    <!-- =================================================
+         SUCCESS TOAST
+    ================================================== -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div id="adminSuccessToast"
+             class="admin-success-toast">
+
+            <div class="admin-success-toast-icon">
+
+                <i class="fa-solid fa-check"></i>
+
+            </div>
+
+
+            <div class="admin-success-toast-content">
+
+                <strong>
+                    Thành công
+                </strong>
+
+                <span>
+                    @TempData["SuccessMessage"]
+                </span>
+
+            </div>
+
+
+            <button type="button"
+                    class="admin-success-toast-close"
+                    onclick="closeAdminToast()"
+                    aria-label="Đóng">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+    }
+
+
+    <!-- =================================================
+         ERROR TOAST
+    ================================================== -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div id="adminErrorToast"
+             class="admin-error-toast">
+
+            <div class="admin-error-toast-icon">
+
+                <i class="fa-solid fa-triangle-exclamation"></i>
+
+            </div>
+
+
+            <div class="admin-error-toast-content">
+
+                <strong>
+                    Không thể thực hiện
+                </strong>
+
+                <span>
+                    @TempData["ErrorMessage"]
+                </span>
+
+            </div>
+
+
+            <button type="button"
+                    class="admin-error-toast-close"
+                    onclick="closeAdminErrorToast()"
+                    aria-label="Đóng">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+    }
+
+
+    <!-- =================================================
+         PAGE INTRO
+    ================================================== -->
+
+    <div class="account-intro">
+
+        <div>
+
+            <span class="account-label">
+                ROSALIE COFFEE
+            </span>
+
+            <h2>
+                Quản lý tài khoản hệ thống
+            </h2>
+
+            <p>
+                Quản lý tài khoản quản trị viên và nhân viên
+                đang sử dụng hệ thống Rosalie Coffee.
+            </p>
+
+        </div>
+
+
+        <a asp-area="Admin"
+           asp-controller="AccountManagement"
+           asp-action="Create"
+           class="account-create-btn">
+
+            <i class="fa-solid fa-plus"></i>
+
+            <span>
+                Thêm tài khoản
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <!-- =================================================
+         STATISTICS
+    ================================================== -->
+
+    <div class="account-stat-grid">
+
+
+        <!-- TOTAL -->
+
+        <div class="account-stat-card">
+
+            <div class="account-stat-icon">
+
+                <i class="fa-solid fa-users"></i>
+
+            </div>
+
+
+            <div class="account-stat-info">
+
+                <span>
+                    Tổng tài khoản
+                </span>
+
+                <strong>
+                    @totalAccounts
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTIVE -->
+
+        <div class="account-stat-card">
+
+            <div class="account-stat-icon active">
+
+                <i class="fa-solid fa-user-check"></i>
+
+            </div>
+
+
+            <div class="account-stat-info">
+
+                <span>
+                    Đang hoạt động
+                </span>
+
+                <strong>
+                    @activeAccounts
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOCKED -->
+
+        <div class="account-stat-card">
+
+            <div class="account-stat-icon locked">
+
+                <i class="fa-solid fa-user-lock"></i>
+
+            </div>
+
+
+            <div class="account-stat-info">
+
+                <span>
+                    Đã khóa
+                </span>
+
+                <strong>
+                    @lockedAccounts
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         TOOLBAR
+    ================================================== -->
+
+    <div class="account-toolbar">
+
+
+        <!-- SEARCH -->
+
+        <form asp-area="Admin"
+              asp-controller="AccountManagement"
+              asp-action="Index"
+              method="get"
+              class="account-search">
+
+
+            <div class="account-search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input type="text"
+                       name="keyword"
+                       value="@keyword"
+                       placeholder="Tìm tên đăng nhập, họ tên, email..." />
+
+            </div>
+
+
+            <button type="submit"
+                    class="account-search-btn">
+
+                Tìm kiếm
+
+            </button>
+
+
+            @if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                <a asp-area="Admin"
+                   asp-controller="AccountManagement"
+                   asp-action="Index"
+                   class="account-reset-btn">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                    Xóa lọc
+
+                </a>
+            }
+
+        </form>
+
+
+        <div class="account-result-count">
+
+            <i class="fa-solid fa-list"></i>
+
+            <span>
+                Hiển thị
+                <strong>@Model.Count</strong>
+                tài khoản
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         TABLE CARD
+    ================================================== -->
+
+    <div class="account-table-card">
+
+
+        <div class="account-table-header">
+
+            <div>
+
+                <h3>
+                    Danh sách tài khoản
+                </h3>
+
+                <p>
+                    Thông tin các tài khoản được cấp quyền
+                    truy cập hệ thống quản trị.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TABLE
+        ================================================== -->
+
+        <div class="account-table-wrapper">
+
+            <table class="account-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            #
+                        </th>
+
+                        <th>
+                            Tài khoản
+                        </th>
+
+                        <th>
+                            Họ và tên
+                        </th>
+
+                        <th>
+                            Liên hệ
+                        </th>
+
+                        <th>
+                            Vai trò
+                        </th>
+
+                        <th>
+                            Trạng thái
+                        </th>
+
+                        <th>
+                            Ngày tạo
+                        </th>
+
+                        <th class="account-action-heading">
+                            Thao tác
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        var index = 1;
+
+                        foreach (var item in Model)
+                        {
+                            var roleName =
+                                item.MaVaiTroNavigation?.TenVaiTro
+                                ?? "Chưa xác định";
+
+
+                            <tr>
+
+
+                                <!-- STT -->
+
+                                <td>
+
+                                    <span class="account-number">
+                                        @index
+                                    </span>
+
+                                </td>
+
+
+                                <!-- USERNAME -->
+
+                                <td>
+
+                                    <div class="account-user">
+
+                                        <div class="account-user-avatar">
+
+                                            @if (
+                                                roleName.Equals(
+                                                    "Admin",
+                                                    StringComparison.OrdinalIgnoreCase
+                                                )
+                                            )
+                                            {
+                                                <i class="fa-solid fa-user-shield"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="fa-solid fa-user"></i>
+                                            }
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <strong>
+                                                @item.TenDangNhap
+                                            </strong>
+
+                                            <span>
+                                                ID: @item.MaTaiKhoan
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- FULL NAME -->
+
+                                <td>
+
+                                    <strong class="account-full-name">
+                                        @item.HoTen
+                                    </strong>
+
+                                </td>
+
+
+                                <!-- CONTACT -->
+
+                                <td>
+
+                                    <div class="account-contact">
+
+                                        @if (!string.IsNullOrWhiteSpace(item.Email))
+                                        {
+                                            <span>
+
+                                                <i class="fa-regular fa-envelope"></i>
+
+                                                @item.Email
+
+                                            </span>
+                                        }
+
+
+                                        @if (!string.IsNullOrWhiteSpace(item.DienThoai))
+                                        {
+                                            <span>
+
+                                                <i class="fa-solid fa-phone"></i>
+
+                                                @item.DienThoai
+
+                                            </span>
+                                        }
+
+
+                                        @if (
+                                            string.IsNullOrWhiteSpace(item.Email)
+                                            &&
+                                            string.IsNullOrWhiteSpace(item.DienThoai)
+                                        )
+                                        {
+                                            <span class="account-empty">
+                                                Chưa cập nhật
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- ROLE -->
+
+                                <td>
+
+                                    @if (
+                                        roleName.Equals(
+                                            "Admin",
+                                            StringComparison.OrdinalIgnoreCase
+                                        )
+                                    )
+                                    {
+                                        <span class="account-role admin">
+
+                                            <i class="fa-solid fa-shield-halved"></i>
+
+                                            @roleName
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="account-role staff">
+
+                                            <i class="fa-solid fa-user-tie"></i>
+
+                                            @roleName
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+                                    @if (item.IsActive)
+                                    {
+                                        <span class="account-status active">
+
+                                            <span class="status-dot"></span>
+
+                                            Hoạt động
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="account-status locked">
+
+                                            <span class="status-dot"></span>
+
+                                            Đã khóa
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- CREATED DATE -->
+
+                                <td>
+
+                                    <div class="account-date">
+
+                                        <i class="fa-regular fa-calendar"></i>
+
+                                        <span>
+                                            @item.NgayTao.ToString("dd/MM/yyyy")
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- ACTION -->
+
+                                <td>
+
+                                    <div class="account-actions">
+
+
+                                        <form asp-area="Admin"
+                                              asp-controller="AccountManagement"
+                                              asp-action="ToggleStatus"
+                                              method="post"
+                                              onsubmit="return confirmToggleAccount('@item.TenDangNhap', @item.IsActive.ToString().ToLower());">
+
+                                            @Html.AntiForgeryToken()
+
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@item.MaTaiKhoan" />
+
+
+                                            @if (item.IsActive)
+                                            {
+                                                <button type="submit"
+                                                        class="account-action-btn lock"
+                                                        title="Khóa tài khoản">
+
+                                                    <i class="fa-solid fa-lock"></i>
+
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit"
+                                                        class="account-action-btn unlock"
+                                                        title="Mở khóa tài khoản">
+
+                                                    <i class="fa-solid fa-lock-open"></i>
+
+                                                </button>
+                                            }
+
+                                        </form>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+
+                            index++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="8">
+
+                                <div class="account-empty-state">
+
+                                    <div class="account-empty-icon">
+
+                                        <i class="fa-solid fa-user-slash"></i>
+
+                                    </div>
+
+
+                                    <h3>
+                                        Không tìm thấy tài khoản
+                                    </h3>
+
+
+                                    <p>
+                                        Không có tài khoản nào phù hợp
+                                        với điều kiện tìm kiếm.
+                                    </p>
+
+
+                                    @if (!string.IsNullOrWhiteSpace(keyword))
+                                    {
+                                        <a asp-area="Admin"
+                                           asp-controller="AccountManagement"
+                                           asp-action="Index">
+
+                                            Xem tất cả tài khoản
+
+                                        </a>
+                                    }
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+@section Scripts {
+
+    <script>
+
+        // =================================================
+        // CONFIRM LOCK / UNLOCK
+        // =================================================
+
+        function confirmToggleAccount(
+            username,
+            isActive
+        ) {
+
+            if (isActive) {
+
+                return confirm(
+                    'Bạn có chắc muốn khóa tài khoản "' +
+                    username +
+                    '" không?'
+                );
+
+            }
+
+            return confirm(
+                'Bạn có chắc muốn mở khóa tài khoản "' +
+                username +
+                '" không?'
+            );
+
+        }
+
+
+        // =================================================
+        // CLOSE SUCCESS TOAST
+        // =================================================
+
+        function closeAdminToast() {
+
+            const toast =
+                document.getElementById(
+                    "adminSuccessToast"
+                );
+
+            if (!toast) {
+                return;
+            }
+
+            toast.classList.add(
+                "hide"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    toast.remove();
+
+                },
+                300
+            );
+
+        }
+
+
+        // =================================================
+        // CLOSE ERROR TOAST
+        // =================================================
+
+        function closeAdminErrorToast() {
+
+            const toast =
+                document.getElementById(
+                    "adminErrorToast"
+                );
+
+            if (!toast) {
+                return;
+            }
+
+            toast.classList.add(
+                "hide"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    toast.remove();
+
+                },
+                300
+            );
+
+        }
+
+
+        // =================================================
+        // AUTO CLOSE
+        // =================================================
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const successToast =
+                    document.getElementById(
+                        "adminSuccessToast"
+                    );
+
+
+                if (successToast) {
+
+                    setTimeout(
+                        closeAdminToast,
+                        3000
+                    );
+
+                }
+
+
+                const errorToast =
+                    document.getElementById(
+                        "adminErrorToast"
+                    );
+
+
+                if (errorToast) {
+
+                    setTimeout(
+                        closeAdminErrorToast,
+                        4000
+                    );
+
+                }
+
+            }
+        );
+
+    </script>
+
+}

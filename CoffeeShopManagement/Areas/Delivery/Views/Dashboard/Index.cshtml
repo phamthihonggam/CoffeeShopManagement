@@ -1,0 +1,132 @@
+﻿@{
+    ViewData["Title"] = "Nhân viên giao hàng";
+}
+
+<div class="container py-5">
+
+    <div class="card border-0 shadow-sm rounded-4">
+
+        <div class="card-body p-4 p-md-5">
+
+            <div class="d-flex flex-column flex-md-row
+                justify-content-between
+                align-items-md-center
+                gap-3 mb-4">
+
+                <div>
+                    <span class="text-muted">
+                        ROSALIE COFFEE
+                    </span>
+
+                    <h1 class="fw-bold mt-1 mb-2">
+                        Nhân viên giao hàng
+                    </h1>
+
+                    <p class="text-muted mb-0">
+                        Xin chào
+                        <strong>@User.Identity?.Name</strong>
+                    </p>
+                </div>
+
+                <a asp-area=""
+                   asp-controller="Account"
+                   asp-action="Logout"
+                   class="btn btn-outline-danger">
+
+                    <i class="fa-solid fa-right-from-bracket me-2"></i>
+                    Đăng xuất
+
+                </a>
+
+            </div>
+
+
+            <hr />
+
+
+            <div class="row g-4 mt-2">
+
+                <!-- QUẢN LÝ ĐƠN -->
+
+                <div class="col-md-6">
+
+                    <div class="card h-100 border-0 bg-light rounded-4">
+
+                        <div class="card-body p-4">
+
+                            <div class="fs-2 mb-3">
+                                <i class="fa-solid fa-motorcycle"></i>
+                            </div>
+
+                            <h4 class="fw-bold">
+                                Đơn hàng giao
+                            </h4>
+
+                            <p class="text-muted">
+                                Xem các đơn đang chờ giao,
+                                nhận đơn và cập nhật quá trình giao hàng.
+                            </p>
+
+                            <a asp-area="Delivery"
+                               asp-controller="Order"
+                               asp-action="Index"
+                               class="btn btn-dark">
+
+                                <i class="fa-solid fa-box me-2"></i>
+
+                                Quản lý đơn giao hàng
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- HƯỚNG DẪN -->
+
+                <div class="col-md-6">
+
+                    <div class="card h-100 border-0 bg-light rounded-4">
+
+                        <div class="card-body p-4">
+
+                            <div class="fs-2 mb-3">
+                                <i class="fa-solid fa-route"></i>
+                            </div>
+
+                            <h4 class="fw-bold">
+                                Quy trình giao hàng
+                            </h4>
+
+                            <p class="text-muted mb-2">
+                                1. Nhận đơn hàng
+                            </p>
+
+                            <p class="text-muted mb-2">
+                                2. Bắt đầu giao hàng
+                            </p>
+
+                            <p class="text-muted mb-2">
+                                3. Giao thành công
+                            </p>
+
+                            <p class="text-muted mb-0">
+                                Hoặc báo giao thất bại nếu có sự cố.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

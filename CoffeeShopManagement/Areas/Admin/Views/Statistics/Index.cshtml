@@ -1,0 +1,222 @@
+﻿@{
+    ViewData["Title"] = "Thống kê";
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-statistics.css"
+          asp-append-version="true" />
+
+}
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="admin-welcome">
+
+    <div class="statistics-admin-heading">
+
+        <div>
+
+            <h2>
+                Thống kê kinh doanh
+            </h2>
+
+            <p>
+                Theo dõi tình hình đơn hàng, khách hàng
+                và doanh thu của Rosalie Coffee.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     QUICK STATS
+===================================================== -->
+
+<div class="admin-statistics-grid">
+
+    <div class="admin-statistics-card">
+
+        <div class="admin-statistics-icon">
+            <i class="fa-solid fa-coins"></i>
+        </div>
+
+        <span>
+            Tổng doanh thu
+        </span>
+
+        <strong>
+            @(((decimal)ViewBag.TotalRevenue).ToString("#,##0"))đ
+        </strong>
+
+    </div>
+
+
+    <div class="admin-statistics-card">
+
+        <div class="admin-statistics-icon">
+            <i class="fa-solid fa-receipt"></i>
+        </div>
+
+        <span>
+            Tổng đơn hàng
+        </span>
+
+        <strong>
+            @ViewBag.TotalOrders
+        </strong>
+
+    </div>
+
+
+    <div class="admin-statistics-card">
+
+        <div class="admin-statistics-icon">
+            <i class="fa-solid fa-users"></i>
+        </div>
+
+        <span>
+            Khách hàng
+        </span>
+
+        <strong>
+            @ViewBag.TotalCustomers
+        </strong>
+
+    </div>
+
+
+    <div class="admin-statistics-card">
+
+        <div class="admin-statistics-icon">
+            <i class="fa-solid fa-mug-hot"></i>
+        </div>
+
+        <span>
+            Sản phẩm
+        </span>
+
+        <strong>
+            @ViewBag.TotalProducts
+        </strong>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ORDER STATUS
+===================================================== -->
+
+<div class="admin-statistics-grid admin-statistics-status-grid">
+
+    <div class="admin-statistics-small-card status-pending-card">
+
+        <span>
+            Chờ xử lý
+        </span>
+
+        <strong>
+            @ViewBag.PendingOrders
+        </strong>
+
+    </div>
+
+
+    <div class="admin-statistics-small-card status-completed-card">
+
+        <span>
+            Hoàn thành
+        </span>
+
+        <strong>
+            @ViewBag.CompletedOrders
+        </strong>
+
+    </div>
+
+
+    <div class="admin-statistics-small-card status-cancelled-card">
+
+        <span>
+            Đã hủy
+        </span>
+
+        <strong>
+            @ViewBag.CancelledOrders
+        </strong>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     REVENUE CHART
+===================================================== -->
+
+<div class="admin-statistics-chart-card">
+
+    <div class="admin-statistics-chart-header">
+
+        <div>
+
+            <span>
+                DOANH THU
+            </span>
+
+            <h3>
+                7 ngày gần nhất
+            </h3>
+
+        </div>
+
+    </div>
+
+
+    <div class="admin-statistics-chart-wrap">
+
+        <canvas id="revenueChart"></canvas>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     DATA FOR JS
+===================================================== -->
+
+<script id="statisticsData"
+        type="application/json">
+
+    @Html.Raw(
+        System.Text.Json.JsonSerializer.Serialize(
+            new
+            {
+                labels = ViewBag.RevenueLabels,
+                values = ViewBag.RevenueValues
+            }
+        )
+    )
+
+</script>
+
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="~/js/admin-statistics.js"
+            asp-append-version="true"></script>
+
+}

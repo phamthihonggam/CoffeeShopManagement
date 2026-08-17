@@ -1,0 +1,80 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+<section class="home-flavor">
+
+    <!-- HEADER -->
+    <div class="home-flavor-header">
+
+        <span class="home-flavor-label">
+            <i class="fa-solid fa-mug-hot"></i>
+            @T["FlavorLabel"]
+        </span>
+
+        <h2>
+            @T["FlavorTitle"]
+        </h2>
+
+        <p>
+            @T["FlavorDescription"]
+        </p>
+
+        <div class="home-flavor-line"></div>
+
+    </div>
+
+
+    <!-- GALLERY -->
+    <div class="gallery-container">
+
+        <!-- DRINKS -->
+        <div class="gallery-item">
+
+            <img src="~/images/gallery/gallery1.jpg"
+                 alt="@T["DrinksAlt"]">
+
+            <div class="gallery-item-content">
+
+                <span>
+                    @T["DrinksLabel"]
+                </span>
+
+                <h3>
+                    @T["DrinksTitle"]
+                </h3>
+
+                <p>
+                    @T["DrinksDescription"]
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- CAKES -->
+        <div class="gallery-item">
+
+            <img src="~/images/gallery/gallery2.jpg"
+                 alt="@T["CakesAlt"]">
+
+            <div class="gallery-item-content">
+
+                <span>
+                    @T["CakesLabel"]
+                </span>
+
+                <h3>
+                    @T["CakesTitle"]
+                </h3>
+
+                <p>
+                    @T["CakesDescription"]
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

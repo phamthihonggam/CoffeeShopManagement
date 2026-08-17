@@ -1,0 +1,1832 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+	
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>1.3</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+
+	<data name="Search" xml:space="preserve">
+		<value>Tìm kiếm</value>
+	</data>
+
+	<data name="Cart" xml:space="preserve">
+		<value>Giỏ hàng</value>
+	</data>
+
+	<data name="Login" xml:space="preserve">
+		<value>Đăng nhập</value>
+	</data>
+
+	<data name="Profile" xml:space="preserve">
+		<value>Thông tin cá nhân</value>
+	</data>
+
+	<data name="Logout" xml:space="preserve">
+		<value>Đăng xuất</value>
+	</data>
+	<data name="HeroTitleLine1" xml:space="preserve">
+    <value>Khởi đầu ngày mới</value>
+</data>
+
+	<data name="HeroTitleLine2" xml:space="preserve">
+    <value>cùng cà phê nguyên bản</value>
+</data>
+
+	<data name="HeroDescription" xml:space="preserve">
+    <value>Những hạt cà phê tuyển chọn được pha chế mỗi ngày, mang đến hương vị đậm đà và những khoảnh khắc đáng nhớ.</value>
+</data>
+
+	<data name="OrderNow" xml:space="preserve">
+    <value>Đặt hàng ngay</value>
+</data>
+	<data name="BestSellerTitle" xml:space="preserve">
+    <value>SẢN PHẨM BÁN CHẠY</value>
+</data>
+
+	<data name="ViewDetails" xml:space="preserve">
+    <value>Xem chi tiết</value>
+</data>
+
+	<data name="PreviousProducts" xml:space="preserve">
+    <value>Sản phẩm trước</value>
+</data>
+
+	<data name="NextProducts" xml:space="preserve">
+    <value>Sản phẩm tiếp theo</value>
+</data>
+	<data name="SpecialOffer" xml:space="preserve">
+    <value>ƯU ĐÃI ĐẶC BIỆT</value>
+</data>
+
+	<data name="PromotionProductsTitle" xml:space="preserve">
+    <value>SẢN PHẨM KHUYẾN MÃI</value>
+</data>
+
+	<data name="PromotionProductsDescription" xml:space="preserve">
+    <value>Những món được yêu thích với ưu đãi hấp dẫn dành cho bạn.</value>
+</data>
+
+	<data name="ViewAllOffers" xml:space="preserve">
+    <value>Xem tất cả ưu đãi</value>
+</data>
+	<data name="GalleryLabel" xml:space="preserve">
+    <value>KHÔNG GIAN &amp; CẢM HỨNG</value>
+</data>
+
+	<data name="GalleryTitle" xml:space="preserve">
+    <value>KHOẢNH KHẮC CÙNG ROSALIE</value>
+</data>
+
+	<data name="GalleryDescription" xml:space="preserve">
+    <value>Mỗi ly cà phê được pha bằng sự tận tâm, mang đến những phút giây đáng nhớ.</value>
+</data>
+
+	<data name="GalleryCard1Title" xml:space="preserve">
+    <value>Cà phê nguyên bản</value>
+</data>
+
+	<data name="GalleryCard1Description" xml:space="preserve">
+    <value>Hương vị mộc mạc trong từng khoảnh khắc.</value>
+</data>
+
+	<data name="GalleryCard2Title" xml:space="preserve">
+    <value>Một chút thư giãn</value>
+</data>
+
+	<data name="GalleryCard2Description" xml:space="preserve">
+    <value>Khoảng lặng nhẹ nhàng giữa ngày bận rộn.</value>
+</data>
+
+	<data name="GalleryCard3Title" xml:space="preserve">
+    <value>Cà phê &amp; bánh ngọt</value>
+</data>
+
+	<data name="GalleryCard3Description" xml:space="preserve">
+    <value>Một sự kết hợp dành cho những phút thật chậm.</value>
+</data>
+
+	<data name="GalleryCard4Title" xml:space="preserve">
+    <value>Tận tâm trong từng ly</value>
+</data>
+
+	<data name="GalleryCard4Description" xml:space="preserve">
+    <value>Chăm chút từ cách pha đến khoảnh khắc trao tay.</value>
+</data>
+	<data name="BranchSystemLabel" xml:space="preserve">
+    <value>HỆ THỐNG CỬA HÀNG</value>
+</data>
+
+	<data name="BranchTitle" xml:space="preserve">
+    <value>CHI NHÁNH ROSALIE</value>
+</data>
+
+	<data name="BranchDescription" xml:space="preserve">
+    <value>Ghé thăm Rosalie Coffee tại những chi nhánh nổi bật và tận hưởng không gian ấm cúng cùng những thức uống yêu thích.</value>
+</data>
+
+	<data name="ViewBranch" xml:space="preserve">
+    <value>Xem chi nhánh</value>
+</data>
+
+	<data name="ViewAllBranches" xml:space="preserve">
+    <value>Xem tất cả chi nhánh</value>
+</data>
+	<data name="FlavorLabel" xml:space="preserve">
+    <value>HƯƠNG VỊ MỖI NGÀY</value>
+</data>
+
+	<data name="FlavorTitle" xml:space="preserve">
+    <value>THƯỞNG THỨC THEO CÁCH CỦA BẠN</value>
+</data>
+
+	<data name="FlavorDescription" xml:space="preserve">
+    <value>Từ những thức uống tươi mát đến những chiếc bánh thơm ngon, Rosalie luôn có một hương vị dành cho bạn.</value>
+</data>
+
+	<data name="DrinksAlt" xml:space="preserve">
+    <value>Thức uống Rosalie</value>
+</data>
+
+	<data name="DrinksLabel" xml:space="preserve">
+    <value>THỨC UỐNG</value>
+</data>
+
+	<data name="DrinksTitle" xml:space="preserve">
+    <value>NƯỚC NGON THƯƠNG VỊ</value>
+</data>
+
+	<data name="DrinksDescription" xml:space="preserve">
+    <value>Tươi mát trong từng ngụm</value>
+</data>
+
+	<data name="CakesAlt" xml:space="preserve">
+    <value>Bánh Rosalie</value>
+</data>
+
+	<data name="CakesLabel" xml:space="preserve">
+    <value>BÁNH NGỌT</value>
+</data>
+
+	<data name="CakesTitle" xml:space="preserve">
+    <value>BÁNH NGON NO ĐẦY</value>
+</data>
+
+	<data name="CakesDescription" xml:space="preserve">
+    <value>Ngọt ngào cho mọi khoảnh khắc</value>
+</data>
+	<data name="NavHome" xml:space="preserve">
+    <value>Trang chủ</value>
+</data>
+
+	<data name="NavMenu" xml:space="preserve">
+    <value>Thực đơn</value>
+</data>
+
+	<data name="NavPromotion" xml:space="preserve">
+    <value>Khuyến mãi</value>
+</data>
+
+	<data name="NavAbout" xml:space="preserve">
+    <value>Về chúng tôi</value>
+</data>
+
+	<data name="NavContact" xml:space="preserve">
+    <value>Liên hệ</value>
+</data>
+	<data name="FooterAboutTitle" xml:space="preserve">
+    <value>VỀ ROSALIE</value>
+</data>
+
+	<data name="FooterAboutDescription" xml:space="preserve">
+    <value>Rosalie Coffee &amp; More không chỉ là nơi thưởng thức cà phê, mà còn là không gian kết nối và tận hưởng cuộc sống.</value>
+</data>
+
+	<data name="FooterExploreMore" xml:space="preserve">
+    <value>Khám phá thêm</value>
+</data>
+
+	<data name="FooterSystemTitle" xml:space="preserve">
+    <value>HỆ THỐNG</value>
+</data>
+
+	<data name="FooterSystemDescription" xml:space="preserve">
+    <value>Chúng tôi không ngừng mở rộng để mang đến trải nghiệm tốt nhất.</value>
+</data>
+
+	<data name="FooterFollowTitle" xml:space="preserve">
+    <value>THEO DÕI CHÚNG TÔI</value>
+</data>
+
+	<data name="FooterFollowDescription" xml:space="preserve">
+    <value>Cập nhật ưu đãi mới nhất cùng Rosalie.</value>
+</data>
+
+	<data name="FooterRightsReserved" xml:space="preserve">
+    <value>Bảo lưu mọi quyền.</value>
+</data>
+
+	<data name="FooterSecurePayment" xml:space="preserve">
+    <value>Thanh toán an toàn</value>
+</data>
+
+	<data name="Contact" xml:space="preserve">
+    <value>Liên hệ</value>
+</data>
+	<data name="MenuPageTitle" xml:space="preserve">
+    <value>Thực đơn - Rosalie Coffee</value>
+</data>
+
+	<data name="ExploreNow" xml:space="preserve">
+    <value>KHÁM PHÁ NGAY</value>
+</data>
+
+	<data name="MenuCoffeeTitle" xml:space="preserve">
+    <value>CÀ PHÊ</value>
+</data>
+
+	<data name="MenuCoffeeDescription" xml:space="preserve">
+    <value>Hạt cà phê được tuyển chọn kỹ lưỡng và rang xay mỗi ngày để mang đến hương thơm đậm đà, vị cân bằng và hậu vị ngọt dịu – đậm chất Rosalie Coffee.</value>
+</data>
+
+	<data name="MenuFruitTeaTitle" xml:space="preserve">
+    <value>TRÀ TRÁI CÂY</value>
+</data>
+
+	<data name="MenuFruitTeaDescription" xml:space="preserve">
+    <value>Sự kết hợp giữa các loại trà hảo hạng cùng trái cây tươi, tạo nên hương vị thanh nhẹ, thơm dịu và tươi mới, phù hợp cho mọi thời điểm trong ngày.</value>
+</data>
+
+	<data name="MenuFrostTitle" xml:space="preserve">
+    <value>FROST SERIES</value>
+</data>
+
+	<data name="MenuFrostDescription" xml:space="preserve">
+    <value>Xay mịn từ nguyên liệu chất lượng cùng lớp kem béo nhẹ, mang đến cảm giác mát lạnh, thơm ngon và đầy năng lượng trong từng ngụm.</value>
+</data>
+
+	<data name="MenuJuiceTitle" xml:space="preserve">
+    <value>JUICE &amp; SMOOTHIE</value>
+</data>
+
+	<data name="MenuJuiceDescription" xml:space="preserve">
+    <value>Được chế biến từ trái cây tươi tuyển chọn, giữ trọn vị ngọt tự nhiên và nguồn vitamin, là lựa chọn lý tưởng cho một ngày tràn đầy sức sống.</value>
+</data>
+
+	<data name="MenuMatchaTitle" xml:space="preserve">
+    <value>MATCHA SERIES</value>
+</data>
+
+	<data name="MenuMatchaDescription" xml:space="preserve">
+    <value>Hương vị matcha Nhật Bản nguyên chất, kết hợp cùng sữa tươi tạo nên sự cân bằng giữa vị đắng nhẹ, béo mịn và thơm dịu.</value>
+</data>
+
+	<data name="MenuSodaTitle" xml:space="preserve">
+    <value>SODA SERIES</value>
+</data>
+
+	<data name="MenuSodaDescription" xml:space="preserve">
+    <value>Những ly soda mát lạnh kết hợp cùng hương trái cây tươi, tạo nên cảm giác sảng khoái và đầy năng lượng.</value>
+</data>
+
+	<data name="MenuCakeTitle" xml:space="preserve">
+    <value>CAKE SERIES</value>
+</data>
+
+	<data name="MenuCakeDescription" xml:space="preserve">
+    <value>Những chiếc bánh ngọt được làm từ nguyên liệu chọn lọc, mang đến vị mềm mịn, thơm ngon và sự ngọt ngào trong từng khoảnh khắc.</value>
+</data>
+
+	<data name="MenuYogurtTitle" xml:space="preserve">
+    <value>YOGURT SERIES</value>
+</data>
+
+	<data name="MenuYogurtDescription" xml:space="preserve">
+    <value>Sữa chua tươi mát kết hợp cùng hương vị trái cây tự nhiên, tạo nên thức uống nhẹ nhàng, bổ dưỡng và đầy năng lượng.</value>
+</data>
+	<data name="ProductsPageTitle" xml:space="preserve">
+    <value>Thực đơn - Rosalie Coffee</value>
+</data>
+
+	<data name="ProductsMenuTitle" xml:space="preserve">
+    <value>THỰC ĐƠN ROSALIE COFFEE</value>
+</data>
+
+	<data name="FilterAll" xml:space="preserve">
+    <value>Tất cả</value>
+</data>
+
+	<data name="FilterCoffee" xml:space="preserve">
+    <value>Cà phê</value>
+</data>
+
+	<data name="FilterTea" xml:space="preserve">
+    <value>Trà</value>
+</data>
+
+	<data name="FilterMatcha" xml:space="preserve">
+    <value>Matcha</value>
+</data>
+
+	<data name="FilterSoda" xml:space="preserve">
+    <value>Soda</value>
+</data>
+
+	<data name="FilterCake" xml:space="preserve">
+    <value>Bánh ngọt</value>
+</data>
+
+	<data name="FilterJuice" xml:space="preserve">
+    <value>Nước ép</value>
+</data>
+
+	<data name="FilterYogurt" xml:space="preserve">
+    <value>Sữa chua</value>
+</data>
+
+	<data name="FilterBlended" xml:space="preserve">
+    <value>Đá xay</value>
+</data>
+
+	<data name="DisplayMode" xml:space="preserve">
+    <value>Hiển thị:</value>
+</data>
+
+	<data name="PaginationMode" xml:space="preserve">
+    <value>Phân trang</value>
+</data>
+
+	<data name="LoadMoreMode" xml:space="preserve">
+    <value>Xem thêm</value>
+</data>
+
+	<data name="LoadMore" xml:space="preserve">
+    <value>Xem thêm</value>
+</data>
+	<data name="Favorite" xml:space="preserve">
+    <value>Yêu thích</value>
+</data>
+	<data name="BreadcrumbHome" xml:space="preserve">
+    <value>Trang chủ</value>
+</data>
+
+	<data name="BreadcrumbMenu" xml:space="preserve">
+    <value>Thực đơn</value>
+</data>
+
+	<data name="ChooseSize" xml:space="preserve">
+    <value>Chọn Size</value>
+</data>
+
+	<data name="SugarLevel" xml:space="preserve">
+    <value>Độ ngọt</value>
+</data>
+
+	<data name="IceLevel" xml:space="preserve">
+    <value>Mức đá</value>
+</data>
+
+	<data name="Topping" xml:space="preserve">
+    <value>Topping</value>
+</data>
+
+	<data name="DecreaseQuantity" xml:space="preserve">
+    <value>Giảm số lượng</value>
+</data>
+
+	<data name="IncreaseQuantity" xml:space="preserve">
+    <value>Tăng số lượng</value>
+</data>
+
+	<data name="AddToCart" xml:space="preserve">
+    <value>Thêm vào giỏ</value>
+</data>
+
+	<data name="ProductDescription" xml:space="preserve">
+    <value>Mô tả sản phẩm</value>
+</data>
+
+	<data name="DefaultProductDescription" xml:space="preserve">
+    <value>Rosalie Coffee mang đến sản phẩm được chọn lọc kỹ lưỡng, phù hợp cho những khoảnh khắc thư giãn trong ngày.</value>
+</data>
+
+	<data name="AddedToCart" xml:space="preserve">
+    <value>Đã thêm vào giỏ hàng</value>
+</data>
+
+	<data name="AddedToCartMessage" xml:space="preserve">
+    <value>Sản phẩm đã được thêm thành công.</value>
+</data>
+
+	<data name="ViewCart" xml:space="preserve">
+    <value>Xem giỏ</value>
+</data>
+	<!-- DÁN CÁC KEY NÀY VÀO SharedResource.vi.resx, NGAY TRƯỚC </root> -->
+
+	<data name="PromotionPageTitle" xml:space="preserve">
+    <value>Khuyến mãi - Rosalie Coffee</value>
+</data>
+
+	<data name="PromotionHeroSpecialBadge" xml:space="preserve">
+    <value>KHUYẾN MÃI ĐẶC BIỆT</value>
+</data>
+
+	<data name="PromotionHeroDiscount30" xml:space="preserve">
+    <value>ƯU ĐÃI ĐẾN 30%</value>
+</data>
+
+	<data name="PromotionHeroSlide1Description" xml:space="preserve">
+    <value>Khám phá những món uống và bánh ngọt được Rosalie Coffee lựa chọn với mức giá đặc biệt trong thời gian giới hạn.</value>
+</data>
+
+	<data name="PromotionComboBadge" xml:space="preserve">
+    <value>COMBO TIẾT KIỆM</value>
+</data>
+
+	<data name="PromotionComboHeroSubtitle" xml:space="preserve">
+    <value>THƯỞNG THỨC NHIỀU HƠN</value>
+</data>
+
+	<data name="PromotionComboHeroDescription" xml:space="preserve">
+    <value>Kết hợp thức uống cùng bánh ngọt yêu thích với mức giá tiết kiệm dành riêng cho bạn.</value>
+</data>
+
+	<data name="ViewCombo" xml:space="preserve">
+    <value>Xem combo</value>
+</data>
+
+	<data name="PromotionVoucherBadge" xml:space="preserve">
+    <value>VOUCHER ROSALIE</value>
+</data>
+
+	<data name="PromotionVoucherHeroTop" xml:space="preserve">
+    <value>ƯU ĐÃI</value>
+</data>
+
+	<data name="PromotionVoucherHeroDiscount" xml:space="preserve">
+    <value>GIẢM ĐẾN 50.000Đ</value>
+</data>
+
+	<data name="PromotionVoucherHeroDescription" xml:space="preserve">
+    <value>Lưu voucher Rosalie để nhận thêm ưu đãi khi thanh toán đơn hàng của bạn.</value>
+</data>
+
+	<data name="GetVoucher" xml:space="preserve">
+    <value>NHẬN VOUCHER</value>
+</data>
+
+	<data name="Hours" xml:space="preserve">
+    <value>GIỜ</value>
+</data>
+
+	<data name="Minutes" xml:space="preserve">
+    <value>PHÚT</value>
+</data>
+
+	<data name="Seconds" xml:space="preserve">
+    <value>GIÂY</value>
+</data>
+
+	<data name="FlashSaleNote" xml:space="preserve">
+    <value>Giá ưu đãi chỉ áp dụng trong thời gian Flash Sale. Sau khi chương trình kết thúc, sản phẩm sẽ trở về mức giá bán thông thường.</value>
+</data>
+
+	<data name="PromotionProductsHeading" xml:space="preserve">
+    <value>Sản phẩm khuyến mãi</value>
+</data>
+
+	<data name="PromotionProductCountText" xml:space="preserve">
+    <value>Hiện có {0} sản phẩm đang được giảm giá tại Rosalie Coffee.</value>
+</data>
+
+	<data name="SoldCount" xml:space="preserve">
+    <value>Đã bán {0}</value>
+</data>
+
+	<data name="InStock" xml:space="preserve">
+    <value>Còn hàng</value>
+</data>
+
+	<data name="ViewAllProducts" xml:space="preserve">
+    <value>Xem tất cả sản phẩm</value>
+</data>
+
+	<data name="NoPromotionProducts" xml:space="preserve">
+    <value>Hiện chưa có sản phẩm khuyến mãi.</value>
+</data>
+
+	<data name="SavingComboTitle" xml:space="preserve">
+    <value>Combo tiết kiệm</value>
+</data>
+
+	<data name="SavingComboDescription" xml:space="preserve">
+    <value>Thưởng thức nhiều hơn với mức giá ưu đãi dành riêng cho bạn.</value>
+</data>
+
+	<data name="DefaultComboDescription" xml:space="preserve">
+    <value>Combo Rosalie được kết hợp từ những món được yêu thích với mức giá tiết kiệm hơn.</value>
+</data>
+
+	<data name="ViewAllCombos" xml:space="preserve">
+    <value>Xem tất cả Combo</value>
+</data>
+
+	<data name="NoPromotionCombos" xml:space="preserve">
+    <value>Hiện chưa có combo khuyến mãi.</value>
+</data>
+
+	<data name="VoucherForYou" xml:space="preserve">
+    <value>Voucher dành cho bạn</value>
+</data>
+
+	<data name="VoucherSaveDescription" xml:space="preserve">
+    <value>Lưu voucher để sử dụng khi thanh toán</value>
+</data>
+
+	<data name="Discount" xml:space="preserve">
+    <value>GIẢM</value>
+</data>
+
+	<data name="VoucherDiscount15" xml:space="preserve">
+    <value>Giảm 15.000đ</value>
+</data>
+
+	<data name="VoucherDiscount30" xml:space="preserve">
+    <value>Giảm 30.000đ</value>
+</data>
+
+	<data name="VoucherDiscount50" xml:space="preserve">
+    <value>Giảm 50.000đ</value>
+</data>
+
+	<data name="ApplicableFrom" xml:space="preserve">
+    <value>Áp dụng cho đơn từ</value>
+</data>
+
+	<data name="ExpiryDate" xml:space="preserve">
+    <value>HSD</value>
+</data>
+
+	<data name="SaveVoucher" xml:space="preserve">
+    <value>Lưu</value>
+</data>
+
+	<data name="ComboIncludes" xml:space="preserve">
+    <value>Combo bao gồm</value>
+</data>
+
+	<data name="AddComboToCart" xml:space="preserve">
+    <value>Thêm combo vào giỏ</value>
+</data>
+	<!-- =====================================================
+     PROMOTION JAVASCRIPT - TIẾNG VIỆT
+===================================================== -->
+
+	<data name="ToastErrorTitle" xml:space="preserve">
+    <value>Có lỗi xảy ra</value>
+</data>
+
+	<data name="ToastAddedToCartTitle" xml:space="preserve">
+    <value>Đã thêm vào giỏ</value>
+</data>
+
+	<data name="ToastVoucherSavedTitle" xml:space="preserve">
+    <value>Đã lưu voucher</value>
+</data>
+
+	<data name="Close" xml:space="preserve">
+    <value>Đóng</value>
+</data>
+
+	<data name="VoucherSavedButton" xml:space="preserve">
+    <value>Đã lưu</value>
+</data>
+
+	<data name="VoucherCodeNotFound" xml:space="preserve">
+    <value>Không tìm thấy mã voucher.</value>
+</data>
+
+	<data name="VoucherSavedSuccess" xml:space="preserve">
+    <value>Voucher {0} đã được lưu thành công.</value>
+</data>
+
+	<data name="Collapse" xml:space="preserve">
+    <value>Thu gọn</value>
+</data>
+
+	<data name="ComboInfoNotFound" xml:space="preserve">
+    <value>Không tìm thấy thông tin combo.</value>
+</data>
+
+	<data name="ComboLoadFailed" xml:space="preserve">
+    <value>Không tải được combo.</value>
+</data>
+
+	<data name="ComboProductsEmpty" xml:space="preserve">
+    <value>Chưa có thông tin sản phẩm trong combo.</value>
+</data>
+
+	<data name="ComboInfoLoadError" xml:space="preserve">
+    <value>Không thể tải thông tin combo.</value>
+</data>
+
+	<data name="ComboNotFound" xml:space="preserve">
+    <value>Không tìm thấy combo.</value>
+</data>
+
+	<data name="ComboAddFailed" xml:space="preserve">
+    <value>Không thể thêm combo.</value>
+</data>
+
+	<data name="ComboServerAddFailed" xml:space="preserve">
+    <value>Server không thể thêm combo.</value>
+</data>
+
+	<data name="Adding" xml:space="preserve">
+    <value>Đang thêm...</value>
+</data>
+
+	<data name="Added" xml:space="preserve">
+    <value>Đã thêm</value>
+</data>
+
+	<data name="AddedToCart" xml:space="preserve">
+    <value>Đã thêm vào giỏ</value>
+</data>
+
+	<data name="ComboAddedSuccess" xml:space="preserve">
+    <value>Combo "{0}" đã được thêm vào giỏ hàng.</value>
+</data>
+
+	<data name="ComboAddCartError" xml:space="preserve">
+    <value>Không thể thêm combo vào giỏ hàng. Vui lòng thử lại.</value>
+</data>
+	<data name="AboutPageTitle" xml:space="preserve">
+    <value>Về Rosalie - Rosalie Coffee</value>
+</data>
+
+	<data name="AboutHeroSubtitle" xml:space="preserve">
+    <value>Về Rosalie Coffee</value>
+</data>
+
+	<data name="AboutHeroTitle" xml:space="preserve">
+    <value>Câu chuyện của Rosalie Coffee</value>
+</data>
+
+	<data name="AboutHeroDescription" xml:space="preserve">
+    <value>Nơi những hạt cà phê được chọn lọc kỹ lưỡng và mỗi khoảnh khắc thưởng thức đều trở nên đáng nhớ.</value>
+</data>
+
+	<data name="AboutStoryLabel" xml:space="preserve">
+    <value>Câu chuyện thương hiệu</value>
+</data>
+
+	<data name="AboutStoryTitle" xml:space="preserve">
+    <value>Hơn cả một ly cà phê</value>
+</data>
+
+	<data name="AboutStoryParagraph1" xml:space="preserve">
+    <value>Rosalie Coffee được tạo nên với mong muốn mang đến một không gian nơi mọi người có thể thưởng thức cà phê chất lượng và tận hưởng những phút giây thư giãn trong ngày.</value>
+</data>
+
+	<data name="AboutStoryParagraph2" xml:space="preserve">
+    <value>Chúng tôi lựa chọn những hạt cà phê phù hợp, chú trọng từng công đoạn pha chế và luôn cố gắng mang đến hương vị ổn định trong mỗi ly cà phê phục vụ khách hàng.</value>
+</data>
+
+	<data name="AboutStoryParagraph3" xml:space="preserve">
+    <value>Với Rosalie Coffee, một ly cà phê ngon không chỉ nằm ở hương vị mà còn ở không gian, sự phục vụ và cảm xúc mà khách hàng nhận được.</value>
+</data>
+
+	<data name="AboutValuesLabel" xml:space="preserve">
+    <value>Giá trị của chúng tôi</value>
+</data>
+
+	<data name="AboutValuesTitle" xml:space="preserve">
+    <value>Điều làm nên Rosalie</value>
+</data>
+
+	<data name="AboutValuesDescription" xml:space="preserve">
+    <value>Chúng tôi luôn hướng đến chất lượng, sự tận tâm và trải nghiệm tốt nhất dành cho khách hàng.</value>
+</data>
+
+	<data name="AboutValue1Title" xml:space="preserve">
+    <value>Cà phê chất lượng</value>
+</data>
+
+	<data name="AboutValue1Description" xml:space="preserve">
+    <value>Lựa chọn nguyên liệu phù hợp và chú trọng chất lượng trong từng sản phẩm.</value>
+</data>
+
+	<data name="AboutValue2Title" xml:space="preserve">
+    <value>Tận tâm phục vụ</value>
+</data>
+
+	<data name="AboutValue2Description" xml:space="preserve">
+    <value>Luôn cố gắng mang đến sự thân thiện, chuyên nghiệp và chu đáo trong từng trải nghiệm.</value>
+</data>
+
+	<data name="AboutValue3Title" xml:space="preserve">
+    <value>Trải nghiệm đáng nhớ</value>
+</data>
+
+	<data name="AboutValue3Description" xml:space="preserve">
+    <value>Tạo nên một không gian thoải mái để khách hàng có thể thư giãn, gặp gỡ và tận hưởng cà phê.</value>
+</data>
+
+	<data name="AboutExperienceLabel" xml:space="preserve">
+    <value>Trải nghiệm Rosalie</value>
+</data>
+
+	<data name="AboutExperienceTitle" xml:space="preserve">
+    <value>Một không gian dành cho bạn</value>
+</data>
+
+	<data name="AboutExperienceDescription" xml:space="preserve">
+    <value>Từ những buổi sáng cần một nguồn năng lượng mới đến những buổi gặp gỡ cùng bạn bè, Rosalie Coffee mong muốn trở thành một phần nhỏ trong những khoảnh khắc đẹp của bạn.</value>
+</data>
+
+	<data name="AboutExperienceItem1" xml:space="preserve">
+    <value>Không gian thoải mái</value>
+</data>
+
+	<data name="AboutExperienceItem2" xml:space="preserve">
+    <value>Cà phê và thức uống đa dạng</value>
+</data>
+
+	<data name="AboutExperienceItem3" xml:space="preserve">
+    <value>Phục vụ thân thiện</value>
+</data>
+
+	<data name="AboutExperienceItem4" xml:space="preserve">
+    <value>Phù hợp học tập và gặp gỡ</value>
+</data>
+
+	<data name="AboutExperienceImageAlt" xml:space="preserve">
+    <value>Không gian Rosalie Coffee</value>
+</data>
+
+	<data name="AboutCtaTitle" xml:space="preserve">
+    <value>Sẵn sàng thưởng thức?</value>
+</data>
+
+	<data name="AboutCtaDescription" xml:space="preserve">
+    <value>Khám phá menu Rosalie Coffee và tìm cho mình thức uống yêu thích ngay hôm nay.</value>
+</data>
+
+	<data name="AboutCtaButton" xml:space="preserve">
+    <value>Xem Menu</value>
+</data>
+	<data name="ContactPageTitle" xml:space="preserve">
+    <value>Liên hệ - Rosalie Coffee</value>
+</data>
+
+	<data name="ContactHeroTitle" xml:space="preserve">
+    <value>Liên hệ với Rosalie Coffee</value>
+</data>
+
+	<data name="ContactHeroDescription" xml:space="preserve">
+    <value>Chúng tôi luôn sẵn sàng lắng nghe và đồng hành cùng bạn. Hãy ghé thăm chi nhánh Rosalie Coffee gần bạn nhất để thưởng thức những ly cà phê thơm ngon trong không gian ấm cúng.</value>
+</data>
+
+	<data name="ContactNow" xml:space="preserve">
+    <value>Liên hệ ngay</value>
+</data>
+
+	<data name="ViewMenu" xml:space="preserve">
+    <value>Xem Menu</value>
+</data>
+
+	<data name="BranchSystemTitle" xml:space="preserve">
+    <value>HỆ THỐNG CHI NHÁNH</value>
+</data>
+
+	<data name="BranchSystemDescription" xml:space="preserve">
+    <value>Tìm kiếm và khám phá chi nhánh Rosalie Coffee gần bạn nhất</value>
+</data>
+
+	<data name="BranchSearchPlaceholder" xml:space="preserve">
+    <value>Tìm theo tên chi nhánh hoặc quận...</value>
+</data>
+
+	<data name="BranchWifi" xml:space="preserve">
+    <value>Wifi</value>
+</data>
+
+	<data name="BranchParking" xml:space="preserve">
+    <value>Bãi xe</value>
+</data>
+
+	<data name="BranchAirConditioner" xml:space="preserve">
+    <value>Máy lạnh</value>
+</data>
+
+	<data name="BranchPowerOutlet" xml:space="preserve">
+    <value>Ổ cắm</value>
+</data>
+
+	<data name="Directions" xml:space="preserve">
+    <value>Chỉ đường</value>
+</data>
+
+	<data name="BranchImageAlt" xml:space="preserve">
+    <value>Chi nhánh Rosalie Coffee</value>
+</data>
+	<!-- =====================================================
+     CART - TIẾNG VIỆT
+===================================================== -->
+
+	<data name="CartPageTitle" xml:space="preserve">
+    <value>Giỏ hàng - Rosalie Coffee</value>
+</data>
+
+	<data name="CartYourCart" xml:space="preserve">
+    <value>Giỏ hàng của bạn</value>
+</data>
+
+	<data name="CartItemCount" xml:space="preserve">
+    <value>{0} sản phẩm</value>
+</data>
+
+	<data name="ContinueShopping" xml:space="preserve">
+    <value>Tiếp tục mua hàng</value>
+</data>
+
+	<data name="CartEmptyTitle" xml:space="preserve">
+    <value>Giỏ hàng đang trống</value>
+</data>
+
+	<data name="CartEmptyDescription" xml:space="preserve">
+    <value>Hãy khám phá thực đơn và chọn những món bạn yêu thích nhé.</value>
+</data>
+
+	<data name="ExploreMenu" xml:space="preserve">
+    <value>Khám phá thực đơn</value>
+</data>
+
+	<data name="CartSavingCombo" xml:space="preserve">
+    <value>Combo tiết kiệm</value>
+</data>
+
+	<data name="CartSize" xml:space="preserve">
+    <value>Size</value>
+</data>
+
+	<data name="CartSugar" xml:space="preserve">
+    <value>Đường</value>
+</data>
+
+	<data name="CartIce" xml:space="preserve">
+    <value>Đá</value>
+</data>
+
+	<data name="CartTopping" xml:space="preserve">
+    <value>Topping</value>
+</data>
+
+	<data name="CartNote" xml:space="preserve">
+    <value>Ghi chú</value>
+</data>
+
+	<data name="DecreaseQuantity" xml:space="preserve">
+    <value>Giảm số lượng</value>
+</data>
+
+	<data name="IncreaseQuantity" xml:space="preserve">
+    <value>Tăng số lượng</value>
+</data>
+
+	<data name="RemoveProduct" xml:space="preserve">
+    <value>Xóa sản phẩm</value>
+</data>
+
+	<data name="YourVouchers" xml:space="preserve">
+    <value>Voucher của bạn</value>
+</data>
+
+	<data name="LoginForVoucherTitle" xml:space="preserve">
+    <value>Đăng nhập để sử dụng voucher</value>
+</data>
+
+	<data name="LoginForVoucherDescription" xml:space="preserve">
+    <value>Đăng nhập để xem và sử dụng những voucher bạn đã lưu.</value>
+</data>
+
+	<data name="PaymentSummary" xml:space="preserve">
+    <value>Tóm tắt thanh toán</value>
+</data>
+
+	<data name="Subtotal" xml:space="preserve">
+    <value>Tạm tính</value>
+</data>
+
+	<data name="ShippingFee" xml:space="preserve">
+    <value>Phí giao hàng</value>
+</data>
+
+	<data name="FreeShipping" xml:space="preserve">
+    <value>Miễn phí</value>
+</data>
+
+	<data name="GrandTotal" xml:space="preserve">
+    <value>Tổng cộng</value>
+</data>
+
+	<data name="FreeShippingFrom" xml:space="preserve">
+    <value>Miễn phí giao hàng cho đơn từ</value>
+</data>
+
+	<data name="CheckoutNow" xml:space="preserve">
+    <value>Thanh toán ngay</value>
+</data>
+
+	<data name="LoginToCheckout" xml:space="preserve">
+    <value>Đăng nhập để thanh toán</value>
+</data>
+
+	<data name="SecurePaymentSSL" xml:space="preserve">
+    <value>Thanh toán an toàn và bảo mật SSL</value>
+</data>
+
+	<data name="Notification" xml:space="preserve">
+    <value>Thông báo</value>
+</data>
+
+	<data name="NoSavedVouchers" xml:space="preserve">
+    <value>Bạn chưa lưu voucher nào.</value>
+</data>
+
+	<data name="MinimumOrder" xml:space="preserve">
+    <value>Đơn từ</value>
+</data>
+
+	<data name="VoucherCannotApplyTitle" xml:space="preserve">
+    <value>Không thể áp dụng voucher</value>
+</data>
+
+	<data name="VoucherMinimumOrderMessage" xml:space="preserve">
+    <value>Voucher {0} chỉ áp dụng cho đơn từ {1}.</value>
+</data>
+
+	<data name="VoucherInvalid" xml:space="preserve">
+    <value>Voucher không hợp lệ.</value>
+</data>
+
+	<data name="VoucherAppliedTitle" xml:space="preserve">
+    <value>Áp dụng voucher thành công</value>
+</data>
+
+	<data name="VoucherDiscountMessage" xml:space="preserve">
+    <value>Bạn đã được giảm {0}.</value>
+</data>
+
+	<data name="VoucherSaveError" xml:space="preserve">
+    <value>Không thể lưu voucher. Vui lòng thử lại.</value>
+</data>
+	<!-- ================= CHECKOUT ================= -->
+
+	<data name="CheckoutPageTitle" xml:space="preserve">
+    <value>Thanh toán - Rosalie Coffee</value>
+</data>
+
+	<data name="CheckoutTitle" xml:space="preserve">
+    <value>Thanh toán</value>
+</data>
+
+	<data name="ShippingInformation" xml:space="preserve">
+    <value>Thông tin giao hàng</value>
+</data>
+
+	<data name="ShippingInformationDescription" xml:space="preserve">
+    <value>Vui lòng nhập đầy đủ thông tin để Rosalie Coffee giao hàng đến bạn.</value>
+</data>
+
+	<data name="FullName" xml:space="preserve">
+    <value>Họ và tên</value>
+</data>
+
+	<data name="FullNamePlaceholder" xml:space="preserve">
+    <value>Nhập họ và tên</value>
+</data>
+
+	<data name="PhoneNumber" xml:space="preserve">
+    <value>Số điện thoại</value>
+</data>
+
+	<data name="PhoneNumberPlaceholder" xml:space="preserve">
+    <value>Nhập số điện thoại</value>
+</data>
+
+	<data name="DeliveryAddress" xml:space="preserve">
+    <value>Địa chỉ nhận hàng</value>
+</data>
+
+	<data name="DeliveryAddressPlaceholder" xml:space="preserve">
+    <value>Nhập số nhà, tên đường...</value>
+</data>
+
+	<data name="ProvinceCity" xml:space="preserve">
+    <value>Tỉnh / Thành phố</value>
+</data>
+
+	<data name="SelectProvince" xml:space="preserve">
+    <value>-- Chọn tỉnh / thành phố --</value>
+</data>
+
+	<data name="District" xml:space="preserve">
+    <value>Quận / Huyện</value>
+</data>
+
+	<data name="SelectDistrict" xml:space="preserve">
+    <value>-- Chọn quận / huyện --</value>
+</data>
+
+	<data name="OrderNote" xml:space="preserve">
+    <value>Ghi chú</value>
+</data>
+
+	<data name="OrderNotePlaceholder" xml:space="preserve">
+    <value>Ví dụ: Giao giờ hành chính, ít đá, ít đường...</value>
+</data>
+
+	<data name="PaymentMethod" xml:space="preserve">
+    <value>Phương thức thanh toán</value>
+</data>
+
+	<data name="PaymentMethodDescription" xml:space="preserve">
+    <value>Chọn phương thức thanh toán cho đơn hàng</value>
+</data>
+
+	<data name="CashOnDelivery" xml:space="preserve">
+    <value>Thanh toán khi nhận hàng</value>
+</data>
+
+	<data name="CashOnDeliveryDescription" xml:space="preserve">
+    <value>Thanh toán tiền mặt khi nhận được hàng</value>
+</data>
+
+	<data name="VNPayPayment" xml:space="preserve">
+    <value>Thanh toán online qua VNPay</value>
+</data>
+
+	<data name="VNPayPaymentDescription" xml:space="preserve">
+    <value>Thanh toán an toàn qua cổng VNPay</value>
+</data>
+
+	<data name="BackToCart" xml:space="preserve">
+    <value>Quay lại giỏ hàng</value>
+</data>
+
+	<data name="YourOrder" xml:space="preserve">
+    <value>Đơn hàng của bạn</value>
+</data>
+
+	<data name="UnitPrice" xml:space="preserve">
+    <value>Đơn giá</value>
+</data>
+
+	<data name="CartEmpty" xml:space="preserve">
+    <value>Giỏ hàng đang trống.</value>
+</data>
+
+	<data name="CheckoutFreeShippingMessage" xml:space="preserve">
+    <value>🎉 Đơn hàng của bạn được miễn phí vận chuyển.</value>
+</data>
+
+	<data name="CheckoutShippingFeeText" xml:space="preserve">
+    <value>Phí giao hàng</value>
+</data>
+
+	<data name="CheckoutFreeShippingCondition" xml:space="preserve">
+    <value>Đơn sau giảm giá từ</value>
+</data>
+
+	<data name="PureCoffee" xml:space="preserve">
+    <value>Cà phê nguyên chất</value>
+</data>
+
+	<data name="PureCoffeeDescription" xml:space="preserve">
+    <value>100% hạt cà phê chất lượng</value>
+</data>
+
+	<data name="FastDelivery" xml:space="preserve">
+    <value>Giao nhanh 30 phút</value>
+</data>
+
+	<data name="FastDeliveryDescription" xml:space="preserve">
+    <value>Freeship đơn từ 150.000đ</value>
+</data>
+
+	<data name="FreshIngredients" xml:space="preserve">
+    <value>Nguyên liệu tươi</value>
+</data>
+
+	<data name="FreshIngredientsDescription" xml:space="preserve">
+    <value>Tươi mới mỗi ngày</value>
+</data>
+
+	<data name="DailyOffers" xml:space="preserve">
+    <value>Ưu đãi mỗi ngày</value>
+</data>
+
+	<data name="DailyOffersDescription" xml:space="preserve">
+    <value>Nhiều quà tặng hấp dẫn</value>
+</data>
+	<!-- ================= LOGIN ================= -->
+
+	<data name="LoginPageTitle" xml:space="preserve">
+    <value>Đăng nhập</value>
+</data>
+
+	<data name="LoginBannerAlt" xml:space="preserve">
+    <value>Đăng nhập Rosalie Coffee</value>
+</data>
+
+	<data name="WelcomeBack" xml:space="preserve">
+    <value>Chào mừng trở lại!</value>
+</data>
+
+	<data name="LoginWelcomeDescription" xml:space="preserve">
+    <value>Đăng nhập để đặt món, theo dõi đơn hàng và tận hưởng những ưu đãi dành riêng cho thành viên Rosalie Coffee.</value>
+</data>
+
+	<data name="BackToHome" xml:space="preserve">
+    <value>Quay về trang chủ</value>
+</data>
+
+	<data name="LoginDescription" xml:space="preserve">
+    <value>Vui lòng nhập thông tin tài khoản của bạn.</value>
+</data>
+
+	<data name="Email" xml:space="preserve">
+    <value>Email</value>
+</data>
+
+	<data name="EmailPlaceholder" xml:space="preserve">
+    <value>Nhập Email của bạn</value>
+</data>
+
+	<data name="Password" xml:space="preserve">
+    <value>Mật khẩu</value>
+</data>
+
+	<data name="PasswordPlaceholder" xml:space="preserve">
+    <value>Nhập mật khẩu</value>
+</data>
+
+	<data name="TogglePasswordVisibility" xml:space="preserve">
+    <value>Hiện hoặc ẩn mật khẩu</value>
+</data>
+
+	<data name="RememberMe" xml:space="preserve">
+    <value>Ghi nhớ đăng nhập</value>
+</data>
+
+	<data name="ForgotPassword" xml:space="preserve">
+    <value>Quên mật khẩu?</value>
+</data>
+
+	<data name="Or" xml:space="preserve">
+    <value>HOẶC</value>
+</data>
+
+	<data name="ContinueWithGoogle" xml:space="preserve">
+    <value>Tiếp tục với Google</value>
+</data>
+
+	<data name="NoAccount" xml:space="preserve">
+    <value>Chưa có tài khoản?</value>
+</data>
+
+	<data name="RegisterNow" xml:space="preserve">
+    <value>Đăng ký ngay</value>
+</data>
+	<data name="LoggingIn" xml:space="preserve">
+    <value>Đang đăng nhập...</value>
+</data>
+	<!-- ================= REGISTER ================= -->
+
+	<data name="RegisterPageTitle" xml:space="preserve">
+    <value>Đăng ký</value>
+</data>
+
+	<data name="RegisterBannerAlt" xml:space="preserve">
+    <value>Đăng ký Rosalie Coffee</value>
+</data>
+
+	<data name="JoinRosalie" xml:space="preserve">
+    <value>Gia nhập Rosalie Coffee</value>
+</data>
+
+	<data name="RegisterWelcomeDescription" xml:space="preserve">
+    <value>Tạo tài khoản để tích điểm, nhận Voucher Welcome và tận hưởng những ưu đãi dành riêng cho thành viên.</value>
+</data>
+
+	<data name="RegisterBenefit1" xml:space="preserve">
+    <value>Voucher Welcome 10%</value>
+</data>
+
+	<data name="RegisterBenefit2" xml:space="preserve">
+    <value>Tích điểm mỗi đơn hàng</value>
+</data>
+
+	<data name="RegisterBenefit3" xml:space="preserve">
+    <value>Quà tặng sinh nhật</value>
+</data>
+
+	<data name="RegisterBenefit4" xml:space="preserve">
+    <value>Ưu đãi dành riêng cho thành viên</value>
+</data>
+
+	<data name="Register" xml:space="preserve">
+    <value>Đăng ký</value>
+</data>
+
+	<data name="RegisterDescription" xml:space="preserve">
+    <value>Chỉ mất chưa đến 1 phút để trở thành thành viên Rosalie Coffee.</value>
+</data>
+
+	<data name="RegisterEmailPlaceholder" xml:space="preserve">
+    <value>Nhập Email</value>
+</data>
+
+	<data name="Address" xml:space="preserve">
+    <value>Địa chỉ</value>
+</data>
+
+	<data name="AddressPlaceholder" xml:space="preserve">
+    <value>Nhập địa chỉ</value>
+</data>
+
+	<data name="PasswordNotEntered" xml:space="preserve">
+    <value>Chưa nhập mật khẩu</value>
+</data>
+
+	<data name="PasswordRuleLength" xml:space="preserve">
+    <value>Ít nhất 8 ký tự</value>
+</data>
+
+	<data name="PasswordRuleUpper" xml:space="preserve">
+    <value>Có chữ hoa</value>
+</data>
+
+	<data name="PasswordRuleLower" xml:space="preserve">
+    <value>Có chữ thường</value>
+</data>
+
+	<data name="PasswordRuleNumber" xml:space="preserve">
+    <value>Có số</value>
+</data>
+
+	<data name="PasswordRuleSpecial" xml:space="preserve">
+    <value>Có ký tự đặc biệt</value>
+</data>
+
+	<data name="ConfirmPassword" xml:space="preserve">
+    <value>Xác nhận mật khẩu</value>
+</data>
+
+	<data name="ConfirmPasswordPlaceholder" xml:space="preserve">
+    <value>Nhập lại mật khẩu</value>
+</data>
+
+	<data name="AgreeTerms" xml:space="preserve">
+    <value>Tôi đồng ý với Điều khoản sử dụng và Chính sách bảo mật.</value>
+</data>
+
+	<data name="CreateAccount" xml:space="preserve">
+    <value>Tạo tài khoản</value>
+</data>
+
+	<data name="AlreadyHaveAccount" xml:space="preserve">
+    <value>Đã có tài khoản?</value>
+</data>
+
+	<data name="LoginNow" xml:space="preserve">
+    <value>Đăng nhập ngay</value>
+</data>
+
+	<data name="PasswordVeryWeak" xml:space="preserve">
+    <value>Mật khẩu rất yếu</value>
+</data>
+
+	<data name="PasswordWeak" xml:space="preserve">
+    <value>Mật khẩu yếu</value>
+</data>
+
+	<data name="PasswordMedium" xml:space="preserve">
+    <value>Mật khẩu trung bình</value>
+</data>
+
+	<data name="PasswordQuiteStrong" xml:space="preserve">
+    <value>Mật khẩu khá mạnh</value>
+</data>
+
+	<data name="PasswordStrong" xml:space="preserve">
+    <value>Mật khẩu mạnh</value>
+</data>
+
+	<data name="CreatingAccount" xml:space="preserve">
+    <value>Đang tạo tài khoản...</value>
+</data>
+	<!-- ================= FORGOT PASSWORD ================= -->
+
+	<data name="ForgotPasswordPageTitle" xml:space="preserve">
+    <value>Quên mật khẩu</value>
+</data>
+
+	<data name="RecoverPasswordTitle" xml:space="preserve">
+    <value>Khôi phục mật khẩu</value>
+</data>
+
+	<data name="RecoverPasswordDescription" xml:space="preserve">
+    <value>Nhập Email đã đăng ký với Rosalie Coffee. Chúng tôi sẽ gửi mã OTP để xác nhận tài khoản.</value>
+</data>
+
+	<data name="BackToLogin" xml:space="preserve">
+    <value>Quay lại đăng nhập</value>
+</data>
+
+	<data name="ForgotPasswordQuestion" xml:space="preserve">
+    <value>Quên mật khẩu?</value>
+</data>
+
+	<data name="ForgotPasswordDescription" xml:space="preserve">
+    <value>Nhập Email của bạn để nhận mã xác nhận.</value>
+</data>
+
+	<data name="SendOtp" xml:space="preserve">
+    <value>Gửi mã OTP</value>
+</data>
+
+	<data name="RememberPassword" xml:space="preserve">
+    <value>Đã nhớ mật khẩu?</value>
+</data>
+	<!-- ================= VERIFY OTP ================= -->
+
+	<data name="VerifyOtpPageTitle" xml:space="preserve">
+    <value>Xác nhận OTP</value>
+</data>
+
+	<data name="CheckEmailTitle" xml:space="preserve">
+    <value>Kiểm tra Email</value>
+</data>
+
+	<data name="CheckEmailDescription" xml:space="preserve">
+    <value>Rosalie Coffee đã gửi mã xác nhận gồm 6 chữ số đến Email của bạn.</value>
+</data>
+
+	<data name="ResendEmail" xml:space="preserve">
+    <value>Gửi lại Email</value>
+</data>
+
+	<data name="EnterOtpTitle" xml:space="preserve">
+    <value>Nhập mã OTP</value>
+</data>
+
+	<data name="OtpExpiryDescription" xml:space="preserve">
+    <value>Mã xác nhận có hiệu lực trong 5 phút.</value>
+</data>
+
+	<data name="OtpCode" xml:space="preserve">
+    <value>Mã OTP</value>
+</data>
+
+	<data name="OtpPlaceholder" xml:space="preserve">
+    <value>Nhập mã OTP 6 số</value>
+</data>
+
+	<data name="VerifyOtpButton" xml:space="preserve">
+    <value>Xác nhận OTP</value>
+</data>
+	<!-- ================= RESET PASSWORD ================= -->
+
+	<data name="ResetPasswordPageTitle" xml:space="preserve">
+    <value>Đặt lại mật khẩu</value>
+</data>
+
+	<data name="CreateNewPasswordTitle" xml:space="preserve">
+    <value>Tạo mật khẩu mới</value>
+</data>
+
+	<data name="CreateNewPasswordDescription" xml:space="preserve">
+    <value>Tài khoản của bạn đã được xác nhận. Hãy tạo mật khẩu mới để tiếp tục sử dụng Rosalie Coffee.</value>
+</data>
+
+	<data name="ResetPasswordTitle" xml:space="preserve">
+    <value>Đặt lại mật khẩu</value>
+</data>
+
+	<data name="ResetPasswordDescription" xml:space="preserve">
+    <value>Nhập mật khẩu mới cho tài khoản của bạn.</value>
+</data>
+
+	<data name="NewPassword" xml:space="preserve">
+    <value>Mật khẩu mới</value>
+</data>
+
+	<data name="NewPasswordPlaceholder" xml:space="preserve">
+    <value>Nhập mật khẩu mới</value>
+</data>
+
+	<data name="ConfirmNewPassword" xml:space="preserve">
+    <value>Xác nhận mật khẩu mới</value>
+</data>
+
+	<data name="ConfirmNewPasswordPlaceholder" xml:space="preserve">
+    <value>Nhập lại mật khẩu mới</value>
+</data>
+
+	<data name="ChangePassword" xml:space="preserve">
+    <value>Đổi mật khẩu</value>
+</data>
+	<!-- ================= PROFILE ================= -->
+
+	<data name="ProfilePageTitle" xml:space="preserve">
+    <value>Thông tin cá nhân</value>
+</data>
+
+	<data name="RosalieMember" xml:space="preserve">
+    <value>Thành viên Rosalie Coffee</value>
+</data>
+
+	<data name="JoinDate" xml:space="preserve">
+    <value>Ngày tham gia</value>
+</data>
+
+	<data name="AccountLabel" xml:space="preserve">
+    <value>TÀI KHOẢN</value>
+</data>
+
+	<data name="PersonalInformation" xml:space="preserve">
+    <value>Thông tin cá nhân</value>
+</data>
+
+	<data name="ProfileDescription" xml:space="preserve">
+    <value>Cập nhật thông tin để Rosalie Coffee phục vụ bạn tốt hơn.</value>
+</data>
+
+	<data name="ProfileNamePlaceholder" xml:space="preserve">
+    <value>Nhập họ tên</value>
+</data>
+
+	<data name="EmailCannotChange" xml:space="preserve">
+    <value>Email đăng nhập không thể thay đổi.</value>
+</data>
+
+	<data name="ProfileAddressPlaceholder" xml:space="preserve">
+    <value>Nhập địa chỉ của bạn</value>
+</data>
+
+	<data name="AccountCreatedDate" xml:space="preserve">
+    <value>Ngày tạo tài khoản</value>
+</data>
+
+	<data name="MyOrders" xml:space="preserve">
+    <value>Đơn hàng của tôi</value>
+</data>
+
+	<data name="Back" xml:space="preserve">
+    <value>Quay lại</value>
+</data>
+
+	<data name="SaveChanges" xml:space="preserve">
+    <value>Lưu thay đổi</value>
+</data>
+	<!-- ================= ORDER HISTORY ================= -->
+
+	<data name="OrderHistoryPageTitle" xml:space="preserve">
+    <value>Đơn hàng của tôi</value>
+</data>
+
+	<data name="OrderHistoryDescription" xml:space="preserve">
+    <value>Theo dõi các đơn hàng bạn đã đặt tại Rosalie Coffee.</value>
+</data>
+
+	<data name="NoOrdersTitle" xml:space="preserve">
+    <value>Bạn chưa có đơn hàng nào</value>
+</data>
+
+	<data name="NoOrdersDescription" xml:space="preserve">
+    <value>Hãy chọn một món yêu thích từ Rosalie Coffee nhé.</value>
+</data>
+
+	<data name="OrderCode" xml:space="preserve">
+    <value>Mã đơn hàng</value>
+</data>
+
+	<data name="OrderDate" xml:space="preserve">
+    <value>Ngày đặt</value>
+</data>
+
+	<data name="PaymentTotal" xml:space="preserve">
+    <value>Tổng thanh toán</value>
+</data>
+
+	<data name="OrderStatus" xml:space="preserve">
+    <value>Trạng thái</value>
+</data>
+
+	<data name="OrderStatusPaid" xml:space="preserve">
+    <value>Đã thanh toán</value>
+</data>
+
+	<data name="OrderStatusFailed" xml:space="preserve">
+    <value>Thanh toán thất bại</value>
+</data>
+
+	<data name="OrderStatusPending" xml:space="preserve">
+    <value>Đang xử lý</value>
+</data>
+	<!-- ================= SUCCESS / ORDER DETAIL ================= -->
+
+	<data name="SuccessPageTitle" xml:space="preserve">
+    <value>Đặt hàng thành công</value>
+</data>
+
+	<data name="OrderSuccessTitle" xml:space="preserve">
+    <value>Đặt hàng thành công!</value>
+</data>
+
+	<data name="OrderSuccessThankYou" xml:space="preserve">
+    <value>Cảm ơn bạn đã đặt hàng tại</value>
+</data>
+
+	<data name="OrderSuccessRecorded" xml:space="preserve">
+    <value>Đơn hàng của bạn đã được ghi nhận.</value>
+</data>
+
+	<data name="OrderInformation" xml:space="preserve">
+    <value>Thông tin đơn hàng</value>
+</data>
+
+	<data name="OrderDetails" xml:space="preserve">
+    <value>Chi tiết đơn hàng</value>
+</data>
+
+	<data name="Product" xml:space="preserve">
+    <value>Sản phẩm</value>
+</data>
+
+	<data name="QuantityShort" xml:space="preserve">
+    <value>SL</value>
+</data>
+
+	<data name="LineTotal" xml:space="preserve">
+    <value>Thành tiền</value>
+</data>
+
+	<data name="OrderProductDetailsUnavailable" xml:space="preserve">
+    <value>Chi tiết sản phẩm chưa được lưu cho đơn hàng này.</value>
+</data>
+
+	<data name="Recipient" xml:space="preserve">
+    <value>Người nhận</value>
+</data>
+
+	<data name="ShippingAddress" xml:space="preserve">
+    <value>Địa chỉ giao hàng</value>
+</data>
+
+	<data name="EstimatedTime" xml:space="preserve">
+    <value>Thời gian dự kiến</value>
+</data>
+
+	<data name="EstimatedTimeValue" xml:space="preserve">
+    <value>30 - 60 phút</value>
+</data>
+
+	<data name="InvoiceSavedMessage" xml:space="preserve">
+    <value>Hóa đơn đã được lưu vào hệ thống Rosalie Coffee.</value>
+</data>
+	<!-- ================= ACCOUNT CONTROLLER ================= -->
+
+	<data name="EmailAlreadyUsed" xml:space="preserve">
+    <value>Email này đã được sử dụng.</value>
+</data>
+
+	<data name="RegisterWelcomeSuccess" xml:space="preserve">
+    <value>🎉 Chào mừng {0}! Bạn đã đăng ký thành công.</value>
+</data>
+
+	<data name="InvalidEmailOrPassword" xml:space="preserve">
+    <value>Email hoặc mật khẩu không đúng.</value>
+</data>
+
+	<data name="LoginWelcomeSuccess" xml:space="preserve">
+    <value>👋 Chào mừng quay lại, {0}!</value>
+</data>
+
+	<data name="GoogleLoginFailed" xml:space="preserve">
+    <value>Không thể đăng nhập bằng Google.</value>
+</data>
+
+	<data name="GoogleEmailUnavailable" xml:space="preserve">
+    <value>Không lấy được Email từ tài khoản Google.</value>
+</data>
+
+	<data name="GoogleWelcomeSuccess" xml:space="preserve">
+    <value>👋 Chào mừng {0}!</value>
+</data>
+
+	<data name="AccountEmailNotFound" xml:space="preserve">
+    <value>Không tìm thấy tài khoản với Email này.</value>
+</data>
+
+	<data name="EmailSendError" xml:space="preserve">
+    <value>Lỗi gửi Email: {0}</value>
+</data>
+
+	<data name="OtpSentSuccess" xml:space="preserve">
+    <value>Mã xác nhận đã được gửi đến Email của bạn.</value>
+</data>
+
+	<data name="OtpNotExist" xml:space="preserve">
+    <value>Mã xác nhận không còn tồn tại.</value>
+</data>
+
+	<data name="OtpInvalid" xml:space="preserve">
+    <value>Mã xác nhận không hợp lệ.</value>
+</data>
+
+	<data name="OtpExpired" xml:space="preserve">
+    <value>Mã OTP đã hết hạn.</value>
+</data>
+
+	<data name="OtpIncorrect" xml:space="preserve">
+    <value>Mã OTP không đúng.</value>
+</data>
+
+	<data name="PasswordChangedSuccess" xml:space="preserve">
+    <value>✅ Đổi mật khẩu thành công. Bạn có thể đăng nhập bằng mật khẩu mới.</value>
+</data>
+
+	<data name="FullNameRequired" xml:space="preserve">
+    <value>Vui lòng nhập họ tên.</value>
+</data>
+
+	<data name="PhoneRequired" xml:space="preserve">
+    <value>Vui lòng nhập số điện thoại.</value>
+</data>
+
+	<data name="ProfileUpdateSuccess" xml:space="preserve">
+    <value>✅ Cập nhật thông tin cá nhân thành công.</value>
+</data>
+
+	<data name="LogoutSuccess" xml:space="preserve">
+    <value>👋 Đăng xuất thành công! Hẹn gặp lại bạn.</value>
+</data>
+	<!-- ================= CHECKOUT CONTROLLER ================= -->
+
+	<data name="VnPayTmnCodeMissing" xml:space="preserve">
+    <value>Chưa cấu hình VNPay:TmnCode trong User Secrets.</value>
+</data>
+
+	<data name="VnPayHashSecretMissing" xml:space="preserve">
+    <value>Chưa cấu hình VNPay:HashSecret trong User Secrets.</value>
+</data>
+
+	<data name="VnPayReturnUrlMissing" xml:space="preserve">
+    <value>Chưa cấu hình VNPay:ReturnUrl trong User Secrets.</value>
+</data>
+
+	<data name="LoginRequiredForVoucher" xml:space="preserve">
+    <value>Vui lòng đăng nhập để sử dụng Voucher.</value>
+</data>
+
+	<data name="VoucherInfoInvalid" xml:space="preserve">
+    <value>Thông tin Voucher không hợp lệ.</value>
+</data>
+
+	<data name="VoucherMinimumOrderServer" xml:space="preserve">
+    <value>Voucher {0} chỉ áp dụng cho đơn từ {1}.</value>
+</data>
+
+	<data name="LoginRequiredForCheckout" xml:space="preserve">
+    <value>Vui lòng đăng nhập để thanh toán.</value>
+</data>
+
+	<data name="CustomerNotFound" xml:space="preserve">
+    <value>Không tìm thấy khách hàng.</value>
+</data>
+
+	<data name="InvalidPaymentAmount" xml:space="preserve">
+    <value>Số tiền thanh toán không hợp lệ.</value>
+</data>
+
+	<data name="VnPayOrderInfo" xml:space="preserve">
+    <value>Thanh toan don hang Rosalie Coffee {0}</value>
+</data>
+
+	<data name="VnPaySignatureNotFound" xml:space="preserve">
+    <value>Không tìm thấy chữ ký VNPay.</value>
+</data>
+
+	<data name="VnPayInvalidSignature" xml:space="preserve">
+    <value>Chữ ký VNPay không hợp lệ.</value>
+</data>
+
+	<data name="OrderCodeNotFound" xml:space="preserve">
+    <value>Không tìm thấy mã đơn hàng.</value>
+</data>
+
+	<data name="InvalidOrderCode" xml:space="preserve">
+    <value>Mã đơn hàng không hợp lệ.</value>
+</data>
+
+	<data name="InvoiceNotFound" xml:space="preserve">
+    <value>Không tìm thấy hóa đơn.</value>
+</data>
+</root>

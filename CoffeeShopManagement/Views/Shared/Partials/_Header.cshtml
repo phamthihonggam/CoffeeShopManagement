@@ -1,0 +1,557 @@
+﻿@using CoffeeShopManagement.Extensions
+@using CoffeeShopManagement.Models
+@using Microsoft.AspNetCore.Http
+@using System.Globalization
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+@{
+    // =================================================
+    // CART
+    // =================================================
+
+    var cart =
+        Context.Session
+            .GetObjectFromJson<List<CartItem>>("CART")
+        ?? new List<CartItem>();
+
+    var cartCount =
+        cart.Sum(x => x.SoLuong);
+
+
+    // =================================================
+    // LANGUAGE
+    // =================================================
+
+    var currentCulture =
+        CultureInfo.CurrentUICulture
+            .TwoLetterISOLanguageName;
+
+    var isVietnamese =
+        currentCulture == "vi";
+
+
+    // =================================================
+    // ACCOUNT SESSION
+    // =================================================
+
+    var hoTen =
+        Context.Session
+            .GetString("HoTen");
+
+    var vaiTro =
+        Context.Session
+            .GetString("VaiTro");
+
+    var maKh =
+        Context.Session
+            .GetInt32("MaKH");
+
+    var maTaiKhoan =
+        Context.Session
+            .GetInt32("MaTaiKhoan");
+
+
+    // =================================================
+    // ADMIN
+    // =================================================
+
+    var isAdmin =
+        User.IsInRole("Admin")
+        ||
+        string.Equals(
+            vaiTro,
+            "Admin",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+
+    // =================================================
+    // STAFF
+    // =================================================
+
+    var isStaff =
+        User.IsInRole("NhanVien")
+        ||
+        string.Equals(
+            vaiTro,
+            "NhanVien",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+
+    // =================================================
+    // LOGIN STATUS
+    // =================================================
+
+    var isLoggedIn =
+        User.Identity?.IsAuthenticated == true
+        ||
+        !string.IsNullOrWhiteSpace(hoTen)
+        ||
+        maKh.HasValue
+        ||
+        maTaiKhoan.HasValue;
+
+
+    // =================================================
+    // CUSTOMER
+    // =================================================
+
+    var isCustomer =
+        maKh.HasValue
+        ||
+        string.Equals(
+            vaiTro,
+            "KhachHang",
+            StringComparison.OrdinalIgnoreCase
+        )
+        ||
+        (
+            isLoggedIn
+            &&
+            !isAdmin
+            &&
+            !isStaff
+        );
+}
+
+
+<header>
+
+    <nav class="navbar navbar-expand-lg">
+
+        <div class="container-fluid px-0">
+
+            <!-- =================================================
+                 LOGO
+            ================================================== -->
+
+            <a class="navbar-brand d-flex align-items-center"
+               asp-controller="Home"
+               asp-action="Index">
+
+                <img src="~/images/logo/logo.png"
+                     class="logo"
+                     alt="Rosalie Coffee" />
+
+            </a>
+
+
+            <!-- =================================================
+                 MOBILE TOGGLER
+            ================================================== -->
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent"
+                    aria-controls="navbarContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <!-- =================================================
+                 NAVBAR CONTENT
+            ================================================== -->
+
+            <div class="collapse navbar-collapse"
+                 id="navbarContent">
+
+                <!-- =================================================
+                     MENU
+                ================================================== -->
+                @await Component.InvokeAsync("Menu")
+
+
+                <!-- =================================================
+                     RIGHT SIDE
+                ================================================== -->
+
+                <div class="navbar-right">
+
+
+                    <!-- =================================================
+                         CART
+                    ================================================== -->
+
+                    <a asp-controller="Cart"
+                       asp-action="Index"
+                       class="cart-btn"
+                       aria-label="@T["Cart"]">
+
+                        <i class="fa-solid fa-bag-shopping"></i>
+
+                        <span class="cart-count">
+                            @cartCount
+                        </span>
+
+                    </a>
+
+
+                    <!-- =================================================
+                         LANGUAGE
+                    ================================================== -->
+
+                    <div class="language-dropdown">
+
+                        <button type="button"
+                                class="lang-toggle"
+                                id="langBtn">
+
+                            <i class="bi bi-globe2 globe"></i>
+
+                            <span class="divider"></span>
+
+
+                            @if (isVietnamese)
+                            {
+                                <span class="lang-current">
+                                    VN
+                                </span>
+
+                                <span class="lang-other">
+                                    US
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="lang-current">
+                                    US
+                                </span>
+
+                                <span class="lang-other">
+                                    VN
+                                </span>
+                            }
+
+
+                            <i class="bi bi-chevron-down arrow"></i>
+
+                        </button>
+
+
+                        <div class="lang-menu"
+                             id="langMenu">
+
+
+                            <!-- ============================
+                                 VIETNAMESE
+                            ============================= -->
+
+                            <a asp-controller="Language"
+                               asp-action="SetLanguage"
+                               asp-route-culture="vi"
+                               asp-route-returnUrl="@(Context.Request.Path + Context.Request.QueryString)"
+                               class="lang-item @(isVietnamese ? "active" : "")">
+
+                                <div class="lang-left">
+
+                                    <img src="~/images/flags/vn.png"
+                                         alt="Vietnam">
+
+                                    <span>
+                                        Tiếng Việt
+                                    </span>
+
+                                </div>
+
+
+                                @if (isVietnamese)
+                                {
+                                    <i class="bi bi-check-lg check"></i>
+                                }
+
+                            </a>
+
+
+                            <!-- ============================
+                                 ENGLISH
+                            ============================= -->
+
+                            <a asp-controller="Language"
+                               asp-action="SetLanguage"
+                               asp-route-culture="en"
+                               asp-route-returnUrl="@(Context.Request.Path + Context.Request.QueryString)"
+                               class="lang-item @(!isVietnamese ? "active" : "")">
+
+                                <div class="lang-left">
+
+                                    <img src="~/images/flags/us.png"
+                                         alt="English">
+
+                                    <span>
+                                        English (US)
+                                    </span>
+
+                                </div>
+
+
+                                @if (!isVietnamese)
+                                {
+                                    <i class="bi bi-check-lg check"></i>
+                                }
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         ACCOUNT
+                    ================================================== -->
+                    @if (!isLoggedIn)
+                    {
+                        <!-- ============================
+                             CHƯA ĐĂNG NHẬP
+                        ============================= -->
+
+                        <a asp-controller="Account"
+                           asp-action="Login"
+                           class="btn-login">
+
+                            <i class="bi bi-person me-1"></i>
+
+                            @T["Login"]
+
+                        </a>
+                    }
+                    else
+                    {
+                        <!-- ============================
+                             ĐÃ ĐĂNG NHẬP
+                        ============================= -->
+
+                        <div class="dropdown account-dropdown">
+
+                            <button class="btn-login dropdown-toggle"
+                                    type="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+
+                                <i class="bi bi-person-circle me-2"></i>
+
+
+                                @if (!string.IsNullOrWhiteSpace(hoTen))
+                                {
+                                    @hoTen
+                                }
+                                else
+                                {
+                                    @User.Identity?.Name
+                                }
+
+                            </button>
+
+
+                            <ul class="dropdown-menu dropdown-menu-end">
+
+
+                                <!-- =================================================
+                                     ADMIN
+                                ================================================== -->
+                                @if (isAdmin)
+                                {
+                                    <li>
+
+                                        <span class="dropdown-item-text fw-bold">
+
+                                            <i class="bi bi-shield-lock-fill me-2"></i>
+
+                                            ADMIN
+
+                                        </span>
+
+                                    </li>
+
+                                    <li>
+                                        <hr class="dropdown-divider" />
+                                    </li>
+
+
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                           asp-area="Admin"
+                                           asp-controller="Dashboard"
+                                           asp-action="Index">
+
+                                            <i class="bi bi-speedometer2 me-2"></i>
+
+                                            Trang quản trị
+
+                                        </a>
+
+                                    </li>
+
+
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                           asp-area="Admin"
+                                           asp-controller="Order"
+                                           asp-action="Index">
+
+                                            <i class="bi bi-receipt me-2"></i>
+
+                                            Quản lý đơn hàng
+
+                                        </a>
+
+                                    </li>
+
+
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                           asp-area="Admin"
+                                           asp-controller="Product"
+                                           asp-action="Index">
+
+                                            <i class="bi bi-cup-hot me-2"></i>
+
+                                            Quản lý sản phẩm
+
+                                        </a>
+
+                                    </li>
+                                }
+
+
+                                <!-- =================================================
+                                     NHÂN VIÊN
+                                ================================================== -->
+                                @if (isStaff)
+                                {
+                                    <li>
+
+                                        <span class="dropdown-item-text fw-bold">
+
+                                            <i class="bi bi-person-badge-fill me-2"></i>
+
+                                            NHÂN VIÊN
+
+                                        </span>
+
+                                    </li>
+
+                                    <li>
+                                        <hr class="dropdown-divider" />
+                                    </li>
+
+
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                           asp-area="Staff"
+                                           asp-controller="Dashboard"
+                                           asp-action="Index">
+
+                                            <i class="bi bi-speedometer2 me-2"></i>
+
+                                            Trang nhân viên
+
+                                        </a>
+
+                                    </li>
+
+
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                           asp-area="Staff"
+                                           asp-controller="Order"
+                                           asp-action="Index">
+
+                                            <i class="bi bi-receipt me-2"></i>
+
+                                            Quản lý đơn hàng
+
+                                        </a>
+
+                                    </li>
+                                }
+
+
+                                <!-- =================================================
+                                     KHÁCH HÀNG
+                                ================================================== -->
+                                @if (isCustomer)
+                                {
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                           asp-area=""
+                                           asp-controller="Account"
+                                           asp-action="Profile">
+
+                                            <i class="bi bi-person me-2"></i>
+
+                                            @T["Profile"]
+
+                                        </a>
+
+                                    </li>
+
+
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                           asp-area=""
+                                           asp-controller="Account"
+                                           asp-action="OrderHistory">
+
+                                            <i class="bi bi-bag-check me-2"></i>
+
+                                            Đơn hàng của tôi
+
+                                        </a>
+
+                                    </li>
+                                }
+
+
+                                <!-- =================================================
+                                     LOGOUT
+                                ================================================== -->
+
+                                <li>
+                                    <hr class="dropdown-divider" />
+                                </li>
+
+
+                                <li>
+
+                                    <a class="dropdown-item text-danger"
+                                       asp-area=""
+                                       asp-controller="Account"
+                                       asp-action="Logout">
+
+                                        <i class="bi bi-box-arrow-right me-2"></i>
+
+                                        @T["Logout"]
+
+                                    </a>
+
+                                </li>
+
+                            </ul>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+</header>

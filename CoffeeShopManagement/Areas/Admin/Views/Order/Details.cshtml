@@ -1,0 +1,1315 @@
+﻿@model CoffeeShopManagement.Models.HoaDon
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+
+    var currentStatus =
+        Model.TrangThai?.Trim()
+        ?? "";
+
+    var statusClass =
+        currentStatus switch
+        {
+            "Chờ xác nhận" => "status-pending",
+            "Chờ xử lý" => "status-pending",
+            "Đã thanh toán" => "status-confirmed",
+            "Đã xác nhận" => "status-confirmed",
+            "Đang xử lý" => "status-preparing",
+            "Đang chuẩn bị" => "status-preparing",
+            "Chờ giao hàng" => "status-shipping",
+            "Đang giao hàng" => "status-shipping",
+            "Hoàn thành" => "status-completed",
+            "Yêu cầu hủy" => "status-cancel-request",
+            "Yêu cầu hủy khi đang giao" => "status-cancel-request",
+            "Đã hủy" => "status-cancelled",
+            "Đã hủy - Chờ hoàn tiền" => "status-cancelled",
+            "Đã hủy - Đã hoàn tiền" => "status-cancelled",
+            "Giao thất bại" => "status-cancelled",
+            _ => "status-default"
+        };
+
+    bool isVnPay =
+        string.Equals(
+            Model.PhuongThucThanhToan,
+            "VNPAY",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+    bool isCancelRequest =
+        currentStatus == "Yêu cầu hủy"
+        ||
+        currentStatus == "Yêu cầu hủy khi đang giao";
+
+    bool waitingRefund =
+        currentStatus == "Đã hủy - Chờ hoàn tiền"
+        &&
+        Model.TrangThaiHoanTien == "Chờ hoàn tiền";
+
+    string receiverName =
+        !string.IsNullOrWhiteSpace(Model.HoTenNguoiNhan)
+            ? Model.HoTenNguoiNhan
+            : Model.MaKhNavigation.HoTen;
+
+    string receiverPhone =
+        !string.IsNullOrWhiteSpace(Model.DienThoaiNguoiNhan)
+            ? Model.DienThoaiNguoiNhan
+            : Model.MaKhNavigation.DienThoai ?? "Chưa cập nhật";
+
+    string receiverAddress =
+        !string.IsNullOrWhiteSpace(Model.DiaChiGiaoHang)
+            ? Model.DiaChiGiaoHang
+            : Model.MaKhNavigation.DiaChi ?? "Chưa cập nhật";
+}
+
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-order.css"
+          asp-append-version="true" />
+
+}
+
+
+<!-- =====================================================
+     MESSAGE
+===================================================== -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mb-3">
+
+        <i class="fa-solid fa-circle-check me-2"></i>
+
+        @TempData["SuccessMessage"]
+
+    </div>
+}
+
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mb-3">
+
+        <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+        @TempData["ErrorMessage"]
+
+    </div>
+}
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="admin-welcome">
+
+    <div class="order-admin-heading">
+
+        <div>
+
+            <h2>
+                Chi tiết đơn hàng #HD@(Model.MaHd.ToString("D5"))
+            </h2>
+
+            <p>
+                Thông tin khách hàng, giao hàng,
+                sản phẩm và thanh toán của đơn hàng.
+            </p>
+
+        </div>
+
+
+        <a asp-area="Admin"
+           asp-controller="Order"
+           asp-action="Index"
+           class="admin-order-reset-btn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Quay lại
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ORDER OVERVIEW
+===================================================== -->
+
+<div class="admin-order-detail-grid">
+
+
+    <!-- =================================================
+         NGƯỜI NHẬN
+    ================================================== -->
+
+    <div class="admin-order-detail-card">
+
+        <div class="admin-order-detail-title">
+
+            <div class="admin-order-detail-icon">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    GIAO HÀNG
+                </span>
+
+                <h3>
+                    Người nhận
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-order-info-list">
+
+            <div>
+
+                <span>
+                    Họ tên
+                </span>
+
+                <strong>
+                    @receiverName
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Số điện thoại
+                </span>
+
+                <strong>
+                    @receiverPhone
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Khu vực
+                </span>
+
+                <strong>
+
+                    @(Model.QuanHuyenGiaoHang
+                        ?? "Chưa cập nhật")
+
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Địa chỉ giao hàng
+                </span>
+
+                <strong>
+                    @receiverAddress
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         THÔNG TIN ĐƠN
+    ================================================== -->
+
+    <div class="admin-order-detail-card">
+
+        <div class="admin-order-detail-title">
+
+            <div class="admin-order-detail-icon">
+
+                <i class="fa-solid fa-receipt"></i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    ĐƠN HÀNG
+                </span>
+
+                <h3>
+                    Thông tin đơn
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-order-info-list">
+
+            <div>
+
+                <span>
+                    Mã đơn
+                </span>
+
+                <strong>
+                    #HD@(Model.MaHd.ToString("D5"))
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Ngày đặt
+                </span>
+
+                <strong>
+
+                    @(
+                        Model.NgayDat.HasValue
+                            ? Model.NgayDat.Value.ToString(
+                                "dd/MM/yyyy HH:mm"
+                            )
+                            : "Không xác định"
+                    )
+
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Trạng thái
+                </span>
+
+                <span class="admin-order-status @statusClass">
+
+                    @(Model.TrangThai ?? "Chưa xác định")
+
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Phương thức thanh toán
+                </span>
+
+                <strong>
+
+                    @(
+                        isVnPay
+                            ? "VNPAY"
+                            : "COD"
+                    )
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     CUSTOMER ACCOUNT + DELIVERY STAFF
+===================================================== -->
+
+<div class="admin-order-detail-grid">
+
+
+    <!-- KHÁCH HÀNG -->
+
+    <div class="admin-order-detail-card">
+
+        <div class="admin-order-detail-title">
+
+            <div class="admin-order-detail-icon">
+
+                <i class="fa-solid fa-id-card"></i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    TÀI KHOẢN
+                </span>
+
+                <h3>
+                    Khách hàng
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-order-info-list">
+
+            <div>
+
+                <span>
+                    Họ tên tài khoản
+                </span>
+
+                <strong>
+                    @Model.MaKhNavigation.HoTen
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Email
+                </span>
+
+                <strong>
+
+                    @(Model.MaKhNavigation.Email
+                        ?? "Chưa cập nhật")
+
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Số điện thoại
+                </span>
+
+                <strong>
+
+                    @(Model.MaKhNavigation.DienThoai
+                        ?? "Chưa cập nhật")
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SHIPPER -->
+
+    <div class="admin-order-detail-card">
+
+        <div class="admin-order-detail-title">
+
+            <div class="admin-order-detail-icon">
+
+                <i class="fa-solid fa-motorcycle"></i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    GIAO HÀNG
+                </span>
+
+                <h3>
+                    Nhân viên giao hàng
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-order-info-list">
+
+            <div>
+
+                <span>
+                    Nhân viên
+                </span>
+
+                <strong>
+
+                    @(Model.MaTaiKhoanGiaoNavigation != null
+                        ? Model.MaTaiKhoanGiaoNavigation.HoTen
+                        : "Chưa có nhân viên nhận đơn")
+
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Nhận đơn lúc
+                </span>
+
+                <strong>
+
+                    @(Model.NgayNhanGiao.HasValue
+                        ? Model.NgayNhanGiao.Value
+                            .ToString("dd/MM/yyyy HH:mm")
+                        : "Chưa nhận")
+
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Bắt đầu giao
+                </span>
+
+                <strong>
+
+                    @(Model.NgayBatDauGiao.HasValue
+                        ? Model.NgayBatDauGiao.Value
+                            .ToString("dd/MM/yyyy HH:mm")
+                        : "Chưa bắt đầu")
+
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Giao thành công
+                </span>
+
+                <strong>
+
+                    @(Model.NgayGiaoThanhCong.HasValue
+                        ? Model.NgayGiaoThanhCong.Value
+                            .ToString("dd/MM/yyyy HH:mm")
+                        : "Chưa hoàn thành")
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     CANCEL REQUEST
+===================================================== -->
+@if (
+    !string.IsNullOrWhiteSpace(Model.LyDoHuy)
+    ||
+    isCancelRequest
+    ||
+    !string.IsNullOrWhiteSpace(Model.TrangThaiHoanTien)
+)
+{
+    <div class="admin-order-detail-card admin-order-items-card">
+
+        <div class="admin-order-detail-title">
+
+            <div class="admin-order-detail-icon">
+
+                <i class="fa-solid fa-ban"></i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    HỦY ĐƠN
+                </span>
+
+                <h3>
+                    Thông tin hủy và hoàn tiền
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-order-info-list">
+
+            @if (!string.IsNullOrWhiteSpace(Model.LyDoHuy))
+            {
+                <div>
+
+                    <span>
+                        Lý do hủy
+                    </span>
+
+                    <strong>
+                        @Model.LyDoHuy
+                    </strong>
+
+                </div>
+            }
+
+
+            @if (!string.IsNullOrWhiteSpace(Model.GhiChuHuy))
+            {
+                <div>
+
+                    <span>
+                        Ghi chú
+                    </span>
+
+                    <strong>
+                        @Model.GhiChuHuy
+                    </strong>
+
+                </div>
+            }
+
+
+            <div>
+
+                <span>
+                    Ngày yêu cầu hủy
+                </span>
+
+                <strong>
+
+                    @(Model.NgayYeuCauHuy.HasValue
+                        ? Model.NgayYeuCauHuy.Value
+                            .ToString("dd/MM/yyyy HH:mm")
+                        : "Chưa có")
+
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Trạng thái hoàn tiền
+                </span>
+
+                <strong>
+
+                    @(Model.TrangThaiHoanTien
+                        ?? "Không có")
+
+                </strong>
+
+            </div>
+
+
+            @if (
+                Model.SoTienHoan.HasValue
+                &&
+                Model.SoTienHoan.Value > 0
+            )
+            {
+                <div>
+
+                    <span>
+                        Số tiền hoàn
+                    </span>
+
+                    <strong>
+
+                        @Model.SoTienHoan.Value
+                        .ToString("#,##0")đ
+
+                    </strong>
+
+                </div>
+            }
+
+
+            @if (Model.NgayHoanTien.HasValue)
+            {
+                <div>
+
+                    <span>
+                        Ngày hoàn tiền
+                    </span>
+
+                    <strong>
+
+                        @Model.NgayHoanTien.Value
+                        .ToString("dd/MM/yyyy HH:mm")
+
+                    </strong>
+
+                </div>
+            }
+
+        </div>
+
+
+        @if (isCancelRequest)
+        {
+            <div class="admin-order-actions">
+
+
+                <form asp-area="Admin"
+                      asp-controller="Order"
+                      asp-action="ApproveCancel"
+                      method="post"
+                      onsubmit="return confirm('Xác nhận duyệt hủy đơn hàng này?');">
+
+                    @Html.AntiForgeryToken()
+
+
+                    <input type="hidden"
+                           name="id"
+                           value="@Model.MaHd" />
+
+
+                    <button type="submit"
+                            class="admin-order-action-btn danger">
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Duyệt hủy
+
+                    </button>
+
+                </form>
+
+
+                <form asp-area="Admin"
+                      asp-controller="Order"
+                      asp-action="RejectCancel"
+                      method="post"
+                      onsubmit="return confirm('Xác nhận từ chối yêu cầu hủy?');">
+
+                    @Html.AntiForgeryToken()
+
+
+                    <input type="hidden"
+                           name="id"
+                           value="@Model.MaHd" />
+
+
+                    <button type="submit"
+                            class="admin-order-action-btn secondary">
+
+                        <i class="fa-solid fa-xmark"></i>
+
+                        Từ chối hủy
+
+                    </button>
+
+                </form>
+
+            </div>
+        }
+
+
+        @if (waitingRefund)
+        {
+            <div class="admin-order-actions">
+
+                <form asp-area="Admin"
+                      asp-controller="Order"
+                      asp-action="ConfirmRefund"
+                      method="post"
+                      onsubmit="return confirm('Xác nhận cửa hàng đã hoàn tiền cho khách?');">
+
+                    @Html.AntiForgeryToken()
+
+
+                    <input type="hidden"
+                           name="id"
+                           value="@Model.MaHd" />
+
+
+                    <button type="submit"
+                            class="admin-order-action-btn success">
+
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+
+                        Xác nhận đã hoàn tiền
+
+                    </button>
+
+                </form>
+
+            </div>
+        }
+
+    </div>
+}
+
+
+<!-- =====================================================
+     DELIVERY FAILURE
+===================================================== -->
+@if (!string.IsNullOrWhiteSpace(Model.LyDoGiaoThatBai))
+{
+    <div class="admin-order-detail-card admin-order-items-card">
+
+        <div class="admin-order-detail-title">
+
+            <div class="admin-order-detail-icon">
+
+                <i class="fa-solid fa-triangle-exclamation"></i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    GIAO HÀNG
+                </span>
+
+                <h3>
+                    Giao hàng thất bại
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-order-info-list">
+
+            <div>
+
+                <span>
+                    Lý do
+                </span>
+
+                <strong>
+                    @Model.LyDoGiaoThatBai
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+}
+
+
+<!-- =====================================================
+     PRODUCTS
+===================================================== -->
+
+<div class="admin-order-detail-card admin-order-items-card">
+
+    <div class="admin-order-detail-title">
+
+        <div class="admin-order-detail-icon">
+
+            <i class="fa-solid fa-bag-shopping"></i>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                SẢN PHẨM
+            </span>
+
+            <h3>
+                Chi tiết món đã đặt
+            </h3>
+
+        </div>
+
+    </div>
+
+
+    <div class="admin-order-detail-table-wrap">
+
+        <table class="admin-order-detail-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Sản phẩm
+                    </th>
+
+                    <th>
+                        Loại
+                    </th>
+
+                    <th>
+                        Đơn giá
+                    </th>
+
+                    <th>
+                        Số lượng
+                    </th>
+
+                    <th>
+                        Thành tiền
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @if (
+                    Model.ChiTietHoaDons != null
+                    &&
+                    Model.ChiTietHoaDons.Any()
+                )
+                {
+                    @foreach (
+                        var item
+                        in Model.ChiTietHoaDons
+                    )
+                    {
+                        var productName =
+                            item.MaSpNavigation?.TenSp
+                            ??
+                            item.MaComboNavigation?.TenCombo
+                            ??
+                            "Không xác định";
+
+
+                        var itemType =
+                            item.MaCombo.HasValue
+                                ? "Combo"
+                                : "Sản phẩm";
+
+
+                        var lineTotal =
+                            item.DonGia
+                            * item.SoLuong;
+
+
+                        <tr>
+
+                            <td>
+
+                                <strong class="admin-order-item-name">
+
+                                    @productName
+
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="admin-order-item-type">
+
+                                    @itemType
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                @(item.DonGia
+                                    .ToString("#,##0"))đ
+
+                            </td>
+
+
+                            <td>
+
+                                @item.SoLuong
+
+                            </td>
+
+
+                            <td>
+
+                                <strong class="admin-order-total">
+
+                                    @(lineTotal
+                                        .ToString("#,##0"))đ
+
+                                </strong>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="5">
+
+                            <div class="admin-order-empty">
+
+                                <i class="fa-solid fa-bag-shopping"></i>
+
+                                <h3>
+                                    Không có chi tiết sản phẩm
+                                </h3>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     PAYMENT
+===================================================== -->
+
+<div class="admin-order-payment-card">
+
+    <div class="admin-order-payment-title">
+
+        <div>
+
+            <span>
+                THANH TOÁN
+            </span>
+
+            <h3>
+                Tổng kết đơn hàng
+            </h3>
+
+        </div>
+
+
+        <div>
+
+            @if (isVnPay)
+            {
+                <span class="admin-order-payment-method paid">
+
+                    VNPAY
+
+                </span>
+            }
+            else
+            {
+                <span class="admin-order-payment-method cod">
+
+                    COD
+
+                </span>
+            }
+
+        </div>
+
+    </div>
+
+
+    <div class="admin-order-payment-list">
+
+        <div>
+
+            <span>
+                Tạm tính
+            </span>
+
+            <strong>
+
+                @((Model.TamTinh ?? 0)
+                    .ToString("#,##0"))đ
+
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Giảm giá
+            </span>
+
+            <strong class="admin-order-discount">
+
+                -@((Model.GiamGia ?? 0)
+                                    .ToString("#,##0"))đ
+
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Phí giao hàng
+            </span>
+
+            <strong>
+
+                @((Model.PhiGiaoHang ?? 0)
+                    .ToString("#,##0"))đ
+
+            </strong>
+
+        </div>
+
+
+        <div class="admin-order-payment-total">
+
+            <span>
+                Tổng thanh toán
+            </span>
+
+            <strong>
+
+                @((Model.TongTien ?? 0)
+                    .ToString("#,##0"))đ
+
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ORDER STATUS ACTION
+===================================================== -->
+@if (
+    !isCancelRequest
+    &&
+    currentStatus != "Hoàn thành"
+    &&
+    currentStatus != "Đã hủy"
+    &&
+    currentStatus != "Đã hủy - Chờ hoàn tiền"
+    &&
+    currentStatus != "Đã hủy - Đã hoàn tiền"
+    &&
+    currentStatus != "Đang giao hàng"
+    &&
+    currentStatus != "Chờ giao hàng"
+    &&
+    currentStatus != "Giao thất bại"
+)
+{
+    <div class="admin-order-detail-card admin-order-items-card">
+
+        <div class="admin-order-detail-title">
+
+            <div class="admin-order-detail-icon">
+
+                <i class="fa-solid fa-list-check"></i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    XỬ LÝ ĐƠN
+                </span>
+
+                <h3>
+                    Cập nhật tiến trình
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-order-actions">
+
+
+            @if (
+                currentStatus == "Chờ xác nhận"
+                ||
+                currentStatus == "Chờ xử lý"
+                ||
+                currentStatus == "Đã thanh toán"
+            )
+            {
+                <form asp-area="Admin"
+                      asp-controller="Order"
+                      asp-action="UpdateStatus"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+
+                    <input type="hidden"
+                           name="id"
+                           value="@Model.MaHd" />
+
+
+                    <input type="hidden"
+                           name="trangThai"
+                           value="Đã xác nhận" />
+
+
+                    <button type="submit"
+                            class="admin-order-action-btn primary">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        Xác nhận đơn
+
+                    </button>
+
+                </form>
+            }
+
+
+            @if (currentStatus == "Đã xác nhận")
+            {
+                <form asp-area="Admin"
+                      asp-controller="Order"
+                      asp-action="UpdateStatus"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+
+                    <input type="hidden"
+                           name="id"
+                           value="@Model.MaHd" />
+
+
+                    <input type="hidden"
+                           name="trangThai"
+                           value="Đang xử lý" />
+
+
+                    <button type="submit"
+                            class="admin-order-action-btn primary">
+
+                        <i class="fa-solid fa-gears"></i>
+
+                        Đang xử lý
+
+                    </button>
+
+                </form>
+            }
+
+
+            @if (currentStatus == "Đang xử lý")
+            {
+                <form asp-area="Admin"
+                      asp-controller="Order"
+                      asp-action="UpdateStatus"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+
+                    <input type="hidden"
+                           name="id"
+                           value="@Model.MaHd" />
+
+
+                    <input type="hidden"
+                           name="trangThai"
+                           value="Đang chuẩn bị" />
+
+
+                    <button type="submit"
+                            class="admin-order-action-btn primary">
+
+                        <i class="fa-solid fa-mug-hot"></i>
+
+                        Bắt đầu chuẩn bị
+
+                    </button>
+
+                </form>
+            }
+
+
+            @if (currentStatus == "Đang chuẩn bị")
+            {
+                <form asp-area="Admin"
+                      asp-controller="Order"
+                      asp-action="UpdateStatus"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+
+                    <input type="hidden"
+                           name="id"
+                           value="@Model.MaHd" />
+
+
+                    <input type="hidden"
+                           name="trangThai"
+                           value="Chờ giao hàng" />
+
+
+                    <button type="submit"
+                            class="admin-order-action-btn success">
+
+                        <i class="fa-solid fa-box"></i>
+
+                        Chuẩn bị xong - Chờ giao hàng
+
+                    </button>
+
+                </form>
+            }
+
+        </div>
+
+    </div>
+}

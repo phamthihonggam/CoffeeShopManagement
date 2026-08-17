@@ -1,0 +1,162 @@
+﻿/* =========================================
+   ROSALIE - ADD TO CART TOAST
+========================================= */
+
+.app-toast {
+    position: fixed !important;
+    top: 95px !important;
+    right: 28px !important;
+    left: auto !important;
+    bottom: auto !important;
+    width: 430px;
+    max-width: calc(100vw - 40px);
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #ffffff;
+    border: 1px solid #eee3dc;
+    border-radius: 14px;
+    box-shadow: 0 12px 35px rgba(75, 46, 43, 0.18);
+    z-index: 999999 !important;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-15px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+}
+
+
+    /* =========================================
+   SHOW
+========================================= */
+
+    .app-toast.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+
+/* =========================================
+   ICON
+========================================= */
+
+.app-toast-icon {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #e8f7ed;
+    color: #2ca65a;
+    font-size: 18px;
+}
+
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.app-toast-content {
+    flex: 1;
+    min-width: 0;
+}
+
+
+/* =========================================
+   TITLE
+========================================= */
+
+.app-toast-title {
+    margin: 0 0 4px;
+    color: #4b2e2b;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.app-toast-message {
+    margin: 0;
+    color: #766861;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+    white-space: normal;
+}
+
+
+/* =========================================
+   XEM GIỎ
+========================================= */
+
+.app-toast-cart {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 13px;
+    background: #f6eee8;
+    border-radius: 9px;
+    color: #8f4d2e;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+
+    .app-toast-cart:hover {
+        background: #8f4d2e;
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .app-toast {
+        position: fixed !important;
+        top: 80px !important;
+        right: 15px !important;
+        left: 15px !important;
+        bottom: auto !important;
+        width: auto;
+        max-width: none;
+        padding: 14px;
+    }
+
+
+    .app-toast-icon {
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
+    }
+
+
+    .app-toast-title {
+        font-size: 14px;
+    }
+
+
+    .app-toast-message {
+        font-size: 11px;
+    }
+
+
+    .app-toast-cart {
+        padding: 8px 10px;
+        font-size: 11px;
+    }
+}

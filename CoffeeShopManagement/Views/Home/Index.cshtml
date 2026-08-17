@@ -1,0 +1,52 @@
+﻿@model CoffeeShopManagement.ViewModels.HomeViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+@{
+    ViewData["Title"] = T["HomePageTitle"];
+}
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+<partial name="Partials/_Hero" />
+
+
+<!-- =====================================================
+     BEST SELLER
+===================================================== -->
+<partial name="Partials/_BestSeller"
+         model="Model.BestSeller" />
+
+
+<!-- =====================================================
+     HOME PROMOTION PRODUCTS
+===================================================== -->
+<partial name="Partials/_HomePromotionProducts"
+         model="Model.PromotionProducts" />
+
+
+<!-- =====================================================
+     PROMOTION GALLERY / EXPERIENCE
+===================================================== -->
+<partial name="Partials/_Promotion" />
+
+
+<!-- =====================================================
+     BRANCH / CONTACT PREVIEW
+===================================================== -->
+<partial name="Partials/_Branch" />
+
+
+<!-- =====================================================
+     GALLERY
+===================================================== -->
+<partial name="Partials/_Gallery" />
+
+
+@section Scripts {
+
+    <script src="~/js/home.js"
+            asp-append-version="true">
+    </script>
+
+}

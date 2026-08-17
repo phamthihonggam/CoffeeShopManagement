@@ -1,0 +1,483 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI",sans-serif;
+    background: #f8f5f2;
+}
+
+.register-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg,#f8f5f2,#f3ece7);
+}
+
+.register-container {
+    width: 1200px;
+    max-width: 100%;
+    background: #fff;
+    border-radius: 22px;
+    overflow: hidden;
+    display: flex;
+    box-shadow: 0 20px 60px rgba(0,0,0,.12);
+}
+
+/*==========================
+        LEFT
+==========================*/
+.register-left {
+    width: 45%;
+    position: relative;
+    overflow: hidden;
+}
+
+.register-banner {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(55,30,20,.45);
+}
+
+.register-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 60px;
+    color: #fff;
+}
+
+    .register-content h1 {
+        font-size: 46px;
+        margin-bottom: 18px;
+        line-height: 1.2;
+    }
+
+    .register-content p {
+        line-height: 1.8;
+        margin-bottom: 30px;
+    }
+
+.member-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 35px;
+}
+
+    .member-benefits li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        font-size: 17px;
+    }
+
+    .member-benefits i {
+        color: #FFD86B;
+    }
+
+.back-home {
+    width: max-content;
+    text-decoration: none;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.6);
+    border-radius: 40px;
+    padding: 14px 24px;
+    transition: .3s;
+}
+
+    .back-home:hover {
+        background: #fff;
+        color: #5B3525;
+    }
+
+/*==========================
+        RIGHT
+==========================*/
+
+.register-right {
+    width: 55%;
+    padding: 55px 60px;
+}
+
+    .register-right h2 {
+        font-size: 38px;
+        color: #5B3525;
+        margin-bottom: 8px;
+    }
+
+.register-desc {
+    color: #777;
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #5B3525;
+    }
+
+.form-control {
+    width: 100%;
+    height: 52px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 0 16px;
+    transition: .25s;
+    font-size: 15px;
+}
+
+    .form-control:focus {
+        outline: none;
+        border-color: #8B5A3C;
+        box-shadow: 0 0 0 3px rgba(139,90,60,.15);
+    }
+
+.form-check {
+    margin: 20px 0 28px;
+}
+
+.form-check-input {
+    cursor: pointer;
+}
+
+.form-check-label {
+    color: #666;
+    margin-left: 6px;
+    font-size: 14px;
+}
+
+.btn-register {
+    width: 100%;
+    height: 54px;
+    border: none;
+    border-radius: 12px;
+    background: #5B3525;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .3s;
+}
+
+    .btn-register:hover {
+        background: #744731;
+        transform: translateY(-2px);
+    }
+
+.divider {
+    text-align: center;
+    color: #999;
+    margin: 30px 0;
+    position: relative;
+}
+
+    .divider::before,
+    .divider::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 42%;
+        height: 1px;
+        background: #ddd;
+    }
+
+    .divider::before {
+        left: 0;
+    }
+
+    .divider::after {
+        right: 0;
+    }
+
+.google-btn {
+    width: 100%;
+    height: 54px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: .25s;
+}
+
+    .google-btn:hover {
+        background: #fafafa;
+    }
+
+    .google-btn i {
+        color: #DB4437;
+        margin-right: 10px;
+    }
+
+.login-link {
+    margin-top: 28px;
+    text-align: center;
+    color: #666;
+}
+
+    .login-link a {
+        color: #8B5A3C;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+.alert-success-custom {
+    background: #ecfdf3;
+    color: #027a48;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 25px;
+}
+
+.text-danger {
+    font-size: 13px;
+}
+
+/*==========================
+      RESPONSIVE
+==========================*/
+
+@media(max-width:992px) {
+
+    .register-container {
+        flex-direction: column;
+    }
+
+    .register-left,
+    .register-right {
+        width: 100%;
+    }
+
+    .register-left {
+        text-align: center;
+        padding: 45px 30px;
+    }
+
+    .register-right {
+        padding: 40px 30px;
+    }
+
+    .logo img {
+        width: 140px;
+    }
+
+    .register-left h1 {
+        font-size: 34px;
+    }
+}
+
+@media(max-width:576px) {
+
+    .register-page {
+        padding: 20px;
+    }
+
+    .register-left {
+        display: none;
+    }
+
+    .register-right {
+        padding: 28px 22px;
+    }
+
+        .register-right h2 {
+            font-size: 30px;
+        }
+}
+/*====================================
+        PASSWORD BOX
+====================================*/
+
+.password-box {
+    position: relative;
+}
+
+    .password-box .form-control {
+        padding-right: 52px;
+    }
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #888;
+    font-size: 18px;
+    transition: .25s;
+}
+
+    .toggle-password:hover {
+        color: #5B3525;
+    }
+
+/*====================================
+        PASSWORD STRENGTH
+====================================*/
+
+.password-strength {
+    width: 100%;
+    height: 8px;
+    background: #ececec;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 12px;
+}
+
+.strength-bar {
+    width: 0%;
+    height: 100%;
+    border-radius: 20px;
+    transition: .35s ease;
+    background: #dc3545;
+}
+
+.strength-text {
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+}
+
+/*====================================
+        PASSWORD RULE
+====================================*/
+
+.password-rule {
+    list-style: none;
+    margin-top: 14px;
+    padding-left: 0;
+}
+
+    .password-rule li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 7px;
+        font-size: 13px;
+        color: #888;
+    }
+
+        .password-rule li i {
+            width: 16px;
+        }
+
+    .password-rule .valid {
+        color: #16a34a;
+    }
+
+        .password-rule .valid i {
+            color: #16a34a;
+        }
+
+    .password-rule .invalid {
+        color: #dc3545;
+    }
+
+        .password-rule .invalid i {
+            color: #dc3545;
+        }
+
+/*====================================
+        VALIDATION
+====================================*/
+
+.text-danger {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #dc3545;
+}
+
+.validation-summary-errors {
+    margin-bottom: 20px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    background: #fdecec;
+    border: 1px solid #f7c9c9;
+}
+
+    .validation-summary-errors ul {
+        margin: 0;
+        padding-left: 18px;
+    }
+
+/*====================================
+        INPUT ERROR
+====================================*/
+
+.input-validation-error {
+    border-color: #dc3545 !important;
+    background: #fff8f8;
+}
+
+    .input-validation-error:focus {
+        box-shadow: 0 0 0 3px rgba(220,53,69,.15);
+    }
+
+/*====================================
+        BUTTON LOADING
+====================================*/
+
+.btn-register:disabled {
+    opacity: .85;
+    cursor: not-allowed;
+}
+
+.btn-register i {
+    margin-right: 8px;
+}
+
+/*====================================
+        CHECKBOX
+====================================*/
+
+.form-check-input {
+    accent-color: #5B3525;
+}
+
+/*====================================
+        PLACEHOLDER
+====================================*/
+
+.form-control::placeholder {
+    color: #b3b3b3;
+}
+
+/*====================================
+        AUTOFILL
+====================================*/
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+    -webkit-text-fill-color: #333;
+    transition: background-color 9999s;
+}

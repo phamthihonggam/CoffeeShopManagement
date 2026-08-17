@@ -1,0 +1,207 @@
+﻿@{
+    ViewData["Title"] = "Trang nhân viên";
+}
+
+
+<div class="admin-welcome">
+
+    <h2>
+        Xin chào @ViewBag.StaffName
+    </h2>
+
+    <p>
+        Chào mừng bạn đến với hệ thống nhân viên
+        Rosalie Coffee. Theo dõi đơn hàng, sản phẩm
+        và hỗ trợ hoạt động bán hàng tại cửa hàng.
+    </p>
+
+</div>
+
+
+<div class="admin-stat-grid">
+
+
+    <!-- =====================================
+         ĐƠN HÀNG
+    ====================================== -->
+
+    <div class="admin-stat-card">
+
+        <div class="admin-stat-icon">
+
+            <i class="fa-solid fa-receipt"></i>
+
+        </div>
+
+        <span>
+            ĐƠN HÀNG
+        </span>
+
+        <strong>
+            @ViewBag.TotalOrders
+        </strong>
+
+    </div>
+
+
+    <!-- =====================================
+         SẢN PHẨM
+    ====================================== -->
+
+    <div class="admin-stat-card">
+
+        <div class="admin-stat-icon">
+
+            <i class="fa-solid fa-mug-hot"></i>
+
+        </div>
+
+        <span>
+            SẢN PHẨM
+        </span>
+
+        <strong>
+            @ViewBag.TotalProducts
+        </strong>
+
+    </div>
+
+
+    <!-- =====================================
+         KHÁCH HÀNG
+    ====================================== -->
+
+    <div class="admin-stat-card">
+
+        <div class="admin-stat-icon">
+
+            <i class="fa-solid fa-users"></i>
+
+        </div>
+
+        <span>
+            KHÁCH HÀNG
+        </span>
+
+        <strong>
+            @ViewBag.TotalCustomers
+        </strong>
+
+    </div>
+
+
+    <!-- =====================================
+         DOANH THU
+    ====================================== -->
+
+    <div class="admin-stat-card">
+
+        <div class="admin-stat-icon">
+
+            <i class="fa-solid fa-coins"></i>
+
+        </div>
+
+        <span>
+            DOANH THU
+        </span>
+
+        <strong>
+            @(((decimal)ViewBag.TotalRevenue)
+                .ToString("#,##0"))đ
+        </strong>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     CHỨC NĂNG NHANH
+========================================= -->
+
+<div class="staff-actions">
+
+    <h3>
+        Chức năng nhân viên
+    </h3>
+
+
+    <div class="staff-action-grid">
+
+
+        <!-- ĐƠN HÀNG -->
+
+        <a asp-area="Staff"
+           asp-controller="Order"
+           asp-action="Index"
+           class="staff-action-card">
+
+            <i class="fa-solid fa-receipt"></i>
+
+            <div>
+
+                <strong>
+                    Quản lý đơn hàng
+                </strong>
+
+                <span>
+                    Xem và xử lý đơn hàng khách hàng
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <!-- HOME -->
+
+        <a asp-area=""
+           asp-controller="Home"
+           asp-action="Index"
+           class="staff-action-card">
+
+            <i class="fa-solid fa-house"></i>
+
+            <div>
+
+                <strong>
+                    Xem cửa hàng
+                </strong>
+
+                <span>
+                    Quay lại website Rosalie Coffee
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <!-- LOGOUT -->
+
+        <a asp-area=""
+           asp-controller="Account"
+           asp-action="Logout"
+           class="staff-action-card">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            <div>
+
+                <strong>
+                    Đăng xuất
+                </strong>
+
+                <span>
+                    Thoát khỏi tài khoản nhân viên
+                </span>
+
+            </div>
+
+        </a>
+
+
+    </div>
+
+</div>

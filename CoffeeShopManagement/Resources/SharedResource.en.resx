@@ -1,0 +1,1831 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+	
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>1.3</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="Search" xml:space="preserve">
+		<value>Search</value>
+	</data>
+
+	<data name="Cart" xml:space="preserve">
+		<value>Cart</value>
+	</data>
+
+	<data name="Login" xml:space="preserve">
+		<value>Login</value>
+	</data>
+
+	<data name="Profile" xml:space="preserve">
+		<value>My Profile</value>
+	</data>
+
+	<data name="Logout" xml:space="preserve">
+		<value>Logout</value>
+	</data>
+	<data name="HeroTitleLine1" xml:space="preserve">
+    <value>Start your day</value>
+</data>
+
+	<data name="HeroTitleLine2" xml:space="preserve">
+    <value>with authentic coffee</value>
+</data>
+
+	<data name="HeroDescription" xml:space="preserve">
+    <value>Carefully selected coffee beans are freshly brewed every day, bringing rich flavors and memorable moments.</value>
+</data>
+
+	<data name="OrderNow" xml:space="preserve">
+    <value>Order Now</value>
+</data>
+	<data name="BestSellerTitle" xml:space="preserve">
+    <value>BEST SELLERS</value>
+</data>
+
+	<data name="ViewDetails" xml:space="preserve">
+    <value>View Details</value>
+</data>
+
+	<data name="PreviousProducts" xml:space="preserve">
+    <value>Previous Products</value>
+</data>
+
+	<data name="NextProducts" xml:space="preserve">
+    <value>Next Products</value>
+</data>
+	<data name="SpecialOffer" xml:space="preserve">
+    <value>SPECIAL OFFER</value>
+</data>
+
+	<data name="PromotionProductsTitle" xml:space="preserve">
+    <value>PROMOTIONAL PRODUCTS</value>
+</data>
+
+	<data name="PromotionProductsDescription" xml:space="preserve">
+    <value>Popular favorites with attractive special offers just for you.</value>
+</data>
+
+	<data name="ViewAllOffers" xml:space="preserve">
+    <value>View All Offers</value>
+</data>
+	<data name="GalleryLabel" xml:space="preserve">
+    <value>SPACE &amp; INSPIRATION</value>
+</data>
+
+	<data name="GalleryTitle" xml:space="preserve">
+    <value>MOMENTS WITH ROSALIE</value>
+</data>
+
+	<data name="GalleryDescription" xml:space="preserve">
+    <value>Every cup is crafted with care, creating memorable moments to enjoy.</value>
+</data>
+
+	<data name="GalleryCard1Title" xml:space="preserve">
+    <value>Authentic Coffee</value>
+</data>
+
+	<data name="GalleryCard1Description" xml:space="preserve">
+    <value>Pure and comforting flavors in every moment.</value>
+</data>
+
+	<data name="GalleryCard2Title" xml:space="preserve">
+    <value>A Moment to Relax</value>
+</data>
+
+	<data name="GalleryCard2Description" xml:space="preserve">
+    <value>A peaceful pause in the middle of a busy day.</value>
+</data>
+
+	<data name="GalleryCard3Title" xml:space="preserve">
+    <value>Coffee &amp; Pastries</value>
+</data>
+
+	<data name="GalleryCard3Description" xml:space="preserve">
+    <value>A perfect pairing for moments worth slowing down for.</value>
+</data>
+
+	<data name="GalleryCard4Title" xml:space="preserve">
+    <value>Care in Every Cup</value>
+</data>
+
+	<data name="GalleryCard4Description" xml:space="preserve">
+    <value>Thoughtfully crafted from brewing to the moment it reaches your hands.</value>
+</data>
+	<data name="BranchSystemLabel" xml:space="preserve">
+    <value>OUR STORE NETWORK</value>
+</data>
+
+	<data name="BranchTitle" xml:space="preserve">
+    <value>ROSALIE LOCATIONS</value>
+</data>
+
+	<data name="BranchDescription" xml:space="preserve">
+    <value>Visit Rosalie Coffee at our featured locations and enjoy a cozy atmosphere with your favorite drinks.</value>
+</data>
+
+	<data name="ViewBranch" xml:space="preserve">
+    <value>View Location</value>
+</data>
+
+	<data name="ViewAllBranches" xml:space="preserve">
+    <value>View All Locations</value>
+</data>
+	<data name="FlavorLabel" xml:space="preserve">
+    <value>EVERYDAY FLAVORS</value>
+</data>
+
+	<data name="FlavorTitle" xml:space="preserve">
+    <value>ENJOY IT YOUR WAY</value>
+</data>
+
+	<data name="FlavorDescription" xml:space="preserve">
+    <value>From refreshing drinks to delicious pastries, Rosalie always has a flavor made for you.</value>
+</data>
+
+	<data name="DrinksAlt" xml:space="preserve">
+    <value>Rosalie Drinks</value>
+</data>
+
+	<data name="DrinksLabel" xml:space="preserve">
+    <value>DRINKS</value>
+</data>
+
+	<data name="DrinksTitle" xml:space="preserve">
+    <value>REFRESHING FLAVORS</value>
+</data>
+
+	<data name="DrinksDescription" xml:space="preserve">
+    <value>Freshness in every sip</value>
+</data>
+
+	<data name="CakesAlt" xml:space="preserve">
+    <value>Rosalie Pastries</value>
+</data>
+
+	<data name="CakesLabel" xml:space="preserve">
+    <value>PASTRIES</value>
+</data>
+
+	<data name="CakesTitle" xml:space="preserve">
+    <value>SWEET &amp; SATISFYING</value>
+</data>
+
+	<data name="CakesDescription" xml:space="preserve">
+    <value>A little sweetness for every moment</value>
+</data>
+	<data name="NavHome" xml:space="preserve">
+    <value>Home</value>
+</data>
+
+	<data name="NavMenu" xml:space="preserve">
+    <value>Menu</value>
+</data>
+
+	<data name="NavPromotion" xml:space="preserve">
+    <value>Promotion</value>
+</data>
+
+	<data name="NavAbout" xml:space="preserve">
+    <value>About</value>
+</data>
+
+	<data name="NavContact" xml:space="preserve">
+    <value>Contact</value>
+</data>
+	<data name="FooterAboutTitle" xml:space="preserve">
+    <value>ABOUT ROSALIE</value>
+</data>
+
+	<data name="FooterAboutDescription" xml:space="preserve">
+    <value>Rosalie Coffee &amp; More is more than a place to enjoy coffee; it is a space to connect and enjoy life.</value>
+</data>
+
+	<data name="FooterExploreMore" xml:space="preserve">
+    <value>Discover More</value>
+</data>
+
+	<data name="FooterSystemTitle" xml:space="preserve">
+    <value>OUR NETWORK</value>
+</data>
+
+	<data name="FooterSystemDescription" xml:space="preserve">
+    <value>We are continuously expanding to bring you the best possible experience.</value>
+</data>
+
+	<data name="FooterFollowTitle" xml:space="preserve">
+    <value>FOLLOW US</value>
+</data>
+
+	<data name="FooterFollowDescription" xml:space="preserve">
+    <value>Stay updated with Rosalie's latest offers.</value>
+</data>
+
+	<data name="FooterRightsReserved" xml:space="preserve">
+    <value>All Rights Reserved.</value>
+</data>
+
+	<data name="FooterSecurePayment" xml:space="preserve">
+    <value>Secure Payment</value>
+</data>
+
+	<data name="Contact" xml:space="preserve">
+    <value>Contact</value>
+</data>
+	<data name="MenuPageTitle" xml:space="preserve">
+    <value>Menu - Rosalie Coffee</value>
+</data>
+
+	<data name="ExploreNow" xml:space="preserve">
+    <value>EXPLORE NOW</value>
+</data>
+
+	<data name="MenuCoffeeTitle" xml:space="preserve">
+    <value>COFFEE</value>
+</data>
+
+	<data name="MenuCoffeeDescription" xml:space="preserve">
+    <value>Carefully selected coffee beans are freshly roasted every day to deliver a rich aroma, balanced flavor, and a smooth sweet finish that reflects the signature taste of Rosalie Coffee.</value>
+</data>
+
+	<data name="MenuFruitTeaTitle" xml:space="preserve">
+    <value>FRUIT TEA</value>
+</data>
+
+	<data name="MenuFruitTeaDescription" xml:space="preserve">
+    <value>A refreshing blend of premium tea and fresh fruit, creating a light, fragrant, and vibrant flavor perfect for any time of day.</value>
+</data>
+
+	<data name="MenuFrostTitle" xml:space="preserve">
+    <value>FROST SERIES</value>
+</data>
+
+	<data name="MenuFrostDescription" xml:space="preserve">
+    <value>Blended smooth with quality ingredients and a light creamy topping for a refreshing, delicious, and energizing experience in every sip.</value>
+</data>
+
+	<data name="MenuJuiceTitle" xml:space="preserve">
+    <value>JUICE &amp; SMOOTHIE</value>
+</data>
+
+	<data name="MenuJuiceDescription" xml:space="preserve">
+    <value>Made from carefully selected fresh fruits to preserve their natural sweetness and vitamins, making it an ideal choice for an energetic day.</value>
+</data>
+
+	<data name="MenuMatchaTitle" xml:space="preserve">
+    <value>MATCHA SERIES</value>
+</data>
+
+	<data name="MenuMatchaDescription" xml:space="preserve">
+    <value>Authentic Japanese matcha combined with fresh milk creates a perfect balance of gentle bitterness, creamy texture, and delicate aroma.</value>
+</data>
+
+	<data name="MenuSodaTitle" xml:space="preserve">
+    <value>SODA SERIES</value>
+</data>
+
+	<data name="MenuSodaDescription" xml:space="preserve">
+    <value>Refreshing sparkling soda blended with fresh fruit flavors for a vibrant and energizing experience.</value>
+</data>
+
+	<data name="MenuCakeTitle" xml:space="preserve">
+    <value>CAKE SERIES</value>
+</data>
+
+	<data name="MenuCakeDescription" xml:space="preserve">
+    <value>Sweet treats made with carefully selected ingredients, offering a soft texture, delightful aroma, and a touch of sweetness in every moment.</value>
+</data>
+
+	<data name="MenuYogurtTitle" xml:space="preserve">
+    <value>YOGURT SERIES</value>
+</data>
+
+	<data name="MenuYogurtDescription" xml:space="preserve">
+    <value>Refreshing yogurt combined with natural fruit flavors creates a light, nutritious, and energizing drink.</value>
+</data>
+	<data name="ProductsPageTitle" xml:space="preserve">
+    <value>Menu - Rosalie Coffee</value>
+</data>
+
+	<data name="ProductsMenuTitle" xml:space="preserve">
+    <value>ROSALIE COFFEE MENU</value>
+</data>
+
+	<data name="FilterAll" xml:space="preserve">
+    <value>All</value>
+</data>
+
+	<data name="FilterCoffee" xml:space="preserve">
+    <value>Coffee</value>
+</data>
+
+	<data name="FilterTea" xml:space="preserve">
+    <value>Tea</value>
+</data>
+
+	<data name="FilterMatcha" xml:space="preserve">
+    <value>Matcha</value>
+</data>
+
+	<data name="FilterSoda" xml:space="preserve">
+    <value>Soda</value>
+</data>
+
+	<data name="FilterCake" xml:space="preserve">
+    <value>Pastries</value>
+</data>
+
+	<data name="FilterJuice" xml:space="preserve">
+    <value>Juice</value>
+</data>
+
+	<data name="FilterYogurt" xml:space="preserve">
+    <value>Yogurt</value>
+</data>
+
+	<data name="FilterBlended" xml:space="preserve">
+    <value>Blended</value>
+</data>
+
+	<data name="DisplayMode" xml:space="preserve">
+    <value>Display:</value>
+</data>
+
+	<data name="PaginationMode" xml:space="preserve">
+    <value>Pagination</value>
+</data>
+
+	<data name="LoadMoreMode" xml:space="preserve">
+    <value>Load More</value>
+</data>
+
+	<data name="LoadMore" xml:space="preserve">
+    <value>Load More</value>
+</data>
+	<data name="Favorite" xml:space="preserve">
+    <value>Favorite</value>
+</data>
+	<data name="BreadcrumbHome" xml:space="preserve">
+    <value>Home</value>
+</data>
+
+	<data name="BreadcrumbMenu" xml:space="preserve">
+    <value>Menu</value>
+</data>
+
+	<data name="ChooseSize" xml:space="preserve">
+    <value>Choose Size</value>
+</data>
+
+	<data name="SugarLevel" xml:space="preserve">
+    <value>Sweetness Level</value>
+</data>
+
+	<data name="IceLevel" xml:space="preserve">
+    <value>Ice Level</value>
+</data>
+
+	<data name="Topping" xml:space="preserve">
+    <value>Toppings</value>
+</data>
+
+	<data name="DecreaseQuantity" xml:space="preserve">
+    <value>Decrease quantity</value>
+</data>
+
+	<data name="IncreaseQuantity" xml:space="preserve">
+    <value>Increase quantity</value>
+</data>
+
+	<data name="AddToCart" xml:space="preserve">
+    <value>Add to Cart</value>
+</data>
+
+	<data name="ProductDescription" xml:space="preserve">
+    <value>Product Description</value>
+</data>
+
+	<data name="DefaultProductDescription" xml:space="preserve">
+    <value>Rosalie Coffee offers carefully selected products, perfect for relaxing moments throughout your day.</value>
+</data>
+
+	<data name="AddedToCart" xml:space="preserve">
+    <value>Added to Cart</value>
+</data>
+
+	<data name="AddedToCartMessage" xml:space="preserve">
+    <value>The product has been added to your cart successfully.</value>
+</data>
+
+	<data name="ViewCart" xml:space="preserve">
+    <value>View Cart</value>
+</data>
+	<!-- DÁN CÁC KEY NÀY VÀO SharedResource.en.resx, NGAY TRƯỚC </root> -->
+
+	<data name="PromotionPageTitle" xml:space="preserve">
+    <value>Promotions - Rosalie Coffee</value>
+</data>
+
+	<data name="PromotionHeroSpecialBadge" xml:space="preserve">
+    <value>SPECIAL PROMOTION</value>
+</data>
+
+	<data name="PromotionHeroDiscount30" xml:space="preserve">
+    <value>UP TO 30% OFF</value>
+</data>
+
+	<data name="PromotionHeroSlide1Description" xml:space="preserve">
+    <value>Discover selected drinks and pastries from Rosalie Coffee at special prices for a limited time.</value>
+</data>
+
+	<data name="PromotionComboBadge" xml:space="preserve">
+    <value>VALUE COMBO</value>
+</data>
+
+	<data name="PromotionComboHeroSubtitle" xml:space="preserve">
+    <value>ENJOY MORE FOR LESS</value>
+</data>
+
+	<data name="PromotionComboHeroDescription" xml:space="preserve">
+    <value>Pair your favorite drinks and pastries with a special combo price made just for you.</value>
+</data>
+
+	<data name="ViewCombo" xml:space="preserve">
+    <value>View Combo</value>
+</data>
+
+	<data name="PromotionVoucherBadge" xml:space="preserve">
+    <value>ROSALIE VOUCHER</value>
+</data>
+
+	<data name="PromotionVoucherHeroTop" xml:space="preserve">
+    <value>SPECIAL</value>
+</data>
+
+	<data name="PromotionVoucherHeroDiscount" xml:space="preserve">
+    <value>SAVE UP TO 50,000 VND</value>
+</data>
+
+	<data name="PromotionVoucherHeroDescription" xml:space="preserve">
+    <value>Save Rosalie vouchers and enjoy extra savings when you check out.</value>
+</data>
+
+	<data name="GetVoucher" xml:space="preserve">
+    <value>GET VOUCHER</value>
+</data>
+
+	<data name="Hours" xml:space="preserve">
+    <value>HOURS</value>
+</data>
+
+	<data name="Minutes" xml:space="preserve">
+    <value>MINUTES</value>
+</data>
+
+	<data name="Seconds" xml:space="preserve">
+    <value>SECONDS</value>
+</data>
+
+	<data name="FlashSaleNote" xml:space="preserve">
+    <value>Special prices apply only during the Flash Sale. After the promotion ends, products will return to their regular prices.</value>
+</data>
+
+	<data name="PromotionProductsHeading" xml:space="preserve">
+    <value>Promotional Products</value>
+</data>
+
+	<data name="PromotionProductCountText" xml:space="preserve">
+    <value>There are currently {0} discounted products at Rosalie Coffee.</value>
+</data>
+
+	<data name="SoldCount" xml:space="preserve">
+    <value>Sold {0}</value>
+</data>
+
+	<data name="InStock" xml:space="preserve">
+    <value>In Stock</value>
+</data>
+
+	<data name="ViewAllProducts" xml:space="preserve">
+    <value>View All Products</value>
+</data>
+
+	<data name="NoPromotionProducts" xml:space="preserve">
+    <value>There are currently no promotional products.</value>
+</data>
+
+	<data name="SavingComboTitle" xml:space="preserve">
+    <value>Value Combos</value>
+</data>
+
+	<data name="SavingComboDescription" xml:space="preserve">
+    <value>Enjoy more with special combo prices made just for you.</value>
+</data>
+
+	<data name="DefaultComboDescription" xml:space="preserve">
+    <value>Rosalie combos bring together customer favorites at a better value.</value>
+</data>
+
+	<data name="ViewAllCombos" xml:space="preserve">
+    <value>View All Combos</value>
+</data>
+
+	<data name="NoPromotionCombos" xml:space="preserve">
+    <value>There are currently no promotional combos.</value>
+</data>
+
+	<data name="VoucherForYou" xml:space="preserve">
+    <value>Vouchers for You</value>
+</data>
+
+	<data name="VoucherSaveDescription" xml:space="preserve">
+    <value>Save vouchers to use at checkout</value>
+</data>
+
+	<data name="Discount" xml:space="preserve">
+    <value>OFF</value>
+</data>
+
+	<data name="VoucherDiscount15" xml:space="preserve">
+    <value>Save 15,000 VND</value>
+</data>
+
+	<data name="VoucherDiscount30" xml:space="preserve">
+    <value>Save 30,000 VND</value>
+</data>
+
+	<data name="VoucherDiscount50" xml:space="preserve">
+    <value>Save 50,000 VND</value>
+</data>
+
+	<data name="ApplicableFrom" xml:space="preserve">
+    <value>Valid for orders from</value>
+</data>
+
+	<data name="ExpiryDate" xml:space="preserve">
+    <value>Expires</value>
+</data>
+
+	<data name="SaveVoucher" xml:space="preserve">
+    <value>Save</value>
+</data>
+
+	<data name="ComboIncludes" xml:space="preserve">
+    <value>Combo Includes</value>
+</data>
+
+	<data name="AddComboToCart" xml:space="preserve">
+    <value>Add Combo to Cart</value>
+</data>
+	<!-- =====================================================
+     PROMOTION JAVASCRIPT - ENGLISH
+===================================================== -->
+
+	<data name="ToastErrorTitle" xml:space="preserve">
+    <value>Something went wrong</value>
+</data>
+
+	<data name="ToastAddedToCartTitle" xml:space="preserve">
+    <value>Added to Cart</value>
+</data>
+
+	<data name="ToastVoucherSavedTitle" xml:space="preserve">
+    <value>Voucher Saved</value>
+</data>
+
+	<data name="Close" xml:space="preserve">
+    <value>Close</value>
+</data>
+
+	<data name="VoucherSavedButton" xml:space="preserve">
+    <value>Saved</value>
+</data>
+
+	<data name="VoucherCodeNotFound" xml:space="preserve">
+    <value>Voucher code not found.</value>
+</data>
+
+	<data name="VoucherSavedSuccess" xml:space="preserve">
+    <value>Voucher {0} was saved successfully.</value>
+</data>
+
+	<data name="Collapse" xml:space="preserve">
+    <value>Show Less</value>
+</data>
+
+	<data name="ComboInfoNotFound" xml:space="preserve">
+    <value>Combo information was not found.</value>
+</data>
+
+	<data name="ComboLoadFailed" xml:space="preserve">
+    <value>Unable to load the combo.</value>
+</data>
+
+	<data name="ComboProductsEmpty" xml:space="preserve">
+    <value>No product information is available for this combo.</value>
+</data>
+
+	<data name="ComboInfoLoadError" xml:space="preserve">
+    <value>Unable to load combo information.</value>
+</data>
+
+	<data name="ComboNotFound" xml:space="preserve">
+    <value>Combo not found.</value>
+</data>
+
+	<data name="ComboAddFailed" xml:space="preserve">
+    <value>Unable to add the combo.</value>
+</data>
+
+	<data name="ComboServerAddFailed" xml:space="preserve">
+    <value>The server could not add the combo.</value>
+</data>
+
+	<data name="Adding" xml:space="preserve">
+    <value>Adding...</value>
+</data>
+
+	<data name="Added" xml:space="preserve">
+    <value>Added</value>
+</data>
+
+	<data name="AddedToCart" xml:space="preserve">
+    <value>Added to Cart</value>
+</data>
+
+	<data name="ComboAddedSuccess" xml:space="preserve">
+    <value>Combo "{0}" was added to your cart.</value>
+</data>
+
+	<data name="ComboAddCartError" xml:space="preserve">
+    <value>Unable to add the combo to your cart. Please try again.</value>
+</data>
+	<data name="AboutPageTitle" xml:space="preserve">
+    <value>About Rosalie - Rosalie Coffee</value>
+</data>
+
+	<data name="AboutHeroSubtitle" xml:space="preserve">
+    <value>About Rosalie Coffee</value>
+</data>
+
+	<data name="AboutHeroTitle" xml:space="preserve">
+    <value>The Story of Rosalie Coffee</value>
+</data>
+
+	<data name="AboutHeroDescription" xml:space="preserve">
+    <value>A place where carefully selected coffee beans and meaningful moments come together.</value>
+</data>
+
+	<data name="AboutStoryLabel" xml:space="preserve">
+    <value>Our Brand Story</value>
+</data>
+
+	<data name="AboutStoryTitle" xml:space="preserve">
+    <value>More Than a Cup of Coffee</value>
+</data>
+
+	<data name="AboutStoryParagraph1" xml:space="preserve">
+    <value>Rosalie Coffee was created with the desire to offer a welcoming space where everyone can enjoy quality coffee and relaxing moments throughout the day.</value>
+</data>
+
+	<data name="AboutStoryParagraph2" xml:space="preserve">
+    <value>We carefully select our coffee beans, pay attention to every step of the brewing process, and strive to deliver consistent flavor in every cup we serve.</value>
+</data>
+
+	<data name="AboutStoryParagraph3" xml:space="preserve">
+    <value>At Rosalie Coffee, a great cup of coffee is not only about flavor, but also about the atmosphere, service, and emotions our customers experience.</value>
+</data>
+
+	<data name="AboutValuesLabel" xml:space="preserve">
+    <value>Our Values</value>
+</data>
+
+	<data name="AboutValuesTitle" xml:space="preserve">
+    <value>What Makes Rosalie Special</value>
+</data>
+
+	<data name="AboutValuesDescription" xml:space="preserve">
+    <value>We are committed to quality, thoughtful service, and creating the best possible experience for our customers.</value>
+</data>
+
+	<data name="AboutValue1Title" xml:space="preserve">
+    <value>Quality Coffee</value>
+</data>
+
+	<data name="AboutValue1Description" xml:space="preserve">
+    <value>We carefully select suitable ingredients and focus on quality in every product.</value>
+</data>
+
+	<data name="AboutValue2Title" xml:space="preserve">
+    <value>Thoughtful Service</value>
+</data>
+
+	<data name="AboutValue2Description" xml:space="preserve">
+    <value>We strive to provide friendly, professional, and attentive service in every experience.</value>
+</data>
+
+	<data name="AboutValue3Title" xml:space="preserve">
+    <value>Memorable Experiences</value>
+</data>
+
+	<data name="AboutValue3Description" xml:space="preserve">
+    <value>We create a comfortable space where customers can relax, connect, and enjoy their coffee.</value>
+</data>
+
+	<data name="AboutExperienceLabel" xml:space="preserve">
+    <value>The Rosalie Experience</value>
+</data>
+
+	<data name="AboutExperienceTitle" xml:space="preserve">
+    <value>A Space Made for You</value>
+</data>
+
+	<data name="AboutExperienceDescription" xml:space="preserve">
+    <value>From mornings that call for a fresh boost of energy to gatherings with friends, Rosalie Coffee hopes to become a small part of your most meaningful moments.</value>
+</data>
+
+	<data name="AboutExperienceItem1" xml:space="preserve">
+    <value>Comfortable atmosphere</value>
+</data>
+
+	<data name="AboutExperienceItem2" xml:space="preserve">
+    <value>A wide variety of coffee and drinks</value>
+</data>
+
+	<data name="AboutExperienceItem3" xml:space="preserve">
+    <value>Friendly service</value>
+</data>
+
+	<data name="AboutExperienceItem4" xml:space="preserve">
+    <value>Perfect for studying and meeting friends</value>
+</data>
+
+	<data name="AboutExperienceImageAlt" xml:space="preserve">
+    <value>Rosalie Coffee interior</value>
+</data>
+
+	<data name="AboutCtaTitle" xml:space="preserve">
+    <value>Ready to Enjoy?</value>
+</data>
+
+	<data name="AboutCtaDescription" xml:space="preserve">
+    <value>Explore the Rosalie Coffee menu and find your favorite drink today.</value>
+</data>
+
+	<data name="AboutCtaButton" xml:space="preserve">
+    <value>View Menu</value>
+</data>
+	<data name="ContactPageTitle" xml:space="preserve">
+    <value>Contact - Rosalie Coffee</value>
+</data>
+
+	<data name="ContactHeroTitle" xml:space="preserve">
+    <value>Contact Rosalie Coffee</value>
+</data>
+
+	<data name="ContactHeroDescription" xml:space="preserve">
+    <value>We are always happy to listen and connect with you. Visit your nearest Rosalie Coffee location and enjoy delicious coffee in a warm and welcoming atmosphere.</value>
+</data>
+
+	<data name="ContactNow" xml:space="preserve">
+    <value>Contact Us</value>
+</data>
+
+	<data name="ViewMenu" xml:space="preserve">
+    <value>View Menu</value>
+</data>
+
+	<data name="BranchSystemTitle" xml:space="preserve">
+    <value>OUR LOCATIONS</value>
+</data>
+
+	<data name="BranchSystemDescription" xml:space="preserve">
+    <value>Find and explore the Rosalie Coffee location nearest to you</value>
+</data>
+
+	<data name="BranchSearchPlaceholder" xml:space="preserve">
+    <value>Search by location name or district...</value>
+</data>
+
+	<data name="BranchWifi" xml:space="preserve">
+    <value>Wi-Fi</value>
+</data>
+
+	<data name="BranchParking" xml:space="preserve">
+    <value>Parking</value>
+</data>
+
+	<data name="BranchAirConditioner" xml:space="preserve">
+    <value>Air Conditioning</value>
+</data>
+
+	<data name="BranchPowerOutlet" xml:space="preserve">
+    <value>Power Outlets</value>
+</data>
+
+	<data name="Directions" xml:space="preserve">
+    <value>Directions</value>
+</data>
+
+	<data name="BranchImageAlt" xml:space="preserve">
+    <value>Rosalie Coffee location</value>
+</data>
+	<!-- =====================================================
+     CART - ENGLISH
+===================================================== -->
+
+	<data name="CartPageTitle" xml:space="preserve">
+    <value>Shopping Cart - Rosalie Coffee</value>
+</data>
+
+	<data name="CartYourCart" xml:space="preserve">
+    <value>Your Cart</value>
+</data>
+
+	<data name="CartItemCount" xml:space="preserve">
+    <value>{0} items</value>
+</data>
+
+	<data name="ContinueShopping" xml:space="preserve">
+    <value>Continue Shopping</value>
+</data>
+
+	<data name="CartEmptyTitle" xml:space="preserve">
+    <value>Your cart is empty</value>
+</data>
+
+	<data name="CartEmptyDescription" xml:space="preserve">
+    <value>Explore our menu and choose something you love.</value>
+</data>
+
+	<data name="ExploreMenu" xml:space="preserve">
+    <value>Explore Menu</value>
+</data>
+
+	<data name="CartSavingCombo" xml:space="preserve">
+    <value>Value Combo</value>
+</data>
+
+	<data name="CartSize" xml:space="preserve">
+    <value>Size</value>
+</data>
+
+	<data name="CartSugar" xml:space="preserve">
+    <value>Sugar</value>
+</data>
+
+	<data name="CartIce" xml:space="preserve">
+    <value>Ice</value>
+</data>
+
+	<data name="CartTopping" xml:space="preserve">
+    <value>Topping</value>
+</data>
+
+	<data name="CartNote" xml:space="preserve">
+    <value>Note</value>
+</data>
+
+	<data name="DecreaseQuantity" xml:space="preserve">
+    <value>Decrease quantity</value>
+</data>
+
+	<data name="IncreaseQuantity" xml:space="preserve">
+    <value>Increase quantity</value>
+</data>
+
+	<data name="RemoveProduct" xml:space="preserve">
+    <value>Remove product</value>
+</data>
+
+	<data name="YourVouchers" xml:space="preserve">
+    <value>Your Vouchers</value>
+</data>
+
+	<data name="LoginForVoucherTitle" xml:space="preserve">
+    <value>Sign in to use vouchers</value>
+</data>
+
+	<data name="LoginForVoucherDescription" xml:space="preserve">
+    <value>Sign in to view and use the vouchers you have saved.</value>
+</data>
+
+	<data name="PaymentSummary" xml:space="preserve">
+    <value>Order Summary</value>
+</data>
+
+	<data name="Subtotal" xml:space="preserve">
+    <value>Subtotal</value>
+</data>
+
+	<data name="ShippingFee" xml:space="preserve">
+    <value>Shipping Fee</value>
+</data>
+
+	<data name="FreeShipping" xml:space="preserve">
+    <value>Free</value>
+</data>
+
+	<data name="GrandTotal" xml:space="preserve">
+    <value>Total</value>
+</data>
+
+	<data name="FreeShippingFrom" xml:space="preserve">
+    <value>Free shipping for orders from</value>
+</data>
+
+	<data name="CheckoutNow" xml:space="preserve">
+    <value>Checkout Now</value>
+</data>
+
+	<data name="LoginToCheckout" xml:space="preserve">
+    <value>Sign In to Checkout</value>
+</data>
+
+	<data name="SecurePaymentSSL" xml:space="preserve">
+    <value>Safe and secure SSL payment</value>
+</data>
+
+	<data name="Notification" xml:space="preserve">
+    <value>Notification</value>
+</data>
+
+	<data name="NoSavedVouchers" xml:space="preserve">
+    <value>You haven't saved any vouchers yet.</value>
+</data>
+
+	<data name="MinimumOrder" xml:space="preserve">
+    <value>Minimum order</value>
+</data>
+
+	<data name="VoucherCannotApplyTitle" xml:space="preserve">
+    <value>Unable to apply voucher</value>
+</data>
+
+	<data name="VoucherMinimumOrderMessage" xml:space="preserve">
+    <value>Voucher {0} is only valid for orders of {1} or more.</value>
+</data>
+
+	<data name="VoucherInvalid" xml:space="preserve">
+    <value>This voucher is invalid.</value>
+</data>
+
+	<data name="VoucherAppliedTitle" xml:space="preserve">
+    <value>Voucher Applied Successfully</value>
+</data>
+
+	<data name="VoucherDiscountMessage" xml:space="preserve">
+    <value>You saved {0}.</value>
+</data>
+
+	<data name="VoucherSaveError" xml:space="preserve">
+    <value>Unable to save the voucher. Please try again.</value>
+</data>
+	<!-- ================= CHECKOUT ================= -->
+
+	<data name="CheckoutPageTitle" xml:space="preserve">
+    <value>Checkout - Rosalie Coffee</value>
+</data>
+
+	<data name="CheckoutTitle" xml:space="preserve">
+    <value>Checkout</value>
+</data>
+
+	<data name="ShippingInformation" xml:space="preserve">
+    <value>Delivery Information</value>
+</data>
+
+	<data name="ShippingInformationDescription" xml:space="preserve">
+    <value>Please provide your delivery information so Rosalie Coffee can deliver your order.</value>
+</data>
+
+	<data name="FullName" xml:space="preserve">
+    <value>Full Name</value>
+</data>
+
+	<data name="FullNamePlaceholder" xml:space="preserve">
+    <value>Enter your full name</value>
+</data>
+
+	<data name="PhoneNumber" xml:space="preserve">
+    <value>Phone Number</value>
+</data>
+
+	<data name="PhoneNumberPlaceholder" xml:space="preserve">
+    <value>Enter your phone number</value>
+</data>
+
+	<data name="DeliveryAddress" xml:space="preserve">
+    <value>Delivery Address</value>
+</data>
+
+	<data name="DeliveryAddressPlaceholder" xml:space="preserve">
+    <value>Enter house number, street name...</value>
+</data>
+
+	<data name="ProvinceCity" xml:space="preserve">
+    <value>Province / City</value>
+</data>
+
+	<data name="SelectProvince" xml:space="preserve">
+    <value>-- Select province / city --</value>
+</data>
+
+	<data name="District" xml:space="preserve">
+    <value>District</value>
+</data>
+
+	<data name="SelectDistrict" xml:space="preserve">
+    <value>-- Select district --</value>
+</data>
+
+	<data name="OrderNote" xml:space="preserve">
+    <value>Order Note</value>
+</data>
+
+	<data name="OrderNotePlaceholder" xml:space="preserve">
+    <value>Example: Deliver during office hours, less ice, less sugar...</value>
+</data>
+
+	<data name="PaymentMethod" xml:space="preserve">
+    <value>Payment Method</value>
+</data>
+
+	<data name="PaymentMethodDescription" xml:space="preserve">
+    <value>Select a payment method for your order</value>
+</data>
+
+	<data name="CashOnDelivery" xml:space="preserve">
+    <value>Cash on Delivery</value>
+</data>
+
+	<data name="CashOnDeliveryDescription" xml:space="preserve">
+    <value>Pay in cash when your order is delivered</value>
+</data>
+
+	<data name="VNPayPayment" xml:space="preserve">
+    <value>Online Payment via VNPay</value>
+</data>
+
+	<data name="VNPayPaymentDescription" xml:space="preserve">
+    <value>Secure online payment through VNPay</value>
+</data>
+
+	<data name="BackToCart" xml:space="preserve">
+    <value>Back to Cart</value>
+</data>
+
+	<data name="YourOrder" xml:space="preserve">
+    <value>Your Order</value>
+</data>
+
+	<data name="UnitPrice" xml:space="preserve">
+    <value>Unit Price</value>
+</data>
+
+	<data name="CartEmpty" xml:space="preserve">
+    <value>Your cart is empty.</value>
+</data>
+
+	<data name="CheckoutFreeShippingMessage" xml:space="preserve">
+    <value>🎉 Your order qualifies for free shipping.</value>
+</data>
+
+	<data name="CheckoutShippingFeeText" xml:space="preserve">
+    <value>Shipping fee</value>
+</data>
+
+	<data name="CheckoutFreeShippingCondition" xml:space="preserve">
+    <value>Free shipping for discounted orders from</value>
+</data>
+
+	<data name="PureCoffee" xml:space="preserve">
+    <value>Quality Coffee</value>
+</data>
+
+	<data name="PureCoffeeDescription" xml:space="preserve">
+    <value>100% quality coffee beans</value>
+</data>
+
+	<data name="FastDelivery" xml:space="preserve">
+    <value>30-Minute Delivery</value>
+</data>
+
+	<data name="FastDeliveryDescription" xml:space="preserve">
+    <value>Free shipping on orders from 150,000đ</value>
+</data>
+
+	<data name="FreshIngredients" xml:space="preserve">
+    <value>Fresh Ingredients</value>
+</data>
+
+	<data name="FreshIngredientsDescription" xml:space="preserve">
+    <value>Freshly prepared every day</value>
+</data>
+
+	<data name="DailyOffers" xml:space="preserve">
+    <value>Daily Offers</value>
+</data>
+
+	<data name="DailyOffersDescription" xml:space="preserve">
+    <value>Exciting gifts and special offers</value>
+</data>
+	<!-- ================= LOGIN ================= -->
+
+	<data name="LoginPageTitle" xml:space="preserve">
+    <value>Login</value>
+</data>
+
+	<data name="LoginBannerAlt" xml:space="preserve">
+    <value>Rosalie Coffee Login</value>
+</data>
+
+	<data name="WelcomeBack" xml:space="preserve">
+    <value>Welcome Back!</value>
+</data>
+
+	<data name="LoginWelcomeDescription" xml:space="preserve">
+    <value>Sign in to order your favorites, track your orders, and enjoy exclusive offers for Rosalie Coffee members.</value>
+</data>
+
+	<data name="BackToHome" xml:space="preserve">
+    <value>Back to Home</value>
+</data>
+
+	<data name="LoginDescription" xml:space="preserve">
+    <value>Please enter your account information.</value>
+</data>
+
+	<data name="Email" xml:space="preserve">
+    <value>Email</value>
+</data>
+
+	<data name="EmailPlaceholder" xml:space="preserve">
+    <value>Enter your email</value>
+</data>
+
+	<data name="Password" xml:space="preserve">
+    <value>Password</value>
+</data>
+
+	<data name="PasswordPlaceholder" xml:space="preserve">
+    <value>Enter your password</value>
+</data>
+
+	<data name="TogglePasswordVisibility" xml:space="preserve">
+    <value>Show or hide password</value>
+</data>
+
+	<data name="RememberMe" xml:space="preserve">
+    <value>Remember me</value>
+</data>
+
+	<data name="ForgotPassword" xml:space="preserve">
+    <value>Forgot password?</value>
+</data>
+
+	<data name="Or" xml:space="preserve">
+    <value>OR</value>
+</data>
+
+	<data name="ContinueWithGoogle" xml:space="preserve">
+    <value>Continue with Google</value>
+</data>
+
+	<data name="NoAccount" xml:space="preserve">
+    <value>Don't have an account?</value>
+</data>
+
+	<data name="RegisterNow" xml:space="preserve">
+    <value>Register Now</value>
+</data>
+	<data name="LoggingIn" xml:space="preserve">
+    <value>Signing in...</value>
+</data>
+	<!-- ================= REGISTER ================= -->
+
+	<data name="RegisterPageTitle" xml:space="preserve">
+    <value>Register</value>
+</data>
+
+	<data name="RegisterBannerAlt" xml:space="preserve">
+    <value>Rosalie Coffee Registration</value>
+</data>
+
+	<data name="JoinRosalie" xml:space="preserve">
+    <value>Join Rosalie Coffee</value>
+</data>
+
+	<data name="RegisterWelcomeDescription" xml:space="preserve">
+    <value>Create an account to earn points, receive a Welcome Voucher, and enjoy exclusive member offers.</value>
+</data>
+
+	<data name="RegisterBenefit1" xml:space="preserve">
+    <value>10% Welcome Voucher</value>
+</data>
+
+	<data name="RegisterBenefit2" xml:space="preserve">
+    <value>Earn points on every order</value>
+</data>
+
+	<data name="RegisterBenefit3" xml:space="preserve">
+    <value>Birthday gifts</value>
+</data>
+
+	<data name="RegisterBenefit4" xml:space="preserve">
+    <value>Exclusive member offers</value>
+</data>
+
+	<data name="Register" xml:space="preserve">
+    <value>Register</value>
+</data>
+
+	<data name="RegisterDescription" xml:space="preserve">
+    <value>It takes less than a minute to become a Rosalie Coffee member.</value>
+</data>
+
+	<data name="RegisterEmailPlaceholder" xml:space="preserve">
+    <value>Enter your email</value>
+</data>
+
+	<data name="Address" xml:space="preserve">
+    <value>Address</value>
+</data>
+
+	<data name="AddressPlaceholder" xml:space="preserve">
+    <value>Enter your address</value>
+</data>
+
+	<data name="PasswordNotEntered" xml:space="preserve">
+    <value>No password entered</value>
+</data>
+
+	<data name="PasswordRuleLength" xml:space="preserve">
+    <value>At least 8 characters</value>
+</data>
+
+	<data name="PasswordRuleUpper" xml:space="preserve">
+    <value>Contains an uppercase letter</value>
+</data>
+
+	<data name="PasswordRuleLower" xml:space="preserve">
+    <value>Contains a lowercase letter</value>
+</data>
+
+	<data name="PasswordRuleNumber" xml:space="preserve">
+    <value>Contains a number</value>
+</data>
+
+	<data name="PasswordRuleSpecial" xml:space="preserve">
+    <value>Contains a special character</value>
+</data>
+
+	<data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm Password</value>
+</data>
+
+	<data name="ConfirmPasswordPlaceholder" xml:space="preserve">
+    <value>Re-enter your password</value>
+</data>
+
+	<data name="AgreeTerms" xml:space="preserve">
+    <value>I agree to the Terms of Use and Privacy Policy.</value>
+</data>
+
+	<data name="CreateAccount" xml:space="preserve">
+    <value>Create Account</value>
+</data>
+
+	<data name="AlreadyHaveAccount" xml:space="preserve">
+    <value>Already have an account?</value>
+</data>
+
+	<data name="LoginNow" xml:space="preserve">
+    <value>Login Now</value>
+</data>
+
+	<data name="PasswordVeryWeak" xml:space="preserve">
+    <value>Very weak password</value>
+</data>
+
+	<data name="PasswordWeak" xml:space="preserve">
+    <value>Weak password</value>
+</data>
+
+	<data name="PasswordMedium" xml:space="preserve">
+    <value>Medium strength password</value>
+</data>
+
+	<data name="PasswordQuiteStrong" xml:space="preserve">
+    <value>Fairly strong password</value>
+</data>
+
+	<data name="PasswordStrong" xml:space="preserve">
+    <value>Strong password</value>
+</data>
+
+	<data name="CreatingAccount" xml:space="preserve">
+    <value>Creating account...</value>
+</data>
+	<!-- ================= FORGOT PASSWORD ================= -->
+
+	<data name="ForgotPasswordPageTitle" xml:space="preserve">
+    <value>Forgot Password</value>
+</data>
+
+	<data name="RecoverPasswordTitle" xml:space="preserve">
+    <value>Recover Your Password</value>
+</data>
+
+	<data name="RecoverPasswordDescription" xml:space="preserve">
+    <value>Enter the email address registered with Rosalie Coffee. We will send you an OTP code to verify your account.</value>
+</data>
+
+	<data name="BackToLogin" xml:space="preserve">
+    <value>Back to Login</value>
+</data>
+
+	<data name="ForgotPasswordQuestion" xml:space="preserve">
+    <value>Forgot your password?</value>
+</data>
+
+	<data name="ForgotPasswordDescription" xml:space="preserve">
+    <value>Enter your email address to receive a verification code.</value>
+</data>
+
+	<data name="SendOtp" xml:space="preserve">
+    <value>Send OTP</value>
+</data>
+
+	<data name="RememberPassword" xml:space="preserve">
+    <value>Remember your password?</value>
+</data>
+	<!-- ================= VERIFY OTP ================= -->
+
+	<data name="VerifyOtpPageTitle" xml:space="preserve">
+    <value>Verify OTP</value>
+</data>
+
+	<data name="CheckEmailTitle" xml:space="preserve">
+    <value>Check Your Email</value>
+</data>
+
+	<data name="CheckEmailDescription" xml:space="preserve">
+    <value>Rosalie Coffee has sent a 6-digit verification code to your email address.</value>
+</data>
+
+	<data name="ResendEmail" xml:space="preserve">
+    <value>Resend Email</value>
+</data>
+
+	<data name="EnterOtpTitle" xml:space="preserve">
+    <value>Enter OTP Code</value>
+</data>
+
+	<data name="OtpExpiryDescription" xml:space="preserve">
+    <value>The verification code is valid for 5 minutes.</value>
+</data>
+
+	<data name="OtpCode" xml:space="preserve">
+    <value>OTP Code</value>
+</data>
+
+	<data name="OtpPlaceholder" xml:space="preserve">
+    <value>Enter the 6-digit OTP</value>
+</data>
+
+	<data name="VerifyOtpButton" xml:space="preserve">
+    <value>Verify OTP</value>
+</data>
+	<!-- ================= RESET PASSWORD ================= -->
+
+	<data name="ResetPasswordPageTitle" xml:space="preserve">
+    <value>Reset Password</value>
+</data>
+
+	<data name="CreateNewPasswordTitle" xml:space="preserve">
+    <value>Create a New Password</value>
+</data>
+
+	<data name="CreateNewPasswordDescription" xml:space="preserve">
+    <value>Your account has been verified. Create a new password to continue using Rosalie Coffee.</value>
+</data>
+
+	<data name="ResetPasswordTitle" xml:space="preserve">
+    <value>Reset Password</value>
+</data>
+
+	<data name="ResetPasswordDescription" xml:space="preserve">
+    <value>Enter a new password for your account.</value>
+</data>
+
+	<data name="NewPassword" xml:space="preserve">
+    <value>New Password</value>
+</data>
+
+	<data name="NewPasswordPlaceholder" xml:space="preserve">
+    <value>Enter your new password</value>
+</data>
+
+	<data name="ConfirmNewPassword" xml:space="preserve">
+    <value>Confirm New Password</value>
+</data>
+
+	<data name="ConfirmNewPasswordPlaceholder" xml:space="preserve">
+    <value>Re-enter your new password</value>
+</data>
+
+	<data name="ChangePassword" xml:space="preserve">
+    <value>Change Password</value>
+</data>
+	<!-- ================= PROFILE ================= -->
+
+	<data name="ProfilePageTitle" xml:space="preserve">
+    <value>My Profile</value>
+</data>
+
+	<data name="RosalieMember" xml:space="preserve">
+    <value>Rosalie Coffee Member</value>
+</data>
+
+	<data name="JoinDate" xml:space="preserve">
+    <value>Member Since</value>
+</data>
+
+	<data name="AccountLabel" xml:space="preserve">
+    <value>ACCOUNT</value>
+</data>
+
+	<data name="PersonalInformation" xml:space="preserve">
+    <value>Personal Information</value>
+</data>
+
+	<data name="ProfileDescription" xml:space="preserve">
+    <value>Keep your information up to date so Rosalie Coffee can serve you better.</value>
+</data>
+
+	<data name="ProfileNamePlaceholder" xml:space="preserve">
+    <value>Enter your full name</value>
+</data>
+
+	<data name="EmailCannotChange" xml:space="preserve">
+    <value>Your login email cannot be changed.</value>
+</data>
+
+	<data name="ProfileAddressPlaceholder" xml:space="preserve">
+    <value>Enter your address</value>
+</data>
+
+	<data name="AccountCreatedDate" xml:space="preserve">
+    <value>Account Created</value>
+</data>
+
+	<data name="MyOrders" xml:space="preserve">
+    <value>My Orders</value>
+</data>
+
+	<data name="Back" xml:space="preserve">
+    <value>Back</value>
+</data>
+
+	<data name="SaveChanges" xml:space="preserve">
+    <value>Save Changes</value>
+</data>
+	<!-- ================= ORDER HISTORY ================= -->
+
+	<data name="OrderHistoryPageTitle" xml:space="preserve">
+    <value>My Orders</value>
+</data>
+
+	<data name="OrderHistoryDescription" xml:space="preserve">
+    <value>Track the orders you have placed with Rosalie Coffee.</value>
+</data>
+
+	<data name="NoOrdersTitle" xml:space="preserve">
+    <value>You haven't placed any orders yet</value>
+</data>
+
+	<data name="NoOrdersDescription" xml:space="preserve">
+    <value>Explore Rosalie Coffee and choose something you love.</value>
+</data>
+
+	<data name="OrderCode" xml:space="preserve">
+    <value>Order Number</value>
+</data>
+
+	<data name="OrderDate" xml:space="preserve">
+    <value>Order Date</value>
+</data>
+
+	<data name="PaymentTotal" xml:space="preserve">
+    <value>Total Payment</value>
+</data>
+
+	<data name="OrderStatus" xml:space="preserve">
+    <value>Status</value>
+</data>
+
+	<data name="OrderStatusPaid" xml:space="preserve">
+    <value>Paid</value>
+</data>
+
+	<data name="OrderStatusFailed" xml:space="preserve">
+    <value>Payment Failed</value>
+</data>
+
+	<data name="OrderStatusPending" xml:space="preserve">
+    <value>Processing</value>
+</data>
+	<!-- ================= SUCCESS / ORDER DETAIL ================= -->
+
+	<data name="SuccessPageTitle" xml:space="preserve">
+    <value>Order Successful</value>
+</data>
+
+	<data name="OrderSuccessTitle" xml:space="preserve">
+    <value>Order Placed Successfully!</value>
+</data>
+
+	<data name="OrderSuccessThankYou" xml:space="preserve">
+    <value>Thank you for ordering from</value>
+</data>
+
+	<data name="OrderSuccessRecorded" xml:space="preserve">
+    <value>Your order has been successfully recorded.</value>
+</data>
+
+	<data name="OrderInformation" xml:space="preserve">
+    <value>Order Information</value>
+</data>
+
+	<data name="OrderDetails" xml:space="preserve">
+    <value>Order Details</value>
+</data>
+
+	<data name="Product" xml:space="preserve">
+    <value>Product</value>
+</data>
+
+	<data name="QuantityShort" xml:space="preserve">
+    <value>Qty</value>
+</data>
+
+	<data name="LineTotal" xml:space="preserve">
+    <value>Total</value>
+</data>
+
+	<data name="OrderProductDetailsUnavailable" xml:space="preserve">
+    <value>Product details are not available for this order.</value>
+</data>
+
+	<data name="Recipient" xml:space="preserve">
+    <value>Recipient</value>
+</data>
+
+	<data name="ShippingAddress" xml:space="preserve">
+    <value>Delivery Address</value>
+</data>
+
+	<data name="EstimatedTime" xml:space="preserve">
+    <value>Estimated Delivery Time</value>
+</data>
+
+	<data name="EstimatedTimeValue" xml:space="preserve">
+    <value>30 - 60 minutes</value>
+</data>
+
+	<data name="InvoiceSavedMessage" xml:space="preserve">
+    <value>Your invoice has been saved in the Rosalie Coffee system.</value>
+</data>
+	<!-- ================= ACCOUNT CONTROLLER ================= -->
+
+	<data name="EmailAlreadyUsed" xml:space="preserve">
+    <value>This email is already in use.</value>
+</data>
+
+	<data name="RegisterWelcomeSuccess" xml:space="preserve">
+    <value>🎉 Welcome, {0}! Your account has been created successfully.</value>
+</data>
+
+	<data name="InvalidEmailOrPassword" xml:space="preserve">
+    <value>Incorrect email or password.</value>
+</data>
+
+	<data name="LoginWelcomeSuccess" xml:space="preserve">
+    <value>👋 Welcome back, {0}!</value>
+</data>
+
+	<data name="GoogleLoginFailed" xml:space="preserve">
+    <value>Unable to sign in with Google.</value>
+</data>
+
+	<data name="GoogleEmailUnavailable" xml:space="preserve">
+    <value>Unable to retrieve the email address from your Google account.</value>
+</data>
+
+	<data name="GoogleWelcomeSuccess" xml:space="preserve">
+    <value>👋 Welcome, {0}!</value>
+</data>
+
+	<data name="AccountEmailNotFound" xml:space="preserve">
+    <value>No account was found with this email address.</value>
+</data>
+
+	<data name="EmailSendError" xml:space="preserve">
+    <value>Email sending error: {0}</value>
+</data>
+
+	<data name="OtpSentSuccess" xml:space="preserve">
+    <value>A verification code has been sent to your email.</value>
+</data>
+
+	<data name="OtpNotExist" xml:space="preserve">
+    <value>The verification code is no longer available.</value>
+</data>
+
+	<data name="OtpInvalid" xml:space="preserve">
+    <value>The verification code is invalid.</value>
+</data>
+
+	<data name="OtpExpired" xml:space="preserve">
+    <value>The OTP code has expired.</value>
+</data>
+
+	<data name="OtpIncorrect" xml:space="preserve">
+    <value>The OTP code is incorrect.</value>
+</data>
+
+	<data name="PasswordChangedSuccess" xml:space="preserve">
+    <value>✅ Your password has been changed successfully. You can now sign in with your new password.</value>
+</data>
+
+	<data name="FullNameRequired" xml:space="preserve">
+    <value>Please enter your full name.</value>
+</data>
+
+	<data name="PhoneRequired" xml:space="preserve">
+    <value>Please enter your phone number.</value>
+</data>
+
+	<data name="ProfileUpdateSuccess" xml:space="preserve">
+    <value>✅ Your profile has been updated successfully.</value>
+</data>
+
+	<data name="LogoutSuccess" xml:space="preserve">
+    <value>👋 You have signed out successfully. See you again!</value>
+</data>
+	<!-- ================= CHECKOUT CONTROLLER ================= -->
+
+	<data name="VnPayTmnCodeMissing" xml:space="preserve">
+    <value>VNPay:TmnCode has not been configured in User Secrets.</value>
+</data>
+
+	<data name="VnPayHashSecretMissing" xml:space="preserve">
+    <value>VNPay:HashSecret has not been configured in User Secrets.</value>
+</data>
+
+	<data name="VnPayReturnUrlMissing" xml:space="preserve">
+    <value>VNPay:ReturnUrl has not been configured in User Secrets.</value>
+</data>
+
+	<data name="LoginRequiredForVoucher" xml:space="preserve">
+    <value>Please sign in to use vouchers.</value>
+</data>
+
+	<data name="VoucherInfoInvalid" xml:space="preserve">
+    <value>The voucher information is invalid.</value>
+</data>
+
+	<data name="VoucherMinimumOrderServer" xml:space="preserve">
+    <value>Voucher {0} is only valid for orders of {1} or more.</value>
+</data>
+
+	<data name="LoginRequiredForCheckout" xml:space="preserve">
+    <value>Please sign in to continue to checkout.</value>
+</data>
+
+	<data name="CustomerNotFound" xml:space="preserve">
+    <value>Customer not found.</value>
+</data>
+
+	<data name="InvalidPaymentAmount" xml:space="preserve">
+    <value>The payment amount is invalid.</value>
+</data>
+
+	<data name="VnPayOrderInfo" xml:space="preserve">
+    <value>Rosalie Coffee order payment {0}</value>
+</data>
+
+	<data name="VnPaySignatureNotFound" xml:space="preserve">
+    <value>VNPay signature was not found.</value>
+</data>
+
+	<data name="VnPayInvalidSignature" xml:space="preserve">
+    <value>The VNPay signature is invalid.</value>
+</data>
+
+	<data name="OrderCodeNotFound" xml:space="preserve">
+    <value>Order number was not found.</value>
+</data>
+
+	<data name="InvalidOrderCode" xml:space="preserve">
+    <value>The order number is invalid.</value>
+</data>
+
+	<data name="InvoiceNotFound" xml:space="preserve">
+    <value>Invoice not found.</value>
+</data>
+</root>

@@ -1,0 +1,31 @@
+﻿@model IEnumerable<CoffeeShopManagement.Models.SanPham>
+<h2 class="text-center mb-4">☕ Menu Cà Phê</h2>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-3 mb-4">
+            <div class="card shadow">
+
+                <img src="https://via.placeholder.com/300x200"
+                     class="card-img-top">
+
+                <div class="card-body">
+                    <h5 class="card-title">@item.TenSp</h5>
+
+                    <p class="text-danger fw-bold">
+                        @item.DonGia.ToString("N0") VNĐ
+                    </p>
+
+                    <a asp-controller="Cart"
+                       asp-action="Add"
+                       asp-route-id="@item.MaSp"
+                       class="btn btn-success">
+                        Thêm vào giỏ hàng
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    }
+</div>

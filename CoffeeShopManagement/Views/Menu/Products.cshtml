@@ -1,0 +1,495 @@
+﻿@model IEnumerable<CoffeeShopManagement.Models.SanPham>
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+@{
+    var filter =
+        Context.Request.Query["filter"].ToString();
+
+    var keyword =
+        Context.Request.Query["keyword"].ToString();
+
+    var category =
+        Context.Request.Query["category"].ToString();
+
+    ViewData["Title"] =
+        T["ProductsPageTitle"];
+}
+
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/menu-search.css"
+          asp-append-version="true" />
+
+}
+
+
+<section class="menu-page">
+
+    <!-- =====================================
+         TITLE
+    ====================================== -->
+
+    <h1>
+        @T["ProductsMenuTitle"]
+    </h1>
+
+
+    <div class="menu-divider">
+
+        <i class="fas fa-coffee"></i>
+
+    </div>
+
+
+    <!-- =====================================
+         SEARCH + PRICE + SORT
+    ====================================== -->
+
+    <div class="menu-search-filter-row">
+
+
+        <!-- ================================
+             SEARCH
+        ================================= -->
+
+        <div class="menu-search-box">
+
+
+            <button type="button"
+                    id="menuSearchBtn"
+                    class="menu-search-submit"
+                    title="Tìm kiếm">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+            </button>
+
+
+            <input id="menuSearchInput"
+                   type="text"
+                   value="@keyword"
+                   placeholder="Tìm tên món..."
+                   autocomplete="off" />
+
+
+            <button type="button"
+                    id="menuClearSearchBtn"
+                    class="menu-search-clear"
+                    title="Xóa tìm kiếm">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- ================================
+             MIN PRICE
+        ================================= -->
+
+        <div class="menu-filter-field">
+
+            <label for="minPrice">
+                Giá từ
+            </label>
+
+
+            <div class="menu-price-input">
+
+                <input id="minPrice"
+                       type="number"
+                       min="0"
+                       step="1000"
+                       placeholder="0" />
+
+                <span>
+                    đ
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================
+             MAX PRICE
+        ================================= -->
+
+        <div class="menu-filter-field">
+
+            <label for="maxPrice">
+                Giá đến
+            </label>
+
+
+            <div class="menu-price-input">
+
+                <input id="maxPrice"
+                       type="number"
+                       min="0"
+                       step="1000"
+                       placeholder="200000" />
+
+                <span>
+                    đ
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================
+             SORT
+        ================================= -->
+
+        <div class="menu-filter-field menu-sort-field">
+
+            <label for="sortSelect">
+                Sắp xếp
+            </label>
+
+
+            <select id="sortSelect">
+
+                <option value="">
+                    Mặc định
+                </option>
+
+                <option value="price-asc">
+                    Giá thấp → cao
+                </option>
+
+                <option value="price-desc">
+                    Giá cao → thấp
+                </option>
+
+                <option value="name-asc">
+                    Tên A → Z
+                </option>
+
+                <option value="name-desc">
+                    Tên Z → A
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ================================
+             RESET
+        ================================= -->
+
+        <button type="button"
+                id="resetAdvancedBtn"
+                class="advanced-reset-btn">
+
+            <i class="fa-solid fa-rotate-left"></i>
+
+            <span>
+                Đặt lại
+            </span>
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================
+         SEARCH RESULT INFO
+    ====================================== -->
+    @if (!string.IsNullOrWhiteSpace(keyword))
+    {
+        <div class="menu-search-result-info">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <span>
+                Kết quả tìm kiếm cho:
+            </span>
+
+            <strong>
+                "@keyword"
+            </strong>
+
+        </div>
+    }
+
+
+    <!-- =====================================
+         CATEGORY + VIEW MODE
+    ====================================== -->
+
+    <div class="menu-toolbar">
+
+
+        <!-- ================================
+             CATEGORY FILTER
+        ================================= -->
+
+        <div class="menu-filter">
+
+
+            <button class="active"
+                    data-filter="all"
+                    data-category="0">
+
+                @T["FilterAll"]
+
+            </button>
+
+
+            <button data-filter="coffee"
+                    data-category="1">
+
+                @T["FilterCoffee"]
+
+            </button>
+
+
+            <button data-filter="tea"
+                    data-category="2">
+
+                @T["FilterTea"]
+
+            </button>
+
+
+            <button data-filter="matcha"
+                    data-category="3">
+
+                @T["FilterMatcha"]
+
+            </button>
+
+
+            <button data-filter="soda"
+                    data-category="4">
+
+                @T["FilterSoda"]
+
+            </button>
+
+
+            <button data-filter="cake"
+                    data-category="5">
+
+                @T["FilterCake"]
+
+            </button>
+
+
+            <button data-filter="juice"
+                    data-category="6">
+
+                @T["FilterJuice"]
+
+            </button>
+
+
+            <button data-filter="yogurt"
+                    data-category="7">
+
+                @T["FilterYogurt"]
+
+            </button>
+
+
+            <button data-filter="blended"
+                    data-category="8">
+
+                @T["FilterBlended"]
+
+            </button>
+
+        </div>
+
+
+        <!-- ================================
+             VIEW MODE
+        ================================= -->
+
+        <div class="view-mode">
+
+            <span class="view-label">
+                @T["DisplayMode"]
+            </span>
+
+
+            <div class="mode-switch"
+                 id="modeSwitch">
+
+
+                <span id="paginationText"
+                      class="mode-text active">
+
+                    @T["PaginationMode"]
+
+                </span>
+
+
+                <div class="switch-track">
+
+                    <div class="switch-thumb">
+                    </div>
+
+                </div>
+
+
+                <span id="loadMoreText"
+                      class="mode-text">
+
+                    @T["LoadMoreMode"]
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         PRODUCTS
+    ====================================== -->
+
+    <div id="menuGrid"
+         class="menu-grid">
+
+        @if (Model != null && Model.Any())
+        {
+            <partial name="_MenuList"
+                     model="Model" />
+        }
+        else
+        {
+            <div class="menu-no-result">
+
+                <div class="menu-no-result-icon">
+
+                    <i class="fa-solid fa-mug-hot"></i>
+
+                </div>
+
+
+                <h3>
+                    Không tìm thấy món phù hợp
+                </h3>
+
+
+                <p>
+
+                    @if (!string.IsNullOrWhiteSpace(keyword))
+                    {
+                        <text>
+                            Không có sản phẩm nào phù hợp với
+                            "<strong>@keyword</strong>".
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            Hiện chưa có sản phẩm phù hợp với bộ lọc này.
+                        </text>
+                    }
+
+                </p>
+
+
+                <button type="button"
+                        class="menu-no-result-reset"
+                        onclick="document.getElementById('resetAdvancedBtn')?.click();">
+
+                    <i class="fa-solid fa-rotate-left"></i>
+
+                    Xem tất cả sản phẩm
+
+                </button>
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- =====================================
+         LOAD MORE
+    ====================================== -->
+
+    <div class="load-more-container"
+         id="loadMoreContainer">
+
+        <button id="loadMoreBtn"
+                type="button"
+                class="load-more-btn">
+
+            @T["LoadMore"]
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================
+         PAGINATION
+    ====================================== -->
+
+    <div id="pagination"
+         class="pagination">
+    </div>
+
+</section>
+
+
+@section Scripts {
+
+    <!-- =====================================
+         DỮ LIỆU BAN ĐẦU
+    ====================================== -->
+
+    <script>
+
+        window.defaultFilter =
+            @Html.Raw(
+                    System.Text.Json.JsonSerializer.Serialize(filter)
+            );
+
+        window.defaultKeyword =
+            @Html.Raw(
+                    System.Text.Json.JsonSerializer.Serialize(keyword)
+            );
+
+        window.defaultCategory =
+            @Html.Raw(
+                    System.Text.Json.JsonSerializer.Serialize(category)
+            );
+
+    </script>
+
+
+    <!-- =====================================
+         MENU CHÍNH
+         PHẢI LOAD TRƯỚC
+    ====================================== -->
+
+    <script src="~/js/menu.js"
+            asp-append-version="true">
+    </script>
+
+
+    <!-- =====================================
+         SEARCH
+         LOAD SAU MENU.JS
+    ====================================== -->
+
+    <script src="~/js/menu-search.js"
+            asp-append-version="true">
+    </script>
+
+}

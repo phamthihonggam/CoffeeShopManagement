@@ -1,0 +1,1286 @@
+﻿@model CoffeeShopManagement.ViewModels.ProductCustomizeViewModel
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+@{
+    var product = Model.Product!;
+
+    ViewData["Title"] = product.TenSp;
+
+
+    // =====================================================
+    // SOURCE + PRICE
+    //
+    // MENU:
+    //     DonGia
+    //
+    // PROMOTION:
+    //     GiaKhuyenMai
+    // =====================================================
+
+    string source =
+        ViewBag.Source?.ToString()
+        ?? "menu";
+
+
+    bool isPromotion =
+        ViewBag.IsPromotion != null
+        &&
+        Convert.ToBoolean(
+            ViewBag.IsPromotion
+        );
+
+
+    decimal sellingPrice =
+        ViewBag.SellingPrice != null
+            ? Convert.ToDecimal(
+                ViewBag.SellingPrice
+            )
+            : product.DonGia;
+
+
+    decimal originalPrice =
+        ViewBag.OriginalPrice != null
+            ? Convert.ToDecimal(
+                ViewBag.OriginalPrice
+            )
+            : product.DonGia;
+
+
+    int? discountPercent =
+        ViewBag.DiscountPercent != null
+            ? Convert.ToInt32(
+                ViewBag.DiscountPercent
+            )
+            : null;
+
+
+    // =====================================================
+    // PRODUCT TYPE
+    // =====================================================
+
+    var productType =
+        product.MaLoai;
+
+
+    // =====================================================
+    // QUY TẮC HIỂN THỊ
+    //
+    // 1 = Cà phê
+    // 2 = Trà
+    // 3 = Matcha
+    // 4 = Soda
+    // 5 = Bánh ngọt
+    // 6 = Nước ép
+    // 7 = Sữa chua
+    // 8 = Đá xay
+    // =====================================================
+
+    var isCake =
+        productType == 5;
+
+
+    var showSize =
+        !isCake
+        &&
+        Model.Sizes.Any();
+
+
+    var showSugar =
+        productType is 1 or 2 or 3 or 7 or 8
+        &&
+        Model.SugarLevels.Any();
+
+
+    var showIce =
+        productType is 1 or 2 or 3 or 4 or 6
+        &&
+        Model.IceLevels.Any();
+
+
+    var showTopping =
+        !isCake
+        &&
+        Model.Toppings.Any();
+
+
+    // =====================================================
+    // REVIEWS
+    // =====================================================
+
+    var reviews =
+        ViewBag.Reviews
+            as List<CoffeeShopManagement.Models.DanhGiaSanPham>
+        ??
+        new List<CoffeeShopManagement.Models.DanhGiaSanPham>();
+
+
+    int reviewCount =
+        reviews.Count;
+
+
+    double averageRating =
+        reviewCount > 0
+            ? reviews.Average(x => Convert.ToDouble(x.SoSao))
+            : 0;
+
+
+    int fiveStarCount =
+        reviews.Count(x => x.SoSao == 5);
+
+    int fourStarCount =
+        reviews.Count(x => x.SoSao == 4);
+
+    int threeStarCount =
+        reviews.Count(x => x.SoSao == 3);
+
+    int twoStarCount =
+        reviews.Count(x => x.SoSao == 2);
+
+    int oneStarCount =
+        reviews.Count(x => x.SoSao == 1);
+}
+
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/product-detail.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/toast.css"
+          asp-append-version="true" />
+
+}
+
+
+<!-- =====================================================
+     DATA CHO PRODUCT-DETAIL.JS
+===================================================== -->
+
+<div id="productDetailData"
+     data-base-price="@sellingPrice.ToString(
+                  System.Globalization.CultureInfo.InvariantCulture
+               )"
+     data-original-price="@originalPrice.ToString(
+                  System.Globalization.CultureInfo.InvariantCulture
+               )"
+     data-source="@source"
+     data-is-promotion="@isPromotion.ToString().ToLower()"
+     data-product-name="@product.TenSp"
+     data-product-id="@product.MaSp"
+     data-product-type="@productType"
+     data-add-cart-url="@Url.Action(
+                  "AddToCart",
+                  "Cart"
+               )">
+</div>
+
+
+<!-- =====================================================
+     PRODUCT DETAIL PAGE
+===================================================== -->
+
+<section class="product-detail-page">
+
+    <div class="product-detail-container">
+
+
+        <!-- =================================================
+             BREADCRUMB
+        ================================================== -->
+
+        <div class="product-breadcrumb">
+
+            <a asp-controller="Home"
+               asp-action="Index">
+
+                @T["BreadcrumbHome"]
+
+            </a>
+
+
+            <span class="separator">
+                /
+            </span>
+
+
+            @if (isPromotion)
+            {
+                <a asp-controller="Promotion"
+                   asp-action="Index">
+
+                    Khuyến mãi
+
+                </a>
+            }
+            else
+            {
+                <a asp-controller="Menu"
+                   asp-action="Products">
+
+                    @T["BreadcrumbMenu"]
+
+                </a>
+            }
+
+
+            <span class="separator">
+                /
+            </span>
+
+
+            <span class="current">
+
+                @product.TenSp
+
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             PRODUCT MAIN
+        ================================================== -->
+
+        <div class="product-detail-main">
+
+
+            <!-- =================================================
+                 IMAGE
+            ================================================== -->
+
+            <div class="product-detail-image">
+
+
+                @if (
+                    isPromotion
+                    &&
+                    discountPercent.HasValue
+                    &&
+                    discountPercent.Value > 0
+                )
+                {
+                    <span class="product-detail-discount">
+
+                        -@discountPercent%
+
+                    </span>
+                }
+
+
+                <img src="~/images/menu/@product.HinhAnh"
+                     asp-append-version="true"
+                     alt="@product.TenSp" />
+
+            </div>
+
+
+            <!-- =================================================
+                 PRODUCT INFO
+            ================================================== -->
+
+            <div class="product-detail-info">
+
+
+                <!-- CATEGORY -->
+
+                <span class="product-category">
+
+                    @(product.MaLoaiNavigation?.TenLoai
+                        ?? "Rosalie Coffee")
+
+                </span>
+
+
+                <!-- NAME -->
+
+                <h1>
+
+                    @product.TenSp
+
+                </h1>
+
+
+                <!-- SHORT DESCRIPTION -->
+                @if (!string.IsNullOrWhiteSpace(
+                                    product.MoTa))
+                {
+                    <p class="product-short-description">
+
+                        @product.MoTa
+
+                    </p>
+                }
+
+
+                <!-- =================================================
+                     PRICE
+                ================================================== -->
+
+                <div class="product-detail-price">
+
+
+                    @if (
+                        isPromotion
+                        &&
+                        sellingPrice < originalPrice
+                    )
+                    {
+                        <!-- GIÁ KHUYẾN MÃI -->
+
+                        <span id="detailPrice"
+                              class="sale-price">
+
+                            @sellingPrice.ToString("N0")đ
+
+                        </span>
+
+
+                        <!-- GIÁ MENU -->
+
+                        <span class="old-price">
+
+                            @originalPrice.ToString("N0")đ
+
+                        </span>
+                    }
+                    else
+                    {
+                        <!-- GIÁ MENU -->
+
+                        <span id="detailPrice"
+                              class="normal-price">
+
+                            @sellingPrice.ToString("N0")đ
+
+                        </span>
+                    }
+
+                </div>
+
+
+                <!-- =================================================
+                     SIZE
+                ================================================== -->
+                @if (showSize)
+                {
+                    <div class="product-option-block">
+
+                        <h4>
+                            @T["ChooseSize"]
+                        </h4>
+
+
+                        <div class="product-size-group">
+
+                            @{
+                                var firstSize =
+                                    true;
+                            }
+
+
+                            @foreach (var size in Model.Sizes)
+                            {
+                                <button type="button"
+                                        class="detail-size-btn @(firstSize ? "active" : "")"
+                                        data-size="@size.TenSize"
+                                        data-plus="@size.GiaThem">
+
+                                    <span>
+                                        @size.TenSize
+                                    </span>
+
+
+                                    @if (size.GiaThem > 0)
+                                    {
+                                        <small>
+
+                                            +@size.GiaThem.ToString("N0")đ
+
+                                        </small>
+                                    }
+
+                                </button>
+
+
+                                firstSize =
+                                    false;
+                            }
+
+                        </div>
+
+                    </div>
+                }
+
+
+                <!-- =================================================
+                     SUGAR
+                ================================================== -->
+                @if (showSugar)
+                {
+                    <div class="product-option-block">
+
+                        <h4>
+                            @T["SugarLevel"]
+                        </h4>
+
+
+                        <div class="product-radio-group">
+
+                            @{
+                                var firstSugar =
+                                    true;
+                            }
+
+
+                            @foreach (var sugar in Model.SugarLevels)
+                            {
+                                <label class="detail-radio-option">
+
+                                    <input type="radio"
+                                           name="detailSugar"
+                                           value="@sugar.TenDuong"
+                                           checked="@firstSugar" />
+
+
+                                    <span>
+                                        @sugar.TenDuong
+                                    </span>
+
+                                </label>
+
+
+                                firstSugar =
+                                    false;
+                            }
+
+                        </div>
+
+                    </div>
+                }
+
+
+                <!-- =================================================
+                     ICE
+                ================================================== -->
+                @if (showIce)
+                {
+                    <div class="product-option-block">
+
+                        <h4>
+                            @T["IceLevel"]
+                        </h4>
+
+
+                        <div class="product-radio-group">
+
+                            @{
+                                var firstIce =
+                                    true;
+                            }
+
+
+                            @foreach (var ice in Model.IceLevels)
+                            {
+                                <label class="detail-radio-option">
+
+                                    <input type="radio"
+                                           name="detailIce"
+                                           value="@ice.TenDa"
+                                           checked="@firstIce" />
+
+
+                                    <span>
+                                        @ice.TenDa
+                                    </span>
+
+                                </label>
+
+
+                                firstIce =
+                                    false;
+                            }
+
+                        </div>
+
+                    </div>
+                }
+
+
+                <!-- =================================================
+                     TOPPING
+                ================================================== -->
+                @if (showTopping)
+                {
+                    <div class="product-option-block">
+
+                        <h4>
+                            @T["Topping"]
+                        </h4>
+
+
+                        <div class="product-topping-list">
+
+                            @foreach (var topping in Model.Toppings)
+                            {
+                                <label class="detail-topping-item">
+
+                                    <span class="detail-topping-left">
+
+                                        <input type="checkbox"
+                                               class="detail-topping"
+                                               value="@topping.TenTopping"
+                                               data-price="@topping.GiaThem" />
+
+
+                                        <span>
+                                            @topping.TenTopping
+                                        </span>
+
+                                    </span>
+
+
+                                    <strong>
+
+                                        +@topping.GiaThem.ToString("N0")đ
+
+                                    </strong>
+
+                                </label>
+                            }
+
+                        </div>
+
+                    </div>
+                }
+
+
+                <!-- =================================================
+                     QUANTITY + ADD CART
+                ================================================== -->
+
+                <div class="product-detail-bottom">
+
+
+                    <!-- QUANTITY -->
+
+                    <div class="detail-quantity">
+
+                        <button type="button"
+                                id="detailMinus"
+                                aria-label="@T["DecreaseQuantity"]">
+
+                            −
+
+                        </button>
+
+
+                        <span id="detailQty">
+                            1
+                        </span>
+
+
+                        <button type="button"
+                                id="detailPlus"
+                                aria-label="@T["IncreaseQuantity"]">
+
+                            +
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- ADD CART -->
+
+                    <button type="button"
+                            class="detail-add-cart"
+                            id="detailAddCart"
+                            data-id="@product.MaSp">
+
+                        <i class="fa-solid fa-cart-shopping"></i>
+
+
+                        <span>
+                            @T["AddToCart"]
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             PRODUCT DESCRIPTION
+        ====================================================== -->
+
+        <div class="product-description-section">
+
+
+            <!-- =================================================
+                 TABS
+            ================================================== -->
+
+            <div class="product-description-tabs">
+
+                <button type="button"
+                        class="product-description-tab active"
+                        data-tab="description">
+
+                    Mô tả
+
+                </button>
+
+
+                <button type="button"
+                        class="product-description-tab"
+                        data-tab="information">
+
+                    Thông tin sản phẩm
+
+                </button>
+
+
+                <button type="button"
+                        class="product-description-tab"
+                        data-tab="reviews">
+
+                    Đánh giá
+
+                    <span class="product-review-tab-count">
+                        @reviewCount
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <!-- =================================================
+                 DESCRIPTION TAB
+            ================================================== -->
+
+            <div id="productDescriptionTab"
+                 class="product-description-panel active">
+
+                <div class="product-description-content">
+
+                    <h3>
+                        Mô tả
+                    </h3>
+
+
+                    <p>
+
+                        <strong>
+                            @product.TenSp
+                        </strong>
+
+                        là một trong những sản phẩm được
+                        Rosalie Coffee chăm chút từ nguyên liệu,
+                        hương vị cho đến cách thưởng thức.
+                        Sản phẩm mang đến sự cân bằng giữa
+                        hương thơm đặc trưng, vị ngon hài hòa
+                        và cảm giác dễ chịu trong từng lần thưởng thức.
+
+                    </p>
+
+
+                    @if (!string.IsNullOrWhiteSpace(
+                        product.MoTa))
+                    {
+                        <p>
+
+                            @product.MoTa
+
+                            Đây là lựa chọn phù hợp cho những
+                            buổi sáng cần thêm năng lượng,
+                            giờ nghỉ giữa ngày hoặc những
+                            khoảnh khắc thư giãn cùng bạn bè
+                            tại Rosalie Coffee.
+
+                        </p>
+                    }
+                    else
+                    {
+                        <p>
+
+                            Sản phẩm được Rosalie Coffee chuẩn bị
+                            với nguyên liệu tuyển chọn và quy trình
+                            pha chế phù hợp để mang đến trải nghiệm
+                            thơm ngon, cân bằng và dễ thưởng thức.
+
+                        </p>
+                    }
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 INFORMATION TAB
+            ================================================== -->
+
+            <div id="productInformationTab"
+                 class="product-description-panel">
+
+                <div class="product-information-grid">
+
+
+                    <!-- PRODUCT NAME -->
+
+                    <div class="product-information-row">
+
+                        <span>
+                            Tên sản phẩm
+                        </span>
+
+                        <strong>
+                            @product.TenSp
+                        </strong>
+
+                    </div>
+
+
+                    <!-- CATEGORY -->
+
+                    <div class="product-information-row">
+
+                        <span>
+                            Danh mục
+                        </span>
+
+                        <strong>
+
+                            @(product.MaLoaiNavigation?.TenLoai
+                                ?? "Rosalie Coffee")
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- PRICE -->
+
+                    <div class="product-information-row">
+
+                        <span>
+                            Giá
+                        </span>
+
+
+                        <strong class="product-information-price">
+
+                            @sellingPrice.ToString("N0")đ
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- BRAND -->
+
+                    <div class="product-information-row">
+
+                        <span>
+                            Thương hiệu
+                        </span>
+
+                        <strong>
+                            Rosalie Coffee
+                        </strong>
+
+                    </div>
+
+
+                    <!-- SIZE -->
+
+                    <div class="product-information-row">
+
+                        <span>
+                            Tùy chọn Size
+                        </span>
+
+                        <strong>
+
+                            @(showSize
+                                ? "Có"
+                                : "Không")
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- SUGAR -->
+
+                    <div class="product-information-row">
+
+                        <span>
+                            Độ ngọt
+                        </span>
+
+                        <strong>
+
+                            @(showSugar
+                                ? "Có thể lựa chọn"
+                                : "Không áp dụng")
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- ICE -->
+
+                    <div class="product-information-row">
+
+                        <span>
+                            Mức đá
+                        </span>
+
+                        <strong>
+
+                            @(showIce
+                                ? "Có thể lựa chọn"
+                                : "Không áp dụng")
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- TOPPING -->
+
+                    <div class="product-information-row">
+
+                        <span>
+                            Topping
+                        </span>
+
+                        <strong>
+
+                            @(showTopping
+                                ? "Có thể lựa chọn"
+                                : "Không áp dụng")
+
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 REVIEWS TAB
+            ================================================== -->
+
+            <div id="productReviewsTab"
+                 class="product-description-panel">
+
+                <div class="product-reviews-wrap">
+
+                    @if (reviewCount > 0)
+                    {
+                        <!-- =====================================
+                             REVIEW SUMMARY
+                        ====================================== -->
+
+                        <div class="product-review-summary">
+
+                            <div class="product-review-score">
+
+                                <span class="product-review-score-number">
+                                    @averageRating.ToString("0.0")
+                                </span>
+
+                                <div class="product-review-score-stars">
+
+                                    @for (int star = 1; star <= 5; star++)
+                                    {
+                                        <i class="bi @(star <= Math.Round(averageRating) ? "bi-star-fill" : "bi-star")"></i>
+                                    }
+
+                                </div>
+
+                                <p>
+                                    Dựa trên
+                                    <strong>@reviewCount</strong>
+                                    đánh giá
+                                </p>
+
+                            </div>
+
+
+                            <div class="product-review-bars">
+
+                                @{
+                                    var starRows = new[]
+                                    {
+                                        new { Star = 5, Count = fiveStarCount },
+                                        new { Star = 4, Count = fourStarCount },
+                                        new { Star = 3, Count = threeStarCount },
+                                        new { Star = 2, Count = twoStarCount },
+                                        new { Star = 1, Count = oneStarCount }
+                                    };
+                                }
+
+                                @foreach (var row in starRows)
+                                {
+                                    var percent =
+                                        reviewCount > 0
+                                            ? row.Count * 100.0 / reviewCount
+                                            : 0;
+
+                                    <div class="product-review-bar-row">
+
+                                        <span class="product-review-bar-label">
+                                            @row.Star
+                                            <i class="bi bi-star-fill"></i>
+                                        </span>
+
+                                        <div class="product-review-bar-track">
+
+                                            <span class="product-review-bar-fill"
+                                                  style="width:@percent.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%">
+                                            </span>
+
+                                        </div>
+
+                                        <span class="product-review-bar-count">
+                                            @row.Count
+                                        </span>
+
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =====================================
+                             REVIEW LIST
+                        ====================================== -->
+
+                        <div class="product-review-list">
+
+                            <div class="product-review-list-heading">
+
+                                <div>
+                                    <span class="product-review-list-label">
+                                        KHÁCH HÀNG ĐÁNH GIÁ
+                                    </span>
+
+                                    <h3>
+                                        Cảm nhận về @product.TenSp
+                                    </h3>
+                                </div>
+
+                                <span class="product-review-total">
+                                    @reviewCount đánh giá
+                                </span>
+
+                            </div>
+
+
+                            @foreach (var review in reviews)
+                            {
+                                var customerName =
+                                    review.MaKhNavigation?.HoTen
+                                    ?? "Khách hàng Rosalie";
+
+                                var firstLetter =
+                                    string.IsNullOrWhiteSpace(customerName)
+                                        ? "R"
+                                        : customerName.Trim().Substring(0, 1).ToUpper();
+
+                                <article class="product-review-item">
+
+                                    <div class="product-review-avatar">
+                                        @firstLetter
+                                    </div>
+
+
+                                    <div class="product-review-content">
+
+                                        <div class="product-review-head">
+
+                                            <div>
+
+                                                <strong class="product-review-customer">
+                                                    @customerName
+                                                </strong>
+
+                                                <div class="product-review-stars">
+
+                                                    @for (int star = 1; star <= 5; star++)
+                                                    {
+                                                        <i class="bi @(star <= review.SoSao ? "bi-star-fill" : "bi-star")"></i>
+                                                    }
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <time class="product-review-date">
+                                                @string.Format(
+                                                    "{0:dd/MM/yyyy}",
+                                                    review.NgayDanhGia
+                                                )
+                                            </time>
+
+                                        </div>
+
+
+                                        @if (!string.IsNullOrWhiteSpace(review.NoiDung))
+                                        {
+                                            <p class="product-review-comment">
+                                                @review.NoiDung
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p class="product-review-comment muted">
+                                                Khách hàng đã đánh giá sản phẩm này
+                                                @review.SoSao sao.
+                                            </p>
+                                        }
+
+
+                                        <span class="product-review-verified">
+
+                                            <i class="bi bi-patch-check-fill"></i>
+
+                                            Đã mua hàng tại Rosalie Coffee
+
+                                        </span>
+
+                                    </div>
+
+                                </article>
+                            }
+
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- =====================================
+                             EMPTY REVIEWS
+                        ====================================== -->
+
+                        <div class="product-review-empty">
+
+                            <div class="product-review-empty-icon">
+                                <i class="bi bi-chat-heart"></i>
+                            </div>
+
+                            <h3>
+                                Chưa có đánh giá nào
+                            </h3>
+
+                            <p>
+                                Sản phẩm này chưa nhận được đánh giá.
+                                Sau khi đơn hàng hoàn thành, khách hàng
+                                có thể đánh giá từ mục “Đơn hàng của tôi”.
+                            </p>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ADD CART TOAST
+===================================================== -->
+
+<div id="detailToast"
+     class="app-toast">
+
+    <div class="app-toast-icon">
+
+        <i class="fa-solid fa-check"></i>
+
+    </div>
+
+
+    <div class="app-toast-content">
+
+        <div id="detailToastTitle"
+             class="app-toast-title">
+
+            @T["AddedToCart"]
+
+        </div>
+
+
+        <div id="detailToastMessage"
+             class="app-toast-message">
+
+            @T["AddedToCartMessage"]
+
+        </div>
+
+    </div>
+
+
+    <a asp-controller="Cart"
+       asp-action="Index"
+       class="app-toast-cart">
+
+        <i class="fa-solid fa-bag-shopping"></i>
+
+        @T["ViewCart"]
+
+    </a>
+
+</div>
+
+
+@section Scripts {
+
+    <!-- PRODUCT DETAIL -->
+
+    <script src="~/js/product-detail.js"
+            asp-append-version="true">
+    </script>
+
+
+    <!-- =================================================
+         DESCRIPTION TABS
+    ================================================== -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const tabs =
+                    document.querySelectorAll(
+                        ".product-description-tab"
+                    );
+
+
+                const descriptionPanel =
+                    document.getElementById(
+                        "productDescriptionTab"
+                    );
+
+
+                const informationPanel =
+                    document.getElementById(
+                        "productInformationTab"
+                    );
+
+
+                const reviewsPanel =
+                    document.getElementById(
+                        "productReviewsTab"
+                    );
+
+
+                tabs.forEach(
+                    tab => {
+
+                        tab.addEventListener(
+                            "click",
+                            function () {
+
+                                const selected =
+                                    this.dataset.tab;
+
+
+                                // =========================
+                                // ACTIVE TAB
+                                // =========================
+
+                                tabs.forEach(
+                                    item => {
+
+                                        item.classList.remove(
+                                            "active"
+                                        );
+
+                                    }
+                                );
+
+
+                                this.classList.add(
+                                    "active"
+                                );
+
+
+                                // =========================
+                                // DESCRIPTION
+                                // =========================
+
+                                descriptionPanel
+                                    ?.classList
+                                    .toggle(
+                                        "active",
+                                        selected ===
+                                        "description"
+                                    );
+
+
+                                // =========================
+                                // INFORMATION
+                                // =========================
+
+                                informationPanel
+                                    ?.classList
+                                    .toggle(
+                                        "active",
+                                        selected ===
+                                        "information"
+                                    );
+
+
+                                // =========================
+                                // REVIEWS
+                                // =========================
+
+                                reviewsPanel
+                                    ?.classList
+                                    .toggle(
+                                        "active",
+                                        selected ===
+                                        "reviews"
+                                    );
+
+                            }
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+    </script>
+
+}

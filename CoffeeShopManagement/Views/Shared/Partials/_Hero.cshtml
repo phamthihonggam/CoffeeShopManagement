@@ -1,0 +1,31 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+<section class="hero-section">
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+
+        <h1>
+            @T["HeroTitleLine1"]
+            <br />
+            @T["HeroTitleLine2"]
+        </h1>
+
+        <p>
+            @T["HeroDescription"]
+        </p>
+
+        <a asp-controller="Menu"
+           asp-action="Products"
+           class="btn-order">
+
+            @T["OrderNow"]
+
+        </a>
+
+    </div>
+
+    <div class="hero-dots"></div>
+
+</section>

@@ -1,0 +1,375 @@
+﻿@model IEnumerable<CoffeeShopManagement.Models.KhachHang>
+
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-user.css"
+          asp-append-version="true" />
+
+}
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="admin-welcome">
+
+    <div class="user-admin-heading">
+
+        <div>
+
+            <h2>
+                Quản lý người dùng
+            </h2>
+
+            <p>
+                Theo dõi thông tin khách hàng
+                đã đăng ký tại Rosalie Coffee.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     QUICK STATS
+===================================================== -->
+
+<div class="admin-user-stats">
+
+    <div class="admin-user-stat-card">
+
+        <div class="admin-user-stat-icon">
+
+            <i class="fa-solid fa-users"></i>
+
+        </div>
+
+        <span>
+            Tổng khách hàng
+        </span>
+
+        <strong>
+            @ViewBag.TotalCustomers
+        </strong>
+
+    </div>
+
+
+    <div class="admin-user-stat-card">
+
+        <div class="admin-user-stat-icon">
+
+            <i class="fa-solid fa-bag-shopping"></i>
+
+        </div>
+
+        <span>
+            Đã mua hàng
+        </span>
+
+        <strong>
+            @ViewBag.CustomersWithOrders
+        </strong>
+
+    </div>
+
+
+    <div class="admin-user-stat-card">
+
+        <div class="admin-user-stat-icon">
+
+            <i class="fa-solid fa-user-plus"></i>
+
+        </div>
+
+        <span>
+            Khách mới 30 ngày
+        </span>
+
+        <strong>
+            @ViewBag.NewCustomers
+        </strong>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SEARCH
+===================================================== -->
+
+<div class="admin-user-toolbar">
+
+    <form method="get"
+          asp-area="Admin"
+          asp-controller="User"
+          asp-action="Index"
+          class="admin-user-search-form">
+
+        <div class="admin-user-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input type="text"
+                   name="keyword"
+                   value="@ViewBag.Keyword"
+                   placeholder="Tìm họ tên, email hoặc số điện thoại..."
+                   autocomplete="off" />
+
+        </div>
+
+
+        <button type="submit"
+                class="admin-user-search-btn">
+
+            Tìm kiếm
+
+        </button>
+
+
+        @if (!string.IsNullOrWhiteSpace(
+            ViewBag.Keyword?.ToString()))
+        {
+            <a asp-area="Admin"
+               asp-controller="User"
+               asp-action="Index"
+               class="admin-user-reset-btn">
+
+                <i class="fa-solid fa-rotate-left"></i>
+
+                Đặt lại
+
+            </a>
+        }
+
+    </form>
+
+</div>
+
+
+<!-- =====================================================
+     TABLE
+===================================================== -->
+
+<div class="admin-user-card">
+
+    <div class="admin-user-table-wrap">
+
+        <table class="admin-user-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Mã
+                    </th>
+
+                    <th>
+                        Khách hàng
+                    </th>
+
+                    <th>
+                        Liên hệ
+                    </th>
+
+                    <th>
+                        Ngày đăng ký
+                    </th>
+
+                    <th>
+                        Số đơn
+                    </th>
+
+                    <th>
+                        Thao tác
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <!-- MÃ -->
+
+                            <td>
+
+                                <span class="admin-user-id">
+                                    #@item.MaKh
+                                </span>
+
+                            </td>
+
+
+                            <!-- KHÁCH HÀNG -->
+
+                            <td>
+
+                                <div class="admin-user-info">
+
+                                    <div class="admin-user-avatar">
+
+                                        <i class="fa-solid fa-user"></i>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <strong>
+                                            @item.HoTen
+                                        </strong>
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                            item.DiaChi))
+                                        {
+                                            <span>
+                                                @item.DiaChi
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- LIÊN HỆ -->
+
+                            <td>
+
+                                <div class="admin-user-contact">
+
+                                    @if (!string.IsNullOrWhiteSpace(
+                                        item.Email))
+                                    {
+                                        <span>
+
+                                            <i class="fa-regular fa-envelope"></i>
+
+                                            @item.Email
+
+                                        </span>
+                                    }
+
+                                    @if (!string.IsNullOrWhiteSpace(
+                                        item.DienThoai))
+                                    {
+                                        <span>
+
+                                            <i class="fa-solid fa-phone"></i>
+
+                                            @item.DienThoai
+
+                                        </span>
+                                    }
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- NGÀY TẠO -->
+
+                            <td>
+
+                                <div class="admin-user-date">
+
+                                    <strong>
+                                        @item.NgayTao.ToString("dd/MM/yyyy")
+                                    </strong>
+
+                                    <span>
+                                        @item.NgayTao.ToString("HH:mm")
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- SỐ ĐƠN -->
+
+                            <td>
+
+                                <span class="admin-user-order-count">
+
+                                    @item.HoaDons.Count
+                                    đơn
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- THAO TÁC -->
+
+                            <td>
+
+                                <a asp-area="Admin"
+                                   asp-controller="User"
+                                   asp-action="Details"
+                                   asp-route-id="@item.MaKh"
+                                   class="admin-user-view-btn"
+                                   title="Xem chi tiết">
+
+                                    <i class="fa-solid fa-eye"></i>
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="6">
+
+                            <div class="admin-user-empty">
+
+                                <i class="fa-solid fa-users"></i>
+
+                                <h3>
+                                    Không tìm thấy khách hàng
+                                </h3>
+
+                                <p>
+                                    Thử nhập từ khóa khác.
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

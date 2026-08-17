@@ -1,0 +1,43 @@
+﻿@model IEnumerable<CoffeeShopManagement.Models.NhanVien>
+
+<h2>Quản lý nhân viên</h2>
+<a asp-action="Create" class="btn btn-primary mb-3">
+    ➕ Thêm nhân viên
+</a>
+<table class="table table-bordered">
+
+    <tr>
+        <th>Mã NV</th>
+        <th>Họ tên</th>
+        <th>Email</th>
+        <th>Điện thoại</th>
+        <th>Chức vụ</th>
+        <th>Thao tác</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.MaNv</td>
+            <td>@item.HoTen</td>
+            <td>@item.Email</td>
+            <td>@item.DienThoai</td>
+            <td>@item.ChucVu</td>
+            <td>
+                <a asp-action="Edit"
+                   asp-route-id="@item.MaNv"
+                   class="btn btn-warning btn-sm">
+                    Sửa
+                </a>
+
+                <a asp-action="Delete"
+                   asp-route-id="@item.MaNv"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Bạn có chắc muốn xóa nhân viên này?')">
+                    Xóa
+                </a>
+            </td>
+        </tr>
+    }
+
+</table>

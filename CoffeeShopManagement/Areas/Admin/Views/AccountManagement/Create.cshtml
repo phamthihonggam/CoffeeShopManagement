@@ -1,0 +1,511 @@
+﻿@using CoffeeShopManagement.Models
+
+@{
+    ViewData["Title"] = "Thêm tài khoản";
+
+    var roles =
+        ViewBag.Roles as List<VaiTro>
+        ?? new List<VaiTro>();
+
+    int? selectedRole =
+        ViewBag.SelectedRole as int?;
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-account.css"
+          asp-append-version="true" />
+
+}
+
+<div class="account-page">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="account-intro">
+
+        <div>
+
+            <span class="account-label">
+                ROSALIE COFFEE
+            </span>
+
+            <h2>
+                Thêm tài khoản mới
+            </h2>
+
+            <p>
+                Tạo tài khoản quản trị hoặc nhân viên
+                và phân vai trò sử dụng hệ thống.
+            </p>
+
+        </div>
+
+
+        <a asp-area="Admin"
+           asp-controller="AccountManagement"
+           asp-action="Index"
+           class="account-reset-btn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Quay lại
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         ERROR
+    ====================================================== -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="account-alert account-alert-error">
+
+            <i class="fa-solid fa-circle-exclamation"></i>
+
+            <span>
+                @TempData["ErrorMessage"]
+            </span>
+
+        </div>
+    }
+
+
+    <!-- =====================================================
+         FORM CARD
+    ====================================================== -->
+
+    <div class="account-table-card">
+
+
+        <div class="account-table-header">
+
+            <div>
+
+                <h3>
+                    Thông tin tài khoản
+                </h3>
+
+                <p>
+                    Nhập đầy đủ thông tin để tạo tài khoản mới.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FORM
+        ================================================== -->
+
+        <form asp-area="Admin"
+              asp-controller="AccountManagement"
+              asp-action="Create"
+              method="post"
+              enctype="multipart/form-data"
+              class="account-create-form">
+
+            @Html.AntiForgeryToken()
+
+
+            <!-- =================================================
+                 AVATAR
+            ================================================== -->
+
+            <div class="account-form-group account-avatar-group">
+
+                <label>
+                    Ảnh đại diện
+                </label>
+
+
+                <div class="account-avatar-upload">
+
+
+                    <!-- PREVIEW -->
+
+                    <div class="account-avatar-preview">
+
+                        <img id="avatarPreview"
+                             alt="Ảnh đại diện" />
+
+                        <div id="avatarPlaceholder"
+                             class="account-avatar-placeholder">
+
+                            <i class="fa-solid fa-user"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FILE -->
+
+                    <div class="account-avatar-input">
+
+                        <label for="hinhAnh"
+                               class="account-avatar-select">
+
+                            <i class="fa-regular fa-image"></i>
+
+                            Chọn ảnh
+
+                        </label>
+
+
+                        <input type="file"
+                               id="hinhAnh"
+                               name="hinhAnh"
+                               accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" />
+
+
+                        <span>
+                            JPG, JPEG, PNG hoặc WEBP · tối đa 5MB
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 USERNAME
+            ================================================== -->
+
+            <div class="account-form-group">
+
+                <label for="tenDangNhap">
+                    Tên đăng nhập
+                    <span>*</span>
+                </label>
+
+
+                <div class="account-form-control-wrap">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    <input type="text"
+                           id="tenDangNhap"
+                           name="tenDangNhap"
+                           placeholder="Ví dụ: nhanvien01"
+                           autocomplete="off"
+                           required />
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PASSWORD
+            ================================================== -->
+
+            <div class="account-form-group">
+
+                <label for="matKhau">
+                    Mật khẩu
+                    <span>*</span>
+                </label>
+
+
+                <div class="account-form-control-wrap">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <input type="password"
+                           id="matKhau"
+                           name="matKhau"
+                           placeholder="Nhập mật khẩu"
+                           required />
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FULL NAME
+            ================================================== -->
+
+            <div class="account-form-group">
+
+                <label for="hoTen">
+                    Họ và tên
+                    <span>*</span>
+                </label>
+
+
+                <div class="account-form-control-wrap">
+
+                    <i class="fa-solid fa-id-card"></i>
+
+                    <input type="text"
+                           id="hoTen"
+                           name="hoTen"
+                           placeholder="Nhập họ và tên"
+                           required />
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 EMAIL
+            ================================================== -->
+
+            <div class="account-form-group">
+
+                <label for="email">
+                    Email
+                </label>
+
+
+                <div class="account-form-control-wrap">
+
+                    <i class="fa-regular fa-envelope"></i>
+
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           placeholder="example@gmail.com" />
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PHONE
+            ================================================== -->
+
+            <div class="account-form-group">
+
+                <label for="dienThoai">
+                    Số điện thoại
+                </label>
+
+
+                <div class="account-form-control-wrap">
+
+                    <i class="fa-solid fa-phone"></i>
+
+                    <input type="text"
+                           id="dienThoai"
+                           name="dienThoai"
+                           placeholder="Nhập số điện thoại" />
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ROLE
+            ================================================== -->
+
+            <div class="account-form-group">
+
+                <label for="maVaiTro">
+                    Vai trò
+                    <span>*</span>
+                </label>
+
+
+                <div class="account-form-control-wrap">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    <select id="maVaiTro"
+                            name="maVaiTro"
+                            required>
+
+                        <option value="">
+                            -- Chọn vai trò --
+                        </option>
+
+
+                        @foreach (var role in roles)
+                        {
+                            if (selectedRole.HasValue &&
+                                selectedRole.Value == role.MaVaiTro)
+                            {
+                                <option value="@role.MaVaiTro"
+                                        selected>
+                                    @role.TenVaiTro
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@role.MaVaiTro">
+                                    @role.TenVaiTro
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ACTIONS
+            ================================================== -->
+
+            <div class="account-form-actions">
+
+
+                <a asp-area="Admin"
+                   asp-controller="AccountManagement"
+                   asp-action="Index"
+                   class="account-cancel-btn">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                    Hủy
+
+                </a>
+
+
+                <button type="submit"
+                        class="account-submit-btn">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Tạo tài khoản
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const input =
+                    document.getElementById("hinhAnh");
+
+                const preview =
+                    document.getElementById("avatarPreview");
+
+                const placeholder =
+                    document.getElementById("avatarPlaceholder");
+
+
+                if (!input ||
+                    !preview ||
+                    !placeholder) {
+                    return;
+                }
+
+
+                input.addEventListener(
+                    "change",
+                    function () {
+
+                        const file =
+                            this.files &&
+                            this.files.length > 0
+                                ? this.files[0]
+                                : null;
+
+
+                        if (!file) {
+
+                            preview.removeAttribute("src");
+
+                            preview.style.display =
+                                "none";
+
+                            placeholder.style.display =
+                                "flex";
+
+                            return;
+                        }
+
+
+                        // =============================
+                        // CHECK SIZE 5MB
+                        // =============================
+
+                        const maxSize =
+                            5 * 1024 * 1024;
+
+
+                        if (file.size > maxSize) {
+
+                            alert(
+                                "Ảnh đại diện không được vượt quá 5MB."
+                            );
+
+                            input.value =
+                                "";
+
+                            preview.removeAttribute("src");
+
+                            preview.style.display =
+                                "none";
+
+                            placeholder.style.display =
+                                "flex";
+
+                            return;
+                        }
+
+
+                        // =============================
+                        // PREVIEW
+                        // =============================
+
+                        const reader =
+                            new FileReader();
+
+
+                        reader.onload =
+                            function (event) {
+
+                                preview.src =
+                                    event.target.result;
+
+                                preview.style.display =
+                                    "block";
+
+                                placeholder.style.display =
+                                    "none";
+                            };
+
+
+                        reader.readAsDataURL(
+                            file
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+    </script>
+
+}

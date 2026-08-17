@@ -1,0 +1,238 @@
+﻿@using CoffeeShopManagement.Models
+
+@{
+    ViewData["Title"] = "Phân quyền";
+
+    var role =
+        ViewBag.Role as VaiTro;
+
+    var permissions =
+        ViewBag.Permissions as List<Quyen>
+        ?? new List<Quyen>();
+
+    var selectedPermissionIds =
+        ViewBag.SelectedPermissionIds as HashSet<int>
+        ?? new HashSet<int>();
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-role.css"
+          asp-append-version="true" />
+
+}
+
+
+<div class="role-page">
+
+
+    <div class="role-intro">
+
+        <div>
+
+            <span>
+                ROSALIE COFFEE
+            </span>
+
+            <h2>
+                Phân quyền - @role?.TenVaiTro
+            </h2>
+
+            <p>
+                Chọn các chức năng mà vai trò này
+                được phép truy cập.
+            </p>
+
+        </div>
+
+
+        <a asp-area="Admin"
+           asp-controller="Role"
+           asp-action="Index"
+           class="role-back-btn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Quay lại
+
+        </a>
+
+    </div>
+
+
+    <form asp-area="Admin"
+          asp-controller="Role"
+          asp-action="Permissions"
+          asp-route-id="@role?.MaVaiTro"
+          method="post"
+          class="permission-card">
+
+        @Html.AntiForgeryToken()
+
+
+        <div class="permission-header">
+
+            <div>
+
+                <h3>
+                    Quyền truy cập
+                </h3>
+
+                <p>
+                    Tick vào các quyền muốn cấp cho
+                    <strong>@role?.TenVaiTro</strong>.
+                </p>
+
+            </div>
+
+
+            <button type="button"
+                    class="permission-select-all"
+                    id="selectAllPermissions">
+
+                <i class="fa-solid fa-check-double"></i>
+
+                Chọn tất cả
+
+            </button>
+
+        </div>
+
+
+        <div class="permission-grid">
+
+            @foreach (var permission in permissions)
+            {
+                var isChecked =
+                    selectedPermissionIds.Contains(
+                        permission.MaQuyen
+                    );
+
+
+                <label class="permission-item">
+
+                    <input type="checkbox"
+                           name="selectedPermissions"
+                           value="@permission.MaQuyen"
+                           checked="@isChecked" />
+
+
+                    <div class="permission-check">
+
+                        <i class="fa-solid fa-check"></i>
+
+                    </div>
+
+
+                    <div class="permission-content">
+
+                        <strong>
+                            @permission.TenQuyen
+                        </strong>
+
+                        <span>
+                            @(string.IsNullOrWhiteSpace(permission.MoTa)
+                                ? "Quyền sử dụng chức năng hệ thống."
+                                : permission.MoTa)
+                        </span>
+
+                    </div>
+
+                </label>
+            }
+
+        </div>
+
+
+        <div class="permission-actions">
+
+            <a asp-area="Admin"
+               asp-controller="Role"
+               asp-action="Index"
+               class="permission-cancel-btn">
+
+                <i class="fa-solid fa-xmark"></i>
+
+                Hủy
+
+            </a>
+
+
+            <button type="submit"
+                    class="permission-save-btn">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                Lưu quyền
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const button =
+                    document.getElementById(
+                        "selectAllPermissions"
+                    );
+
+                const checkboxes =
+                    Array.from(
+                        document.querySelectorAll(
+                            'input[name="selectedPermissions"]'
+                        )
+                    );
+
+
+                if (!button ||
+                    checkboxes.length === 0) {
+                    return;
+                }
+
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const allChecked =
+                            checkboxes.every(
+                                x => x.checked
+                            );
+
+
+                        checkboxes.forEach(
+                            function (checkbox) {
+
+                                checkbox.checked =
+                                    !allChecked;
+
+                            }
+                        );
+
+
+                        button.innerHTML =
+                            allChecked
+                                ? '<i class="fa-solid fa-check-double"></i> Chọn tất cả'
+                                : '<i class="fa-solid fa-xmark"></i> Bỏ chọn tất cả';
+
+                    }
+                );
+
+            }
+        );
+
+    </script>
+
+}

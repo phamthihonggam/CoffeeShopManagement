@@ -1,0 +1,351 @@
+﻿/* =========================================================
+   ROSALIE COFFEE - COMBO REVIEW
+========================================================= */
+
+.combo-review-page {
+    width: 100%;
+    min-height: calc(100vh - 80px);
+    padding: 48px 20px 80px;
+    background: radial-gradient( circle at 8% 20%, rgba(160, 96, 58, .055), transparent 27% ), #f8f5f1;
+}
+
+.combo-review-container {
+    width: 92%;
+    max-width: 1060px;
+    margin: 0 auto;
+}
+
+.combo-review-back {
+    width: fit-content;
+    margin-bottom: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #785747;
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+    .combo-review-back:hover {
+        color: #a65f34;
+    }
+
+.combo-review-card {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #ebe1da;
+    border-radius: 22px;
+    box-shadow: 0 18px 48px rgba(72, 45, 35, .08);
+}
+
+
+/* =========================================================
+   LEFT
+========================================================= */
+
+.combo-review-product {
+    padding: 34px 28px;
+    background: linear-gradient( 180deg, #fff9f4, #f8eee7 );
+    border-right: 1px solid #ebe1da;
+}
+
+.combo-review-label {
+    display: block;
+    margin-bottom: 18px;
+    color: #a65f34;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.8px;
+}
+
+.combo-review-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    margin-bottom: 21px;
+    overflow: hidden;
+    border-radius: 17px;
+    background: #eee4dd;
+    box-shadow: 0 10px 25px rgba(83, 52, 39, .1);
+}
+
+    .combo-review-image img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+    }
+
+.combo-review-product-info > span {
+    display: block;
+    margin-bottom: 7px;
+    color: #9b8d85;
+    font-size: 11px;
+}
+
+.combo-review-product-info h1 {
+    margin: 0 0 10px;
+    color: #482d23;
+    font-size: 22px;
+    line-height: 1.3;
+    font-weight: 900;
+}
+
+.combo-review-product-info strong {
+    color: #a65f34;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   RIGHT FORM
+========================================================= */
+
+.combo-review-form-wrap {
+    padding: 40px 42px;
+}
+
+.combo-review-eyebrow {
+    display: block;
+    margin-bottom: 7px;
+    color: #a66a46;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.combo-review-form-wrap h2 {
+    margin: 0 0 8px;
+    color: #452b21;
+    font-size: 28px;
+    font-weight: 900;
+}
+
+.combo-review-intro {
+    margin: 0 0 29px;
+    color: #8c7e76;
+    font-size: 12.5px;
+    line-height: 1.65;
+}
+
+.combo-review-field {
+    margin-bottom: 24px;
+}
+
+    .combo-review-field > label {
+        display: block;
+        margin-bottom: 10px;
+        color: #554039;
+        font-size: 12.5px;
+        font-weight: 850;
+    }
+
+        .combo-review-field > label span {
+            color: #c94f45;
+        }
+
+
+/* =========================================================
+   STARS
+========================================================= */
+
+.combo-review-stars {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.combo-review-star {
+    width: 47px;
+    height: 47px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e2d8d1;
+    border-radius: 12px;
+    background: #fff;
+    color: #d5ccc6;
+    font-size: 22px;
+    cursor: pointer;
+    transition: transform .18s ease, color .18s ease, border-color .18s ease, background .18s ease;
+}
+
+    .combo-review-star:hover,
+    .combo-review-star.active {
+        border-color: #e1ac52;
+        background: #fff8e8;
+        color: #e2a12f;
+        transform: translateY(-2px);
+    }
+
+.combo-review-rating-text {
+    min-height: 18px;
+    margin-top: 9px;
+    color: #9a8a82;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   TEXTAREA
+========================================================= */
+
+.combo-review-textarea {
+    position: relative;
+}
+
+    .combo-review-textarea textarea {
+        width: 100%;
+        min-height: 150px;
+        padding: 14px 15px 32px;
+        border: 1px solid #ded4cd;
+        border-radius: 12px;
+        outline: none;
+        resize: vertical;
+        background: #fff;
+        color: #4c3931;
+        font-family: inherit;
+        font-size: 13px;
+        line-height: 1.7;
+        transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+        .combo-review-textarea textarea:focus {
+            border-color: #a66a46;
+            box-shadow: 0 0 0 3px rgba(166, 106, 70, .08);
+        }
+
+    .combo-review-textarea span {
+        position: absolute;
+        right: 12px;
+        bottom: 10px;
+        color: #a29791;
+        font-size: 10px;
+    }
+
+.combo-review-error {
+    min-height: 18px;
+    margin-top: -8px;
+    color: #c64d44;
+    font-size: 11.5px;
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   ACTION
+========================================================= */
+
+.combo-review-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 22px;
+    border-top: 1px solid #eee6e1;
+}
+
+.combo-review-cancel,
+.combo-review-submit {
+    min-height: 43px;
+    padding: 0 19px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 850;
+    text-decoration: none;
+}
+
+.combo-review-cancel {
+    border: 1px solid #dacdc5;
+    background: #fff;
+    color: #6c5246;
+}
+
+    .combo-review-cancel:hover {
+        background: #faf5f1;
+        color: #4d3024;
+    }
+
+.combo-review-submit {
+    border: 1px solid #75472f;
+    background: #75472f;
+    color: #fff;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+    .combo-review-submit:hover {
+        background: #513126;
+        border-color: #513126;
+        transform: translateY(-1px);
+    }
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 780px) {
+
+    .combo-review-card {
+        grid-template-columns: 1fr;
+    }
+
+    .combo-review-product {
+        border-right: 0;
+        border-bottom: 1px solid #ebe1da;
+    }
+
+    .combo-review-image {
+        max-width: 310px;
+    }
+}
+
+@media (max-width: 520px) {
+
+    .combo-review-page {
+        padding: 30px 12px 55px;
+    }
+
+    .combo-review-container {
+        width: 100%;
+    }
+
+    .combo-review-product,
+    .combo-review-form-wrap {
+        padding: 25px 20px;
+    }
+
+        .combo-review-form-wrap h2 {
+            font-size: 24px;
+        }
+
+    .combo-review-stars {
+        gap: 5px;
+    }
+
+    .combo-review-star {
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
+    }
+
+    .combo-review-actions {
+        flex-direction: column-reverse;
+    }
+
+    .combo-review-cancel,
+    .combo-review-submit {
+        width: 100%;
+    }
+}

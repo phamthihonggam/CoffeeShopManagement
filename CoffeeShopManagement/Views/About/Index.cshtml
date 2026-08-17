@@ -1,0 +1,293 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+@{
+    ViewData["Title"] = T["AboutPageTitle"];
+}
+
+@section Styles {
+
+    <!-- CSS riêng của trang About -->
+    <link rel="stylesheet"
+          href="~/css/about.css"
+          asp-append-version="true" />
+
+}
+
+
+<!-- =====================================
+     HERO
+====================================== -->
+
+<section class="about-hero">
+
+    <div class="container">
+
+        <div class="about-hero-content">
+
+            <span class="about-subtitle">
+                @T["AboutHeroSubtitle"]
+            </span>
+
+            <h1>
+                @T["AboutHeroTitle"]
+            </h1>
+
+            <p>
+                @T["AboutHeroDescription"]
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================
+     STORY
+====================================== -->
+
+<section class="about-story">
+
+    <!-- TIÊU ĐỀ Ở GIỮA -->
+    <div class="about-story-title">
+
+        <span>
+            @T["AboutStoryLabel"]
+        </span>
+
+    </div>
+
+
+    <!-- ẢNH + NỘI DUNG FULL WIDTH -->
+    <div class="about-story-wrapper">
+
+        <!-- ẢNH BÊN TRÁI -->
+        <div class="about-story-image">
+
+            <img src="~/images/about/about-story.jpg"
+                 alt="Rosalie Coffee" />
+
+        </div>
+
+
+        <!-- NỘI DUNG BÊN PHẢI -->
+        <div class="about-story-content">
+
+            <h2>
+                @T["AboutStoryTitle"]
+            </h2>
+
+            <p>
+                @T["AboutStoryParagraph1"]
+            </p>
+
+            <p>
+                @T["AboutStoryParagraph2"]
+            </p>
+
+            <p>
+                @T["AboutStoryParagraph3"]
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================
+     VALUES
+====================================== -->
+
+<section class="about-values">
+
+    <div class="container">
+
+        <!-- SECTION HEADING -->
+        <div class="about-section-heading">
+
+            <span>
+                @T["AboutValuesLabel"]
+            </span>
+
+            <h2>
+                @T["AboutValuesTitle"]
+            </h2>
+
+            <p>
+                @T["AboutValuesDescription"]
+            </p>
+
+        </div>
+
+
+        <!-- VALUES -->
+        <div class="about-values-grid">
+
+            <!-- VALUE 1 -->
+            <div class="about-value-card">
+
+                <div class="about-value-icon">
+
+                    <i class="fa-solid fa-seedling"></i>
+
+                </div>
+
+                <h3>
+                    @T["AboutValue1Title"]
+                </h3>
+
+                <p>
+                    @T["AboutValue1Description"]
+                </p>
+
+            </div>
+
+
+            <!-- VALUE 2 -->
+            <div class="about-value-card">
+
+                <div class="about-value-icon">
+
+                    <i class="fa-solid fa-mug-hot"></i>
+
+                </div>
+
+                <h3>
+                    @T["AboutValue2Title"]
+                </h3>
+
+                <p>
+                    @T["AboutValue2Description"]
+                </p>
+
+            </div>
+
+
+            <!-- VALUE 3 -->
+            <div class="about-value-card">
+
+                <div class="about-value-icon">
+
+                    <i class="fa-solid fa-heart"></i>
+
+                </div>
+
+                <h3>
+                    @T["AboutValue3Title"]
+                </h3>
+
+                <p>
+                    @T["AboutValue3Description"]
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================
+     EXPERIENCE TITLE
+====================================== -->
+
+<div class="about-experience-title">
+
+    <span>
+        @T["AboutExperienceLabel"]
+    </span>
+
+</div>
+
+
+<!-- =====================================
+     EXPERIENCE
+====================================== -->
+
+<div class="about-experience-wrapper">
+
+    <!-- NỘI DUNG BÊN TRÁI -->
+    <div class="about-experience-content">
+
+        <h2>
+            @T["AboutExperienceTitle"]
+        </h2>
+
+        <p>
+            @T["AboutExperienceDescription"]
+        </p>
+
+        <ul class="about-experience-list">
+
+            <li>
+                <i class="fa-solid fa-check"></i>
+                @T["AboutExperienceItem1"]
+            </li>
+
+            <li>
+                <i class="fa-solid fa-check"></i>
+                @T["AboutExperienceItem2"]
+            </li>
+
+            <li>
+                <i class="fa-solid fa-check"></i>
+                @T["AboutExperienceItem3"]
+            </li>
+
+            <li>
+                <i class="fa-solid fa-check"></i>
+                @T["AboutExperienceItem4"]
+            </li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- ẢNH BÊN PHẢI -->
+    <div class="about-experience-image">
+
+        <img src="~/images/about/about-space.jpg"
+             alt="@T["AboutExperienceImageAlt"]" />
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     CTA
+====================================== -->
+
+<section class="about-cta">
+
+    <div class="container">
+
+        <h2>
+            @T["AboutCtaTitle"]
+        </h2>
+
+        <p>
+            @T["AboutCtaDescription"]
+        </p>
+
+        <a asp-controller="Menu"
+           asp-action="Index"
+           class="about-cta-btn">
+
+            <span>
+                @T["AboutCtaButton"]
+            </span>
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+</section>

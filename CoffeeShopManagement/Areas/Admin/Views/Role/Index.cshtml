@@ -1,0 +1,347 @@
+﻿@using CoffeeShopManagement.Models
+
+@model List<VaiTro>
+
+@{
+    ViewData["Title"] = "Vai trò & quyền";
+
+    var totalRoles =
+        ViewBag.TotalRoles ?? 0;
+
+    var activeRoles =
+        ViewBag.ActiveRoles ?? 0;
+
+    var totalPermissions =
+        ViewBag.TotalPermissions ?? 0;
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-role.css"
+          asp-append-version="true" />
+
+}
+
+
+<div class="role-page">
+
+
+    <!-- =====================================================
+         SUCCESS TOAST
+    ====================================================== -->
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div id="roleSuccessToast"
+             class="role-toast role-toast-success">
+
+            <div class="role-toast-icon">
+
+                <i class="fa-solid fa-check"></i>
+
+            </div>
+
+
+            <div class="role-toast-content">
+
+                <strong>
+                    Thành công
+                </strong>
+
+                <span>
+                    @TempData["SuccessMessage"]
+                </span>
+
+            </div>
+
+
+            <button type="button"
+                    class="role-toast-close"
+                    id="roleToastClose"
+                    aria-label="Đóng thông báo">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+    }
+
+
+    <!-- =====================================================
+         INTRO
+    ====================================================== -->
+
+    <div class="role-intro">
+
+        <div>
+
+            <span>
+                ROSALIE COFFEE
+            </span>
+
+            <h2>
+                Quản lý vai trò & quyền
+            </h2>
+
+            <p>
+                Quản lý vai trò và phân quyền truy cập
+                hệ thống quản trị Rosalie Coffee.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <div class="role-stat-grid">
+
+
+        <!-- TOTAL ROLE -->
+
+        <div class="role-stat-card">
+
+            <div class="role-stat-icon">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Tổng vai trò
+                </span>
+
+                <strong>
+                    @totalRoles
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTIVE ROLE -->
+
+        <div class="role-stat-card">
+
+            <div class="role-stat-icon active">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Đang hoạt động
+                </span>
+
+                <strong>
+                    @activeRoles
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL PERMISSION -->
+
+        <div class="role-stat-card">
+
+            <div class="role-stat-icon permission">
+
+                <i class="fa-solid fa-key"></i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Tổng quyền
+                </span>
+
+                <strong>
+                    @totalPermissions
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ROLE LIST
+    ====================================================== -->
+
+    <div class="role-card">
+
+
+        <!-- HEADER -->
+
+        <div class="role-card-header">
+
+            <div>
+
+                <h3>
+                    Danh sách vai trò
+                </h3>
+
+                <p>
+                    Các vai trò đang được sử dụng trong hệ thống.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- LIST -->
+
+        <div class="role-list">
+
+            @foreach (var role in Model)
+            {
+                var roleClass =
+                    role.TenVaiTro == "Admin"
+                        ? "admin"
+                        : role.TenVaiTro == "Nhân viên"
+                            ? "staff"
+                            : "customer";
+
+
+                <div class="role-item">
+
+
+                    <!-- =========================================
+                         ROLE ICON
+                    ========================================== -->
+
+                    <div class="role-item-icon @roleClass">
+
+                        @if (role.TenVaiTro == "Admin")
+                        {
+                            <i class="fa-solid fa-user-shield"></i>
+                        }
+                        else if (role.TenVaiTro == "Nhân viên")
+                        {
+                            <i class="fa-solid fa-user-tie"></i>
+                        }
+                        else
+                        {
+                            <i class="fa-solid fa-user"></i>
+                        }
+
+                    </div>
+
+
+                    <!-- =========================================
+                         ROLE INFO
+                    ========================================== -->
+
+                    <div class="role-item-info">
+
+
+                        <div class="role-title-row">
+
+                            <h4>
+                                @role.TenVaiTro
+                            </h4>
+
+
+                            @if (role.IsActive)
+                            {
+                                <span class="role-status active">
+
+                                    <i class="fa-solid fa-circle-check"></i>
+
+                                    Hoạt động
+
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="role-status locked">
+
+                                    <i class="fa-solid fa-circle-xmark"></i>
+
+                                    Ngừng hoạt động
+
+                                </span>
+                            }
+
+                        </div>
+
+
+                        <p>
+
+                            @(string.IsNullOrWhiteSpace(role.MoTa)
+                                ? "Chưa có mô tả cho vai trò này."
+                                : role.MoTa)
+
+                        </p>
+
+
+                        <div class="role-permission-count">
+
+                            <i class="fa-solid fa-key"></i>
+
+                            <span>
+                                @role.MaQuyens.Count quyền
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         ACTION
+                    ========================================== -->
+
+                    <div class="role-item-action">
+
+                        <a asp-area="Admin"
+                           asp-controller="Role"
+                           asp-action="Permissions"
+                           asp-route-id="@role.MaVaiTro"
+                           class="role-permission-btn">
+
+                            <i class="fa-solid fa-shield-halved"></i>
+
+                            <span>
+                                Phân quyền
+                            </span>
+
+                        </a>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script src="~/js/admin-role.js"
+            asp-append-version="true"></script>
+
+}

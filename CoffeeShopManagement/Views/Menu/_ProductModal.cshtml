@@ -1,0 +1,185 @@
+﻿<div id="productModal"
+     class="product-modal">
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-box">
+
+        <button type="button"
+                class="close-modal">
+
+            <i class="bi bi-x-lg"></i>
+
+        </button>
+
+
+        <div class="modal-wrapper">
+
+
+            <!-- LEFT -->
+            <div class="modal-left">
+
+                <img id="modalImg"
+                     src=""
+                     alt="Product" />
+
+
+                <div class="product-info">
+
+                    <h2 id="modalName"></h2>
+
+                    <p id="modalDesc"></p>
+
+
+                    <div class="modal-price">
+
+                        <span id="modalPrice">
+                            0đ
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT -->
+            <div class="modal-right">
+
+
+                <!-- LOADING -->
+                <div id="customizeLoading"
+                     class="customize-loading"
+                     style="display:none;">
+
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+
+                    <span>
+                        Đang tải tùy chọn...
+                    </span>
+
+                </div>
+
+
+                <!-- SIZE -->
+                <div id="sizeSection"
+                     class="option-section"
+                     style="display:none;">
+
+                    <div class="option-title">
+                        Chọn Size
+                    </div>
+
+                    <div id="sizeGroup"
+                         class="size-group">
+                    </div>
+
+                </div>
+
+
+                <!-- ĐỘ NGỌT -->
+                <div id="sugarSection"
+                     class="option-section"
+                     style="display:none;">
+
+                    <div class="option-title">
+                        Độ ngọt
+                    </div>
+
+                    <div id="sugarGroup"
+                         class="radio-group">
+                    </div>
+
+                </div>
+
+
+                <!-- MỨC ĐÁ -->
+                <div id="iceSection"
+                     class="option-section"
+                     style="display:none;">
+
+                    <div class="option-title">
+                        Mức đá
+                    </div>
+
+                    <div id="iceGroup"
+                         class="radio-group">
+                    </div>
+
+                </div>
+
+
+                <!-- TOPPING -->
+                <div id="toppingSection"
+                     class="option-section"
+                     style="display:none;">
+
+                    <div class="option-title">
+                        Topping
+                    </div>
+
+                    <div id="toppingList"
+                         class="topping-list">
+                    </div>
+
+                </div>
+
+
+                <!-- GHI CHÚ -->
+                <div class="option-section">
+
+                    <div class="option-title">
+                        Ghi chú
+                    </div>
+
+                    <textarea id="txtNote"
+                              rows="3"
+                              placeholder="Ví dụ: ít đá, ít ngọt..."></textarea>
+
+                </div>
+
+
+                <!-- SỐ LƯỢNG -->
+                <div class="quantity-wrapper">
+
+                    <button id="minusQty"
+                            type="button">
+                        −
+                    </button>
+
+                    <span id="qtyValue">
+                        1
+                    </span>
+
+                    <button id="plusQty"
+                            type="button">
+                        +
+                    </button>
+
+                </div>
+
+
+                <!-- BUTTON -->
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn-buy-modal">
+
+                        <i class="bi bi-cart-fill"></i>
+
+                        <span>
+                            Thêm vào giỏ
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,193 @@
+﻿/* =====================================================
+   ROSALIE COFFEE - ADMIN STATISTICS
+===================================================== */
+
+.statistics-admin-heading {
+    width: 100%;
+}
+
+    .statistics-admin-heading h2 {
+        margin: 0 0 8px;
+        color: #4c2d25;
+        font-size: 25px;
+        font-weight: 800;
+    }
+
+    .statistics-admin-heading p {
+        margin: 0;
+        color: #7e6e66;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+
+/* =====================================================
+   MAIN STATS
+===================================================== */
+
+.admin-statistics-grid {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+
+.admin-statistics-card {
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #eadfd8;
+    border-radius: 17px;
+    box-shadow: 0 9px 24px rgba(70, 43, 34, 0.06);
+}
+
+
+.admin-statistics-icon {
+    width: 43px;
+    height: 43px;
+    margin-bottom: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #f4e8e0;
+    color: #875238;
+    font-size: 17px;
+}
+
+
+.admin-statistics-card span {
+    display: block;
+    color: #8b7a72;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.admin-statistics-card strong {
+    display: block;
+    margin-top: 6px;
+    color: #432820;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+
+/* =====================================================
+   STATUS CARDS
+===================================================== */
+
+.admin-statistics-status-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+
+.admin-statistics-small-card {
+    padding: 18px 20px;
+    background: #ffffff;
+    border: 1px solid #eadfd8;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(70, 43, 34, 0.05);
+}
+
+
+    .admin-statistics-small-card span {
+        display: block;
+        margin-bottom: 5px;
+        color: #8d7d75;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+
+    .admin-statistics-small-card strong {
+        color: #432820;
+        font-size: 21px;
+        font-weight: 900;
+    }
+
+
+.status-pending-card {
+    border-left: 4px solid #d8a84d;
+}
+
+
+.status-completed-card {
+    border-left: 4px solid #5b9b6c;
+}
+
+
+.status-cancelled-card {
+    border-left: 4px solid #c85c5c;
+}
+
+
+/* =====================================================
+   CHART
+===================================================== */
+
+.admin-statistics-chart-card {
+    margin-top: 18px;
+    padding: 22px;
+    background: #ffffff;
+    border: 1px solid #eadfd8;
+    border-radius: 18px;
+    box-shadow: 0 10px 28px rgba(70, 43, 34, 0.06);
+}
+
+
+.admin-statistics-chart-header span {
+    display: block;
+    margin-bottom: 3px;
+    color: #a06a4e;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+}
+
+
+.admin-statistics-chart-header h3 {
+    margin: 0;
+    color: #4b2d24;
+    font-size: 19px;
+    font-weight: 800;
+}
+
+
+.admin-statistics-chart-wrap {
+    position: relative;
+    width: 100%;
+    height: 360px;
+    margin-top: 20px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1050px) {
+
+    .admin-statistics-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+
+    .admin-statistics-status-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .admin-statistics-grid,
+    .admin-statistics-status-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .admin-statistics-chart-wrap {
+        height: 290px;
+    }
+}

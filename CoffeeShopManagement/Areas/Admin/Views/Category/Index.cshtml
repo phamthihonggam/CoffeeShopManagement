@@ -1,0 +1,490 @@
+﻿@model IEnumerable<CoffeeShopManagement.Models.LoaiSanPham>
+
+@{
+    ViewData["Title"] = "Quản lý danh mục";
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-category.css"
+          asp-append-version="true" />
+
+}
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="admin-welcome">
+
+    <div class="category-admin-heading">
+
+        <div class="category-admin-heading-text">
+
+            <h2>
+                Quản lý danh mục
+            </h2>
+
+            <p>
+                Quản lý các nhóm sản phẩm đang có
+                trong hệ thống Rosalie Coffee.
+            </p>
+
+        </div>
+
+
+        <a asp-area="Admin"
+           asp-controller="Category"
+           asp-action="Create"
+           class="admin-add-category-btn">
+
+            <i class="fa-solid fa-plus"></i>
+
+            <span>
+                Thêm danh mục
+            </span>
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SUCCESS TOAST
+===================================================== -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="admin-toast admin-toast-success"
+         id="adminToast">
+
+        <div class="admin-toast-icon">
+
+            <i class="fa-solid fa-check"></i>
+
+        </div>
+
+
+        <div class="admin-toast-body">
+
+            <strong>
+                Thành công
+            </strong>
+
+            <span>
+                @TempData["SuccessMessage"]
+            </span>
+
+        </div>
+
+
+        <button type="button"
+                class="admin-toast-close"
+                id="adminToastClose"
+                aria-label="Đóng">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+}
+
+
+<!-- =====================================================
+     ERROR TOAST
+===================================================== -->
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="admin-toast admin-toast-error"
+         id="adminToast">
+
+        <div class="admin-toast-icon">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+        </div>
+
+
+        <div class="admin-toast-body">
+
+            <strong>
+                Không thể thực hiện
+            </strong>
+
+            <span>
+                @TempData["ErrorMessage"]
+            </span>
+
+        </div>
+
+
+        <button type="button"
+                class="admin-toast-close"
+                id="adminToastClose"
+                aria-label="Đóng">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+}
+
+
+<!-- =====================================================
+     CATEGORY LIST
+===================================================== -->
+
+<div class="admin-category-card">
+
+
+    <!-- HEADER TABLE -->
+
+    <div class="admin-category-header">
+
+        <div class="admin-category-title">
+
+            <span>
+                Danh sách danh mục
+            </span>
+
+            <strong>
+                @Model.Count()
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLE -->
+
+    <div class="admin-category-table-wrap">
+
+        <table class="admin-category-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Mã
+                    </th>
+
+                    <th>
+                        Tên danh mục
+                    </th>
+
+                    <th>
+                        Số sản phẩm
+                    </th>
+
+                    <th>
+                        Trạng thái
+                    </th>
+
+                    <th>
+                        Thao tác
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <!-- =========================
+                                 MÃ DANH MỤC
+                            ========================== -->
+
+                            <td>
+
+                                <span class="category-id">
+
+                                    #@item.MaLoai
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- =========================
+                                 TÊN DANH MỤC
+                            ========================== -->
+
+                            <td>
+
+                                <div class="category-name">
+
+                                    <div class="category-icon">
+
+                                        <i class="fa-solid fa-layer-group"></i>
+
+                                    </div>
+
+
+                                    <strong>
+
+                                        @item.TenLoai
+
+                                    </strong>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- =========================
+                                 SỐ SẢN PHẨM
+                            ========================== -->
+
+                            <td>
+
+                                <span class="category-count">
+
+                                    @item.SanPhams.Count
+                                    sản phẩm
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- =========================
+                                 TRẠNG THÁI
+                            ========================== -->
+
+                            <td>
+
+                                @if (item.SanPhams.Any())
+                                {
+                                    <span class="category-status category-status-active">
+
+                                        <i class="fa-solid fa-circle-check"></i>
+
+                                        Đang sử dụng
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="category-status category-status-empty">
+
+                                        <i class="fa-solid fa-circle-minus"></i>
+
+                                        Chưa có sản phẩm
+
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- =========================
+                                 THAO TÁC
+                            ========================== -->
+
+                            <td>
+
+                                <div class="category-actions">
+
+
+                                    <!-- EDIT -->
+
+                                    <a asp-area="Admin"
+                                       asp-controller="Category"
+                                       asp-action="Edit"
+                                       asp-route-id="@item.MaLoai"
+                                       class="category-action-btn category-edit-btn"
+                                       title="Sửa danh mục">
+
+                                        <i class="fa-solid fa-pen"></i>
+
+                                    </a>
+
+
+                                    <!-- DELETE -->
+
+                                    <form asp-area="Admin"
+                                          asp-controller="Category"
+                                          asp-action="Delete"
+                                          asp-route-id="@item.MaLoai"
+                                          method="post"
+                                          class="category-delete-form"
+                                          id="delete-category-@item.MaLoai">
+
+                                        @Html.AntiForgeryToken()
+
+
+                                        <button type="button"
+                                                class="category-action-btn category-delete-btn js-delete-category"
+                                                data-form-id="delete-category-@item.MaLoai"
+                                                data-category-name="@item.TenLoai"
+                                                title="Xóa danh mục">
+
+                                            <i class="fa-solid fa-trash"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <!-- =========================
+                         EMPTY
+                    ========================== -->
+
+                    <tr>
+
+                        <td colspan="5">
+
+                            <div class="category-empty">
+
+                                <div class="category-empty-icon">
+
+                                    <i class="fa-solid fa-layer-group"></i>
+
+                                </div>
+
+
+                                <h3>
+                                    Chưa có danh mục
+                                </h3>
+
+
+                                <p>
+                                    Hệ thống hiện chưa có
+                                    danh mục sản phẩm nào.
+                                </p>
+
+
+                                <a asp-area="Admin"
+                                   asp-controller="Category"
+                                   asp-action="Create"
+                                   class="admin-add-category-btn">
+
+                                    <i class="fa-solid fa-plus"></i>
+
+                                    Thêm danh mục đầu tiên
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     DELETE CONFIRM MODAL
+===================================================== -->
+
+<div class="category-delete-modal"
+     id="categoryDeleteModal">
+
+    <div class="category-delete-modal-backdrop"
+         id="categoryDeleteBackdrop">
+    </div>
+
+
+    <div class="category-delete-modal-box">
+
+        <!-- ICON -->
+
+        <div class="category-delete-modal-icon">
+
+            <i class="fa-solid fa-trash"></i>
+
+        </div>
+
+
+        <!-- TITLE -->
+
+        <h3>
+            Xóa danh mục
+        </h3>
+
+
+        <!-- MESSAGE -->
+
+        <p>
+
+            Bạn có chắc muốn xóa danh mục
+
+            <strong id="categoryDeleteName">
+            </strong>
+
+            không?
+
+        </p>
+
+
+        <!-- ACTIONS -->
+
+        <div class="category-delete-modal-actions">
+
+
+            <button type="button"
+                    class="category-modal-cancel"
+                    id="categoryDeleteCancel">
+
+                Hủy
+
+            </button>
+
+
+            <button type="button"
+                    class="category-modal-confirm"
+                    id="categoryDeleteConfirm">
+
+                <i class="fa-solid fa-trash"></i>
+
+                Xóa danh mục
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+@section Scripts {
+
+    <script src="~/js/admin-category.js"
+            asp-append-version="true">
+    </script>
+
+}

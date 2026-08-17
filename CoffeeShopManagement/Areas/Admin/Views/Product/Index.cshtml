@@ -1,0 +1,512 @@
+﻿@model IEnumerable<CoffeeShopManagement.Models.SanPham>
+
+@{
+    ViewData["Title"] = "Quản lý sản phẩm";
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-product.css"
+          asp-append-version="true" />
+
+}
+
+
+<!-- =========================================
+     HEADER
+========================================= -->
+
+<div class="admin-welcome">
+
+    <div class="product-admin-heading">
+
+        <div>
+
+            <h2>
+                Quản lý sản phẩm
+            </h2>
+
+            <p>
+                Quản lý danh sách đồ uống và sản phẩm
+                của Rosalie Coffee.
+            </p>
+
+        </div>
+
+
+        <a asp-area="Admin"
+           asp-controller="Product"
+           asp-action="Create"
+           class="admin-add-btn">
+
+            <i class="fa-solid fa-plus"></i>
+
+            Thêm sản phẩm
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     SUCCESS TOAST
+========================================= -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="admin-toast"
+         id="adminToast">
+
+        <div class="admin-toast-icon">
+
+            <i class="fa-solid fa-check"></i>
+
+        </div>
+
+
+        <div class="admin-toast-content">
+
+            <p class="admin-toast-title">
+                Thành công
+            </p>
+
+            <p class="admin-toast-message">
+                @TempData["SuccessMessage"]
+            </p>
+
+        </div>
+
+
+        <button type="button"
+                class="admin-toast-close"
+                id="adminToastClose"
+                aria-label="Đóng">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+}
+
+
+<!-- =========================================
+     ERROR TOAST
+========================================= -->
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="admin-toast admin-toast-error"
+         id="adminToast">
+
+        <div class="admin-toast-icon admin-toast-error-icon">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+        </div>
+
+
+        <div class="admin-toast-content">
+
+            <p class="admin-toast-title">
+                Không thể thực hiện
+            </p>
+
+            <p class="admin-toast-message">
+                @TempData["ErrorMessage"]
+            </p>
+
+        </div>
+
+
+        <button type="button"
+                class="admin-toast-close"
+                id="adminToastClose"
+                aria-label="Đóng">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+}
+
+
+<!-- =========================================
+     TOOLBAR
+========================================= -->
+
+<div class="admin-product-toolbar">
+
+    <form method="get"
+          asp-area="Admin"
+          asp-controller="Product"
+          asp-action="Index"
+          class="admin-product-search">
+
+        <div class="admin-search-box">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input type="text"
+                   name="keyword"
+                   value="@ViewBag.Keyword"
+                   placeholder="Tìm tên hoặc mô tả sản phẩm..."
+                   autocomplete="off" />
+
+        </div>
+
+
+        <button type="submit"
+                class="admin-search-btn">
+
+            Tìm kiếm
+
+        </button>
+
+
+        @if (!string.IsNullOrWhiteSpace(ViewBag.Keyword?.ToString()))
+        {
+            <a asp-area="Admin"
+               asp-controller="Product"
+               asp-action="Index"
+               class="admin-reset-search">
+
+                <i class="fa-solid fa-rotate-left"></i>
+
+                Đặt lại
+
+            </a>
+        }
+
+    </form>
+
+
+    <div class="admin-product-count">
+
+        <i class="fa-solid fa-box-open"></i>
+
+        <span>
+
+            Tổng:
+
+            <strong>
+                @Model.Count()
+            </strong>
+
+            sản phẩm
+
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     PRODUCT TABLE
+========================================= -->
+
+<div class="admin-table-card">
+
+    <div class="admin-table-responsive">
+
+        <table class="admin-product-table">
+
+            <thead>
+
+                <tr>
+
+                    <th class="admin-col-id">
+                        Mã
+                    </th>
+
+                    <th>
+                        Sản phẩm
+                    </th>
+
+                    <th>
+                        Danh mục
+                    </th>
+
+                    <th>
+                        Giá bán
+                    </th>
+
+                    <th>
+                        Khuyến mãi
+                    </th>
+
+                    <th class="admin-col-action">
+                        Thao tác
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @if (Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <!-- =================================
+                                 MÃ
+                            ================================== -->
+
+                            <td>
+
+                                <span class="admin-product-id">
+                                    #@item.MaSp
+                                </span>
+
+                            </td>
+
+
+                            <!-- =================================
+                                 SẢN PHẨM
+                            ================================== -->
+
+                            <td>
+
+                                <div class="admin-product-info">
+
+                                    <div class="admin-product-image">
+
+                                        @if (!string.IsNullOrWhiteSpace(item.HinhAnh))
+                                        {
+                                            <img src="~/images/menu/@item.HinhAnh"
+                                                 alt="@item.TenSp"
+                                                 onerror="
+                                            this.style.display='none';
+                                            this.nextElementSibling.style.display='flex';
+                                            " />
+
+                                            <div class="admin-image-placeholder"
+                                                 style="display:none;">
+
+                                                <i class="fa-solid fa-mug-hot"></i>
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="admin-image-placeholder">
+
+                                                <i class="fa-solid fa-mug-hot"></i>
+
+                                            </div>
+                                        }
+
+                                    </div>
+
+
+                                    <div class="admin-product-name">
+
+                                        <strong>
+                                            @item.TenSp
+                                        </strong>
+
+                                        @if (!string.IsNullOrWhiteSpace(item.MoTa))
+                                        {
+                                            <span>
+                                                @item.MoTa
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- =================================
+                                 DANH MỤC
+                            ================================== -->
+
+                            <td>
+
+                                <span class="admin-category-badge">
+
+                                    @(item.MaLoaiNavigation?.TenLoai
+                                        ?? "Chưa phân loại")
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- =================================
+                                 GIÁ
+                            ================================== -->
+
+                            <td>
+
+                                <div class="admin-price">
+
+                                    @if (item.DangKhuyenMai &&
+                                         item.GiaKhuyenMai.HasValue)
+                                    {
+                                        <strong>
+                                            @(item.GiaKhuyenMai.Value.ToString("#,##0"))đ
+                                        </strong>
+
+                                        <del>
+                                            @(item.DonGia.ToString("#,##0"))đ
+                                        </del>
+                                    }
+                                    else
+                                    {
+                                        <strong>
+                                            @(item.DonGia.ToString("#,##0"))đ
+                                        </strong>
+                                    }
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- =================================
+                                 KHUYẾN MÃI
+                            ================================== -->
+
+                            <td>
+
+                                @if (item.DangKhuyenMai)
+                                {
+                                    <span class="admin-status admin-status-sale">
+
+                                        <i class="fa-solid fa-fire"></i>
+
+                                        Đang giảm
+
+                                        @if (item.PhanTramGiam.HasValue)
+                                        {
+                                            <text>
+                                                @item.PhanTramGiam%
+                                            </text>
+                                        }
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="admin-status admin-status-normal">
+
+                                        <i class="fa-solid fa-circle-check"></i>
+
+                                        Bình thường
+
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- =================================
+                                 THAO TÁC
+                            ================================== -->
+
+                            <td>
+
+                                <div class="admin-table-actions">
+
+                                    <!-- EDIT -->
+
+                                    <a asp-area="Admin"
+                                       asp-controller="Product"
+                                       asp-action="Edit"
+                                       asp-route-id="@item.MaSp"
+                                       class="admin-action-btn admin-edit-btn"
+                                       title="Sửa sản phẩm">
+
+                                        <i class="fa-solid fa-pen"></i>
+
+                                    </a>
+
+
+                                    <!-- DELETE -->
+
+                                    <form asp-area="Admin"
+                                          asp-controller="Product"
+                                          asp-action="Delete"
+                                          asp-route-id="@item.MaSp"
+                                          method="post"
+                                          class="admin-delete-form"
+                                          onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm @item.TenSp không?');">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="admin-action-btn admin-delete-btn"
+                                                title="Xóa sản phẩm">
+
+                                            <i class="fa-solid fa-trash"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <!-- =================================
+                         KHÔNG CÓ SẢN PHẨM
+                    ================================== -->
+
+                    <tr>
+
+                        <td colspan="6">
+
+                            <div class="admin-empty">
+
+                                <i class="fa-solid fa-mug-hot"></i>
+
+                                <h3>
+                                    Không tìm thấy sản phẩm
+                                </h3>
+
+                                <p>
+                                    Thử nhập từ khóa khác
+                                    hoặc đặt lại tìm kiếm.
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     SCRIPT
+========================================= -->
+@section Scripts {
+
+    <script src="~/js/admin-product.js"
+            asp-append-version="true">
+    </script>
+
+}

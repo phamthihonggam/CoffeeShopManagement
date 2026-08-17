@@ -1,0 +1,1206 @@
+﻿@model CoffeeShopManagement.ViewModels.ComboDetailViewModel
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+@{
+    ViewData["Title"] = Model.TenCombo;
+
+
+    var comboReviews =
+        ViewBag.ComboReviews
+            as List<CoffeeShopManagement.Models.DanhGiaCombo>
+        ??
+        new List<CoffeeShopManagement.Models.DanhGiaCombo>();
+
+
+    int comboReviewCount =
+        comboReviews.Count;
+
+
+    double comboAverageRating =
+        comboReviewCount > 0
+            ? comboReviews.Average(
+                x => Convert.ToDouble(x.SoSao)
+            )
+            : 0;
+
+
+    int comboFiveStar =
+        comboReviews.Count(x => x.SoSao == 5);
+
+    int comboFourStar =
+        comboReviews.Count(x => x.SoSao == 4);
+
+    int comboThreeStar =
+        comboReviews.Count(x => x.SoSao == 3);
+
+    int comboTwoStar =
+        comboReviews.Count(x => x.SoSao == 2);
+
+    int comboOneStar =
+        comboReviews.Count(x => x.SoSao == 1);
+}
+
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/combo-detail.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/toast.css"
+          asp-append-version="true" />
+}
+
+
+<div id="comboDetailData"
+     data-combo-id="@Model.MaCombo"
+     data-combo-name="@Model.TenCombo"
+     data-combo-price="@Model.GiaBan">
+</div>
+
+
+<section class="combo-detail-page">
+
+    <div class="combo-detail-container">
+
+
+        <!-- =====================================================
+             BREADCRUMB
+        ====================================================== -->
+
+        <div class="combo-detail-breadcrumb">
+
+            <a asp-controller="Home"
+               asp-action="Index">
+
+                Trang chủ
+
+            </a>
+
+            <span>/</span>
+
+            <a asp-controller="Promotion"
+               asp-action="Index">
+
+                Khuyến mãi
+
+            </a>
+
+            <span>/</span>
+
+            <strong>
+                @Model.TenCombo
+            </strong>
+
+        </div>
+
+
+        <!-- =====================================================
+             MAIN
+        ====================================================== -->
+
+        <div class="combo-detail-main">
+
+
+            <!-- =================================================
+                 LEFT IMAGE
+            ================================================== -->
+
+            <div class="combo-detail-image-box">
+
+                @if (Model.PhanTramGiam > 0)
+                {
+                    <span class="combo-detail-discount">
+
+                        -@Model.PhanTramGiam%
+
+                    </span>
+                }
+
+
+                <img src="~/images/combo/@Model.HinhAnh"
+                     asp-append-version="true"
+                     alt="@Model.TenCombo"
+                     class="combo-detail-image" />
+
+            </div>
+
+
+            <!-- =================================================
+                 RIGHT CONTENT
+            ================================================== -->
+
+            <div class="combo-detail-info">
+
+
+                <span class="combo-detail-label">
+
+                    <i class="bi bi-gift-fill"></i>
+
+                    ROSALIE COMBO
+
+                </span>
+
+
+                <h1>
+                    @Model.TenCombo
+                </h1>
+
+
+                <p class="combo-detail-description">
+
+                    @(string.IsNullOrWhiteSpace(Model.MoTa)
+                        ? "Combo tiết kiệm được Rosalie Coffee tuyển chọn dành cho bạn."
+                        : Model.MoTa)
+
+                </p>
+
+
+                <!-- =============================================
+                     PRICE
+                ============================================== -->
+
+                <div class="combo-detail-price">
+
+                    <strong>
+                        @Model.GiaBan.ToString("N0")đ
+                    </strong>
+
+
+                    @if (Model.GiaGoc > Model.GiaBan)
+                    {
+                        <del>
+                            @Model.GiaGoc.ToString("N0")đ
+                        </del>
+                    }
+
+                </div>
+
+
+                <!-- =============================================
+                     COMBO INCLUDES
+                ============================================== -->
+
+                <div class="combo-detail-includes">
+
+                    <div class="combo-detail-section-title">
+
+                        <i class="bi bi-bag-check-fill"></i>
+
+                        <h3>
+                            Combo bao gồm
+                        </h3>
+
+                    </div>
+
+
+                    @if (Model.Products != null &&
+                         Model.Products.Any())
+                    {
+                        <div class="combo-detail-product-list">
+
+                            @foreach (var item in Model.Products)
+                            {
+                                <div class="combo-detail-product-item">
+
+                                    <div class="combo-detail-product-left">
+
+                                        <span class="combo-detail-check">
+
+                                            <i class="bi bi-check-lg"></i>
+
+                                        </span>
+
+
+                                        <span>
+                                            @item.TenSanPham
+                                        </span>
+
+                                    </div>
+
+
+                                    <strong>
+                                        @($"x{item.SoLuong}")
+                                    </strong>
+
+                                </div>
+                            }
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="combo-detail-empty">
+
+                            Chưa có thông tin sản phẩm trong combo.
+
+                        </div>
+                    }
+
+                </div>
+
+
+                <!-- =============================================
+                     QUANTITY + ADD CART
+                ============================================== -->
+
+                <div class="combo-detail-bottom">
+
+
+                    <!-- QUANTITY -->
+
+                    <div class="combo-detail-quantity">
+
+                        <button type="button"
+                                id="comboMinus"
+                                aria-label="Giảm số lượng">
+
+                            <i class="fa-solid fa-minus"></i>
+
+                        </button>
+
+
+                        <span id="comboQty">
+                            1
+                        </span>
+
+
+                        <button type="button"
+                                id="comboPlus"
+                                aria-label="Tăng số lượng">
+
+                            <i class="fa-solid fa-plus"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- ADD CART -->
+
+                    <button type="button"
+                            id="comboAddCart"
+                            class="combo-detail-add-cart"
+                            data-id="@Model.MaCombo">
+
+                        <i class="fa-solid fa-cart-shopping"></i>
+
+                        <span>
+                            Thêm combo vào giỏ
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             COMBO DESCRIPTION
+        ====================================================== -->
+
+        <div class="combo-detail-description-card">
+
+            <!-- TABS -->
+
+            <div class="combo-description-tabs">
+
+                <button type="button"
+                        class="combo-description-tab active"
+                        data-tab="description">
+
+                    Mô tả
+
+                </button>
+
+
+                <button type="button"
+                        class="combo-description-tab"
+                        data-tab="information">
+
+                    Thông tin combo
+
+                </button>
+
+
+                <button type="button"
+                        class="combo-description-tab"
+                        data-tab="reviews">
+
+                    Đánh giá
+
+                    <span class="combo-review-tab-count">
+                        @comboReviewCount
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <!-- =============================================
+                 TAB: DESCRIPTION
+            ============================================== -->
+
+            <div id="comboDescriptionTab"
+                 class="combo-description-panel active">
+
+                <div class="combo-description-content">
+
+                    <h3>
+                        Mô tả
+                    </h3>
+
+
+                    <p>
+                        <strong>@Model.TenCombo</strong>
+                        là sự kết hợp được Rosalie Coffee lựa chọn dành cho
+                        những khoảnh khắc thư giãn trong ngày. Combo mang đến
+                        sự cân bằng giữa hương vị đồ uống thơm ngon và món ăn
+                        kèm hấp dẫn, giúp bạn thưởng thức trọn vẹn hơn với mức
+                        giá tiết kiệm.
+                    </p>
+
+
+                    @if (!string.IsNullOrWhiteSpace(Model.MoTa))
+                    {
+                        <p>
+                            Combo bao gồm:
+                            <strong>@Model.MoTa</strong>.
+                            Đây là lựa chọn phù hợp cho bữa sáng, giờ nghỉ
+                            hoặc những lúc bạn muốn nạp thêm năng lượng
+                            cùng Rosalie Coffee.
+                        </p>
+                    }
+                    else
+                    {
+                        <p>
+                            Combo được xây dựng để mang đến trải nghiệm tiện lợi,
+                            ngon miệng và tiết kiệm hơn khi thưởng thức tại
+                            Rosalie Coffee.
+                        </p>
+                    }
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 TAB: INFORMATION
+            ============================================== -->
+
+            <div id="comboInformationTab"
+                 class="combo-description-panel">
+
+                <div class="combo-information-grid">
+
+                    <div class="combo-information-row">
+
+                        <span>
+                            Tên combo
+                        </span>
+
+                        <strong>
+                            @Model.TenCombo
+                        </strong>
+
+                    </div>
+
+
+                    <div class="combo-information-row">
+
+                        <span>
+                            Giá gốc
+                        </span>
+
+                        <strong>
+                            @Model.GiaGoc.ToString("N0")đ
+                        </strong>
+
+                    </div>
+
+
+                    <div class="combo-information-row">
+
+                        <span>
+                            Giá ưu đãi
+                        </span>
+
+                        <strong class="combo-information-sale">
+                            @Model.GiaBan.ToString("N0")đ
+                        </strong>
+
+                    </div>
+
+
+                    <div class="combo-information-row">
+
+                        <span>
+                            Giảm giá
+                        </span>
+
+                        <strong>
+                            @Model.PhanTramGiam%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="combo-information-products">
+
+                        <h3>
+                            Thành phần combo
+                        </h3>
+
+
+                        @if (Model.Products != null &&
+                             Model.Products.Any())
+                        {
+                            @foreach (var item in Model.Products)
+                            {
+                                <div class="combo-information-product">
+
+                                    <span>
+                                        @item.TenSanPham
+                                    </span>
+
+                                    <strong>
+                                        @($"x{item.SoLuong}")
+                                    </strong>
+
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p>
+                                Chưa có thông tin thành phần combo.
+                            </p>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 TAB: REVIEWS
+            ============================================== -->
+
+            <div id="comboReviewsTab"
+                 class="combo-description-panel">
+
+                <div class="combo-reviews-wrap">
+
+                    @if (comboReviewCount > 0)
+                    {
+                        <!-- =====================================
+                             SUMMARY
+                        ====================================== -->
+
+                        <div class="combo-review-summary">
+
+                            <div class="combo-review-score">
+
+                                <span class="combo-review-score-number">
+                                    @comboAverageRating.ToString("0.0")
+                                </span>
+
+                                <div class="combo-review-score-stars">
+
+                                    @for (int star = 1; star <= 5; star++)
+                                    {
+                                        <i class="bi @(star <= Math.Round(comboAverageRating) ? "bi-star-fill" : "bi-star")"></i>
+                                    }
+
+                                </div>
+
+                                <p>
+                                    Dựa trên
+                                    <strong>@comboReviewCount</strong>
+                                    đánh giá
+                                </p>
+
+                            </div>
+
+
+                            <div class="combo-review-bars">
+
+                                @{
+                                    var comboStarRows =
+                                        new[]
+                                        {
+                                            new { Star = 5, Count = comboFiveStar },
+                                            new { Star = 4, Count = comboFourStar },
+                                            new { Star = 3, Count = comboThreeStar },
+                                            new { Star = 2, Count = comboTwoStar },
+                                            new { Star = 1, Count = comboOneStar }
+                                        };
+                                }
+
+                                @foreach (var row in comboStarRows)
+                                {
+                                    var percent =
+                                        comboReviewCount > 0
+                                            ? row.Count * 100.0 / comboReviewCount
+                                            : 0;
+
+                                    <div class="combo-review-bar-row">
+
+                                        <span class="combo-review-bar-label">
+
+                                            @row.Star
+                                            <i class="bi bi-star-fill"></i>
+
+                                        </span>
+
+
+                                        <div class="combo-review-bar-track">
+
+                                            <span class="combo-review-bar-fill"
+                                                  style="width:@percent.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%">
+                                            </span>
+
+                                        </div>
+
+
+                                        <span class="combo-review-bar-count">
+                                            @row.Count
+                                        </span>
+
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =====================================
+                             REVIEW LIST
+                        ====================================== -->
+
+                        <div class="combo-review-list">
+
+                            <div class="combo-review-list-heading">
+
+                                <div>
+
+                                    <span class="combo-review-list-label">
+                                        KHÁCH HÀNG ĐÁNH GIÁ
+                                    </span>
+
+                                    <h3>
+                                        Cảm nhận về @Model.TenCombo
+                                    </h3>
+
+                                </div>
+
+                                <span class="combo-review-total">
+                                    @comboReviewCount đánh giá
+                                </span>
+
+                            </div>
+
+
+                            @foreach (var review in comboReviews)
+                            {
+                                var customerName =
+                                    review.MaKhNavigation?.HoTen
+                                    ?? "Khách hàng Rosalie";
+
+                                var firstLetter =
+                                    string.IsNullOrWhiteSpace(customerName)
+                                        ? "R"
+                                        : customerName.Trim().Substring(0, 1).ToUpper();
+
+                                <article class="combo-review-item">
+
+                                    <div class="combo-review-avatar">
+                                        @firstLetter
+                                    </div>
+
+
+                                    <div class="combo-review-content">
+
+                                        <div class="combo-review-head">
+
+                                            <div>
+
+                                                <strong class="combo-review-customer">
+                                                    @customerName
+                                                </strong>
+
+                                                <div class="combo-review-stars">
+
+                                                    @for (int star = 1; star <= 5; star++)
+                                                    {
+                                                        <i class="bi @(star <= review.SoSao ? "bi-star-fill" : "bi-star")"></i>
+                                                    }
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <time class="combo-review-date">
+                                                @review.NgayDanhGia.ToString("dd/MM/yyyy")
+                                            </time>
+
+                                        </div>
+
+
+                                        @if (!string.IsNullOrWhiteSpace(review.NoiDung))
+                                        {
+                                            <p class="combo-review-comment">
+                                                @review.NoiDung
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p class="combo-review-comment muted">
+                                                Khách hàng đã đánh giá combo này
+                                                @review.SoSao sao.
+                                            </p>
+                                        }
+
+
+                                        <span class="combo-review-verified">
+
+                                            <i class="bi bi-patch-check-fill"></i>
+
+                                            Đã mua combo tại Rosalie Coffee
+
+                                        </span>
+
+                                    </div>
+
+                                </article>
+                            }
+
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- =====================================
+                             EMPTY
+                        ====================================== -->
+
+                        <div class="combo-review-empty">
+
+                            <div class="combo-review-empty-icon">
+                                <i class="bi bi-chat-heart"></i>
+                            </div>
+
+                            <h3>
+                                Chưa có đánh giá nào
+                            </h3>
+
+                            <p>
+                                Combo này chưa nhận được đánh giá.
+                                Sau khi đơn hàng hoàn thành, khách hàng
+                                có thể đánh giá từ mục “Đơn hàng của tôi”.
+                            </p>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             BACK
+        ====================================================== -->
+
+        <div class="combo-detail-back">
+
+            <a asp-controller="Promotion"
+               asp-action="Index">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Quay lại khuyến mãi
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     COMBO TOAST
+===================================================== -->
+
+<div id="comboDetailToast"
+     class="combo-detail-toast">
+
+    <div class="combo-detail-toast-icon">
+
+        <i class="fa-solid fa-check"></i>
+
+    </div>
+
+
+    <div class="combo-detail-toast-content">
+
+        <strong>
+            Đã thêm combo vào giỏ hàng
+        </strong>
+
+
+        <span id="comboDetailToastMessage">
+        </span>
+
+    </div>
+
+
+    <a asp-controller="Cart"
+       asp-action="Index"
+       class="combo-detail-toast-cart">
+
+        <i class="fa-solid fa-bag-shopping"></i>
+
+        Xem giỏ
+
+    </a>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const data =
+                    document.getElementById(
+                        "comboDetailData"
+                    );
+
+
+                const minus =
+                    document.getElementById(
+                        "comboMinus"
+                    );
+
+
+                const plus =
+                    document.getElementById(
+                        "comboPlus"
+                    );
+
+
+                const qtyElement =
+                    document.getElementById(
+                        "comboQty"
+                    );
+
+
+                const addButton =
+                    document.getElementById(
+                        "comboAddCart"
+                    );
+
+
+                const toast =
+                    document.getElementById(
+                        "comboDetailToast"
+                    );
+
+
+                const toastMessage =
+                    document.getElementById(
+                        "comboDetailToastMessage"
+                    );
+
+
+                let quantity =
+                    1;
+
+
+                const comboId =
+                    Number(
+                        data?.dataset.comboId
+                        || 0
+                    );
+
+
+                const comboName =
+                    data?.dataset.comboName
+                    || "";
+
+
+                // =================================================
+                // UPDATE QUANTITY
+                // =================================================
+
+                function updateQuantity() {
+
+                    if (qtyElement) {
+
+                        qtyElement.textContent =
+                            quantity;
+                    }
+
+                }
+
+
+                // =================================================
+                // MINUS
+                // =================================================
+
+                minus
+                    ?.addEventListener(
+                        "click",
+                        function () {
+
+                            if (
+                                quantity > 1
+                            ) {
+
+                                quantity--;
+
+                                updateQuantity();
+                            }
+
+                        }
+                    );
+
+
+                // =================================================
+                // PLUS
+                // =================================================
+
+                plus
+                    ?.addEventListener(
+                        "click",
+                        function () {
+
+                            if (
+                                quantity < 20
+                            ) {
+
+                                quantity++;
+
+                                updateQuantity();
+                            }
+
+                        }
+                    );
+
+
+                // =================================================
+                // SHOW TOAST
+                // =================================================
+
+                function showComboToast(
+                    message
+                ) {
+
+                    if (!toast) {
+                        return;
+                    }
+
+
+                    if (toastMessage) {
+
+                        toastMessage.textContent =
+                            message;
+                    }
+
+
+                    toast
+                        .classList
+                        .remove(
+                            "show"
+                        );
+
+
+                    void toast.offsetWidth;
+
+
+                    toast
+                        .classList
+                        .add(
+                            "show"
+                        );
+
+
+                    clearTimeout(
+                        window.comboDetailToastTimer
+                    );
+
+
+                    window.comboDetailToastTimer =
+                        setTimeout(
+                            function () {
+
+                                toast
+                                    .classList
+                                    .remove(
+                                        "show"
+                                    );
+
+                            },
+                            3000
+                        );
+
+                }
+
+
+                // =================================================
+                // ADD COMBO TO CART
+                // =================================================
+
+                addButton
+                    ?.addEventListener(
+                        "click",
+                        async function () {
+
+                            if (
+                                !comboId
+                            ) {
+                                return;
+                            }
+
+
+                            const originalHtml =
+                                this.innerHTML;
+
+
+                            this.disabled =
+                                true;
+
+
+                            this.innerHTML = `
+
+                                <i class="fa-solid fa-spinner fa-spin"></i>
+
+                                Đang thêm...
+                            `;
+
+
+                            try {
+
+                                for (
+                                    let i = 0;
+                                    i < quantity;
+                                    i++
+                                ) {
+
+                                    const response =
+                                        await fetch(
+                                            "/Cart/AddCombo",
+                                            {
+                                                method:
+                                                    "POST",
+
+                                                headers: {
+                                                    "Content-Type":
+                                                        "application/x-www-form-urlencoded"
+                                                },
+
+                                                body:
+                                                    new URLSearchParams(
+                                                        {
+                                                            id:
+                                                                comboId
+                                                        }
+                                                    )
+                                            }
+                                        );
+
+
+                                    if (
+                                        !response.ok
+                                    ) {
+
+                                        throw new Error(
+                                            "Không thể thêm combo vào giỏ."
+                                        );
+                                    }
+
+
+                                    const result =
+                                        await response.json();
+
+
+                                    if (
+                                        result.success === false
+                                    ) {
+
+                                        throw new Error(
+                                            result.message
+                                            ||
+                                            "Không thể thêm combo vào giỏ."
+                                        );
+                                    }
+
+
+                                    if (
+                                        result.cartCount != null
+                                    ) {
+
+                                        document
+                                            .querySelectorAll(
+                                                ".cart-count, #cartCount, .cart-badge"
+                                            )
+                                            .forEach(
+                                                badge => {
+
+                                                    badge.textContent =
+                                                        result.cartCount;
+
+                                                }
+                                            );
+                                    }
+                                }
+
+
+                                showComboToast(
+                                    `${comboName} · SL ${quantity}`
+                                );
+
+                            }
+                            catch (error) {
+
+                                console.error(
+                                    error
+                                );
+
+
+                                alert(
+                                    error.message
+                                    ||
+                                    "Không thể thêm combo vào giỏ."
+                                );
+
+                            }
+                            finally {
+
+                                this.disabled =
+                                    false;
+
+
+                                this.innerHTML =
+                                    originalHtml;
+                            }
+
+                        }
+                    );
+
+
+                // =================================================
+                // DESCRIPTION TABS
+                // =================================================
+
+                const descriptionTabs =
+                    document.querySelectorAll(
+                        ".combo-description-tab"
+                    );
+
+
+                const descriptionPanel =
+                    document.getElementById(
+                        "comboDescriptionTab"
+                    );
+
+
+                const informationPanel =
+                    document.getElementById(
+                        "comboInformationTab"
+                    );
+
+
+                const reviewsPanel =
+                    document.getElementById(
+                        "comboReviewsTab"
+                    );
+
+
+                descriptionTabs.forEach(
+                    tab => {
+
+                        tab.addEventListener(
+                            "click",
+                            function () {
+
+                                const selectedTab =
+                                    this.dataset.tab;
+
+
+                                descriptionTabs.forEach(
+                                    item => {
+
+                                        item.classList.remove(
+                                            "active"
+                                        );
+
+                                    }
+                                );
+
+
+                                this.classList.add(
+                                    "active"
+                                );
+
+
+                                descriptionPanel
+                                    ?.classList
+                                    .toggle(
+                                        "active",
+                                        selectedTab ===
+                                        "description"
+                                    );
+
+
+                                informationPanel
+                                    ?.classList
+                                    .toggle(
+                                        "active",
+                                        selectedTab ===
+                                        "information"
+                                    );
+
+
+                                reviewsPanel
+                                    ?.classList
+                                    .toggle(
+                                        "active",
+                                        selectedTab ===
+                                        "reviews"
+                                    );
+
+                            }
+                        );
+
+                    }
+                );
+
+
+                updateQuantity();
+
+            }
+        );
+
+    </script>
+
+}

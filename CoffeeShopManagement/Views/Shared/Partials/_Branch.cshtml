@@ -1,0 +1,148 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+<section class="home-branches">
+
+    <div class="home-branches-header">
+
+        <span class="home-branches-label">
+            <i class="fa-solid fa-location-dot"></i>
+            @T["BranchSystemLabel"]
+        </span>
+
+        <h2>
+            @T["BranchTitle"]
+        </h2>
+
+        <p>
+            @T["BranchDescription"]
+        </p>
+
+    </div>
+
+
+    <div class="home-branches-grid">
+
+        <!-- BÌNH THẠNH -->
+        <div class="home-branch-card">
+
+            <img src="~/images/branch/branch-bt.jpg"
+                 alt="Rosalie Coffee Bình Thạnh" />
+
+            <div class="home-branch-content">
+
+                <span class="home-branch-city">
+                    TP.HCM
+                </span>
+
+                <h3>
+                    Rosalie Coffee Bình Thạnh
+                </h3>
+
+                <p>
+                    <i class="fa-solid fa-location-dot"></i>
+                    88 Điện Biên Phủ, Bình Thạnh
+                </p>
+
+                <a asp-controller="Contact"
+                   asp-action="Index"
+                   class="home-branch-btn">
+
+                    @T["ViewBranch"]
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- GÒ VẤP -->
+        <div class="home-branch-card">
+
+            <img src="~/images/branch/branch-gv.jpg"
+                 alt="Rosalie Coffee Gò Vấp" />
+
+            <div class="home-branch-content">
+
+                <span class="home-branch-city">
+                    TP.HCM
+                </span>
+
+                <h3>
+                    Rosalie Coffee Gò Vấp
+                </h3>
+
+                <p>
+                    <i class="fa-solid fa-location-dot"></i>
+                    245 Nguyễn Kiệm, Gò Vấp
+                </p>
+
+                <a asp-controller="Contact"
+                   asp-action="Index"
+                   class="home-branch-btn">
+
+                    @T["ViewBranch"]
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUẬN 1 -->
+        <div class="home-branch-card">
+
+            <img src="~/images/branch/branch-q1.jpg"
+                 alt="Rosalie Coffee Quận 1" />
+
+            <div class="home-branch-content">
+
+                <span class="home-branch-city">
+                    TP.HCM
+                </span>
+
+                <h3>
+                    Rosalie Coffee Quận 1
+                </h3>
+
+                <p>
+                    <i class="fa-solid fa-location-dot"></i>
+                    12 Nguyễn Huệ, Quận 1
+                </p>
+
+                <a asp-controller="Contact"
+                   asp-action="Index"
+                   class="home-branch-btn">
+
+                    @T["ViewBranch"]
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="home-branches-all">
+
+        <a asp-controller="Contact"
+           asp-action="Index">
+
+            @T["ViewAllBranches"]
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+</section>

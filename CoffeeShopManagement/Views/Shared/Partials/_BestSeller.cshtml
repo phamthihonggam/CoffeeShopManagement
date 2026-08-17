@@ -1,0 +1,150 @@
+﻿@model IEnumerable<CoffeeShopManagement.Models.SanPham>
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+<section class="best-seller">
+
+    <h2>@T["BestSellerTitle"]</h2>
+
+    @{
+        var products = Model.Take(8).ToList();
+    }
+
+    <!-- =========================
+            PAGE 1
+    ========================== -->
+    <div class="product-page active">
+
+        @foreach (var item in products.Take(4))
+        {
+            <a asp-controller="Menu"
+               asp-action="Details"
+               asp-route-id="@item.MaSp"
+               class="product-card product-card-link">
+
+                <div class="best-image-wrap">
+
+                    <img src="~/images/menu/@item.HinhAnh"
+                         alt="@item.TenSp" />
+
+                    <div class="best-image-overlay">
+
+                        <span>
+                            <i class="bi bi-eye"></i>
+                            @T["ViewDetails"]
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="product-info">
+
+                    <h3>@item.TenSp</h3>
+
+                    <p class="price">
+                        @item.DonGia.ToString("N0")đ
+                    </p>
+
+                    <span class="btn-buy">
+
+                        <i class="bi bi-eye-fill"></i>
+
+                        <span>
+                            @T["ViewDetails"]
+                        </span>
+
+                    </span>
+
+                </div>
+
+            </a>
+        }
+
+    </div>
+
+
+    <!-- =========================
+            PAGE 2
+    ========================== -->
+    <div class="product-page">
+
+        @foreach (var item in products.Skip(4).Take(4))
+        {
+            <a asp-controller="Menu"
+               asp-action="Details"
+               asp-route-id="@item.MaSp"
+               class="product-card product-card-link">
+
+                <div class="best-image-wrap">
+
+                    <img src="~/images/menu/@item.HinhAnh"
+                         alt="@item.TenSp" />
+
+                    <div class="best-image-overlay">
+
+                        <span>
+                            <i class="bi bi-eye"></i>
+                            @T["ViewDetails"]
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="product-info">
+
+                    <h3>@item.TenSp</h3>
+
+                    <p class="price">
+                        @item.DonGia.ToString("N0")đ
+                    </p>
+
+                    <span class="btn-buy">
+
+                        <i class="bi bi-eye-fill"></i>
+
+                        <span>
+                            @T["ViewDetails"]
+                        </span>
+
+                    </span>
+
+                </div>
+
+            </a>
+        }
+
+    </div>
+
+
+    <!-- =========================
+            NAVIGATION
+    ========================== -->
+    @if (products.Count > 4)
+    {
+        <div class="product-nav">
+
+            <button type="button"
+                    id="prevBtn"
+                    aria-label="@T["PreviousProducts"]">
+
+                ❮
+
+            </button>
+
+            <span class="dot active"></span>
+            <span class="dot"></span>
+
+            <button type="button"
+                    id="nextBtn"
+                    aria-label="@T["NextProducts"]">
+
+                ❯
+
+            </button>
+
+        </div>
+    }
+
+</section>

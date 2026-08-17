@@ -1,0 +1,539 @@
+﻿@model List<CoffeeShopManagement.ViewModels.MenuLandingVM>
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+@{
+    ViewData["Title"] = T["MenuPageTitle"];
+}
+
+<link rel="stylesheet"
+      href="~/css/menu-landing.css"
+      asp-append-version="true" />
+
+
+<!-- =====================================================
+     COFFEE
+     CATEGORY = 1
+     IMAGE LEFT - TEXT RIGHT
+===================================================== -->
+
+<section class="coffee-banner">
+
+    <div class="container">
+
+        <div class="coffee-wrapper">
+
+
+            <!-- IMAGE -->
+            <div class="coffee-left">
+
+                <img src="~/images/category/coffee.png"
+                     asp-append-version="true"
+                     alt="Coffee" />
+
+            </div>
+
+
+            <!-- CONTENT -->
+            <div class="coffee-right">
+
+                <div class="coffee-title">
+
+                    <div class="coffee-icon">
+
+                        <i class="bi bi-cup-hot-fill"></i>
+
+                    </div>
+
+                    <h2>
+                        @T["MenuCoffeeTitle"]
+                    </h2>
+
+                </div>
+
+
+                <p>
+                    @T["MenuCoffeeDescription"]
+                </p>
+
+
+                <a asp-controller="Menu"
+                   asp-action="Products"
+                   asp-route-category="1"
+                   class="btn-coffee">
+
+                    @T["ExploreNow"]
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FRUIT TEA
+     CATEGORY = 2
+     TEXT LEFT - IMAGE RIGHT
+===================================================== -->
+
+<section class="fruit-banner">
+
+    <div class="container">
+
+        <div class="fruit-wrapper">
+
+
+            <!-- CONTENT -->
+            <div class="fruit-content">
+
+                <div class="fruit-title">
+
+                    <div class="fruit-icon">
+
+                        <i class="bi bi-cup-hot"></i>
+
+                    </div>
+
+                    <h2>
+                        @T["MenuFruitTeaTitle"]
+                    </h2>
+
+                </div>
+
+
+                <p>
+                    @T["MenuFruitTeaDescription"]
+                </p>
+
+
+                <a asp-controller="Menu"
+                   asp-action="Products"
+                   asp-route-category="2"
+                   class="fruit-btn">
+
+                    @T["ExploreNow"]
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- IMAGE -->
+            <div class="fruit-image">
+
+                <img src="~/images/category/tea.png"
+                     asp-append-version="true"
+                     alt="Fruit Tea" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FROST / ĐÁ XAY
+     CATEGORY = 8
+     IMAGE LEFT - TEXT RIGHT
+===================================================== -->
+
+<section class="frost-banner">
+
+    <div class="container">
+
+        <div class="frost-wrapper">
+
+
+            <!-- IMAGE -->
+            <div class="frost-left">
+
+                <img src="~/images/category/blended.png"
+                     asp-append-version="true"
+                     alt="Frost" />
+
+            </div>
+
+
+            <!-- CONTENT -->
+            <div class="frost-right">
+
+                <div class="frost-title">
+
+                    <div class="frost-icon">
+
+                        <i class="bi bi-cup-straw"></i>
+
+                    </div>
+
+                    <h2>
+                        @T["MenuFrostTitle"]
+                    </h2>
+
+                </div>
+
+
+                <p>
+                    @T["MenuFrostDescription"]
+                </p>
+
+
+                <a asp-controller="Menu"
+                   asp-action="Products"
+                   asp-route-category="8"
+                   class="frost-btn">
+
+                    @T["ExploreNow"]
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     JUICE & SMOOTHIE
+     CATEGORY = 6
+     TEXT LEFT - IMAGE RIGHT
+===================================================== -->
+
+<section class="juice-banner">
+
+    <div class="container">
+
+        <div class="juice-wrapper">
+
+
+            <!-- CONTENT -->
+            <div class="juice-content">
+
+                <div class="juice-title">
+
+                    <div class="juice-icon">
+
+                        <i class="bi bi-cup-straw"></i>
+
+                    </div>
+
+                    <h2>
+                        @T["MenuJuiceTitle"]
+                    </h2>
+
+                </div>
+
+
+                <p>
+                    @T["MenuJuiceDescription"]
+                </p>
+
+
+                <a asp-controller="Menu"
+                   asp-action="Products"
+                   asp-route-category="6"
+                   class="juice-btn">
+
+                    @T["ExploreNow"]
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- IMAGE -->
+            <div class="juice-image">
+
+                <img src="~/images/category/juice.png"
+                     asp-append-version="true"
+                     alt="Juice" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     MATCHA
+     CATEGORY = 3
+     IMAGE LEFT - TEXT RIGHT
+===================================================== -->
+
+<section class="matcha-banner">
+
+    <div class="container">
+
+        <div class="matcha-wrapper">
+
+
+            <!-- IMAGE -->
+            <div class="matcha-left">
+
+                <img src="~/images/category/matcha.png"
+                     asp-append-version="true"
+                     alt="Matcha" />
+
+            </div>
+
+
+            <!-- CONTENT -->
+            <div class="matcha-right">
+
+                <div class="matcha-title">
+
+                    <div class="matcha-icon">
+
+                        <i class="bi bi-cup-hot"></i>
+
+                    </div>
+
+                    <h2>
+                        @T["MenuMatchaTitle"]
+                    </h2>
+
+                </div>
+
+
+                <p>
+                    @T["MenuMatchaDescription"]
+                </p>
+
+
+                <a asp-controller="Menu"
+                   asp-action="Products"
+                   asp-route-category="3"
+                   class="matcha-btn">
+
+                    @T["ExploreNow"]
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SODA
+     CATEGORY = 4
+     TEXT LEFT - IMAGE RIGHT
+===================================================== -->
+
+<section class="soda-banner">
+
+    <div class="container">
+
+        <div class="soda-wrapper">
+
+
+            <!-- CONTENT -->
+            <div class="soda-content">
+
+                <div class="soda-title">
+
+                    <div class="soda-icon">
+
+                        <i class="bi bi-cup-straw"></i>
+
+                    </div>
+
+                    <h2>
+                        @T["MenuSodaTitle"]
+                    </h2>
+
+                </div>
+
+
+                <p>
+                    @T["MenuSodaDescription"]
+                </p>
+
+
+                <a asp-controller="Menu"
+                   asp-action="Products"
+                   asp-route-category="4"
+                   class="soda-btn">
+
+                    @T["ExploreNow"]
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- IMAGE -->
+            <div class="soda-image">
+
+                <img src="~/images/category/soda.png"
+                     asp-append-version="true"
+                     alt="Soda" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CAKE
+     CATEGORY = 5
+     IMAGE LEFT - TEXT RIGHT
+===================================================== -->
+
+<section class="cake-banner">
+
+    <div class="container">
+
+        <div class="cake-wrapper">
+
+
+            <!-- IMAGE -->
+            <div class="cake-left">
+
+                <img src="~/images/category/cake.png"
+                     asp-append-version="true"
+                     alt="Cake" />
+
+            </div>
+
+
+            <!-- CONTENT -->
+            <div class="cake-right">
+
+                <div class="cake-title">
+
+                    <div class="cake-icon">
+
+                        <i class="bi bi-cake2-fill"></i>
+
+                    </div>
+
+                    <h2>
+                        @T["MenuCakeTitle"]
+                    </h2>
+
+                </div>
+
+
+                <p>
+                    @T["MenuCakeDescription"]
+                </p>
+
+
+                <a asp-controller="Menu"
+                   asp-action="Products"
+                   asp-route-category="5"
+                   class="cake-btn">
+
+                    @T["ExploreNow"]
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     YOGURT
+     CATEGORY = 7
+     TEXT LEFT - IMAGE RIGHT
+===================================================== -->
+
+<section class="yogurt-banner">
+
+    <div class="container">
+
+        <div class="yogurt-wrapper">
+
+
+            <!-- CONTENT -->
+            <div class="yogurt-content">
+
+                <div class="yogurt-title">
+
+                    <div class="yogurt-icon">
+
+                        <i class="bi bi-cup-straw"></i>
+
+                    </div>
+
+                    <h2>
+                        @T["MenuYogurtTitle"]
+                    </h2>
+
+                </div>
+
+
+                <p>
+                    @T["MenuYogurtDescription"]
+                </p>
+
+
+                <a asp-controller="Menu"
+                   asp-action="Products"
+                   asp-route-category="7"
+                   class="yogurt-btn">
+
+                    @T["ExploreNow"]
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- IMAGE -->
+            <div class="yogurt-image">
+
+                <img src="~/images/category/yogurt.png"
+                     asp-append-version="true"
+                     alt="Yogurt" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

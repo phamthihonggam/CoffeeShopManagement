@@ -1,0 +1,687 @@
+﻿/* =========================================================
+   ROSALIE COFFEE
+   HEADER / NAVBAR
+========================================================= */
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 1000;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar {
+    width: 100%;
+    min-height: 112px;
+    padding: 0 32px;
+    background: #4b2e2b;
+    box-shadow: 0 4px 16px rgba(45, 25, 20, 0.15);
+}
+
+    .navbar .container-fluid {
+        width: 100%;
+        max-width: 1540px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+    }
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.navbar-brand {
+    flex: 0 0 auto;
+    margin: 0 42px 0 0;
+    padding: 0;
+}
+
+    .navbar-brand img,
+    .navbar-brand .logo {
+        width: 88px;
+        height: 88px;
+        display: block;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+
+/* =========================================================
+   COLLAPSE
+========================================================= */
+
+.navbar-collapse {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}
+
+
+/* =========================================================
+   MENU
+========================================================= */
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0;
+    padding: 0;
+}
+
+    .navbar-nav .nav-item {
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar-nav .nav-link {
+        position: relative;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0 15px !important;
+        color: #ffffff !important;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1;
+        white-space: nowrap;
+        border-radius: 10px;
+        transition: color .25s ease, background .25s ease;
+    }
+
+        .navbar-nav .nav-link:hover {
+            color: #e4b17e !important;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+
+        /* =========================================================
+   MENU UNDERLINE
+========================================================= */
+
+        .navbar-nav .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 5px;
+            width: 0;
+            height: 2px;
+            border-radius: 20px;
+            background: #d9a16d;
+            transform: translateX(-50%);
+            transition: width .25s ease;
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            width: 30px;
+        }
+
+
+/* =========================================================
+   RIGHT SIDE
+========================================================= */
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    /* QUAN TRỌNG:
+       tăng khoảng cách giữa 3 cụm bên phải */
+    gap: 18px;
+    margin-left: auto;
+    padding-left: 35px;
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   CART
+========================================================= */
+
+.cart-btn {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    flex: 0 0 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #4b2e2b;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .14);
+    transition: transform .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+
+    .cart-btn i {
+        font-size: 20px;
+    }
+
+    .cart-btn:hover {
+        background: #d4a373;
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 7px 16px rgba(0, 0, 0, .16);
+    }
+
+
+/* =========================================================
+   CART COUNT
+========================================================= */
+
+.cart-count {
+    position: absolute;
+    top: -6px;
+    right: -4px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ffffff;
+    border-radius: 50px;
+    background: #e53935;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+.language-dropdown {
+    position: relative;
+    margin: 0;
+}
+
+
+/* LANGUAGE BUTTON */
+
+.lang-toggle {
+    min-width: 150px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 16px;
+    border: 1.5px solid rgba(255, 255, 255, .28);
+    border-radius: 50px;
+    background: rgba(255, 255, 255, .025);
+    color: #ffffff;
+    cursor: pointer;
+    transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+
+    .lang-toggle:hover {
+        border-color: #d4a373;
+        background: rgba(255, 255, 255, .06);
+        transform: translateY(-1px);
+    }
+
+
+/* GLOBE */
+
+.globe {
+    font-size: 19px;
+}
+
+
+/* DIVIDER */
+
+.divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255, 255, 255, .28);
+}
+
+
+/* VN */
+
+.lang-current {
+    color: #e0a66e;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+
+/* US */
+
+.lang-other {
+    color: rgba(255, 255, 255, .95);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+
+/* ARROW */
+
+.arrow {
+    margin-left: 2px;
+    font-size: 11px;
+    transition: transform .2s ease;
+}
+
+.lang-toggle:hover .arrow {
+    transform: rotate(180deg);
+}
+
+
+/* =========================================================
+   LANGUAGE DROPDOWN MENU
+========================================================= */
+
+.lang-menu {
+    position: absolute;
+    top: 62px;
+    right: 0;
+    width: 260px;
+    display: none;
+    padding: 7px;
+    overflow: hidden;
+    border: 1px solid #eee4dc;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 16px 35px rgba(0, 0, 0, .16);
+    z-index: 9999;
+}
+
+    .lang-menu.show {
+        display: block;
+        animation: langFade .2s ease;
+    }
+
+
+/* =========================================================
+   LANGUAGE ANIMATION
+========================================================= */
+
+@keyframes langFade {
+
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   LANGUAGE ITEM
+========================================================= */
+
+.lang-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 14px;
+    border-radius: 10px;
+    color: #4b2e2b;
+    text-decoration: none;
+    transition: background .2s ease;
+}
+
+    .lang-item:hover {
+        background: #faf5f0;
+    }
+
+    .lang-item.active {
+        background: #f8f1eb;
+    }
+
+.lang-left {
+    display: flex;
+    align-items: center;
+}
+
+    .lang-left img {
+        width: 36px;
+        height: 36px;
+        margin-right: 11px;
+        border-radius: 6px;
+        object-fit: cover;
+    }
+
+    .lang-left span {
+        font-size: 15px;
+        font-weight: 650;
+    }
+
+.check {
+    color: #9b6a43;
+    font-size: 18px;
+}
+
+
+/* =========================================================
+   LOGIN / REGISTER / ACCOUNT
+========================================================= */
+
+.btn-login,
+.btn-register {
+    min-height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 0 25px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient( 135deg, #dda56e, #c98d57 );
+    color: #ffffff !important;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .10);
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+    .btn-login i,
+    .btn-register i {
+        font-size: 16px;
+    }
+
+    .btn-login:hover,
+    .btn-register:hover {
+        color: #ffffff !important;
+        background: linear-gradient( 135deg, #c98f59, #b97945 );
+        transform: translateY(-2px);
+        box-shadow: 0 7px 16px rgba(0, 0, 0, .14);
+    }
+
+
+/* =========================================================
+   ACCOUNT DROPDOWN
+========================================================= */
+
+.account-dropdown {
+    flex-shrink: 0;
+}
+
+    .account-dropdown .btn-login {
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .account-dropdown .dropdown-menu {
+        min-width: 240px;
+        margin-top: 10px;
+        padding: 8px;
+        border: 1px solid #eee3da;
+        border-radius: 15px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+    }
+
+    .account-dropdown .dropdown-item,
+    .account-dropdown .dropdown-item-text {
+        padding: 11px 12px;
+        border-radius: 8px;
+        font-size: 15px;
+    }
+
+        .account-dropdown .dropdown-item:hover {
+            background: #f8f2ed;
+        }
+
+
+/* =========================================================
+   MOBILE TOGGLER
+========================================================= */
+
+.navbar-toggler {
+    padding: 8px 10px;
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 9px;
+}
+
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+
+.navbar-toggler-icon {
+    filter: invert(1);
+}
+
+
+/* =========================================================
+   RESPONSIVE - LAPTOP
+========================================================= */
+
+@media (max-width: 1350px) {
+
+    .navbar {
+        min-height: 104px;
+        padding: 0 20px;
+    }
+
+    .navbar-brand {
+        margin-right: 25px;
+    }
+
+        .navbar-brand img,
+        .navbar-brand .logo {
+            width: 80px;
+            height: 80px;
+        }
+
+    .navbar-nav {
+        gap: 3px;
+    }
+
+        .navbar-nav .nav-link {
+            padding: 0 10px !important;
+            font-size: 17px;
+        }
+
+
+    /* vẫn giữ khoảng cách rõ ràng */
+
+    .navbar-right {
+        gap: 14px;
+        padding-left: 20px;
+    }
+
+    .cart-btn {
+        width: 46px;
+        height: 46px;
+        flex-basis: 46px;
+    }
+
+        .cart-btn i {
+            font-size: 18px;
+        }
+
+    .lang-toggle {
+        min-width: 130px;
+        height: 46px;
+        padding: 0 11px;
+    }
+
+    .lang-current,
+    .lang-other {
+        font-size: 14px;
+    }
+
+    .btn-login,
+    .btn-register {
+        min-height: 46px;
+        padding: 0 18px;
+        font-size: 14px;
+    }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 991.98px) {
+
+    .navbar {
+        min-height: 90px;
+        padding: 6px 20px;
+    }
+
+    .navbar-brand img,
+    .navbar-brand .logo {
+        width: 76px;
+        height: 76px;
+    }
+
+    .navbar-collapse {
+        display: block;
+        margin-top: 8px;
+        padding: 15px 0 12px;
+        border-top: 1px solid rgba(255, 255, 255, .12);
+    }
+
+    .navbar-nav {
+        width: 100%;
+        display: flex;
+        align-items: stretch;
+        gap: 3px;
+    }
+
+        .navbar-nav .nav-link {
+            width: 100%;
+            min-height: 46px;
+            justify-content: flex-start;
+            padding: 0 12px !important;
+            border-radius: 8px;
+            font-size: 17px;
+        }
+
+            .navbar-nav .nav-link::after {
+                display: none;
+            }
+
+            .navbar-nav .nav-link:hover {
+                background: rgba(255, 255, 255, .06);
+            }
+
+
+    /* RIGHT SIDE */
+
+    .navbar-right {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 13px;
+        padding: 14px 0 0;
+        border-top: 1px solid rgba(255, 255, 255, .12);
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+    .navbar {
+        min-height: 82px;
+        padding: 6px 14px;
+    }
+
+    .navbar-brand img,
+    .navbar-brand .logo {
+        width: 68px;
+        height: 68px;
+    }
+
+    .cart-btn {
+        width: 44px;
+        height: 44px;
+        flex-basis: 44px;
+    }
+
+    .lang-toggle {
+        height: 44px;
+    }
+
+    .btn-login,
+    .btn-register {
+        min-height: 44px;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 575.98px) {
+
+    .navbar-right {
+        display: grid;
+        grid-template-columns: 44px 1fr;
+        column-gap: 14px;
+        row-gap: 12px;
+        width: 100%;
+    }
+
+    .cart-btn {
+        grid-column: 1;
+    }
+
+    .language-dropdown {
+        grid-column: 2;
+        width: 100%;
+    }
+
+    .lang-toggle {
+        width: 100%;
+    }
+
+    .account-dropdown,
+    .navbar-right > .btn-login,
+    .navbar-right > .btn-register {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+        .account-dropdown .btn-login,
+        .navbar-right > .btn-login,
+        .navbar-right > .btn-register {
+            width: 100%;
+            max-width: none;
+        }
+
+    .lang-menu {
+        width: 100%;
+        min-width: 225px;
+    }
+}

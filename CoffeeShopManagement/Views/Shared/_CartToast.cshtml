@@ -1,0 +1,83 @@
+﻿<div id="cartToast" class="cart-toast">
+
+    <div class="cart-toast-box">
+
+        <!-- Header -->
+        <div class="cart-toast-header">
+
+            <div class="cart-toast-success">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                <span>Đã thêm vào giỏ</span>
+
+            </div>
+
+            <button type="button"
+                    id="toastClose"
+                    class="cart-toast-close">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+        <!-- Body -->
+        <div class="cart-toast-body">
+
+            <div class="cart-toast-image">
+
+                <img id="toastImage"
+                     src="/images/no-image.png"
+                     alt="Product">
+
+            </div>
+
+            <div class="cart-toast-info">
+
+                <h4 id="toastName">
+
+                    Cafe Latte
+
+                </h4>
+
+                <div class="cart-toast-row">
+
+                    <span>
+
+                        SL:
+                        <strong id="toastQty">1</strong>
+
+                    </span>
+
+                    <span id="toastPrice">
+
+                        49.000đ
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="cart-toast-footer">
+
+            <a asp-controller="Cart"
+               asp-action="Index"
+               class="toast-cart-btn">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+                Xem giỏ hàng
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

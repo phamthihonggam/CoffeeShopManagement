@@ -1,0 +1,2124 @@
+﻿/*=========================================================
+    ROSALIE COFFEE
+    PROMOTION PAGE
+    PART 1 - HERO
+=========================================================*/
+
+:root {
+    --promotion-primary: #6F4E37;
+    --promotion-secondary: #8B5E3C;
+    --promotion-accent: #E53935;
+    --promotion-bg: #F8F5F2;
+    --promotion-text: #2E2E2E;
+}
+
+/*==============================
+    HERO SECTION
+==============================*/
+
+/* HERO */
+.promotion-hero {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    padding: 0;
+    background: var(--promotion-bg);
+}
+
+/* SLIDER */
+.promotion-slider {
+    position: relative;
+    width: 100%;
+    max-width: none;
+    height: 620px;
+    margin: 0;
+    border-radius: 0;
+    overflow: hidden;
+    background: linear-gradient(135deg, #5d3a29, #8B5E3C, #C28745);
+    box-shadow: none;
+}
+
+
+
+/*==============================
+    SLIDE
+==============================*/
+
+.promotion-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: .6s;
+}
+
+    .promotion-slide.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .promotion-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+/*==============================
+    OVERLAY
+==============================*/
+
+.promotion-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient( 90deg, rgba(0,0,0,.55), rgba(0,0,0,.20) );
+}
+
+/*==============================
+    CONTENT
+==============================*/
+
+.promotion-content {
+    position: absolute;
+    left: 70px;
+    top: 65px;
+    color: #fff;
+    z-index: 20;
+    max-width: 600px;
+}
+
+.promotion-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #FFD54F;
+    color: #7A3E00;
+    padding: 10px 24px;
+    border-radius: 40px;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.promotion-content h2 {
+    font-size: 46px;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.promotion-content h1 {
+    font-size: 115px;
+    line-height: 1;
+    color: #FFE082;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.promotion-content h3 {
+    font-size: 34px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.promotion-content p {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 35px;
+}
+
+/*==============================
+    BUTTON
+==============================*/
+
+.promotion-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    color: var(--promotion-accent);
+    text-decoration: none;
+    padding: 18px 42px;
+    border-radius: 40px;
+    font-weight: 700;
+    transition: .3s;
+}
+
+    .promotion-button:hover {
+        background: #FFF4E8;
+        transform: translateY(-3px);
+    }
+
+/*==============================
+    COUNTDOWN
+==============================*/
+
+.promotion-countdown {
+    position: absolute;
+    right: 50px;
+    bottom: 45px;
+    background: rgba(255,255,255,.12);
+    backdrop-filter: blur(10px);
+    padding: 22px;
+    border-radius: 18px;
+    color: #fff;
+}
+
+.promotion-countdown-title {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: .5px;
+}
+
+.promotion-time {
+    display: flex;
+    gap: 12px;
+}
+
+.promotion-box {
+    width: 72px;
+    height: 72px;
+    background: #fff;
+    color: var(--promotion-accent);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+    .promotion-box span {
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    .promotion-box small {
+        font-size: 11px;
+        color: #666;
+    }
+
+/*==============================
+    PREV NEXT
+==============================*/
+
+.promotion-prev,
+.promotion-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 55px;
+    height: 55px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    background: rgba(255,255,255,.25);
+    color: #fff;
+    transition: .3s;
+    z-index: 30;
+}
+
+.promotion-prev {
+    left: 20px;
+}
+
+.promotion-next {
+    right: 20px;
+}
+
+    .promotion-prev:hover,
+    .promotion-next:hover {
+        background: #fff;
+        color: var(--promotion-primary);
+    }
+
+/*==============================
+    DOT
+==============================*/
+
+.promotion-dots {
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+}
+
+.promotion-dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.45);
+    cursor: pointer;
+    transition: .3s;
+}
+
+    .promotion-dot.active {
+        width: 34px;
+        border-radius: 20px;
+        background: #fff;
+    }
+
+/*==============================
+    ANIMATION
+==============================*/
+
+.promotion-slide.active .promotion-content {
+    animation: promotionFade .8s;
+}
+
+@keyframes promotionFade {
+
+    from {
+        opacity: 0;
+        transform: translateX(-35px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.promotion-slide.active img {
+    animation: promotionZoom 8s linear;
+}
+
+@keyframes promotionZoom {
+
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.08);
+    }
+}
+/*==============================
+    FLASH SALE
+==============================*/
+
+.promotion-flash {
+    width: 100%;
+    max-width: 1700px;
+    margin: 35px auto 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+}
+
+.promotion-flash-left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.promotion-flash-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #E53935;
+    font-size: 40px;
+    font-weight: 800;
+}
+
+    .promotion-flash-title i {
+        color: #E53935;
+    }
+
+.promotion-flash-text {
+    display: none;
+}
+
+.promotion-flash-time {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.promotion-flash-item {
+    width: 50px;
+    height: 50px;
+    background: #E53935;
+    color: #fff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+    .promotion-flash-item span {
+        font-size: 22px;
+        font-weight: 800;
+        line-height: 1;
+    }
+
+    .promotion-flash-item small {
+        font-size: 9px;
+        color: #fff;
+    }
+
+.promotion-flash-colon {
+    color: #E53935;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.promotion-flash-link {
+    color: #E53935;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+    .promotion-flash-link:hover {
+        color: #c62828;
+    }
+
+.promotion-flash {
+    margin-bottom: 40px;
+}
+
+.promotion-flash-note {
+    width: 100%;
+    max-width: 1700px;
+    margin: 0 auto 35px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: #555;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.8;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+    .promotion-flash-note i {
+        color: #E53935;
+        font-size: 22px;
+        margin-top: 4px;
+    }
+
+
+
+/*=========================================================
+    CATEGORY
+=========================================================*/
+
+.promotion-category {
+    width: 92%;
+    max-width: 1400px;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 22px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+.promotion-category-item {
+    padding: 14px 24px;
+    border-radius: 35px;
+    background: #F5F5F5;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: .3s;
+}
+
+    .promotion-category-item:hover {
+        background: #FFE7D6;
+        color: #6F4E37;
+    }
+
+    .promotion-category-item.active {
+        background: #6F4E37;
+        color: #fff;
+    }
+
+/*=========================================================
+    SORT
+=========================================================*/
+
+.promotion-sort {
+    width: 92%;
+    max-width: 1400px;
+    margin: 25px auto;
+    background: #fff;
+    border-radius: 22px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+.promotion-sort-title {
+    font-weight: 700;
+    color: #555;
+}
+
+.promotion-sort-button {
+    padding: 12px 22px;
+    border-radius: 30px;
+    background: #fff;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: .3s;
+    font-weight: 600;
+}
+
+    .promotion-sort-button:hover {
+        color: #6F4E37;
+        border-color: #6F4E37;
+    }
+
+    .promotion-sort-button.active {
+        background: #6F4E37;
+        color: #fff;
+        border-color: #6F4E37;
+    }
+
+/*=========================================================
+    VIEW MODE
+=========================================================*/
+
+.promotion-view {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}
+
+.promotion-view-button {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 14px;
+    background: #fff;
+    cursor: pointer;
+    transition: .3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,.08);
+}
+
+    .promotion-view-button:hover {
+        background: #6F4E37;
+        color: #fff;
+    }
+
+    .promotion-view-button.active {
+        background: #6F4E37;
+        color: #fff;
+    }
+
+/*=========================================================
+    STICKY FILTER
+=========================================================*/
+
+.promotion-filter {
+    position: sticky;
+    top: 90px;
+    z-index: 50;
+}
+
+/*=========================================================
+    ANIMATION
+=========================================================*/
+
+.promotion-flash,
+.promotion-search,
+.promotion-category,
+.promotion-sort {
+    animation: promotionUp .6s ease;
+}
+
+@keyframes promotionUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/*=========================================================
+    PART 3
+    PRODUCT GRID
+=========================================================*/
+
+.promotion-grid {
+    width: 100%;
+    max-width: 1700px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4,minmax(310px,1fr));
+    gap: 32px;
+}
+/*=========================================================
+    CARD
+=========================================================*/
+
+.promotion-card {
+    position: relative;
+    background: #fff;
+    border-radius: 22px;
+    overflow: hidden;
+    transition: .35s;
+    border: 1px solid #eee;
+    box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+    .promotion-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,.16);
+    }
+
+/*=========================================================
+    IMAGE
+=========================================================*/
+
+.promotion-image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+    .promotion-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: .45s;
+    }
+
+.promotion-card:hover .promotion-image img {
+    transform: scale(1.08);
+}
+
+/*=========================================================
+    DISCOUNT
+=========================================================*/
+
+.promotion-discount {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    background: #E53935;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/*=========================================================
+    HOT
+=========================================================*/
+
+.promotion-hot {
+    position: absolute;
+    left: 15px;
+    top: 60px;
+    background: #FF9800;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 18px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/*=========================================================
+    NEW
+=========================================================*/
+
+.promotion-new {
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+    background: #00B894;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/*=========================================================
+    HEART
+=========================================================*/
+
+.promotion-heart {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: #999;
+    transition: .3s;
+    box-shadow: 0 6px 18px rgba(0,0,0,.15);
+}
+
+    .promotion-heart:hover {
+        color: #E53935;
+    }
+
+    .promotion-heart.active {
+        background: #FFE5E5;
+        color: #E53935;
+    }
+
+/*=========================================================
+    BODY
+=========================================================*/
+
+.promotion-body {
+    padding: 22px;
+}
+
+.promotion-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+    height: 56px;
+    overflow: hidden;
+}
+
+
+
+/*=========================================================
+    PRICE
+=========================================================*/
+
+.promotion-price {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 18px;
+}
+
+.promotion-old-price {
+    color: #999;
+    text-decoration: line-through;
+    font-size: 16px;
+}
+
+.promotion-new-price {
+    font-size: 42px;
+    color: #E53935;
+    font-weight: 800;
+}
+
+/*=========================================================
+    SOLD
+=========================================================*/
+
+.promotion-sold {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    font-size: 14px;
+    color: #777;
+}
+
+    .promotion-sold .sold {
+        color: #ff6b35;
+        font-weight: 600;
+    }
+
+    .promotion-sold .stock {
+        color: #4caf50;
+        font-weight: 600;
+    }
+/*=========================================================
+    PROGRESS
+=========================================================*/
+
+.promotion-progress {
+    height: 8px;
+    background: #eee;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.promotion-progress-bar {
+    height: 100%;
+    width: 65%;
+    background: linear-gradient( 90deg, #FF7043, #FFA726 );
+    border-radius: 20px;
+}
+
+/*=========================================================
+    CART
+=========================================================*/
+
+.promotion-cart {
+    width: 100%;
+    height: 52px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    background: linear-gradient( 90deg, #6F4E37, #8B5E3C );
+    color: #fff;
+    font-size: 17px;
+    font-weight: 700;
+    transition: .3s;
+}
+
+    .promotion-cart:hover {
+        background: linear-gradient( 90deg, #8B5E3C, #A97142 );
+        transform: translateY(-2px);
+    }
+
+/*=========================================================
+    STOCK
+=========================================================*/
+
+.promotion-stock {
+    display: inline-block;
+    margin-bottom: 15px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #F5F5F5;
+    color: #666;
+    font-size: 13px;
+}
+
+/*=========================================================
+    BORDER EFFECT
+=========================================================*/
+
+.promotion-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2px solid transparent;
+    border-radius: 22px;
+    transition: .3s;
+}
+
+.promotion-card:hover::after {
+    border-color: #D8B08C;
+}
+
+/*=========================================================
+    IMAGE OVERLAY
+=========================================================*/
+
+.promotion-image::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient( to top, rgba(0,0,0,.20), transparent );
+    z-index: 1;
+}
+
+.promotion-image img {
+    position: relative;
+    z-index: 0;
+}
+
+.promotion-body {
+    position: relative;
+    z-index: 2;
+}
+
+/*=========================================================
+    HOVER ANIMATION
+=========================================================*/
+
+.promotion-card:hover .promotion-name {
+    color: #6F4E37;
+}
+
+.promotion-card:hover .promotion-cart {
+    box-shadow: 0 10px 25px rgba(111,78,55,.30);
+}
+/*=========================================================
+    PART 4
+    VOUCHER
+=========================================================*/
+
+.promotion-voucher {
+    width: 95%;
+    max-width: 1700px;
+    margin: 65px auto 70px;
+}
+
+
+/* =========================================================
+   VOUCHER HEADER
+========================================================= */
+
+.promotion-voucher-title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+
+    .promotion-voucher-title > i {
+        flex-shrink: 0;
+        font-size: 48px;
+        color: #ff9800;
+    }
+
+
+    .promotion-voucher-title > div {
+        min-width: 0;
+    }
+
+
+    .promotion-voucher-title h2 {
+        margin: 0;
+        color: #3b2a20;
+        font-size: 46px;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+
+    .promotion-voucher-title p {
+        margin: 6px 0 0;
+        color: #777;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+
+/* =========================================================
+   VOUCHER GRID
+========================================================= */
+
+.promotion-voucher-list {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    align-items: stretch;
+}
+
+
+/* =========================================================
+   VOUCHER CARD
+========================================================= */
+
+.promotion-voucher-card {
+    position: relative;
+    min-width: 0;
+    min-height: 205px;
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    grid-template-rows: 1fr auto;
+    column-gap: 20px;
+    row-gap: 16px;
+    align-items: center;
+    padding: 22px;
+    background: #ffffff;
+    border: 2px dashed #ffb98d;
+    border-radius: 20px;
+    box-shadow: 0 10px 28px rgba(75, 48, 42, 0.08);
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+
+    .promotion-voucher-card:hover {
+        transform: translateY(-5px);
+        border-color: #d99365;
+        box-shadow: 0 18px 38px rgba(75, 48, 42, 0.14);
+    }
+
+
+/* =========================================================
+   TICKET LEFT
+========================================================= */
+
+.voucher-ticket {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    align-self: stretch;
+    min-height: 155px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 15px 10px;
+    text-align: center;
+    background: linear-gradient( 145deg, #fff7f1, #fff1e5 );
+    border: 1px solid #f4d5c0;
+    border-radius: 15px;
+    color: #6f4e37;
+}
+
+
+    .voucher-ticket span {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+
+    .voucher-ticket strong {
+        color: #e53935;
+        font-size: 25px;
+        font-weight: 900;
+        line-height: 1.1;
+    }
+
+
+/* =========================================================
+   INFO
+========================================================= */
+
+.promotion-voucher-info {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-self: center;
+}
+
+
+.promotion-voucher-code {
+    overflow: hidden;
+    color: #e53935;
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.promotion-voucher-info > strong {
+    color: #44312a;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+
+.promotion-voucher-info > span {
+    color: #777;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+    .promotion-voucher-info > span b {
+        color: #5b3b2c;
+        font-weight: 800;
+    }
+
+
+.promotion-voucher-info > small {
+    color: #9a8e87;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   SAVE BUTTON
+========================================================= */
+
+.promotion-voucher-button {
+    grid-column: 2;
+    grid-row: 2;
+    width: 100%;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 11px;
+    background: #6f4e37;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+
+    .promotion-voucher-button:hover:not(:disabled) {
+        background: #8b5e3c;
+        transform: translateY(-1px);
+        box-shadow: 0 7px 16px rgba(111, 78, 55, 0.18);
+    }
+
+
+    /* ĐÃ LƯU */
+
+    .promotion-voucher-button.saved,
+    .promotion-voucher-button:disabled {
+        background: #80583f;
+        color: #ffffff;
+        cursor: default;
+        opacity: 1;
+        transform: none;
+        box-shadow: none;
+    }
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .promotion-voucher-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .promotion-voucher {
+        width: 92%;
+        margin-top: 50px;
+        margin-bottom: 55px;
+    }
+
+
+    .promotion-voucher-title {
+        align-items: flex-start;
+    }
+
+
+        .promotion-voucher-title > i {
+            font-size: 38px;
+        }
+
+
+        .promotion-voucher-title h2 {
+            font-size: 34px;
+        }
+
+
+    .promotion-voucher-list {
+        grid-template-columns: 1fr;
+    }
+
+
+    .promotion-voucher-card {
+        min-height: 190px;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 520px) {
+
+    .promotion-voucher-card {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        gap: 14px;
+        padding: 18px;
+    }
+
+
+    .voucher-ticket {
+        grid-column: 1;
+        grid-row: 1;
+        min-height: 90px;
+        align-self: auto;
+    }
+
+
+    .promotion-voucher-info {
+        grid-column: 1;
+        grid-row: 2;
+        text-align: center;
+    }
+
+
+    .promotion-voucher-code {
+        white-space: normal;
+    }
+
+
+    .promotion-voucher-button {
+        grid-column: 1;
+        grid-row: 3;
+    }
+}
+
+/*=========================================================
+    PAGINATION
+=========================================================*/
+
+.promotion-pagination {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin: 60px 0;
+}
+
+.promotion-page-button {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    transition: .3s;
+    font-weight: 700;
+    box-shadow: 0 5px 15px rgba(0,0,0,.08);
+}
+
+    .promotion-page-button:hover {
+        background: #6F4E37;
+        color: #fff;
+    }
+
+    .promotion-page-button.active {
+        background: #6F4E37;
+        color: #fff;
+    }
+
+/*=========================================================
+    BACK TO TOP
+=========================================================*/
+
+.promotion-backtop {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    width: 58px;
+    height: 58px;
+    border: none;
+    border-radius: 50%;
+    background: #6F4E37;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    transition: .3s;
+    z-index: 999;
+    box-shadow: 0 10px 25px rgba(0,0,0,.2);
+}
+
+    .promotion-backtop:hover {
+        transform: translateY(-4px);
+        background: #8B5E3C;
+    }
+
+/*=========================================================
+    FOOTER
+=========================================================*/
+
+.promotion-footer {
+    margin-top: 80px;
+    background: #3F2A1D;
+    color: #fff;
+    padding: 70px 0 20px;
+}
+
+.promotion-footer-container {
+    width: 92%;
+    max-width: 1400px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+}
+
+.promotion-footer h3 {
+    font-size: 34px;
+    margin-bottom: 18px;
+}
+
+.promotion-footer h4 {
+    margin-bottom: 18px;
+}
+
+.promotion-footer p {
+    color: #ddd;
+    line-height: 1.8;
+}
+
+.promotion-footer a {
+    display: block;
+    text-decoration: none;
+    color: #ddd;
+    margin: 10px 0;
+    transition: .3s;
+}
+
+    .promotion-footer a:hover {
+        color: #FFD54F;
+        padding-left: 5px;
+    }
+
+.promotion-social {
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+    .promotion-social a {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: #5B3C2A;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        transition: .3s;
+    }
+
+        .promotion-social a:hover {
+            background: #D97706;
+            transform: translateY(-4px);
+        }
+
+.promotion-footer-bottom {
+    margin-top: 50px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,.1);
+    padding-top: 20px;
+    color: #bbb;
+}
+
+/*=========================================================
+    RESPONSIVE
+=========================================================*/
+
+@media(max-width:1200px) {
+
+    .promotion-voucher-list {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media(max-width:992px) {
+
+    .promotion-footer-container {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media(max-width:768px) {
+
+    .promotion-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .promotion-voucher-list {
+        grid-template-columns: 1fr;
+    }
+
+    .promotion-footer-container {
+        grid-template-columns: 1fr;
+    }
+
+    .promotion-pagination {
+        flex-wrap: wrap;
+    }
+}
+
+@media(max-width:576px) {
+
+    .promotion-slider {
+        height: 320px;
+    }
+
+    .promotion-content {
+        left: 25px;
+        top: 35px;
+    }
+
+        .promotion-content h1 {
+            font-size: 60px;
+        }
+
+        .promotion-content h2 {
+            font-size: 28px;
+        }
+
+        .promotion-content h3 {
+            font-size: 22px;
+        }
+
+    .promotion-countdown {
+        display: none;
+    }
+}
+/*=========================================================
+    PART 5
+    EFFECT - LOADING - ANIMATION
+=========================================================*/
+
+/*==============================
+    CARD APPEAR
+==============================*/
+
+.promotion-card {
+    animation: promotionCard .6s ease;
+}
+
+@keyframes promotionCard {
+
+    from {
+        opacity: 0;
+        transform: translateY(35px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/*==============================
+    SHIMMER
+==============================*/
+
+.promotion-loading {
+    position: relative;
+    overflow: hidden;
+    background: #ececec;
+}
+
+    .promotion-loading::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        transform: translateX(-100%);
+        background: linear-gradient( 90deg, transparent, rgba(255,255,255,.7), transparent );
+        animation: promotionShimmer 1.4s infinite;
+    }
+
+@keyframes promotionShimmer {
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/*==============================
+    BADGE
+==============================*/
+
+.promotion-badge-hot {
+    position: absolute;
+    left: 0;
+    top: 18px;
+    background: #E53935;
+    color: #fff;
+    padding: 7px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 0 30px 30px 0;
+}
+
+.promotion-badge-new {
+    position: absolute;
+    right: 0;
+    top: 18px;
+    background: #00B894;
+    color: #fff;
+    padding: 7px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 30px 0 0 30px;
+}
+
+.promotion-badge-best {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 15px;
+    background: #FF9800;
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-weight: 700;
+}
+
+/*==============================
+    GLASS
+==============================*/
+
+.promotion-glass {
+    background: rgba(255,255,255,.75);
+    backdrop-filter: blur(12px);
+}
+
+/*==============================
+    RIPPLE BUTTON
+==============================*/
+
+.promotion-cart {
+    position: relative;
+    overflow: hidden;
+}
+
+    .promotion-cart span {
+        position: absolute;
+        border-radius: 50%;
+        transform: translate(-50%,-50%);
+        animation: promotionRipple .6s linear;
+        background: rgba(255,255,255,.4);
+    }
+
+@keyframes promotionRipple {
+
+    from {
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+
+    to {
+        width: 320px;
+        height: 320px;
+        opacity: 0;
+    }
+}
+
+/*==============================
+    IMAGE OVERLAY
+==============================*/
+
+.promotion-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient( to top, rgba(0,0,0,.25), transparent 60% );
+}
+
+/*==============================
+    HOVER ICON
+==============================*/
+
+.promotion-heart {
+    transition: .35s;
+}
+
+    .promotion-heart:hover {
+        transform: scale(1.15);
+    }
+
+/*==============================
+    BUTTON HOVER
+==============================*/
+
+.promotion-cart:hover {
+    box-shadow: 0 10px 25px rgba(111,78,55,.35);
+}
+
+/*==============================
+    FLOAT
+==============================*/
+
+.promotion-card:hover {
+    animation: promotionFloat .35s forwards;
+}
+
+@keyframes promotionFloat {
+
+    to {
+        transform: translateY(-10px);
+    }
+}
+
+/*==============================
+    SCROLLBAR
+==============================*/
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #F2F2F2;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #8B5E3C;
+    border-radius: 20px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #6F4E37;
+    }
+
+/*==============================
+    TOAST
+==============================*/
+
+.promotion-toast {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    bottom: auto;
+    width: 390px;
+    background: #fff !important;
+    border-radius: 18px;
+    box-shadow: 0 15px 40px rgba(0,0,0,.18);
+    border: 1px solid #ececec;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: .35s;
+    z-index: 99999;
+}
+
+    .promotion-toast.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+.promotion-toast-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+    border-bottom: 1px solid #eee;
+}
+
+.promotion-toast-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #39B54A;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.promotion-toast-header span {
+    flex: 1;
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+}
+
+.promotion-toast-close {
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #888;
+    font-size: 18px;
+}
+
+.promotion-toast-body {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px;
+    color: #555;
+    font-size: 16px;
+}
+
+    .promotion-toast-body i {
+        color: #FF9800;
+        font-size: 22px;
+    }
+
+/*==============================
+    LOADER
+==============================*/
+
+.promotion-loader {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+}
+
+    .promotion-loader.hide {
+        opacity: 0;
+        visibility: hidden;
+        transition: .5s;
+    }
+
+.promotion-spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #ddd;
+    border-top-color: #6F4E37;
+    border-radius: 50%;
+    animation: promotionSpin .8s linear infinite;
+}
+
+@keyframes promotionSpin {
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/*==============================
+    FADE WHEN SCROLL
+==============================*/
+
+.promotion-fade {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: .7s;
+}
+
+    .promotion-fade.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+/*==============================
+    SHADOW
+==============================*/
+
+.promotion-shadow {
+    box-shadow: 0 20px 50px rgba(0,0,0,.12);
+}
+
+/*==============================
+    SELECTION
+==============================*/
+
+::selection {
+    background: #6F4E37;
+    color: #fff;
+}
+/* Ẩn nút chuyển slide */
+.promotion-prev,
+.promotion-next {
+    display: none !important;
+}
+/*====================================
+    PROMOTION HEADER
+====================================*/
+
+.promotion-header {
+    width: 100%;
+    max-width: 1700px;
+    margin: 0 auto 40px;
+}
+
+.promotion-heading h2 {
+    margin: 0;
+    font-size: 46px;
+    font-weight: 800;
+    color: #3B2A20;
+    line-height: 1.2;
+}
+
+.promotion-heading p {
+    margin-top: 12px;
+    font-size: 18px;
+    color: #666;
+}
+
+    .promotion-heading p strong {
+        color: #E53935;
+        font-weight: 700;
+    }
+
+.promotion-heading::after {
+    content: "";
+    display: block;
+    width: 90px;
+    height: 4px;
+    margin-top: 16px;
+    border-radius: 20px;
+    background: #E53935;
+}
+/*====================================
+        COMBO TIẾT KIỆM
+====================================*/
+
+.combo-section {
+    width: 95%;
+    max-width: 1700px;
+    margin: 60px auto;
+}
+
+.combo-header {
+    width: 100%;
+    max-width: 1700px;
+    margin: 0 auto 35px;
+    text-align: left;
+}
+
+    .combo-header h2 {
+        font-size: 52px;
+        font-weight: 800;
+        color: #3B2A20;
+        margin-bottom: 12px;
+    }
+
+    .combo-header p {
+        font-size: 22px;
+        color: #666;
+        margin: 0;
+    }
+
+.combo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.combo-card {
+    position: relative;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    transition: all .35s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+    .combo-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 18px 40px rgba(0,0,0,.15);
+    }
+
+    .combo-image,
+    .combo-card img {
+        width: 100%;
+        height: 240px;
+        object-fit: cover;
+    }
+
+.combo-discount {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #E53935;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 700;
+    z-index: 2;
+}
+
+.combo-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 22px;
+}
+
+    .combo-content h3 {
+        font-size: 28px;
+        font-weight: 800;
+        color: #3B2A20;
+        margin-bottom: 10px;
+    }
+
+    .combo-content p {
+        color: #666;
+        font-size: 15px;
+        line-height: 1.6;
+        min-height: 50px;
+        margin-bottom: 18px;
+    }
+
+.combo-price {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.combo-old-price {
+    color: #999;
+    text-decoration: line-through;
+    font-size: 17px;
+}
+
+.combo-new-price {
+    color: #E53935;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+/*==============================
+        BUTTON
+==============================*/
+
+.combo-action {
+    display: flex;
+    gap: 12px;
+    margin-top: auto;
+}
+
+
+/* =========================================
+   COMMON BUTTON
+========================================= */
+
+.btn-view-combo,
+.btn-combo {
+    flex: 1;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+
+/* =========================================
+   VIEW COMBO
+========================================= */
+
+.btn-view-combo {
+    border: 2px solid #6F4E37;
+    background: #ffffff;
+    color: #6F4E37;
+    text-decoration: none !important;
+}
+
+
+    .btn-view-combo:hover {
+        background: #6F4E37;
+        color: #ffffff;
+        text-decoration: none !important;
+        transform: translateY(-1px);
+    }
+
+
+    .btn-view-combo:focus,
+    .btn-view-combo:active,
+    .btn-view-combo:visited {
+        text-decoration: none;
+    }
+
+
+/* =========================================
+   ADD COMBO
+========================================= */
+
+.btn-combo {
+    border: none;
+    background: #6F4E37;
+    color: #ffffff;
+}
+
+
+    .btn-combo:hover {
+        background: #E53935;
+        transform: translateY(-1px);
+    }
+
+
+    /* =========================================
+   ICON
+========================================= */
+
+    .btn-view-combo i,
+    .btn-combo i {
+        margin: 0;
+    }
+
+
+/*==============================
+        RESPONSIVE
+==============================*/
+
+@media (max-width:1200px) {
+
+    .combo-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width:768px) {
+
+    .combo-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .combo-header h2 {
+        font-size: 34px;
+    }
+
+    .combo-content h3 {
+        font-size: 24px;
+    }
+
+    .combo-new-price {
+        font-size: 26px;
+    }
+
+    .combo-action {
+        flex-direction: column;
+    }
+
+    .btn-view-combo,
+    .btn-combo {
+        width: 100%;
+    }
+}
+/*====================================
+    BUTTON XEM TẤT CẢ COMBO
+====================================*/
+
+.combo-more {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 35px 0 50px;
+}
+
+.combo-more-btn {
+    width: 250px; /* thay min-width */
+    height: 65px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 17px;
+    font-weight: 700;
+    background: #8B5E3C;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 50px;
+    border: 3px solid #fff;
+    box-shadow: 0 6px 15px rgba(111,78,55,.18);
+}
+
+    .combo-more-btn:hover {
+        background: #6F4E37;
+        color: #fff;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 22px rgba(111,78,55,.25), 0 0 0 2px #C99A72;
+    }
+
+    /* Xóa luôn icon và dấu trang trí nếu có */
+
+    .combo-more-btn i,
+    .combo-more-btn::before,
+    .combo-more-btn::after {
+        display: none;
+    }
+
+.extra-combo {
+    display: none;
+}
+
+.extra-product {
+    display: none;
+}
+
+.btn-combo-modal {
+    width: 100%;
+    height: 54px;
+    border: none;
+    border-radius: 12px;
+    background: #8B5E3C;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+    .btn-combo-modal:hover {
+        background: #6F4E37;
+        transform: translateY(-2px);
+    }
+/* =========================================
+   PROMOTION - VIEW DETAIL BUTTON
+========================================= */
+
+a.promotion-cart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #fff;
+}
+
+    a.promotion-cart:hover {
+        color: #fff;
+    }
+
+
+/* =========================================
+   PROMOTION - COMBO DETAIL LINK FIX
+========================================= */
+
+a.btn-view-combo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none !important;
+}
+
+
+    a.btn-view-combo:hover,
+    a.btn-view-combo:focus,
+    a.btn-view-combo:active,
+    a.btn-view-combo:visited {
+        text-decoration: none !important;
+    }
+
+
+@media (max-width: 768px) {
+
+    a.btn-view-combo {
+        width: 100%;
+    }
+}

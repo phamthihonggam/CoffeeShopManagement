@@ -1,0 +1,459 @@
+﻿@model CoffeeShopManagement.Models.SanPham
+
+@{
+    ViewData["Title"] = "Sửa sản phẩm";
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-product.css"
+          asp-append-version="true" />
+
+}
+
+
+<!-- =========================================
+     HEADER
+========================================= -->
+
+<div class="admin-welcome">
+
+    <div class="product-admin-heading">
+
+        <div>
+
+            <h2>
+                Sửa sản phẩm
+            </h2>
+
+            <p>
+                Cập nhật thông tin sản phẩm
+                trong hệ thống Rosalie Coffee.
+            </p>
+
+        </div>
+
+
+        <a asp-area="Admin"
+           asp-controller="Product"
+           asp-action="Index"
+           class="admin-reset-search">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Quay lại
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     EDIT FORM
+========================================= -->
+
+<form asp-area="Admin"
+      asp-controller="Product"
+      asp-action="Edit"
+      asp-route-id="@Model.MaSp"
+      method="post"
+      enctype="multipart/form-data"
+      class="admin-product-form">
+
+    @Html.AntiForgeryToken()
+
+
+    <!-- ID -->
+
+    <input type="hidden"
+           asp-for="MaSp" />
+
+
+    <!-- VALIDATION -->
+
+    <div asp-validation-summary="ModelOnly"
+         class="text-danger">
+    </div>
+
+
+    <div class="admin-form-grid">
+
+
+        <!-- =====================================
+             TÊN SẢN PHẨM
+        ====================================== -->
+
+        <div class="admin-form-group admin-form-full">
+
+            <label asp-for="TenSp">
+                Tên sản phẩm
+            </label>
+
+            <input asp-for="TenSp"
+                   class="admin-form-control"
+                   placeholder="Tên sản phẩm" />
+
+            <span asp-validation-for="TenSp"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <!-- =====================================
+             DANH MỤC
+        ====================================== -->
+
+        <div class="admin-form-group">
+
+            <label asp-for="MaLoai">
+                Danh mục
+            </label>
+
+            <select asp-for="MaLoai"
+                    asp-items="ViewBag.Categories"
+                    class="admin-form-control">
+
+                <option value="">
+                    -- Chọn danh mục --
+                </option>
+
+            </select>
+
+            <span asp-validation-for="MaLoai"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <!-- =====================================
+             GIÁ BÁN
+        ====================================== -->
+
+        <div class="admin-form-group">
+
+            <label asp-for="DonGia">
+                Giá bán
+            </label>
+
+            <div class="admin-form-price">
+
+                <input asp-for="DonGia"
+                       type="number"
+                       min="0"
+                       step="1000"
+                       class="admin-form-control" />
+
+                <span>
+                    đ
+                </span>
+
+            </div>
+
+            <span asp-validation-for="DonGia"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <!-- =====================================
+             MÔ TẢ
+        ====================================== -->
+
+        <div class="admin-form-group admin-form-full">
+
+            <label asp-for="MoTa">
+                Mô tả sản phẩm
+            </label>
+
+            <textarea asp-for="MoTa"
+                      class="admin-form-control admin-form-textarea"
+                      rows="5"
+                      placeholder="Nhập mô tả sản phẩm..."></textarea>
+
+            <span asp-validation-for="MoTa"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <!-- =====================================
+             ẢNH HIỆN TẠI
+        ====================================== -->
+
+        <div class="admin-form-group admin-form-full">
+
+            <label>
+                Hình ảnh sản phẩm
+            </label>
+
+
+            @if (!string.IsNullOrWhiteSpace(Model.HinhAnh))
+            {
+                <div class="admin-image-preview show">
+
+                    <img src="~/images/menu/@Model.HinhAnh"
+                         alt="@Model.TenSp" />
+
+                </div>
+            }
+
+
+            <!-- UPLOAD ẢNH MỚI -->
+
+            <div class="admin-upload-box"
+                 style="margin-top: 14px;">
+
+                <input type="file"
+                       name="imageFile"
+                       id="imageFile"
+                       accept="image/jpeg,image/png,image/webp"
+                       class="admin-file-input" />
+
+
+                <div class="admin-upload-content">
+
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                    <strong>
+                        Chọn ảnh mới
+                    </strong>
+
+                    <span>
+                        Bỏ trống nếu muốn giữ ảnh hiện tại
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- PREVIEW ẢNH MỚI -->
+
+            <div class="admin-image-preview"
+                 id="imagePreview">
+
+                <img id="previewImage"
+                     src=""
+                     alt="Xem trước ảnh mới" />
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             KHUYẾN MÃI
+        ====================================== -->
+
+        <div class="admin-form-group admin-form-full">
+
+            <div class="admin-promotion-switch">
+
+                <label class="admin-switch-label">
+
+                    <input asp-for="DangKhuyenMai"
+                           id="promotionToggle"
+                           type="checkbox" />
+
+                    <span class="admin-switch">
+                    </span>
+
+                    <strong>
+                        Áp dụng khuyến mãi
+                    </strong>
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             PROMOTION FIELDS
+        ====================================== -->
+
+        <div id="promotionFields"
+             class="admin-promotion-fields admin-form-full">
+
+
+            <!-- GIÁ GỐC -->
+
+            <div class="admin-form-group">
+
+                <label asp-for="GiaGoc">
+                    Giá gốc
+                </label>
+
+                <div class="admin-form-price">
+
+                    <input asp-for="GiaGoc"
+                           type="number"
+                           min="0"
+                           step="1000"
+                           class="admin-form-control" />
+
+                    <span>
+                        đ
+                    </span>
+
+                </div>
+
+                <span asp-validation-for="GiaGoc"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- GIÁ KHUYẾN MÃI -->
+
+            <div class="admin-form-group">
+
+                <label asp-for="GiaKhuyenMai">
+                    Giá khuyến mãi
+                </label>
+
+                <div class="admin-form-price">
+
+                    <input asp-for="GiaKhuyenMai"
+                           type="number"
+                           min="0"
+                           step="1000"
+                           class="admin-form-control" />
+
+                    <span>
+                        đ
+                    </span>
+
+                </div>
+
+                <span asp-validation-for="GiaKhuyenMai"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- PHẦN TRĂM GIẢM -->
+
+            <div class="admin-form-group">
+
+                <label asp-for="PhanTramGiam">
+                    Phần trăm giảm
+                </label>
+
+                <div class="admin-form-price">
+
+                    <input asp-for="PhanTramGiam"
+                           type="number"
+                           min="0"
+                           max="100"
+                           class="admin-form-control" />
+
+                    <span>
+                        %
+                    </span>
+
+                </div>
+
+                <span asp-validation-for="PhanTramGiam"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- NGÀY BẮT ĐẦU -->
+
+            <div class="admin-form-group">
+
+                <label asp-for="NgayBatDau">
+                    Ngày bắt đầu
+                </label>
+
+                <input asp-for="NgayBatDau"
+                       type="datetime-local"
+                       class="admin-form-control" />
+
+                <span asp-validation-for="NgayBatDau"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- NGÀY KẾT THÚC -->
+
+            <div class="admin-form-group">
+
+                <label asp-for="NgayKetThuc">
+                    Ngày kết thúc
+                </label>
+
+                <input asp-for="NgayKetThuc"
+                       type="datetime-local"
+                       class="admin-form-control" />
+
+                <span asp-validation-for="NgayKetThuc"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         ACTIONS
+    ========================================== -->
+
+    <div class="admin-form-actions">
+
+        <a asp-area="Admin"
+           asp-controller="Product"
+           asp-action="Index"
+           class="admin-form-cancel">
+
+            <i class="fa-solid fa-xmark"></i>
+
+            Hủy
+
+        </a>
+
+
+        <button type="submit"
+                class="admin-form-submit">
+
+            <i class="fa-solid fa-floppy-disk"></i>
+
+            Lưu thay đổi
+
+        </button>
+
+    </div>
+
+</form>
+
+
+<!-- =========================================
+     SCRIPT
+========================================= -->
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/js/admin-product.js"
+            asp-append-version="true">
+    </script>
+
+}

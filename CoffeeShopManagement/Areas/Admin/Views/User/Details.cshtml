@@ -1,0 +1,388 @@
+﻿@model CoffeeShopManagement.Models.KhachHang
+
+@{
+    ViewData["Title"] = "Chi tiết người dùng";
+
+    var totalOrders =
+        Model.HoaDons.Count;
+
+    var totalSpent =
+        Model.HoaDons.Sum(
+            x => x.TongTien ?? 0
+        );
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-user.css"
+          asp-append-version="true" />
+
+}
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="admin-welcome">
+
+    <div class="user-admin-heading">
+
+        <div>
+
+            <h2>
+                Chi tiết khách hàng
+            </h2>
+
+            <p>
+                Xem thông tin tài khoản và lịch sử mua hàng
+                của khách hàng tại Rosalie Coffee.
+            </p>
+
+        </div>
+
+
+        <a asp-area="Admin"
+           asp-controller="User"
+           asp-action="Index"
+           class="admin-user-reset-btn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Quay lại
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     CUSTOMER SUMMARY
+===================================================== -->
+
+<div class="admin-user-detail-grid">
+
+
+    <!-- THÔNG TIN KHÁCH -->
+
+    <div class="admin-user-detail-card">
+
+        <div class="admin-user-detail-header">
+
+            <div class="admin-user-detail-avatar">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    KHÁCH HÀNG
+                </span>
+
+                <h3>
+                    @Model.HoTen
+                </h3>
+
+                <p>
+                    Mã khách hàng #@Model.MaKh
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-user-detail-info">
+
+
+            <div>
+
+                <span>
+                    Email
+                </span>
+
+                <strong>
+                    @(Model.Email ?? "Chưa cập nhật")
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Số điện thoại
+                </span>
+
+                <strong>
+                    @(Model.DienThoai ?? "Chưa cập nhật")
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Địa chỉ
+                </span>
+
+                <strong>
+                    @(Model.DiaChi ?? "Chưa cập nhật")
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Ngày đăng ký
+                </span>
+
+                <strong>
+                    @Model.NgayTao.ToString("dd/MM/yyyy HH:mm")
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- THỐNG KÊ KHÁCH -->
+
+    <div class="admin-user-detail-stats">
+
+        <div class="admin-user-detail-stat">
+
+            <div class="admin-user-detail-stat-icon">
+
+                <i class="fa-solid fa-receipt"></i>
+
+            </div>
+
+            <span>
+                Tổng đơn hàng
+            </span>
+
+            <strong>
+                @totalOrders
+            </strong>
+
+        </div>
+
+
+        <div class="admin-user-detail-stat">
+
+            <div class="admin-user-detail-stat-icon">
+
+                <i class="fa-solid fa-coins"></i>
+
+            </div>
+
+            <span>
+                Tổng chi tiêu
+            </span>
+
+            <strong>
+                @(totalSpent.ToString("#,##0"))đ
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ORDER HISTORY
+===================================================== -->
+
+<div class="admin-user-order-history">
+
+    <div class="admin-user-order-history-header">
+
+        <div>
+
+            <span>
+                LỊCH SỬ
+            </span>
+
+            <h3>
+                Đơn hàng của khách
+            </h3>
+
+        </div>
+
+    </div>
+
+
+    <div class="admin-user-order-table-wrap">
+
+        <table class="admin-user-order-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Mã đơn
+                    </th>
+
+                    <th>
+                        Ngày đặt
+                    </th>
+
+                    <th>
+                        Tổng tiền
+                    </th>
+
+                    <th>
+                        Trạng thái
+                    </th>
+
+                    <th>
+                        Thao tác
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @if (Model.HoaDons.Any())
+                {
+                    @foreach (var order in Model.HoaDons
+                        .OrderByDescending(x => x.NgayDat)
+                        .ThenByDescending(x => x.MaHd))
+                    {
+                        var statusClass =
+                            order.TrangThai switch
+                            {
+                                "Chờ xử lý" => "status-pending",
+                                "Đã xác nhận" => "status-confirmed",
+                                "Đang chuẩn bị" => "status-preparing",
+                                "Đang giao" => "status-shipping",
+                                "Hoàn thành" => "status-completed",
+                                "Đã hủy" => "status-cancelled",
+                                _ => "status-default"
+                            };
+
+                        <tr>
+
+                            <td>
+
+                                <span class="admin-user-order-id">
+                                    #@order.MaHd
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                @if (order.NgayDat.HasValue)
+                                {
+                                    <div class="admin-user-date">
+
+                                        <strong>
+                                            @order.NgayDat.Value.ToString("dd/MM/yyyy")
+                                        </strong>
+
+                                        <span>
+                                            @order.NgayDat.Value.ToString("HH:mm")
+                                        </span>
+
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span>
+                                        —
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <td>
+
+                                <strong class="admin-user-order-total">
+                                    @((order.TongTien ?? 0).ToString("#,##0"))đ
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="admin-user-order-status @statusClass">
+
+                                    @(order.TrangThai ?? "Chưa xác định")
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <a asp-area="Admin"
+                                   asp-controller="Order"
+                                   asp-action="Details"
+                                   asp-route-id="@order.MaHd"
+                                   class="admin-user-view-btn"
+                                   title="Xem đơn hàng">
+
+                                    <i class="fa-solid fa-eye"></i>
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="5">
+
+                            <div class="admin-user-empty">
+
+                                <i class="fa-solid fa-receipt"></i>
+
+                                <h3>
+                                    Khách hàng chưa có đơn hàng
+                                </h3>
+
+                                <p>
+                                    Chưa có lịch sử mua hàng để hiển thị.
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

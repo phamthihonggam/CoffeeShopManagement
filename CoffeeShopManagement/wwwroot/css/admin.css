@@ -1,0 +1,771 @@
+﻿/* =====================================================
+   ROSALIE COFFEE - ADMIN
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: #f7f3ef;
+    color: #3f2a24;
+}
+
+/* =====================================================
+   WRAPPER
+===================================================== */
+
+.admin-wrapper {
+    min-height: 100vh;
+    display: flex;
+}
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    padding: 24px 18px;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient( 180deg, #4b2b25 0%, #5a342b 55%, #43251f 100% );
+    color: #ffffff;
+    box-shadow: 8px 0 30px rgba(60, 31, 24, 0.12);
+    z-index: 1000;
+}
+
+/* =====================================================
+   LOGO
+===================================================== */
+
+.admin-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 10px 24px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+    .admin-logo img {
+        width: 62px;
+        height: 62px;
+        object-fit: cover;
+        border-radius: 50%;
+        background: #1f1511;
+        border: 2px solid rgba(221, 169, 113, 0.55);
+    }
+
+    .admin-logo h2 {
+        margin: 0;
+        color: #f1d2ad;
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: 1.8px;
+    }
+
+    .admin-logo span {
+        display: block;
+        margin-top: 3px;
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 3px;
+    }
+
+/* =====================================================
+   MENU
+===================================================== */
+
+.admin-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-menu-item {
+    width: 100%;
+    min-height: 50px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    border-radius: 13px;
+    color: rgba(255, 255, 255, 0.82);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+    .admin-menu-item i {
+        width: 22px;
+        text-align: center;
+        color: #ddb183;
+        font-size: 17px;
+    }
+
+    .admin-menu-item:hover {
+        background: rgba(255, 255, 255, 0.09);
+        color: #ffffff;
+        transform: translateX(3px);
+    }
+
+        .admin-menu-item:hover i {
+            color: #f2c995;
+        }
+
+/* =====================================================
+   SIDEBAR BOTTOM
+===================================================== */
+
+.admin-sidebar-bottom {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.admin-back-site {
+    min-height: 46px;
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.78);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+    .admin-back-site:hover {
+        background: rgba(255, 255, 255, 0.09);
+        color: #ffffff;
+    }
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.admin-main {
+    width: calc(100% - 260px);
+    min-height: 100vh;
+    margin-left: 260px;
+    background: #f7f3ef;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.admin-header {
+    min-height: 92px;
+    padding: 18px 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    background: #ffffff;
+    border-bottom: 1px solid #eadfd8;
+    box-shadow: 0 5px 18px rgba(63, 42, 36, 0.05);
+}
+
+.admin-header-label {
+    display: block;
+    margin-bottom: 4px;
+    color: #a26843;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.admin-header h1 {
+    margin: 0;
+    color: #4c2d25;
+    font-size: 26px;
+    font-weight: 800;
+}
+
+/* =====================================================
+   HEADER RIGHT
+===================================================== */
+
+.admin-header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.admin-view-site {
+    height: 42px;
+    padding: 0 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid #d9c4b6;
+    border-radius: 11px;
+    background: #fffaf6;
+    color: #754833;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+    .admin-view-site:hover {
+        background: #784a35;
+        color: #ffffff;
+    }
+
+/* =====================================================
+   ADMIN ACCOUNT
+===================================================== */
+
+.admin-account {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-avatar {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient( 135deg, #7d4d36, #a86c49 );
+    color: #ffffff;
+    font-size: 17px;
+}
+
+.admin-account strong {
+    display: block;
+    color: #432820;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admin-account span {
+    display: block;
+    margin-top: 2px;
+    color: #9a8a82;
+    font-size: 11px;
+}
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+.admin-content {
+    padding: 30px 34px 50px;
+}
+
+/* =====================================================
+   WELCOME
+===================================================== */
+
+.admin-welcome {
+    padding: 28px 30px;
+    background: linear-gradient( 135deg, #ffffff, #fffaf6 );
+    border: 1px solid #eadfd8;
+    border-radius: 20px;
+    box-shadow: 0 12px 28px rgba(78, 48, 38, 0.07);
+}
+
+    .admin-welcome h2 {
+        margin: 0 0 10px;
+        color: #4c2d25;
+        font-size: 25px;
+        font-weight: 800;
+    }
+
+    .admin-welcome p {
+        max-width: 700px;
+        margin: 0;
+        color: #7e6e66;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+/* =====================================================
+   DASHBOARD CARD BASE
+===================================================== */
+
+.admin-stat-grid {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.admin-stat-card {
+    padding: 22px;
+    background: #ffffff;
+    border: 1px solid #eadfd8;
+    border-radius: 18px;
+    box-shadow: 0 10px 24px rgba(76, 45, 37, 0.06);
+}
+
+.admin-stat-icon {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    border-radius: 13px;
+    background: #f4e5db;
+    color: #875238;
+    font-size: 19px;
+}
+
+.admin-stat-card span {
+    display: block;
+    color: #8f817a;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.admin-stat-card strong {
+    display: block;
+    margin-top: 7px;
+    color: #432820;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+
+    .admin-stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 850px) {
+
+    .admin-sidebar {
+        width: 220px;
+    }
+
+    .admin-main {
+        width: calc(100% - 220px);
+        margin-left: 220px;
+    }
+
+    .admin-header {
+        padding-left: 22px;
+        padding-right: 22px;
+    }
+
+    .admin-content {
+        padding-left: 22px;
+        padding-right: 22px;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .admin-sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        min-height: auto;
+    }
+
+    .admin-wrapper {
+        display: block;
+    }
+
+    .admin-main {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .admin-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-header-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .admin-stat-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* =========================================================
+   ADMIN ACCOUNT DROPDOWN
+========================================================= */
+
+.admin-account-dropdown {
+    position: relative;
+}
+
+
+/* =========================================================
+   ACCOUNT BUTTON
+========================================================= */
+
+.admin-account-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+    .admin-account-button:hover,
+    .admin-account-button.active {
+        background: #faf5f1;
+        border-color: #ead9cf;
+    }
+
+
+    /* =========================================================
+   AVATAR
+========================================================= */
+
+    .admin-account-button .admin-avatar {
+        width: 40px;
+        height: 40px;
+        flex: 0 0 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #a66342;
+        color: #ffffff;
+        font-size: 15px;
+    }
+
+
+/* =========================================================
+   INFO
+========================================================= */
+
+.admin-account-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+    .admin-account-info strong {
+        max-width: 150px;
+        color: #44261e;
+        font-size: 12px;
+        font-weight: 800;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .admin-account-info span {
+        margin-top: 2px;
+        color: #9b8175;
+        font-size: 10px;
+    }
+
+
+/* =========================================================
+   ARROW
+========================================================= */
+
+.admin-account-arrow {
+    margin-left: 2px;
+    color: #9e7c6c;
+    font-size: 10px;
+    transition: transform 0.2s ease;
+}
+
+.admin-account-button.active
+.admin-account-arrow {
+    transform: rotate(180deg);
+}
+
+
+/* =========================================================
+   DROPDOWN
+========================================================= */
+
+.admin-account-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 270px;
+    padding: 10px;
+    background: #ffffff;
+    border: 1px solid #eadcd4;
+    border-radius: 14px;
+    box-shadow: 0 15px 40px rgba(65, 39, 30, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-7px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    z-index: 9999;
+}
+
+    .admin-account-menu.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+
+/* =========================================================
+   DROPDOWN HEADER
+========================================================= */
+
+.admin-account-menu-header {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 9px;
+}
+
+.admin-dropdown-avatar {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f1dfd4;
+    color: #80472f;
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.admin-account-menu-header > div:last-child {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-account-menu-header strong {
+    color: #4b2a21;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admin-account-menu-header span {
+    margin-top: 2px;
+    color: #9c857b;
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   ROLE
+========================================================= */
+
+.admin-account-role {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 10px;
+    margin-top: 3px;
+    border-radius: 9px;
+    background: #faf5f1;
+}
+
+    .admin-account-role span {
+        color: #998178;
+        font-size: 10px;
+    }
+
+    .admin-account-role strong {
+        color: #75412f;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.admin-account-divider {
+    height: 1px;
+    margin: 9px 4px;
+    background: #eee2dc;
+}
+
+
+/* =========================================================
+   DROPDOWN ITEM
+========================================================= */
+
+.admin-account-menu form {
+    margin: 0;
+}
+
+.admin-account-menu-item {
+    width: 100%;
+    height: 40px;
+    padding: 0 11px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: #69493c;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+    .admin-account-menu-item i {
+        width: 16px;
+        color: #a16d54;
+    }
+
+    .admin-account-menu-item:hover {
+        background: #f8efea;
+        color: #633726;
+    }
+
+
+/* =========================================================
+   SIDEBAR LOGOUT
+========================================================= */
+
+.admin-logout-form {
+    width: 100%;
+    margin: 0;
+}
+
+.admin-sidebar-logout {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 13px 12px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: #f0d6c5;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+    .admin-sidebar-logout i {
+        width: 17px;
+        text-align: center;
+    }
+
+    .admin-sidebar-logout:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+    }
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .admin-account-info {
+        display: none;
+    }
+
+    .admin-account-arrow {
+        display: none;
+    }
+
+    .admin-account-menu {
+        width: 250px;
+    }
+}
+/* =========================================================
+   ADMIN AVATAR IMAGE
+========================================================= */
+
+.admin-avatar {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    min-height: 42px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background: #a66342;
+}
+
+    .admin-avatar img,
+    .admin-avatar-image {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 50%;
+    }
+
+
+/* =========================================================
+   DROPDOWN AVATAR
+========================================================= */
+
+.admin-dropdown-avatar {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    min-height: 46px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background: #f1dfd4;
+}
+
+    .admin-dropdown-avatar img,
+    .admin-dropdown-avatar-image {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 50%;
+    }

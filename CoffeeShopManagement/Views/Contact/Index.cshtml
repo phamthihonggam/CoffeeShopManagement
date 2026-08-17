@@ -1,0 +1,522 @@
+﻿@model List<CoffeeShopManagement.Models.ChiNhanh>
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+@{
+    ViewData["Title"] = T["ContactPageTitle"];
+}
+
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/contact.css"
+          asp-append-version="true" />
+
+}
+
+
+<section class="branch-page">
+
+
+    <!-- =================================
+         CONTACT HERO
+    ================================= -->
+
+    <section class="branch-page-hero">
+
+        <div class="branch-page-overlay"></div>
+
+        <div class="container">
+
+            <div class="branch-page-content">
+
+                <span class="branch-page-subtitle">
+
+                    <i class="fa-solid fa-headset"></i>
+
+                    ROSALIE COFFEE
+
+                </span>
+
+
+                <h1>
+
+                    @T["ContactHeroTitle"]
+
+                </h1>
+
+
+                <p>
+
+                    @T["ContactHeroDescription"]
+
+                </p>
+
+
+                <div class="branch-page-buttons">
+
+                    <a href="#branch-list"
+                       class="branch-btn-primary"
+                       id="btnContactBranch">
+
+                        <i class="fa-solid fa-phone"></i>
+
+                        @T["ContactNow"]
+
+                    </a>
+
+
+                    <a asp-controller="Menu"
+                       asp-action="Index"
+                       class="branch-btn-outline">
+
+                        <i class="fa-solid fa-mug-hot"></i>
+
+                        @T["ViewMenu"]
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================
+         BRANCH SEARCH
+    ================================= -->
+
+    <section class="branch-page-search">
+
+        <div class="container">
+
+            <div class="branch-page-list-heading">
+
+                <div class="branch-page-list-decoration">
+
+                    <span></span>
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    <span></span>
+
+                </div>
+
+
+                <h2>
+                    @T["BranchSystemTitle"]
+                </h2>
+
+
+                <p>
+                    @T["BranchSystemDescription"]
+                </p>
+
+            </div>
+
+
+            <!-- SEARCH BOX -->
+
+            <div class="branch-page-search-box">
+
+                <i class="fa-solid fa-magnifying-glass branch-page-search-icon"></i>
+
+
+                <input type="text"
+                       id="searchBranch"
+                       placeholder="@T["BranchSearchPlaceholder"]" />
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================
+         BRANCH LIST
+    ================================= -->
+
+    <section class="branch-page-list"
+             id="branch-list">
+
+        <div class="container">
+
+            <div class="branch-page-grid">
+
+                @foreach (var item in Model)
+                {
+                    /*
+                     * ==========================================
+                     * XỬ LÝ ĐƯỜNG DẪN ẢNH
+                     * ==========================================
+                     */
+
+                    var imagePath = Url.Content(
+                        "~/images/branch/" + item.HinhAnh
+                    );
+
+
+                    /*
+                     * ==========================================
+                     * TẠO LINK GOOGLE MAPS
+                     * ==========================================
+                     */
+
+                    var mapAddress =
+                        $"{item.DiaChi}, {item.Quan}, {item.ThanhPho}";
+
+                    var googleMapUrl =
+                        "https://www.google.com/maps/search/?api=1&query="
+                        + Uri.EscapeDataString(mapAddress);
+
+
+                    <!-- =================================
+                         BRANCH CARD
+                    ================================= -->
+
+                    <div class="branch-page-card">
+
+
+                        <!-- IMAGE -->
+
+                        <div class="branch-page-image">
+
+                            <img src="@imagePath"
+                                 alt="@item.TenChiNhanh"
+                                 loading="lazy"
+                                 onerror="this.onerror=null; this.style.display='none';" />
+
+                        </div>
+
+
+                        <!-- CARD BODY -->
+
+                        <div class="branch-page-body">
+
+
+                            <!-- NAME -->
+
+                            <h2>
+                                @item.TenChiNhanh
+                            </h2>
+
+
+                            <!-- ADDRESS -->
+
+                            <p class="branch-page-address">
+
+                                <i class="fa-solid fa-location-dot"></i>
+
+                                @item.DiaChi
+
+                            </p>
+
+
+                            <!-- PHONE -->
+
+                            <p>
+
+                                <i class="fa-solid fa-phone"></i>
+
+                                @item.DienThoai
+
+                            </p>
+
+
+                            <!-- OPENING HOURS -->
+
+                            <p>
+
+                                <i class="fa-regular fa-clock"></i>
+
+                                @item.GioMoCua
+
+                            </p>
+
+
+                            <!-- CITY -->
+
+                            <p>
+
+                                <i class="fa-solid fa-city"></i>
+
+                                @item.Quan -
+                                @item.ThanhPho
+
+                            </p>
+
+
+                            <!-- DESCRIPTION -->
+
+                            <p class="branch-page-description">
+
+                                @item.MoTa
+
+                            </p>
+
+
+                            <!-- =================================
+                                 FEATURES
+                            ================================= -->
+
+                            <div class="branch-page-feature">
+
+
+                                @if (item.Wifi)
+                                {
+                                    <span>
+
+                                        <i class="fa-solid fa-wifi"></i>
+
+                                        @T["BranchWifi"]
+
+                                    </span>
+                                }
+
+
+                                @if (item.BaiDoXe)
+                                {
+                                    <span>
+
+                                        <i class="fa-solid fa-square-parking"></i>
+
+                                        @T["BranchParking"]
+
+                                    </span>
+                                }
+
+
+                                @if (item.MayLanh)
+                                {
+                                    <span>
+
+                                        <i class="fa-regular fa-snowflake"></i>
+
+                                        @T["BranchAirConditioner"]
+
+                                    </span>
+                                }
+
+
+                                @if (item.OCam)
+                                {
+                                    <span>
+
+                                        <i class="fa-solid fa-plug"></i>
+
+                                        @T["BranchPowerOutlet"]
+
+                                    </span>
+                                }
+
+                            </div>
+
+
+                            <!-- =================================
+                                 BUTTONS
+                            ================================= -->
+
+                            <div class="branch-page-button">
+
+
+                                <!-- GOOGLE MAPS -->
+
+                                <a href="@googleMapUrl"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="branch-btn-map">
+
+                                    <i class="fa-solid fa-map-location-dot"></i>
+
+                                    @T["Directions"]
+
+                                </a>
+
+
+                                <!-- DETAIL -->
+
+                                <button type="button"
+                                        class="branch-btn-detail"
+                                        data-id="@item.MaCN">
+
+                                    <i class="fa-solid fa-circle-info"></i>
+
+                                    @T["ViewDetails"]
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================
+         BRANCH DETAIL MODAL
+    ================================= -->
+
+    <div id="branchModal"
+         class="branch-page-modal">
+
+
+        <!-- OVERLAY -->
+
+        <div class="branch-page-modal-overlay"></div>
+
+
+        <!-- MODAL CONTENT -->
+
+        <div class="branch-page-modal-content">
+
+
+            <!-- CLOSE BUTTON -->
+
+            <button type="button"
+                    class="branch-page-close"
+                    aria-label="@T["Close"]">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+
+            <div class="branch-page-modal-wrapper">
+
+
+                <!-- MODAL IMAGE -->
+
+                <div class="branch-page-modal-image">
+
+                    <img id="modalImage"
+                         src=""
+                         alt="@T["BranchImageAlt"]" />
+
+                </div>
+
+
+                <!-- MODAL INFORMATION -->
+
+                <div class="branch-page-modal-info">
+
+
+                    <!-- RATING -->
+
+                    <span id="modalRating"
+                          class="branch-page-modal-rating">
+                    </span>
+
+
+                    <!-- NAME -->
+
+                    <h2 id="modalName">
+                    </h2>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <p id="modalDescription">
+                    </p>
+
+
+                    <!-- INFORMATION -->
+
+                    <ul class="branch-page-modal-list">
+
+
+                        <!-- ADDRESS -->
+
+                        <li>
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            <span id="modalAddress"></span>
+
+                        </li>
+
+
+                        <!-- PHONE -->
+
+                        <li>
+
+                            <i class="fa-solid fa-phone"></i>
+
+                            <span id="modalPhone"></span>
+
+                        </li>
+
+
+                        <!-- OPENING TIME -->
+
+                        <li>
+
+                            <i class="fa-regular fa-clock"></i>
+
+                            <span id="modalTime"></span>
+
+                        </li>
+
+
+                        <!-- CITY -->
+
+                        <li>
+
+                            <i class="fa-solid fa-city"></i>
+
+                            <span id="modalCity"></span>
+
+                        </li>
+
+                    </ul>
+
+
+                    <!-- FEATURES -->
+
+                    <div id="modalFeature"
+                         class="branch-page-modal-feature">
+                    </div>
+
+
+                    <!-- MODAL MAP BUTTON -->
+
+                    <a id="modalMap"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="branch-btn-map">
+
+                        <i class="fa-solid fa-map-location-dot"></i>
+
+                        @T["Directions"]
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+@section Scripts {
+
+    <script src="~/js/contact.js"
+            asp-append-version="true">
+    </script>
+
+}

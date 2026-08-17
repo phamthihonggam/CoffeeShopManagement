@@ -1,0 +1,96 @@
+﻿@{
+    ViewData["Title"] = "Tổng quan";
+}
+
+<div class="admin-welcome">
+
+    <h2>
+        Chào mừng đến với Rosalie Coffee Admin
+    </h2>
+
+    <p>
+        Quản lý sản phẩm, danh mục, đơn hàng, người dùng
+        và theo dõi tình hình kinh doanh của Rosalie Coffee.
+    </p>
+
+</div>
+
+
+<div class="admin-stat-grid">
+
+    <!-- =====================================
+         SẢN PHẨM
+    ====================================== -->
+
+    <div class="admin-stat-card">
+
+        <div class="admin-stat-icon">
+            <i class="fa-solid fa-mug-hot"></i>
+        </div>
+
+        <span>SẢN PHẨM</span>
+
+        <strong>
+            @ViewBag.TotalProducts
+        </strong>
+
+    </div>
+
+
+    <!-- =====================================
+         ĐƠN HÀNG
+    ====================================== -->
+
+    <div class="admin-stat-card">
+
+        <div class="admin-stat-icon">
+            <i class="fa-solid fa-receipt"></i>
+        </div>
+
+        <span>ĐƠN HÀNG</span>
+
+        <strong>
+            @ViewBag.TotalOrders
+        </strong>
+
+    </div>
+
+
+    <!-- =====================================
+         KHÁCH HÀNG
+    ====================================== -->
+
+    <div class="admin-stat-card">
+
+        <div class="admin-stat-icon">
+            <i class="fa-solid fa-users"></i>
+        </div>
+
+        <span>KHÁCH HÀNG</span>
+
+        <strong>
+            @ViewBag.TotalCustomers
+        </strong>
+
+    </div>
+
+
+    <!-- =====================================
+         DOANH THU
+    ====================================== -->
+
+    <div class="admin-stat-card">
+
+        <div class="admin-stat-icon">
+            <i class="fa-solid fa-coins"></i>
+        </div>
+
+        <span>DOANH THU</span>
+
+        <strong>
+            @(((decimal)ViewBag.TotalRevenue).ToString("#,##0"))đ
+        </strong>
+
+    </div>
+
+</div>

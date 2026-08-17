@@ -1,0 +1,475 @@
+﻿@{
+    ViewData["Title"] = "Đánh giá sản phẩm";
+
+    int maHd = ViewBag.MaHd;
+    int maSp = ViewBag.MaSp;
+
+    string tenSp =
+        ViewBag.TenSp?.ToString()
+        ?? "Sản phẩm";
+
+    string hinhAnh =
+        ViewBag.HinhAnh?.ToString()
+        ?? "";
+}
+
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/review.css"
+          asp-append-version="true" />
+
+}
+
+
+<section class="review-page">
+
+    <div class="review-container">
+
+
+        <!-- =============================================
+             HEADER
+        ============================================== -->
+
+        <div class="review-header">
+
+            <span class="review-label">
+
+                <i class="fa-solid fa-star"></i>
+
+                ROSALIE COFFEE
+
+            </span>
+
+            <h1>
+                Đánh giá sản phẩm
+            </h1>
+
+            <p>
+                Chia sẻ cảm nhận của bạn để Rosalie Coffee
+                có thể phục vụ bạn tốt hơn.
+            </p>
+
+        </div>
+
+
+        <!-- =============================================
+             REVIEW CARD
+        ============================================== -->
+
+        <div class="review-card">
+
+
+            <!-- =========================================
+                 PRODUCT
+            ========================================== -->
+
+            <div class="review-product">
+
+                <div class="review-product-image">
+
+                    <img src="~/images/menu/@hinhAnh"
+                         asp-append-version="true"
+                         alt="@tenSp" />
+
+                </div>
+
+
+                <div class="review-product-info">
+
+                    <span>
+                        SẢN PHẨM ĐÃ MUA
+                    </span>
+
+                    <h2>
+                        @tenSp
+                    </h2>
+
+                    <p>
+                        Đơn hàng #@maHd
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 FORM
+            ========================================== -->
+
+            <form asp-controller="Review"
+                  asp-action="Create"
+                  method="post"
+                  class="review-form"
+                  id="reviewForm">
+
+                @Html.AntiForgeryToken()
+
+
+                <input type="hidden"
+                       name="maHd"
+                       value="@maHd" />
+
+                <input type="hidden"
+                       name="maSp"
+                       value="@maSp" />
+
+
+                <!-- =====================================
+                     STAR
+                ====================================== -->
+
+                <div class="review-field">
+
+                    <label class="review-field-title">
+                        Bạn cảm thấy sản phẩm thế nào?
+                    </label>
+
+
+                    <div class="review-stars"
+                         id="reviewStars">
+
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <button type="button"
+                                    class="review-star"
+                                    data-value="@i"
+                                    aria-label="@i sao">
+
+                                <i class="fa-regular fa-star"></i>
+
+                            </button>
+                        }
+
+                    </div>
+
+
+                    <input type="hidden"
+                           id="soSao"
+                           name="soSao"
+                           value="0" />
+
+
+                    <div class="review-star-text"
+                         id="reviewStarText">
+
+                        Chọn số sao đánh giá
+
+                    </div>
+
+                </div>
+
+
+                <!-- =====================================
+                     COMMENT
+                ====================================== -->
+
+                <div class="review-field">
+
+                    <label for="noiDung"
+                           class="review-field-title">
+
+                        Nhận xét của bạn
+
+                    </label>
+
+
+                    <textarea id="noiDung"
+                              name="noiDung"
+                              maxlength="1000"
+                              rows="6"
+                              placeholder="Hãy chia sẻ cảm nhận của bạn về hương vị, chất lượng và trải nghiệm với sản phẩm..."></textarea>
+
+
+                    <div class="review-character">
+
+                        <span id="reviewCharacterCount">
+                            0
+                        </span>
+
+                        / 1000
+
+                    </div>
+
+                </div>
+
+
+                <!-- =====================================
+                     ACTION
+                ====================================== -->
+
+                <div class="review-actions">
+
+                    <a asp-controller="Account"
+                       asp-action="OrderHistory"
+                       class="review-back">
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
+                        Quay lại
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="review-submit"
+                            id="reviewSubmit">
+
+                        <i class="fa-solid fa-paper-plane"></i>
+
+                        Gửi đánh giá
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                // ==========================================
+                // ELEMENTS
+                // ==========================================
+
+                const stars =
+                    document.querySelectorAll(
+                        ".review-star"
+                    );
+
+                const ratingInput =
+                    document.getElementById(
+                        "soSao"
+                    );
+
+                const ratingText =
+                    document.getElementById(
+                        "reviewStarText"
+                    );
+
+                const textarea =
+                    document.getElementById(
+                        "noiDung"
+                    );
+
+                const characterCount =
+                    document.getElementById(
+                        "reviewCharacterCount"
+                    );
+
+                const form =
+                    document.getElementById(
+                        "reviewForm"
+                    );
+
+
+                // ==========================================
+                // RATING TEXT
+                // ==========================================
+
+                const ratingMessages = {
+
+                    1: "Rất không hài lòng",
+
+                    2: "Chưa hài lòng",
+
+                    3: "Bình thường",
+
+                    4: "Hài lòng",
+
+                    5: "Rất hài lòng"
+
+                };
+
+
+                // ==========================================
+                // UPDATE STARS
+                // ==========================================
+
+                function updateStars(value) {
+
+                    stars.forEach(
+                        star => {
+
+                            const starValue =
+                                Number(
+                                    star.dataset.value
+                                );
+
+                            const icon =
+                                star.querySelector("i");
+
+
+                            if (starValue <= value) {
+
+                                star.classList.add(
+                                    "active"
+                                );
+
+                                icon.className =
+                                    "fa-solid fa-star";
+
+                            }
+                            else {
+
+                                star.classList.remove(
+                                    "active"
+                                );
+
+                                icon.className =
+                                    "fa-regular fa-star";
+
+                            }
+
+                        }
+                    );
+
+                }
+
+
+                // ==========================================
+                // STAR CLICK
+                // ==========================================
+
+                stars.forEach(
+                    star => {
+
+                        star.addEventListener(
+                            "click",
+                            function () {
+
+                                const value =
+                                    Number(
+                                        this.dataset.value
+                                    );
+
+                                ratingInput.value =
+                                    value;
+
+                                updateStars(
+                                    value
+                                );
+
+                                ratingText.textContent =
+                                    ratingMessages[value];
+
+                            }
+                        );
+
+
+                        // ==================================
+                        // HOVER
+                        // ==================================
+
+                        star.addEventListener(
+                            "mouseenter",
+                            function () {
+
+                                updateStars(
+                                    Number(
+                                        this.dataset.value
+                                    )
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+
+
+                // ==========================================
+                // LEAVE STAR AREA
+                // ==========================================
+
+                document
+                    .getElementById("reviewStars")
+                    ?.addEventListener(
+                        "mouseleave",
+                        function () {
+
+                            updateStars(
+                                Number(
+                                    ratingInput.value
+                                )
+                            );
+
+                        }
+                    );
+
+
+                // ==========================================
+                // CHARACTER COUNT
+                // ==========================================
+
+                textarea?.addEventListener(
+                    "input",
+                    function () {
+
+                        characterCount.textContent =
+                            this.value.length;
+
+                    }
+                );
+
+
+                // ==========================================
+                // VALIDATE
+                // ==========================================
+
+                form?.addEventListener(
+                    "submit",
+                    function (event) {
+
+                        const rating =
+                            Number(
+                                ratingInput.value
+                            );
+
+
+                        if (
+                            rating < 1
+                            ||
+                            rating > 5
+                        ) {
+
+                            event.preventDefault();
+
+                            ratingText.textContent =
+                                "Vui lòng chọn số sao trước khi gửi.";
+
+                            ratingText.classList.add(
+                                "error"
+                            );
+
+                            return;
+                        }
+
+
+                        ratingText.classList.remove(
+                            "error"
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+    </script>
+
+}

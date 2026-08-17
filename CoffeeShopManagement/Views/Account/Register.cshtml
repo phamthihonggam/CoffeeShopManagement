@@ -1,0 +1,600 @@
+﻿@model CoffeeShopManagement.ViewModels.DangKyViewModel
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+@{
+    Layout = null;
+    ViewData["Title"] = T["RegisterPageTitle"];
+}
+
+<!DOCTYPE html>
+
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+
+<head>
+
+    <meta charset="UTF-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        @T["RegisterPageTitle"] - Rosalie Coffee
+    </title>
+
+    <link rel="stylesheet"
+          href="~/css/register.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+</head>
+
+
+<body>
+
+    <div class="register-page">
+
+        <div class="register-container">
+
+
+            <!-- =========================================
+             LEFT
+        ========================================== -->
+
+            <div class="register-left">
+
+                <img src="~/images/auth/register.jpg"
+                     class="register-banner"
+                     alt="@T["RegisterBannerAlt"]" />
+
+                <div class="overlay"></div>
+
+
+                <div class="register-content">
+
+                    <h1>
+                        @T["JoinRosalie"]
+                    </h1>
+
+
+                    <p>
+                        @T["RegisterWelcomeDescription"]
+                    </p>
+
+
+                    <ul class="member-benefits">
+
+                        <li>
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            @T["RegisterBenefit1"]
+
+                        </li>
+
+
+                        <li>
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            @T["RegisterBenefit2"]
+
+                        </li>
+
+
+                        <li>
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            @T["RegisterBenefit3"]
+
+                        </li>
+
+
+                        <li>
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            @T["RegisterBenefit4"]
+
+                        </li>
+
+                    </ul>
+
+
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="back-home">
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
+                        @T["BackToHome"]
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+             RIGHT
+        ========================================== -->
+
+            <div class="register-right">
+
+                <h2>
+                    @T["Register"]
+                </h2>
+
+
+                <p class="register-desc">
+
+                    @T["RegisterDescription"]
+
+                </p>
+
+
+                <!-- =====================================
+                 REGISTER FORM
+            ====================================== -->
+
+                <form asp-action="Register"
+                      asp-controller="Account"
+                      method="post"
+                      autocomplete="off">
+
+                    @Html.AntiForgeryToken()
+
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger mb-3">
+                    </div>
+
+
+                    <!-- =================================
+                     FULL NAME
+                ================================== -->
+
+                    <div class="form-group">
+
+                        <label asp-for="HoTen">
+                            @T["FullName"]
+                        </label>
+
+
+                        <input asp-for="HoTen"
+                               class="form-control"
+                               placeholder="@T["FullNamePlaceholder"]" />
+
+
+                        <span asp-validation-for="HoTen"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- =================================
+                     EMAIL
+                ================================== -->
+
+                    <div class="form-group">
+
+                        <label asp-for="Email">
+                            @T["Email"]
+                        </label>
+
+
+                        <input asp-for="Email"
+                               class="form-control"
+                               placeholder="@T["RegisterEmailPlaceholder"]" />
+
+
+                        <span asp-validation-for="Email"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- =================================
+                     PHONE
+                ================================== -->
+
+                    <div class="form-group">
+
+                        <label asp-for="DienThoai">
+                            @T["PhoneNumber"]
+                        </label>
+
+
+                        <input asp-for="DienThoai"
+                               class="form-control"
+                               placeholder="@T["PhoneNumberPlaceholder"]" />
+
+
+                        <span asp-validation-for="DienThoai"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- =================================
+                     ADDRESS
+                ================================== -->
+
+                    <div class="form-group">
+
+                        <label asp-for="DiaChi">
+                            @T["Address"]
+                        </label>
+
+
+                        <input asp-for="DiaChi"
+                               class="form-control"
+                               placeholder="@T["AddressPlaceholder"]" />
+
+                    </div>
+
+
+                    <!-- =================================
+                     PASSWORD
+                ================================== -->
+
+                    <div class="form-group">
+
+                        <label asp-for="MatKhau">
+                            @T["Password"]
+                        </label>
+
+
+                        <div class="password-box">
+
+                            <input asp-for="MatKhau"
+                                   id="password"
+                                   class="form-control"
+                                   placeholder="@T["PasswordPlaceholder"]" />
+
+
+                            <button type="button"
+                                    id="togglePassword"
+                                    class="toggle-password"
+                                    aria-label="@T["TogglePasswordVisibility"]">
+
+                                <i class="fa-solid fa-eye"></i>
+
+                            </button>
+
+                        </div>
+
+
+                        <span asp-validation-for="MatKhau"
+                              class="text-danger">
+                        </span>
+
+
+                        <!-- PASSWORD STRENGTH -->
+
+                        <div class="password-strength">
+
+                            <div id="strengthBar"
+                                 class="strength-bar">
+                            </div>
+
+                        </div>
+
+
+                        <small id="strengthText"
+                               class="strength-text">
+
+                            @T["PasswordNotEntered"]
+
+                        </small>
+
+
+                        <!-- PASSWORD RULE -->
+
+                        <ul class="password-rule">
+
+                            <li id="rule-length">
+
+                                <i class="fa-solid fa-circle-xmark"></i>
+
+                                @T["PasswordRuleLength"]
+
+                            </li>
+
+
+                            <li id="rule-upper">
+
+                                <i class="fa-solid fa-circle-xmark"></i>
+
+                                @T["PasswordRuleUpper"]
+
+                            </li>
+
+
+                            <li id="rule-lower">
+
+                                <i class="fa-solid fa-circle-xmark"></i>
+
+                                @T["PasswordRuleLower"]
+
+                            </li>
+
+
+                            <li id="rule-number">
+
+                                <i class="fa-solid fa-circle-xmark"></i>
+
+                                @T["PasswordRuleNumber"]
+
+                            </li>
+
+
+                            <li id="rule-special">
+
+                                <i class="fa-solid fa-circle-xmark"></i>
+
+                                @T["PasswordRuleSpecial"]
+
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+
+                    <!-- =================================
+                     CONFIRM PASSWORD
+                ================================== -->
+
+                    <div class="form-group">
+
+                        <label asp-for="XacNhanMatKhau">
+                            @T["ConfirmPassword"]
+                        </label>
+
+
+                        <div class="password-box">
+
+                            <input asp-for="XacNhanMatKhau"
+                                   id="confirmPassword"
+                                   class="form-control"
+                                   placeholder="@T["ConfirmPasswordPlaceholder"]" />
+
+
+                            <button type="button"
+                                    id="toggleConfirmPassword"
+                                    class="toggle-password"
+                                    aria-label="@T["TogglePasswordVisibility"]">
+
+                                <i class="fa-solid fa-eye"></i>
+
+                            </button>
+
+                        </div>
+
+
+                        <span asp-validation-for="XacNhanMatKhau"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- =================================
+                     TERMS
+                ================================== -->
+
+                    <div class="form-check">
+
+                        <input class="form-check-input"
+                               type="checkbox"
+                               required />
+
+
+                        <label class="form-check-label">
+
+                            @T["AgreeTerms"]
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- =================================
+                     REGISTER BUTTON
+                ================================== -->
+
+                    <button type="submit"
+                            id="registerBtn"
+                            class="btn-register">
+
+                        <span id="btnText">
+
+                            @T["CreateAccount"]
+
+                        </span>
+
+                    </button>
+
+                </form>
+
+
+                <!-- =====================================
+                 DIVIDER
+            ====================================== -->
+
+                <div class="divider">
+
+                    <span>
+                        @T["Or"]
+                    </span>
+
+                </div>
+
+
+                <!-- =====================================
+                 GOOGLE
+            ====================================== -->
+
+                <form asp-controller="Account"
+                      asp-action="GoogleLogin"
+                      method="get">
+
+                    <button class="google-btn"
+                            type="submit">
+
+                        <i class="fab fa-google"></i>
+
+                        @T["ContinueWithGoogle"]
+
+                    </button>
+
+                </form>
+
+
+                <!-- =====================================
+                 LOGIN LINK
+            ====================================== -->
+
+                <div class="login-link">
+
+                    @T["AlreadyHaveAccount"]
+
+                    <a asp-controller="Account"
+                       asp-action="Login">
+
+                        @T["LoginNow"]
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+     JQUERY
+========================================== -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js">
+    </script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js">
+    </script>
+
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js">
+    </script>
+
+
+    <!-- =========================================
+     LOCALIZATION FOR REGISTER.JS
+========================================== -->
+
+    <script>
+
+            window.registerTranslations = {
+
+                passwordVeryWeak:
+                    @Html.Raw(
+                            System.Text.Json.JsonSerializer.Serialize(
+                                    T["PasswordVeryWeak"].Value
+                            )
+                    ),
+
+                passwordWeak:
+                    @Html.Raw(
+                            System.Text.Json.JsonSerializer.Serialize(
+                                    T["PasswordWeak"].Value
+                            )
+                    ),
+
+                passwordMedium:
+                    @Html.Raw(
+                            System.Text.Json.JsonSerializer.Serialize(
+                                    T["PasswordMedium"].Value
+                            )
+                    ),
+
+                passwordQuiteStrong:
+                    @Html.Raw(
+                            System.Text.Json.JsonSerializer.Serialize(
+                                    T["PasswordQuiteStrong"].Value
+                            )
+                    ),
+
+                passwordStrong:
+                    @Html.Raw(
+                            System.Text.Json.JsonSerializer.Serialize(
+                                    T["PasswordStrong"].Value
+                            )
+                    ),
+
+                creatingAccount:
+                    @Html.Raw(
+                            System.Text.Json.JsonSerializer.Serialize(
+                                    T["CreatingAccount"].Value
+                            )
+                    )
+
+            };
+
+    </script>
+
+
+    <!-- =========================================
+     REGISTER JS
+========================================== -->
+
+    <script src="~/js/register.js"
+            asp-append-version="true">
+    </script>
+
+
+    <!-- =========================================
+     TOAST
+========================================== -->
+
+    <script src="~/js/toast.js"
+            asp-append-version="true">
+    </script>
+
+
+    <partial name="_Toast" />
+
+
+    @if (TempData["Toast"] != null)
+    {
+        <script>
+
+                document.addEventListener(
+                    "DOMContentLoaded",
+                    function () {
+
+                        showToast(
+                            @Html.Raw(
+                                    System.Text.Json.JsonSerializer.Serialize(
+                                            TempData["Toast"]?.ToString()
+                                    )
+                            )
+                        );
+
+                    }
+                );
+
+        </script>
+    }
+
+</body>
+
+</html>

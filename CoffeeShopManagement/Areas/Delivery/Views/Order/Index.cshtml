@@ -1,0 +1,1486 @@
+﻿@using CoffeeShopManagement.Models
+
+@{
+    ViewData["Title"] = "Đơn giao hàng";
+
+    var availableOrders =
+        ViewBag.AvailableOrders as List<HoaDon>
+        ?? new List<HoaDon>();
+
+    var myOrders =
+        ViewBag.MyOrders as List<HoaDon>
+        ?? new List<HoaDon>();
+}
+
+
+<link rel="stylesheet"
+      href="~/css/delivery-order.css"
+      asp-append-version="true" />
+
+
+<section class="delivery-page">
+
+    <div class="delivery-container">
+
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
+        <div class="delivery-header">
+
+            <div>
+
+                <span class="delivery-label">
+                    ROSALIE COFFEE
+                </span>
+
+                <h1>
+                    Quản lý giao hàng
+                </h1>
+
+                <p>
+                    Theo dõi và cập nhật trạng thái các đơn hàng
+                    được giao đến khách hàng.
+                </p>
+
+            </div>
+
+
+            <div class="delivery-user">
+
+                <div class="delivery-user-icon">
+
+                    <i class="bi bi-truck"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Nhân viên giao hàng
+                    </span>
+
+                    <strong>
+                        @User.Identity?.Name
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             SUMMARY
+        ====================================================== -->
+
+        <div class="delivery-summary-grid">
+
+
+            <!-- AVAILABLE -->
+
+            <div class="delivery-summary-card">
+
+                <div class="delivery-summary-icon available">
+
+                    <i class="bi bi-box-seam"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Đơn đang chờ nhận
+                    </span>
+
+                    <strong>
+                        @availableOrders.Count
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- MY ORDERS -->
+
+            <div class="delivery-summary-card">
+
+                <div class="delivery-summary-icon shipping">
+
+                    <i class="bi bi-truck"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Đơn của tôi
+                    </span>
+
+                    <strong>
+                        @myOrders.Count
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- SHIPPING -->
+
+            <div class="delivery-summary-card">
+
+                <div class="delivery-summary-icon processing">
+
+                    <i class="bi bi-geo-alt"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Đang giao
+                    </span>
+
+                    <strong>
+
+                        @myOrders.Count(
+                            x =>
+                                x.TrangThai
+                                == "Đang giao hàng"
+                        )
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- CANCEL REQUEST -->
+
+            <div class="delivery-summary-card">
+
+                <div class="delivery-summary-icon cancel">
+
+                    <i class="bi bi-exclamation-triangle"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Yêu cầu hủy
+                    </span>
+
+                    <strong>
+
+                        @myOrders.Count(
+                            x =>
+                                x.TrangThai
+                                == "Yêu cầu hủy khi đang giao"
+                        )
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             MY ORDERS
+        ====================================================== -->
+
+        <div class="delivery-section">
+
+            <div class="delivery-section-header">
+
+                <div>
+
+                    <span>
+                        ĐƠN CỦA TÔI
+                    </span>
+
+                    <h2>
+                        Đơn hàng đang phụ trách
+                    </h2>
+
+                </div>
+
+
+                <div class="delivery-section-count">
+
+                    @myOrders.Count đơn
+
+                </div>
+
+            </div>
+
+
+            @if (!myOrders.Any())
+            {
+                <div class="delivery-empty">
+
+                    <div class="delivery-empty-icon">
+
+                        <i class="bi bi-truck"></i>
+
+                    </div>
+
+
+                    <h3>
+                        Chưa có đơn giao hàng
+                    </h3>
+
+
+                    <p>
+                        Bạn chưa nhận đơn hàng nào.
+                        Hãy chọn một đơn trong danh sách bên dưới.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <div class="delivery-order-list">
+
+
+                    @foreach (var order in myOrders)
+                    {
+                        string status =
+                            order.TrangThai?.Trim()
+                            ?? "";
+
+
+                        string statusClass =
+                            status == "Đang giao hàng"
+                                ? "shipping"
+
+                                : status == "Chờ giao hàng"
+                                    ? "waiting"
+
+                                    : status == "Yêu cầu hủy khi đang giao"
+                                        ? "cancel-request"
+
+                                        : status == "Giao thất bại"
+                                            ? "failed"
+
+                                            : "default";
+
+
+                        bool isPaid =
+                            order.PhuongThucThanhToan
+                            == "VNPAY";
+
+
+                        <div class="delivery-order-card">
+
+
+                            <!-- =================================================
+                                 TOP
+                            ================================================== -->
+
+                            <div class="delivery-order-top">
+
+                                <div class="delivery-order-code">
+
+                                    <div class="delivery-order-code-icon">
+
+                                        <i class="bi bi-receipt"></i>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <span>
+                                            Mã đơn
+                                        </span>
+
+                                        <strong>
+
+                                            #HD@(order.MaHd.ToString("D5"))
+
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+
+                                <span class="delivery-status @statusClass">
+
+                                    @status
+
+                                </span>
+
+                            </div>
+
+
+
+                            <!-- =================================================
+                                 BODY
+                            ================================================== -->
+
+                            <div class="delivery-order-body">
+
+
+                                <!-- RECEIVER -->
+
+                                <div class="delivery-order-info">
+
+                                    <div class="delivery-info-icon">
+
+                                        <i class="bi bi-person"></i>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <span>
+                                            Người nhận
+                                        </span>
+
+                                        <strong>
+
+                                            @(string.IsNullOrWhiteSpace(
+                                                order.HoTenNguoiNhan
+                                            )
+                                                ? order.MaKhNavigation?.HoTen
+                                                : order.HoTenNguoiNhan)
+
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- PHONE -->
+
+                                <div class="delivery-order-info">
+
+                                    <div class="delivery-info-icon">
+
+                                        <i class="bi bi-telephone"></i>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <span>
+                                            Số điện thoại
+                                        </span>
+
+                                        <strong>
+
+                                            @(string.IsNullOrWhiteSpace(
+                                                order.DienThoaiNguoiNhan
+                                            )
+                                                ? order.MaKhNavigation?.DienThoai
+                                                : order.DienThoaiNguoiNhan)
+
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- DISTRICT -->
+
+                                <div class="delivery-order-info">
+
+                                    <div class="delivery-info-icon">
+
+                                        <i class="bi bi-geo-alt"></i>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <span>
+                                            Khu vực
+                                        </span>
+
+                                        <strong>
+
+                                            @(order.QuanHuyenGiaoHang
+                                                ?? "Chưa cập nhật")
+
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- PAYMENT -->
+
+                                <div class="delivery-order-info">
+
+                                    <div class="delivery-info-icon">
+
+                                        <i class="bi bi-wallet2"></i>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <span>
+                                            Thanh toán
+                                        </span>
+
+                                        @if (isPaid)
+                                        {
+                                            <strong class="delivery-paid">
+
+                                                VNPAY - Đã thanh toán
+
+                                            </strong>
+                                        }
+                                        else
+                                        {
+                                            <strong class="delivery-cod">
+
+                                                COD - Thu khi giao
+
+                                            </strong>
+                                        }
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- =================================================
+                                 ADDRESS
+                            ================================================== -->
+
+                            <div class="delivery-address">
+
+                                <i class="bi bi-pin-map-fill"></i>
+
+
+                                <div>
+
+                                    <span>
+                                        Địa chỉ giao hàng
+                                    </span>
+
+                                    <strong>
+
+                                        @(string.IsNullOrWhiteSpace(
+                                            order.DiaChiGiaoHang
+                                        )
+                                            ? order.MaKhNavigation?.DiaChi
+                                            : order.DiaChiGiaoHang)
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- =================================================
+                                 TOTAL
+                            ================================================== -->
+
+                            <div class="delivery-order-money">
+
+                                <div>
+
+                                    <span>
+                                        Tổng đơn hàng
+                                    </span>
+
+                                    <strong>
+
+                                        @((order.TongTien ?? 0)
+                                            .ToString("N0"))đ
+
+                                    </strong>
+
+                                </div>
+
+
+                                @if (!isPaid)
+                                {
+                                    <div class="delivery-collect">
+
+                                        <span>
+                                            Cần thu khách
+                                        </span>
+
+                                        <strong>
+
+                                            @((order.TongTien ?? 0)
+                                                .ToString("N0"))đ
+
+                                        </strong>
+
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="delivery-collect paid">
+
+                                        <span>
+                                            Cần thu khách
+                                        </span>
+
+                                        <strong>
+                                            0đ
+                                        </strong>
+
+                                    </div>
+                                }
+
+                            </div>
+
+
+
+                            <!-- =================================================
+                                 CANCEL REQUEST
+                            ================================================== -->
+                            @if (
+                                                            status
+                                                            == "Yêu cầu hủy khi đang giao"
+                                                        )
+                            {
+                                <div class="delivery-cancel-request">
+
+                                    <div class="delivery-cancel-icon">
+
+                                        <i class="bi bi-exclamation-triangle-fill"></i>
+
+                                    </div>
+
+
+                                    <div class="delivery-cancel-content">
+
+                                        <strong>
+                                            Khách hàng yêu cầu hủy đơn
+                                        </strong>
+
+
+                                        @if (!string.IsNullOrWhiteSpace(order.LyDoHuy))
+                                        {
+                                            <p>
+
+                                                <span>
+                                                    Lý do:
+                                                </span>
+
+                                                @order.LyDoHuy
+
+                                            </p>
+                                        }
+
+
+                                        @if (!string.IsNullOrWhiteSpace(order.GhiChuHuy))
+                                        {
+                                            <p>
+
+                                                <span>
+                                                    Ghi chú:
+                                                </span>
+
+                                                @order.GhiChuHuy
+
+                                            </p>
+                                        }
+
+
+                                        @if (order.NgayYeuCauHuy.HasValue)
+                                        {
+                                            <p>
+
+                                                <span>
+                                                    Thời gian:
+                                                </span>
+
+                                                @order.NgayYeuCauHuy.Value
+                                                .ToString(
+                                                "dd/MM/yyyy HH:mm"
+                                                )
+
+                                            </p>
+                                        }
+
+                                    </div>
+
+                                </div>
+                            }
+
+
+
+                            <!-- =================================================
+                                 FAILED INFO
+                            ================================================== -->
+                            @if (
+                                                            status == "Giao thất bại"
+                                                            &&
+                                                            !string.IsNullOrWhiteSpace(
+                                                                order.LyDoGiaoThatBai
+                                                            )
+                                                        )
+                            {
+                                <div class="delivery-failed-info">
+
+                                    <i class="bi bi-x-circle-fill"></i>
+
+                                    <div>
+
+                                        <strong>
+                                            Giao hàng thất bại
+                                        </strong>
+
+                                        <p>
+                                            @order.LyDoGiaoThatBai
+                                        </p>
+
+                                    </div>
+
+                                </div>
+                            }
+
+
+
+                            <!-- =================================================
+                                 ACTION
+                            ================================================== -->
+
+                            <div class="delivery-order-actions">
+
+
+                                <!-- DETAIL -->
+
+                                <a asp-area="Delivery"
+                                   asp-controller="Order"
+                                   asp-action="Details"
+                                   asp-route-id="@order.MaHd"
+                                   class="delivery-btn detail">
+
+                                    <i class="bi bi-eye"></i>
+
+                                    Chi tiết
+
+                                </a>
+
+
+
+                                <!-- START DELIVERY -->
+                                @if (
+                                                                    status == "Chờ giao hàng"
+                                                                )
+                                {
+                                    <form asp-area="Delivery"
+                                          asp-controller="Order"
+                                          asp-action="StartDelivery"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@order.MaHd" />
+
+
+                                        <button type="submit"
+                                                class="delivery-btn start">
+
+                                            <i class="bi bi-truck"></i>
+
+                                            Bắt đầu giao
+
+                                        </button>
+
+                                    </form>
+                                }
+
+
+
+                                <!-- SHIPPING ACTION -->
+                                @if (
+                                                                    status == "Đang giao hàng"
+                                                                )
+                                {
+                                    <!-- SUCCESS -->
+
+                                    <form asp-area="Delivery"
+                                          asp-controller="Order"
+                                          asp-action="Delivered"
+                                          method="post"
+                                          onsubmit="return confirm('Xác nhận khách đã nhận đơn hàng này?');">
+
+                                        @Html.AntiForgeryToken()
+
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@order.MaHd" />
+
+
+                                        <button type="submit"
+                                                class="delivery-btn success">
+
+                                            <i class="bi bi-check-circle-fill"></i>
+
+                                            Giao thành công
+
+                                        </button>
+
+                                    </form>
+
+
+
+                                    <!-- FAILED -->
+
+                                    <button type="button"
+                                            class="delivery-btn failed"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#failedModal"
+                                            data-order-id="@order.MaHd"
+                                            data-order-code="#HD@(order.MaHd.ToString("D5"))">
+
+                                        <i class="bi bi-x-circle"></i>
+
+                                        Giao thất bại
+
+                                    </button>
+                                }
+
+
+
+                                <!-- CANCEL REQUEST -->
+                                @if (
+                                                                    status ==
+                                                                    "Yêu cầu hủy khi đang giao"
+                                                                )
+                                {
+                                    <form asp-area="Delivery"
+                                          asp-controller="Order"
+                                          asp-action="ConfirmCancelRequest"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@order.MaHd" />
+
+
+                                        <button type="submit"
+                                                class="delivery-btn warning">
+
+                                            <i class="bi bi-arrow-return-left"></i>
+
+                                            Xác nhận chưa giao
+
+                                        </button>
+
+                                    </form>
+                                }
+
+
+                            </div>
+
+                        </div>
+                    }
+
+
+                </div>
+            }
+
+        </div>
+
+
+
+        <!-- =====================================================
+             AVAILABLE ORDERS
+        ====================================================== -->
+
+        <div class="delivery-section delivery-available-section">
+
+            <div class="delivery-section-header">
+
+                <div>
+
+                    <span>
+                        ĐƠN MỚI
+                    </span>
+
+                    <h2>
+                        Đơn hàng chờ giao
+                    </h2>
+
+                </div>
+
+
+                <div class="delivery-section-count">
+
+                    @availableOrders.Count đơn
+
+                </div>
+
+            </div>
+
+
+            @if (!availableOrders.Any())
+            {
+                <div class="delivery-empty small">
+
+                    <div class="delivery-empty-icon">
+
+                        <i class="bi bi-box-seam"></i>
+
+                    </div>
+
+
+                    <h3>
+                        Hiện chưa có đơn mới
+                    </h3>
+
+
+                    <p>
+                        Các đơn sẵn sàng giao sẽ xuất hiện tại đây.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <div class="delivery-available-grid">
+
+
+                    @foreach (var order in availableOrders)
+                    {
+                        bool isPaid =
+                            order.PhuongThucThanhToan
+                            == "VNPAY";
+
+
+                        <div class="delivery-available-card">
+
+
+                            <div class="delivery-available-top">
+
+                                <div>
+
+                                    <span>
+                                        Đơn hàng
+                                    </span>
+
+                                    <strong>
+
+                                        #HD@(order.MaHd.ToString("D5"))
+
+                                    </strong>
+
+                                </div>
+
+
+                                <span class="delivery-payment-badge @(isPaid ? "paid" : "cod")">
+
+                                    @(isPaid
+                                        ? "VNPAY"
+                                        : "COD")
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="delivery-available-info">
+
+                                <div>
+
+                                    <i class="bi bi-person"></i>
+
+                                    <span>
+
+                                        @(string.IsNullOrWhiteSpace(
+                                            order.HoTenNguoiNhan
+                                        )
+                                            ? order.MaKhNavigation?.HoTen
+                                            : order.HoTenNguoiNhan)
+
+                                    </span>
+
+                                </div>
+
+
+                                <div>
+
+                                    <i class="bi bi-geo-alt"></i>
+
+                                    <span>
+
+                                        @(order.QuanHuyenGiaoHang
+                                            ?? "Chưa cập nhật")
+
+                                    </span>
+
+                                </div>
+
+
+                                <div>
+
+                                    <i class="bi bi-cash-stack"></i>
+
+                                    <span>
+
+                                        @((order.TongTien ?? 0)
+                                            .ToString("N0"))đ
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="delivery-available-address">
+
+                                @(string.IsNullOrWhiteSpace(
+                                    order.DiaChiGiaoHang
+                                )
+                                    ? order.MaKhNavigation?.DiaChi
+                                    : order.DiaChiGiaoHang)
+
+                            </div>
+
+
+                            <div class="delivery-available-actions">
+
+
+                                <a asp-area="Delivery"
+                                   asp-controller="Order"
+                                   asp-action="Details"
+                                   asp-route-id="@order.MaHd"
+                                   class="delivery-btn detail">
+
+                                    <i class="bi bi-eye"></i>
+
+                                    Xem
+
+                                </a>
+
+
+                                <form asp-area="Delivery"
+                                      asp-controller="Order"
+                                      asp-action="Receive"
+                                      method="post">
+
+                                    @Html.AntiForgeryToken()
+
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@order.MaHd" />
+
+
+                                    <button type="submit"
+                                            class="delivery-btn receive">
+
+                                        <i class="bi bi-hand-index-thumb"></i>
+
+                                        Nhận đơn
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+                    }
+
+
+                </div>
+            }
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     FAILED DELIVERY MODAL
+========================================================= -->
+
+<div class="modal fade"
+     id="failedModal"
+     tabindex="-1"
+     aria-labelledby="failedModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content delivery-failed-modal">
+
+
+            <div class="modal-header delivery-failed-modal-header">
+
+                <div>
+
+                    <span>
+                        ROSALIE COFFEE
+                    </span>
+
+                    <h5 class="modal-title"
+                        id="failedModalLabel">
+
+                        Giao hàng thất bại
+
+                    </h5>
+
+                </div>
+
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+
+            </div>
+
+
+            <form asp-area="Delivery"
+                  asp-controller="Order"
+                  asp-action="Failed"
+                  method="post"
+                  id="failedForm">
+
+                @Html.AntiForgeryToken()
+
+
+                <input type="hidden"
+                       name="id"
+                       id="failedOrderId" />
+
+
+                <div class="modal-body delivery-failed-modal-body">
+
+
+                    <div class="delivery-failed-order">
+
+                        <i class="bi bi-receipt"></i>
+
+                        <div>
+
+                            <span>
+                                Đơn hàng
+                            </span>
+
+                            <strong id="failedOrderCode">
+
+                                #HD00000
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="delivery-failed-warning">
+
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+
+                        <span>
+                            Hãy chọn hoặc nhập chính xác lý do
+                            không thể giao hàng cho khách.
+                        </span>
+
+                    </div>
+
+
+                    <div class="delivery-modal-field">
+
+                        <label for="failedReasonSelect">
+
+                            Lý do giao thất bại
+
+                            <span>
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <select id="failedReasonSelect">
+
+                            <option value="">
+                                -- Chọn lý do --
+                            </option>
+
+                            <option value="Không liên lạc được với khách hàng">
+                                Không liên lạc được với khách hàng
+                            </option>
+
+                            <option value="Khách hàng không có mặt">
+                                Khách hàng không có mặt
+                            </option>
+
+                            <option value="Khách từ chối nhận hàng">
+                                Khách từ chối nhận hàng
+                            </option>
+
+                            <option value="Địa chỉ giao hàng không chính xác">
+                                Địa chỉ giao hàng không chính xác
+                            </option>
+
+                            <option value="Không thể tiếp cận địa chỉ giao hàng">
+                                Không thể tiếp cận địa chỉ giao hàng
+                            </option>
+
+                            <option value="Khác">
+                                Khác
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="delivery-modal-field"
+                         id="failedOtherField"
+                         style="display:none;">
+
+                        <label for="failedOtherReason">
+
+                            Lý do khác
+
+                        </label>
+
+
+                        <textarea id="failedOtherReason"
+                                  rows="4"
+                                  maxlength="500"
+                                  placeholder="Nhập lý do giao thất bại..."></textarea>
+
+                    </div>
+
+
+                    <!-- value gửi controller -->
+
+                    <input type="hidden"
+                           name="lyDo"
+                           id="failedReasonValue" />
+
+
+                    <div class="delivery-modal-error"
+                         id="failedModalError">
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer delivery-failed-modal-footer">
+
+                    <button type="button"
+                            class="delivery-modal-back"
+                            data-bs-dismiss="modal">
+
+                        Quay lại
+
+                    </button>
+
+
+                    <button type="submit"
+                            class="delivery-modal-confirm">
+
+                        <i class="bi bi-x-circle"></i>
+
+                        Xác nhận giao thất bại
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                // =============================================
+                // ELEMENT
+                // =============================================
+
+                const modal =
+                    document.getElementById(
+                        "failedModal"
+                    );
+
+
+                const orderId =
+                    document.getElementById(
+                        "failedOrderId"
+                    );
+
+
+                const orderCode =
+                    document.getElementById(
+                        "failedOrderCode"
+                    );
+
+
+                const select =
+                    document.getElementById(
+                        "failedReasonSelect"
+                    );
+
+
+                const otherField =
+                    document.getElementById(
+                        "failedOtherField"
+                    );
+
+
+                const otherReason =
+                    document.getElementById(
+                        "failedOtherReason"
+                    );
+
+
+                const reasonValue =
+                    document.getElementById(
+                        "failedReasonValue"
+                    );
+
+
+                const error =
+                    document.getElementById(
+                        "failedModalError"
+                    );
+
+
+                const form =
+                    document.getElementById(
+                        "failedForm"
+                    );
+
+
+                // =============================================
+                // OPEN MODAL
+                // =============================================
+
+                modal?.addEventListener(
+                    "show.bs.modal",
+                    function (event) {
+
+                        const button =
+                            event.relatedTarget;
+
+
+                        if (!button) {
+                            return;
+                        }
+
+
+                        orderId.value =
+                            button.getAttribute(
+                                "data-order-id"
+                            ) ?? "";
+
+
+                        orderCode.textContent =
+                            button.getAttribute(
+                                "data-order-code"
+                            ) ?? "";
+
+
+                        select.value =
+                            "";
+
+
+                        otherReason.value =
+                            "";
+
+
+                        reasonValue.value =
+                            "";
+
+
+                        otherField.style.display =
+                            "none";
+
+
+                        error.textContent =
+                            "";
+
+                    }
+                );
+
+
+                // =============================================
+                // SELECT REASON
+                // =============================================
+
+                select?.addEventListener(
+                    "change",
+                    function () {
+
+                        error.textContent =
+                            "";
+
+
+                        if (
+                            this.value === "Khác"
+                        ) {
+
+                            otherField.style.display =
+                                "block";
+
+                            reasonValue.value =
+                                "";
+
+                            otherReason.focus();
+
+                        }
+                        else {
+
+                            otherField.style.display =
+                                "none";
+
+                            otherReason.value =
+                                "";
+
+                            reasonValue.value =
+                                this.value;
+
+                        }
+
+                    }
+                );
+
+
+                // =============================================
+                // OTHER REASON
+                // =============================================
+
+                otherReason?.addEventListener(
+                    "input",
+                    function () {
+
+                        if (
+                            select.value === "Khác"
+                        ) {
+
+                            reasonValue.value =
+                                this.value.trim();
+
+                        }
+
+                    }
+                );
+
+
+                // =============================================
+                // VALIDATE
+                // =============================================
+
+                form?.addEventListener(
+                    "submit",
+                    function (event) {
+
+                        error.textContent =
+                            "";
+
+
+                        if (!select.value) {
+
+                            event.preventDefault();
+
+                            error.textContent =
+                                "Vui lòng chọn lý do giao thất bại.";
+
+                            return;
+                        }
+
+
+                        if (
+                            select.value === "Khác"
+                            &&
+                            !otherReason.value.trim()
+                        ) {
+
+                            event.preventDefault();
+
+                            error.textContent =
+                                "Vui lòng nhập lý do giao thất bại.";
+
+                            otherReason.focus();
+
+                            return;
+                        }
+
+
+                        if (
+                            select.value === "Khác"
+                        ) {
+
+                            reasonValue.value =
+                                otherReason.value.trim();
+
+                        }
+                        else {
+
+                            reasonValue.value =
+                                select.value;
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    </script>
+
+}

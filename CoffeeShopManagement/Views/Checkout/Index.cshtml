@@ -1,0 +1,1662 @@
+﻿@model CoffeeShopManagement.Models.CheckoutViewModel
+
+@using CoffeeShopManagement.Extensions
+@using CoffeeShopManagement.Models
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+@{
+    ViewData["Title"] = T["CheckoutPageTitle"];
+
+    var cart =
+        Context.Session
+            .GetObjectFromJson<List<CartItem>>("CART")
+        ?? new List<CartItem>();
+
+
+    decimal tamTinh =
+        ViewBag.SubTotal != null
+            ? (decimal)ViewBag.SubTotal
+            : cart.Sum(x => x.ThanhTien);
+
+
+    int giamGia =
+        ViewBag.Discount != null
+            ? (int)ViewBag.Discount
+            : 0;
+
+
+    decimal phiGiaoHang =
+        ViewBag.Shipping != null
+            ? (decimal)ViewBag.Shipping
+            : 0;
+
+
+    decimal tongCong =
+        ViewBag.Total != null
+            ? (decimal)ViewBag.Total
+            : tamTinh;
+
+
+    string? voucherCode =
+        ViewBag.VoucherCode as string;
+}
+
+
+<link rel="stylesheet"
+      href="~/css/checkout.css"
+      asp-append-version="true" />
+
+
+<style>
+    .checkout-voucher-section {
+        margin-top: 24px;
+        padding: 18px;
+        border: 1px solid #eadfd6;
+        border-radius: 14px;
+        background: #fffaf6;
+    }
+
+    .checkout-voucher-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .checkout-voucher-title > div {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #5a332d;
+    }
+
+    .checkout-voucher-title > span {
+        font-size: 13px;
+        color: #8a7d75;
+    }
+
+    #checkoutVoucherList {
+        display: grid;
+        gap: 10px;
+    }
+
+    .checkout-voucher-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 14px;
+        border: 1px solid #e7d8cc;
+        border-radius: 12px;
+        background: #fff;
+        cursor: pointer;
+        transition: .2s ease;
+    }
+
+    .checkout-voucher-item:hover {
+        border-color: #b98b6b;
+        transform: translateY(-1px);
+    }
+
+    .checkout-voucher-item input {
+        width: 18px;
+        height: 18px;
+        flex: 0 0 auto;
+    }
+
+    .checkout-voucher-info {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .checkout-voucher-info strong {
+        color: #5a332d;
+    }
+
+    .checkout-voucher-info span {
+        color: #d14f3f;
+        font-weight: 700;
+    }
+
+    .checkout-voucher-info small,
+    .voucher-empty {
+        color: #8a7d75;
+        font-size: 13px;
+    }
+</style>
+
+
+
+<div class="checkout-page">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="checkout-header">
+
+        <h1>
+            @T["CheckoutTitle"]
+        </h1>
+
+
+        <div class="checkout-breadcrumb">
+
+            <a asp-controller="Cart"
+               asp-action="Index">
+
+                @T["Cart"]
+
+            </a>
+
+            <i class="fas fa-chevron-right"></i>
+
+            <span>
+                @T["CheckoutTitle"]
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
+
+    <form asp-action="Index"
+          asp-controller="Checkout"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+
+        <div class="checkout-wrapper">
+
+
+            <!-- =================================================
+                 LEFT
+            ================================================== -->
+
+            <div class="checkout-left">
+
+                <div class="checkout-card">
+
+
+                    <!-- =========================================
+                         SHIPPING INFORMATION
+                    ========================================== -->
+
+                    <div class="card-header-custom">
+
+                        <div class="header-icon">
+
+                            <i class="fas fa-user"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h3>
+                                @T["ShippingInformation"]
+                            </h3>
+
+                            <p>
+                                @T["ShippingInformationDescription"]
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         VALIDATION
+                    ========================================== -->
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger">
+                    </div>
+
+
+                    <!-- =========================================
+                         NAME + PHONE
+                    ========================================== -->
+
+                    <div class="form-row">
+
+
+                        <!-- NAME -->
+
+                        <div class="form-group">
+
+                            <label>
+                                @T["FullName"] *
+                            </label>
+
+                            <input asp-for="HoTen"
+                                   class="form-control"
+                                   placeholder="@T["FullNamePlaceholder"]" />
+
+                            <span asp-validation-for="HoTen"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- PHONE -->
+
+                        <div class="form-group">
+
+                            <label>
+                                @T["PhoneNumber"] *
+                            </label>
+
+                            <input asp-for="DienThoai"
+                                   class="form-control"
+                                   placeholder="@T["PhoneNumberPlaceholder"]" />
+
+                            <span asp-validation-for="DienThoai"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         ADDRESS
+                    ========================================== -->
+
+                    <div class="form-group full">
+
+                        <label>
+                            @T["DeliveryAddress"] *
+                        </label>
+
+                        <textarea asp-for="DiaChi"
+                                  rows="3"
+                                  class="form-control"
+                                  placeholder="@T["DeliveryAddressPlaceholder"]"></textarea>
+
+                        <span asp-validation-for="DiaChi"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         PROVINCE + DISTRICT
+                    ========================================== -->
+
+                    <div class="form-row">
+
+
+                        <!-- PROVINCE -->
+
+                        <div class="form-group">
+
+                            <label>
+                                @T["ProvinceCity"]
+                            </label>
+
+                            <select id="province"
+                                    name="Province"
+                                    class="form-control">
+
+                                <option value="">
+                                    @T["SelectProvince"]
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- DISTRICT -->
+
+                        <div class="form-group">
+
+                            <label>
+                                @T["District"]
+                            </label>
+
+                            <select id="district"
+                                    name="District"
+                                    class="form-control">
+
+                                <option value="">
+                                    @T["SelectDistrict"]
+                                </option>
+
+                            </select>
+
+                            <input type="hidden"
+                                   id="districtName"
+                                   name="DistrictName"
+                                   value="" />
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =========================================
+                         VOUCHER
+                    ========================================== -->
+
+                    <div class="checkout-voucher-section">
+
+                        <div class="checkout-voucher-title">
+
+                            <div>
+                                <i class="bi bi-ticket-perforated-fill"></i>
+                                <strong>Voucher của bạn</strong>
+                            </div>
+
+                            <span>
+                                Chọn voucher muốn áp dụng
+                            </span>
+
+                        </div>
+
+                        <div id="checkoutVoucherList">
+                            <div class="voucher-empty">
+                                Đang tải voucher...
+                            </div>
+                        </div>
+
+                        <input type="hidden"
+                               id="activeVoucherCode"
+                               value="@voucherCode" />
+
+                    </div>
+
+
+                    <!-- =========================================
+                         NOTE
+                    ========================================== -->
+
+                    <div class="form-group full">
+
+                        <label>
+                            @T["OrderNote"]
+                        </label>
+
+                        <textarea asp-for="GhiChu"
+                                  rows="4"
+                                  class="form-control"
+                                  placeholder="@T["OrderNotePlaceholder"]"></textarea>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         PAYMENT METHOD
+                    ========================================== -->
+
+                    <div class="payment-method-box">
+
+                        <div class="payment-method-title">
+
+                            <i class="fas fa-credit-card"></i>
+
+
+                            <div>
+
+                                <h3>
+                                    @T["PaymentMethod"]
+                                </h3>
+
+                                <p>
+                                    @T["PaymentMethodDescription"]
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =====================================
+                             COD
+                        ====================================== -->
+
+                        <label class="payment-option">
+
+                            <input type="radio"
+                                   name="PaymentMethod"
+                                   value="COD"
+                                   checked />
+
+
+                            <div class="payment-option-icon">
+
+                                <i class="fas fa-money-bill-wave"></i>
+
+                            </div>
+
+
+                            <div class="payment-option-content">
+
+                                <strong>
+                                    @T["CashOnDelivery"]
+                                </strong>
+
+                                <span>
+                                    @T["CashOnDeliveryDescription"]
+                                </span>
+
+                            </div>
+
+
+                            <div class="payment-check">
+
+                                <i class="fas fa-check"></i>
+
+                            </div>
+
+                        </label>
+
+
+                        <!-- =====================================
+                             VNPAY
+                        ====================================== -->
+
+                        <label class="payment-option">
+
+                            <input type="radio"
+                                   name="PaymentMethod"
+                                   value="VNPAY" />
+
+
+                            <div class="payment-option-icon">
+
+                                <i class="fas fa-wallet"></i>
+
+                            </div>
+
+
+                            <div class="payment-option-content">
+
+                                <strong>
+                                    @T["VNPayPayment"]
+                                </strong>
+
+                                <span>
+                                    @T["VNPayPaymentDescription"]
+                                </span>
+
+                            </div>
+
+
+                            <div class="payment-check">
+
+                                <i class="fas fa-check"></i>
+
+                            </div>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         BUTTONS
+                    ========================================== -->
+
+                    <div class="checkout-button-group">
+
+                        <a asp-controller="Cart"
+                           asp-action="Index"
+                           class="back-cart">
+
+                            <i class="fas fa-arrow-left"></i>
+
+                            @T["BackToCart"]
+
+                        </a>
+
+
+                        <button type="submit"
+                                class="checkout-btn">
+
+                            <i class="fas fa-lock"></i>
+
+                            @T["CheckoutNow"]
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         SECURITY
+                    ========================================== -->
+
+                    <div class="secure-payment">
+
+                        <i class="fas fa-shield-alt"></i>
+
+                        @T["SecurePaymentSSL"]
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 RIGHT
+            ================================================== -->
+
+            <div class="checkout-right">
+
+
+                <!-- =============================================
+                     ORDER SUMMARY
+                ============================================== -->
+
+                <div class="order-card">
+
+
+                    <!-- ORDER TITLE -->
+
+                    <div class="order-title">
+
+                        <div class="header-icon">
+
+                            <i class="fas fa-shopping-bag"></i>
+
+                        </div>
+
+                        <h3>
+                            @T["YourOrder"]
+                        </h3>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         ITEMS
+                    ========================================== -->
+                    @if (cart.Any())
+                    {
+                        @foreach (var item in cart)
+                        {
+                            <div class="order-item">
+
+                                <img src="@Url.Content(
+                                                                                                                                                   item.IsCombo
+                                                                                                                                                       ? "~/images/combo/" + item.HinhAnh
+                                                                                                                                                       : "~/images/menu/" + item.HinhAnh
+                                                                                                                                               )"
+                                     alt="@item.TenSP" />
+
+
+                                <div class="order-info">
+
+                                    <h4>
+                                        @item.TenSP
+                                    </h4>
+
+
+                                    <span>
+
+                                        @T["UnitPrice"]:
+
+                                        @(
+                                            (
+                                                item.DonGia
+                                                + item.GiaSize
+                                                + item.GiaTopping
+                                            ).ToString("N0")
+                                        )đ
+
+                                    </span>
+
+                                </div>
+
+
+                                <div class="order-qty">
+
+                                    x @item.SoLuong
+
+                                </div>
+
+
+                                <div class="order-price">
+
+                                    @item.ThanhTien.ToString("N0")đ
+
+                                </div>
+
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+
+                            <i class="fas fa-shopping-cart fa-2x mb-3"></i>
+
+                            <p>
+                                @T["CartEmpty"]
+                            </p>
+
+                        </div>
+                    }
+
+
+                    <hr />
+
+
+                    <!-- =========================================
+                         SUBTOTAL
+                    ========================================== -->
+
+                    <div class="summary-row">
+
+                        <span>
+                            @T["Subtotal"]
+                        </span>
+
+                        <strong id="checkoutSubTotal"
+                                data-subtotal="@Convert.ToInt32(tamTinh)"
+                                data-discount="@giamGia">
+                            @tamTinh.ToString("N0")đ
+                        </strong>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         DISCOUNT
+                    ========================================== -->
+
+                    <div class="summary-row">
+
+                        <span>
+
+                            @T["Discount"]
+
+                            @if (!string.IsNullOrWhiteSpace(voucherCode))
+                            {
+                                <small>
+                                    (@voucherCode)
+                                </small>
+                            }
+
+                        </span>
+
+
+                        <span id="checkoutDiscount"
+                              class="discount"
+                              data-discount="@giamGia">
+
+                            -@giamGia.ToString("N0")đ
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         SHIPPING
+                    ========================================== -->
+
+                    <div class="summary-row">
+
+                        <span>
+                            @T["ShippingFee"]
+                        </span>
+
+
+                        <span id="checkoutShippingFee"
+                              data-current="@Convert.ToInt32(phiGiaoHang)">
+
+                            @if (phiGiaoHang == 0)
+                            {
+                                <text>
+                                    @T["FreeShipping"]
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    @phiGiaoHang.ToString("N0")đ
+                                </text>
+                            }
+
+                        </span>
+
+                    </div>
+
+
+                    <hr />
+
+
+                    <!-- =========================================
+                         TOTAL
+                    ========================================== -->
+
+                    <div class="summary-total">
+
+                        <span>
+                            @T["GrandTotal"]
+                        </span>
+
+                        <strong id="checkoutGrandTotal">
+                            @tongCong.ToString("N0")đ
+                        </strong>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         SHIPPING MESSAGE
+                    ========================================== -->
+
+                    <div class="shipping-box">
+
+                        <i class="fas fa-truck"></i>
+
+                        <span id="checkoutShippingMessage">
+                            Chọn quận/huyện để hệ thống tính phí giao hàng.
+                            Đơn từ <strong>150.000đ</strong> được miễn phí ship.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =============================================
+                     SERVICE
+                ============================================== -->
+
+                <div class="service-box">
+
+
+                    <!-- COFFEE -->
+
+                    <div class="service-item">
+
+                        <i class="fas fa-coffee"></i>
+
+                        <div>
+
+                            <strong>
+                                @T["PureCoffee"]
+                            </strong>
+
+                            <span>
+                                @T["PureCoffeeDescription"]
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DELIVERY -->
+
+                    <div class="service-item">
+
+                        <i class="fas fa-motorcycle"></i>
+
+                        <div>
+
+                            <strong>
+                                @T["FastDelivery"]
+                            </strong>
+
+                            <span>
+                                @T["FastDeliveryDescription"]
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- INGREDIENTS -->
+
+                    <div class="service-item">
+
+                        <i class="fas fa-leaf"></i>
+
+                        <div>
+
+                            <strong>
+                                @T["FreshIngredients"]
+                            </strong>
+
+                            <span>
+                                @T["FreshIngredientsDescription"]
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- OFFERS -->
+
+                    <div class="service-item">
+
+                        <i class="fas fa-gift"></i>
+
+                        <div>
+
+                            <strong>
+                                @T["DailyOffers"]
+                            </strong>
+
+                            <span>
+                                @T["DailyOffersDescription"]
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- =====================================================
+     SCRIPTS
+===================================================== -->
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+
+
+    <!-- =================================================
+         LOCALIZATION FOR CHECKOUT.JS
+    ================================================== -->
+
+    <script>
+
+        window.checkoutTranslations = {
+
+            selectDistrict:
+                @Html.Raw(
+                                                System.Text.Json.JsonSerializer.Serialize(
+                                                                                T["SelectDistrict"].Value
+                                                )
+                )
+
+        };
+
+    </script>
+    <script src="~/js/checkout.js"
+            asp-append-version="true">
+    </script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const districtSelect =
+                document.getElementById("district");
+
+            const districtNameInput =
+                document.getElementById("districtName");
+
+            const subTotalEl =
+                document.getElementById("checkoutSubTotal");
+
+            const discountEl =
+                document.getElementById("checkoutDiscount");
+
+            const shippingEl =
+                document.getElementById("checkoutShippingFee");
+
+            const grandTotalEl =
+                document.getElementById("checkoutGrandTotal");
+
+            const shippingMessageEl =
+                document.getElementById("checkoutShippingMessage");
+
+            const voucherList =
+                document.getElementById("checkoutVoucherList");
+
+            const activeVoucherCodeEl =
+                document.getElementById("activeVoucherCode");
+
+
+            if (!subTotalEl ||
+                !discountEl ||
+                !shippingEl ||
+                !grandTotalEl) {
+                return;
+            }
+
+
+            const subTotal =
+                Number(
+                    subTotalEl.dataset.subtotal || 0
+                );
+
+
+            let currentDiscount =
+                Number(
+                    discountEl.dataset.discount || 0
+                );
+
+
+            function formatVnd(value) {
+
+                return new Intl.NumberFormat(
+                    "vi-VN"
+                ).format(value) + "đ";
+            }
+
+
+            function normalizeVietnamese(text) {
+
+                return (text || "")
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .replace(/đ/g, "d")
+                    .replace(/Đ/g, "D")
+                    .toLowerCase()
+                    .trim();
+            }
+
+
+            function getDistrictName() {
+
+                if (!districtSelect) {
+                    return "";
+                }
+
+
+                const selected =
+                    districtSelect.options[
+                        districtSelect.selectedIndex
+                    ];
+
+
+                if (!selected ||
+                    !districtSelect.value) {
+                    return "";
+                }
+
+
+                return selected.text || "";
+            }
+
+
+            function calculateShipping(
+                afterDiscount,
+                districtText
+            ) {
+
+                if (afterDiscount <= 0) {
+                    return 0;
+                }
+
+
+                // Đơn sau giảm từ 150.000đ => freeship
+                if (afterDiscount >= 150000) {
+                    return 0;
+                }
+
+
+                const district =
+                    normalizeVietnamese(
+                        districtText
+                    );
+
+
+                // Chưa chọn khu vực
+                if (!district) {
+                    return 0;
+                }
+
+
+                if (district.includes("binh thanh")) {
+                    return 15000;
+                }
+
+
+                if (district.includes("quan 1") ||
+                    district.includes("district 1")) {
+                    return 20000;
+                }
+
+
+                if (district.includes("quan 3") ||
+                    district.includes("district 3")) {
+                    return 20000;
+                }
+
+
+                if (district.includes("quan 7") ||
+                    district.includes("district 7")) {
+                    return 25000;
+                }
+
+
+                if (district.includes("thu duc")) {
+                    return 30000;
+                }
+
+
+                return 35000;
+            }
+
+
+            function updateSummary() {
+
+                if (currentDiscount > subTotal) {
+                    currentDiscount = subTotal;
+                }
+
+
+                const afterDiscount =
+                    Math.max(
+                        subTotal - currentDiscount,
+                        0
+                    );
+
+
+                const districtText =
+                    getDistrictName();
+
+
+                if (districtNameInput) {
+                    districtNameInput.value =
+                        districtText;
+                }
+
+
+                const shipping =
+                    calculateShipping(
+                        afterDiscount,
+                        districtText
+                    );
+
+
+                const total =
+                    afterDiscount + shipping;
+
+
+                // DISCOUNT
+                discountEl.textContent =
+                    "-" + formatVnd(
+                        currentDiscount
+                    );
+
+
+                // CHƯA CHỌN QUẬN
+                if (!districtText) {
+
+                    shippingEl.textContent =
+                        "Chọn khu vực";
+
+
+                    grandTotalEl.textContent =
+                        formatVnd(
+                            afterDiscount
+                        );
+
+
+                    if (shippingMessageEl) {
+
+                        shippingMessageEl.innerHTML =
+                            'Chọn quận/huyện để hệ thống tính phí giao hàng. ' +
+                            'Đơn sau giảm từ <strong>150.000đ</strong> được miễn phí ship.';
+                    }
+
+
+                    return;
+                }
+
+
+                // SHIPPING
+                shippingEl.textContent =
+                    shipping === 0
+                        ? "Miễn phí"
+                        : formatVnd(shipping);
+
+
+                // TOTAL
+                grandTotalEl.textContent =
+                    formatVnd(total);
+
+
+                // SHIPPING MESSAGE
+                if (shippingMessageEl) {
+
+                    if (shipping === 0) {
+
+                        shippingMessageEl.innerHTML =
+                            'Đơn hàng của bạn được ' +
+                            '<strong>miễn phí giao hàng</strong>.';
+                    }
+                    else {
+
+                        shippingMessageEl.innerHTML =
+                            'Phí giao hàng đến <strong>' +
+                            districtText +
+                            '</strong>: <strong>' +
+                            formatVnd(shipping) +
+                            '</strong>. Đơn sau giảm từ ' +
+                            '<strong>150.000đ</strong> được miễn phí ship.';
+                    }
+                }
+            }
+
+
+            async function removeVoucherFromServer() {
+
+                try {
+
+                    await fetch(
+                        "/Checkout/RemoveVoucher",
+                        {
+                            method: "POST"
+                        }
+                    );
+                }
+                catch (error) {
+
+                    console.error(
+                        "Remove voucher error:",
+                        error
+                    );
+                }
+            }
+
+
+            async function applyVoucher(
+                radio,
+                voucher
+            ) {
+
+                const code =
+                    voucher.code;
+
+
+                const discount =
+                    Number(
+                        voucher.discount || 0
+                    );
+
+
+                const minOrder =
+                    Number(
+                        voucher.minOrder || 0
+                    );
+
+
+                // =============================================
+                // KIỂM TRA ĐƠN TỐI THIỂU
+                // =============================================
+
+                if (subTotal < minOrder) {
+
+                    radio.checked = false;
+
+
+                    await removeVoucherFromServer();
+
+
+                    currentDiscount = 0;
+
+
+                    if (activeVoucherCodeEl) {
+
+                        activeVoucherCodeEl.value =
+                            "";
+                    }
+
+
+                    updateSummary();
+
+
+                            showCheckoutToast(
+                                "Không thể áp dụng voucher",
+                                "Voucher " +
+                                code +
+                                " chỉ áp dụng cho đơn từ " +
+                                formatVnd(minOrder) +
+                                ".",
+                                "warning"
+                            );
+
+
+                    return;
+                }
+
+
+                // =============================================
+                // GỬI VOUCHER LÊN SERVER
+                // =============================================
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/Checkout/ApplyVoucher",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/x-www-form-urlencoded"
+                                },
+
+                                body:
+                                    new URLSearchParams({
+                                        code: code,
+                                        discount: discount,
+                                        minOrder: minOrder
+                                    })
+                            }
+                        );
+
+
+                    const result =
+                        await response.json();
+
+
+                    // =========================================
+                    // SERVER TỪ CHỐI
+                    // =========================================
+
+                    if (!result.success) {
+
+                        radio.checked = false;
+
+
+                        currentDiscount = 0;
+
+
+                        if (activeVoucherCodeEl) {
+
+                            activeVoucherCodeEl.value =
+                                "";
+                        }
+
+
+                        updateSummary();
+
+
+                        alert(
+                            result.message ||
+                            "Voucher không hợp lệ."
+                        );
+
+
+                        return;
+                    }
+
+
+                    // =========================================
+                    // SUCCESS
+                    // =========================================
+
+                    currentDiscount =
+                        Number(
+                            result.discount ||
+                            discount
+                        );
+
+
+                    if (activeVoucherCodeEl) {
+
+                        activeVoucherCodeEl.value =
+                            code;
+                    }
+
+
+                    updateSummary();
+
+                }
+                catch (error) {
+
+                    console.error(
+                        "Apply voucher error:",
+                        error
+                    );
+
+
+                    radio.checked = false;
+
+
+                    alert(
+                        "Không thể áp dụng voucher. Vui lòng thử lại."
+                    );
+                }
+            }
+
+
+            function renderVouchers() {
+
+                if (!voucherList) {
+                    return;
+                }
+
+
+                let vouchers = [];
+
+
+                try {
+
+                    vouchers =
+                        JSON.parse(
+                            localStorage.getItem(
+                                "savedVouchers"
+                            )
+                        ) || [];
+                }
+                catch {
+
+                    vouchers = [];
+                }
+
+
+                // =============================================
+                // KHÔNG CÓ VOUCHER
+                // =============================================
+
+                if (vouchers.length === 0) {
+
+                    voucherList.innerHTML =
+                        '<div class="voucher-empty">' +
+                        'Bạn chưa lưu voucher nào.' +
+                        '</div>';
+
+
+                    return;
+                }
+
+
+                voucherList.innerHTML =
+                    "";
+
+
+                const activeCode =
+                    activeVoucherCodeEl
+                        ? activeVoucherCodeEl.value
+                        : "";
+
+
+                // =============================================
+                // HIỂN THỊ DANH SÁCH
+                // =============================================
+
+                vouchers.forEach(
+                    voucher => {
+
+                        const item =
+                            document.createElement(
+                                "label"
+                            );
+
+
+                        item.className =
+                            "checkout-voucher-item";
+
+
+                        const discount =
+                            Number(
+                                voucher.discount || 0
+                            );
+
+
+                        const minOrder =
+                            Number(
+                                voucher.minOrder || 0
+                            );
+
+
+                        item.innerHTML = `
+
+                            <input type="radio"
+                                   name="checkoutVoucher"
+                                   ${voucher.code === activeCode
+                                        ? "checked"
+                                        : ""} />
+
+                            <div class="checkout-voucher-info">
+
+                                <strong>
+                                    ${voucher.code}
+                                </strong>
+
+                                <span>
+                                    Giảm ${formatVnd(discount)}
+                                </span>
+
+                                <small>
+                                    Đơn từ ${formatVnd(minOrder)}
+                                </small>
+
+                            </div>
+                        `;
+
+
+                        const radio =
+                            item.querySelector(
+                                "input"
+                            );
+
+
+                        radio.addEventListener(
+                            "change",
+                            function () {
+
+                                if (this.checked) {
+
+                                    applyVoucher(
+                                        this,
+                                        voucher
+                                    );
+                                }
+                            }
+                        );
+
+
+                        voucherList.appendChild(
+                            item
+                        );
+                    }
+                );
+            }
+
+
+            // =================================================
+            // DISTRICT CHANGE
+            // =================================================
+
+            if (districtSelect) {
+
+                districtSelect.addEventListener(
+                    "change",
+                    updateSummary
+                );
+
+
+                // checkout.js nạp quận động
+                const observer =
+                    new MutationObserver(
+                        updateSummary
+                    );
+
+
+                observer.observe(
+                    districtSelect,
+                    {
+                        childList: true,
+                        subtree: true
+                    }
+                );
+            }
+
+
+            // =================================================
+            // INITIAL
+            // =================================================
+
+            renderVouchers();
+
+            updateSummary();
+
+        });
+
+                function showCheckoutToast(
+            title,
+            message,
+            type = "warning"
+        ) {
+
+            let toast =
+                document.getElementById(
+                    "checkoutToast"
+                );
+
+
+            if (!toast) {
+
+                toast =
+                    document.createElement("div");
+
+                toast.id =
+                    "checkoutToast";
+
+                toast.innerHTML = `
+                    <div class="checkout-toast-icon">
+                        <i id="checkoutToastIcon"
+                           class="bi bi-exclamation-circle-fill">
+                        </i>
+                    </div>
+
+                    <div class="checkout-toast-content">
+
+                        <h4 id="checkoutToastTitle">
+                        </h4>
+
+                        <p id="checkoutToastMessage">
+                        </p>
+
+                    </div>
+
+                    <button type="button"
+                            class="checkout-toast-close">
+
+                        <i class="bi bi-x-lg"></i>
+
+                    </button>
+                `;
+
+
+                document.body.appendChild(
+                    toast
+                );
+
+
+                toast
+                    .querySelector(
+                        ".checkout-toast-close"
+                    )
+                    .addEventListener(
+                        "click",
+                        () => {
+
+                            toast.classList.remove(
+                                "show"
+                            );
+
+                        }
+                    );
+            }
+
+
+            const titleElement =
+                toast.querySelector(
+                    "#checkoutToastTitle"
+                );
+
+
+            const messageElement =
+                toast.querySelector(
+                    "#checkoutToastMessage"
+                );
+
+
+            const icon =
+                toast.querySelector(
+                    "#checkoutToastIcon"
+                );
+
+
+            titleElement.textContent =
+                title;
+
+
+            messageElement.textContent =
+                message;
+
+
+            toast.className =
+                "checkout-toast show " +
+                type;
+
+
+            if (type === "success") {
+
+                icon.className =
+                    "bi bi-check-circle-fill";
+            }
+            else if (type === "error") {
+
+                icon.className =
+                    "bi bi-x-circle-fill";
+            }
+            else {
+
+                icon.className =
+                    "bi bi-exclamation-circle-fill";
+            }
+
+
+            clearTimeout(
+                window.checkoutToastTimer
+            );
+
+
+            window.checkoutToastTimer =
+                setTimeout(
+                    () => {
+
+                        toast.classList.remove(
+                            "show"
+                        );
+
+                    },
+                    3000
+                );
+        }
+    </script>
+
+}

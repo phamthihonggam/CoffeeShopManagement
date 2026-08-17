@@ -1,0 +1,152 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+<footer class="footer-custom">
+
+    <div class="footer-container">
+
+        <!-- LOGO -->
+        <div class="footer-column footer-brand">
+
+            <img src="~/images/logo/logo.png"
+                 class="footer-logo"
+                 alt="Rosalie Coffee" />
+
+        </div>
+
+
+        <!-- ABOUT -->
+        <div class="footer-column">
+
+            <h4>@T["FooterAboutTitle"]</h4>
+
+            <p>
+                @T["FooterAboutDescription"]
+            </p>
+
+            <a asp-controller="About"
+               asp-action="Index"
+               class="footer-btn">
+
+                @T["FooterExploreMore"]
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+
+        <!-- BRANCH -->
+        <div class="footer-column">
+
+            <h4>@T["FooterSystemTitle"]</h4>
+
+            <p>
+                @T["FooterSystemDescription"]
+            </p>
+
+            <a asp-controller="Contact"
+               asp-action="Index"
+               class="footer-btn">
+
+                @T["ViewAllBranches"]
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+
+        <!-- SOCIAL -->
+        <div class="footer-column">
+
+            <h4>@T["FooterFollowTitle"]</h4>
+
+            <p>
+                @T["FooterFollowDescription"]
+            </p>
+
+            <div class="social-icons">
+
+                <a href="https://www.facebook.com/"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="Facebook">
+
+                    <i class="bi bi-facebook"></i>
+
+                </a>
+
+                <a href="https://www.instagram.com/"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="Instagram">
+
+                    <i class="bi bi-instagram"></i>
+
+                </a>
+
+                <a href="https://www.tiktok.com/"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="TikTok">
+
+                    <i class="bi bi-tiktok"></i>
+
+                </a>
+
+                <a asp-controller="Contact"
+                   asp-action="Index"
+                   aria-label="@T["Contact"]">
+
+                    <i class="bi bi-chat-dots"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER BOTTOM -->
+    <div class="footer-bottom">
+
+        <div class="footer-bottom-inner">
+
+            <div class="footer-copyright">
+
+                © 2026 Rosalie Coffee & More.
+                @T["FooterRightsReserved"]
+
+            </div>
+
+
+            <!-- PAYMENT -->
+            <div class="footer-payment">
+
+                <span>@T["FooterSecurePayment"]</span>
+
+                <div class="payment-icons">
+
+                    <img src="~/images/payment/visa.png"
+                         alt="Visa" />
+
+                    <img src="~/images/payment/mastercard.png"
+                         alt="Mastercard" />
+
+                    <img src="~/images/payment/vnpay.png"
+                         alt="VNPay" />
+
+                    <img src="~/images/payment/paypal.png"
+                         alt="PayPal" />
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>

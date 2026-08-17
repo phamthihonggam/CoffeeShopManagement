@@ -1,0 +1,49 @@
+﻿@model IEnumerable<CoffeeShopManagement.Models.LoaiSanPham>
+
+<ul class="navbar-nav mx-auto align-items-center">
+
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="Home"
+           asp-action="Index">
+            Trang chủ
+        </a>
+    </li>
+
+    @foreach (var item in Model)
+    {
+        <li class="nav-item">
+            <a class="nav-link"
+               asp-controller="Menu"
+               asp-action="Index"
+               asp-route-id="@item.MaLoai">
+                @item.TenLoai
+            </a>
+        </li>
+    }
+
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="Promotion"
+           asp-action="Index">
+            Khuyến mãi
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="Member"
+           asp-action="Index">
+            Thành viên
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="Branch"
+           asp-action="Index">
+            Chi nhánh
+        </a>
+    </li>
+
+</ul>

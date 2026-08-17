@@ -1,0 +1,486 @@
+﻿@model CoffeeShopManagement.ViewModels.DangNhapViewModel
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+@{
+    Layout = null;
+
+    ViewData["Title"] =
+        T["LoginPageTitle"];
+}
+
+
+<!DOCTYPE html>
+
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+
+    <title>
+        @T["LoginPageTitle"] - Rosalie Coffee
+    </title>
+
+
+    <!-- =========================================
+         LOGIN CSS
+    ========================================== -->
+
+    <link rel="stylesheet"
+          href="~/css/login.css"
+          asp-append-version="true" />
+
+
+    <!-- =========================================
+         FONT AWESOME
+    ========================================== -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+</head>
+
+
+<body>
+
+
+    <div class="login-page">
+
+
+        <div class="login-container">
+
+
+            <!-- =================================================
+                 LEFT
+            ================================================== -->
+
+            <div class="login-left">
+
+
+                <!-- BACKGROUND IMAGE -->
+
+                <img src="~/images/auth/login.jpg"
+                     class="login-banner"
+                     alt="@T["LoginBannerAlt"]" />
+
+
+                <!-- OVERLAY -->
+
+                <div class="overlay"></div>
+
+
+
+                <!-- =============================================
+                     LEFT CONTENT
+                ============================================== -->
+
+                <div class="login-content">
+
+
+                    <h1>
+                        @T["WelcomeBack"]
+                    </h1>
+
+
+                    <p>
+                        @T["LoginWelcomeDescription"]
+                    </p>
+
+
+
+                    <!-- BACK HOME -->
+
+                    <a asp-area=""
+                       asp-controller="Home"
+                       asp-action="Index"
+                       class="back-home">
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
+                        @T["BackToHome"]
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 RIGHT
+            ================================================== -->
+
+            <div class="login-right">
+
+
+                <!-- TITLE -->
+
+                <h2>
+                    @T["Login"]
+                </h2>
+
+
+                <p class="login-desc">
+
+                    Đăng nhập bằng Email hoặc tên đăng nhập
+                    Rosalie Coffee.
+
+                </p>
+
+
+
+                <!-- =================================================
+                     LOGIN FORM
+                ================================================== -->
+
+                <form asp-area=""
+                      asp-controller="Account"
+                      asp-action="Login"
+                      method="post"
+                      autocomplete="off">
+
+
+                    @Html.AntiForgeryToken()
+
+
+
+                    <!-- =============================================
+                         VALIDATION SUMMARY
+                    ============================================== -->
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger mb-3">
+                    </div>
+
+
+
+                    <!-- =============================================
+                         EMAIL / USERNAME
+                    ============================================== -->
+
+                    <div class="form-group">
+
+
+                        <label asp-for="Email">
+
+                            Email hoặc tên đăng nhập
+
+                        </label>
+
+
+
+                        <input asp-for="Email"
+                               type="text"
+                               class="form-control"
+                               placeholder="Nhập Email hoặc tên đăng nhập"
+                               autocomplete="username" />
+
+
+
+                        <span asp-validation-for="Email"
+                              class="text-danger">
+                        </span>
+
+
+                    </div>
+
+
+
+                    <!-- =============================================
+                         PASSWORD
+                    ============================================== -->
+
+                    <div class="form-group">
+
+
+                        <label asp-for="MatKhau">
+
+                            @T["Password"]
+
+                        </label>
+
+
+
+                        <div class="password-box">
+
+
+                            <input asp-for="MatKhau"
+                                   type="password"
+                                   id="password"
+                                   class="form-control"
+                                   placeholder="@T["PasswordPlaceholder"]"
+                                   autocomplete="current-password" />
+
+
+
+                            <button type="button"
+                                    id="togglePassword"
+                                    class="toggle-password"
+                                    aria-label="@T["TogglePasswordVisibility"]">
+
+                                <i class="fa-solid fa-eye"></i>
+
+                            </button>
+
+
+                        </div>
+
+
+
+                        <span asp-validation-for="MatKhau"
+                              class="text-danger">
+                        </span>
+
+
+                    </div>
+
+
+
+                    <!-- =============================================
+                         LOGIN OPTIONS
+                    ============================================== -->
+
+                    <div class="login-option">
+
+
+                        <!-- REMEMBER ME -->
+
+                        <label class="remember-me">
+
+
+                            <input asp-for="RememberMe" />
+
+
+                            @T["RememberMe"]
+
+
+                        </label>
+
+
+
+                        <!-- FORGOT PASSWORD -->
+
+                        <a asp-area=""
+                           asp-controller="Account"
+                           asp-action="ForgotPassword"
+                           class="forgot-password">
+
+                            @T["ForgotPassword"]
+
+                        </a>
+
+
+                    </div>
+
+
+
+                    <!-- =============================================
+                         LOGIN BUTTON
+                    ============================================== -->
+
+                    <button type="submit"
+                            id="loginBtn"
+                            class="btn-login">
+
+
+                        <span id="btnText">
+
+                            @T["Login"]
+
+                        </span>
+
+
+                    </button>
+
+
+                </form>
+
+
+
+                <!-- =================================================
+                     DIVIDER
+                ================================================== -->
+
+                <div class="divider">
+
+
+                    <span>
+
+                        @T["Or"]
+
+                    </span>
+
+
+                </div>
+
+
+
+                <!-- =================================================
+                     GOOGLE LOGIN
+                     DÀNH CHO KHÁCH HÀNG
+                ================================================== -->
+
+                <form asp-area=""
+                      asp-controller="Account"
+                      asp-action="GoogleLogin"
+                      method="get">
+
+
+                    <button class="google-btn"
+                            type="submit">
+
+
+                        <i class="fab fa-google"></i>
+
+
+                        @T["ContinueWithGoogle"]
+
+
+                    </button>
+
+
+                </form>
+
+
+
+                <!-- =================================================
+                     REGISTER
+                     DÀNH CHO KHÁCH HÀNG
+                ================================================== -->
+
+                <div class="register-text">
+
+
+                    @T["NoAccount"]
+
+
+                    <a asp-area=""
+                       asp-controller="Account"
+                       asp-action="Register">
+
+                        @T["RegisterNow"]
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         JQUERY
+    ====================================================== -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js">
+    </script>
+
+
+
+    <!-- =====================================================
+         JQUERY VALIDATION
+    ====================================================== -->
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js">
+    </script>
+
+
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js">
+    </script>
+
+
+
+    <!-- =====================================================
+         LOCALIZATION FOR LOGIN.JS
+    ====================================================== -->
+
+    <script>
+
+            window.loginTranslations = {
+
+                loggingIn:
+                    @Html.Raw(
+                            System.Text.Json.JsonSerializer.Serialize(
+                                    T["LoggingIn"].Value
+                            )
+                    )
+
+            };
+
+    </script>
+
+
+
+    <!-- =====================================================
+         LOGIN JS
+    ====================================================== -->
+
+    <script src="~/js/login.js"
+            asp-append-version="true">
+    </script>
+
+
+
+    <!-- =====================================================
+         TOAST JS
+    ====================================================== -->
+
+    <script src="~/js/toast.js"
+            asp-append-version="true">
+    </script>
+
+
+
+    <!-- =====================================================
+         TOAST PARTIAL
+    ====================================================== -->
+
+    <partial name="_Toast" />
+
+
+
+    <!-- =====================================================
+         TEMPDATA TOAST
+    ====================================================== -->
+    @if (TempData["Toast"] != null)
+    {
+        <script>
+
+                document.addEventListener(
+                    "DOMContentLoaded",
+                    function () {
+
+                        showToast(
+                            @Html.Raw(
+                                    System.Text.Json.JsonSerializer.Serialize(
+                                            TempData["Toast"]?.ToString()
+                                    )
+                            )
+                        );
+
+                    }
+                );
+
+        </script>
+    }
+
+
+</body>
+
+</html>

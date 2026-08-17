@@ -1,0 +1,185 @@
+﻿@model CoffeeShopManagement.ViewModels.VerifyOtpViewModel
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+@{
+    Layout = null;
+    ViewData["Title"] = T["VerifyOtpPageTitle"];
+}
+
+<!DOCTYPE html>
+
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        @T["VerifyOtpPageTitle"] - Rosalie Coffee
+    </title>
+
+    <link rel="stylesheet"
+          href="~/css/login.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+</head>
+
+<body>
+
+    <div class="login-page">
+
+        <div class="login-container">
+
+
+            <!-- =========================================
+                 LEFT
+            ========================================== -->
+
+            <div class="login-left">
+
+                <img src="~/images/auth/login.jpg"
+                     class="login-banner"
+                     alt="Rosalie Coffee" />
+
+                <div class="overlay"></div>
+
+
+                <div class="login-content">
+
+                    <h1>
+                        @T["CheckEmailTitle"]
+                    </h1>
+
+                    <p>
+                        @T["CheckEmailDescription"]
+                    </p>
+
+
+                    <a asp-controller="Account"
+                       asp-action="ForgotPassword"
+                       class="back-home">
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
+                        @T["ResendEmail"]
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 RIGHT
+            ========================================== -->
+
+            <div class="login-right">
+
+                <h2>
+                    @T["EnterOtpTitle"]
+                </h2>
+
+
+                <p class="login-desc">
+                    @T["OtpExpiryDescription"]
+                </p>
+
+
+                @if (TempData["Success"] != null)
+                {
+                    <div style="
+                        padding:12px 15px;
+                        margin-bottom:18px;
+                        background:#edf8ef;
+                        border-radius:8px;
+                        color:#287a37;">
+
+                        @TempData["Success"]
+
+                    </div>
+                }
+
+
+                <form asp-controller="Account"
+                      asp-action="VerifyOtp"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger mb-3">
+                    </div>
+
+
+                    <!-- =================================
+                         OTP
+                    ================================== -->
+
+                    <div class="form-group">
+
+                        <label asp-for="Otp">
+                            @T["OtpCode"]
+                        </label>
+
+
+                        <input asp-for="Otp"
+                               class="form-control"
+                               maxlength="6"
+                               inputmode="numeric"
+                               autocomplete="one-time-code"
+                               placeholder="@T["OtpPlaceholder"]"
+                               style="
+                        text-align:center;
+                        font-size:24px;
+                        font-weight:700;
+                        letter-spacing:8px;" />
+
+
+                        <span asp-validation-for="Otp"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- =================================
+                         BUTTON
+                    ================================== -->
+
+                    <button type="submit"
+                            class="btn-login">
+
+                        @T["VerifyOtpButton"]
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js">
+    </script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js">
+    </script>
+
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js">
+    </script>
+
+</body>
+
+</html>

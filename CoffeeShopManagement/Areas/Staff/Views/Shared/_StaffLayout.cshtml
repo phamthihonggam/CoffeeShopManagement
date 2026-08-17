@@ -1,0 +1,511 @@
+﻿@{
+    var title =
+        ViewData["Title"]?.ToString()
+        ?? "Nhân viên";
+
+    // Dùng đúng Session của AccountController mới
+    var staffFullName =
+        Context.Session.GetString("HoTen")
+        ?? User.Identity?.Name
+        ?? "Nhân viên";
+
+    var staffRole =
+        Context.Session.GetString("VaiTro")
+        ?? "NhanVien";
+
+    var staffUsername =
+        Context.Session.GetString("TenDangNhap")
+        ?? User.Identity?.Name
+        ?? "staff";
+
+    var avatarLetter =
+        !string.IsNullOrWhiteSpace(staffFullName)
+            ? staffFullName.Substring(0, 1).ToUpper()
+            : "N";
+}
+
+<!DOCTYPE html>
+
+<html lang="vi">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        @title - Rosalie Coffee
+    </title>
+
+
+    <!-- BOOTSTRAP -->
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+
+    <!-- FONT AWESOME -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+
+    <!-- DÙNG CHUNG STYLE ADMIN -->
+
+    <link rel="stylesheet"
+          href="~/css/admin.css"
+          asp-append-version="true" />
+
+
+    <!-- STAFF CSS -->
+
+    <link rel="stylesheet"
+          href="~/css/staff.css"
+          asp-append-version="true" />
+
+
+    <!-- CSS RIÊNG TỪNG PAGE -->
+    @RenderSection(
+            "Styles",
+            required: false
+        )
+
+</head>
+
+
+<body>
+
+    <div class="admin-wrapper">
+
+
+        <!-- =====================================================
+             SIDEBAR
+        ====================================================== -->
+
+        <aside class="admin-sidebar">
+
+
+            <!-- LOGO -->
+
+            <div class="admin-logo">
+
+                <img src="~/images/logo/logo.png"
+                     alt="Rosalie Coffee" />
+
+                <div>
+
+                    <h2>
+                        ROSALIE
+                    </h2>
+
+                    <span>
+                        NHÂN VIÊN
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 MENU
+            ================================================== -->
+
+            <nav class="admin-menu">
+
+
+                <!-- TỔNG QUAN -->
+
+                <a asp-area="Staff"
+                   asp-controller="Dashboard"
+                   asp-action="Index"
+                   class="admin-menu-item">
+
+                    <i class="fa-solid fa-chart-pie"></i>
+
+                    <span>
+                        Tổng quan
+                    </span>
+
+                </a>
+
+
+                <!-- ĐƠN HÀNG -->
+
+                <a asp-area="Staff"
+                   asp-controller="Order"
+                   asp-action="Index"
+                   class="admin-menu-item">
+
+                    <i class="fa-solid fa-receipt"></i>
+
+                    <span>
+                        Đơn hàng
+                    </span>
+
+                </a>
+
+
+                <!-- SẢN PHẨM -->
+
+                <a asp-area="Staff"
+                   asp-controller="Product"
+                   asp-action="Index"
+                   class="admin-menu-item">
+
+                    <i class="fa-solid fa-mug-hot"></i>
+
+                    <span>
+                        Sản phẩm
+                    </span>
+
+                </a>
+
+
+                <!-- KHÁCH HÀNG -->
+
+                <a asp-area="Staff"
+                   asp-controller="Customer"
+                   asp-action="Index"
+                   class="admin-menu-item">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    <span>
+                        Khách hàng
+                    </span>
+
+                </a>
+
+            </nav>
+
+
+            <!-- =================================================
+                 SIDEBAR BOTTOM
+            ================================================== -->
+
+            <div class="admin-sidebar-bottom">
+
+                <a asp-area=""
+                   asp-controller="Account"
+                   asp-action="Logout"
+                   class="admin-sidebar-logout">
+
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                    <span>
+                        Đăng xuất
+                    </span>
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =====================================================
+             MAIN
+        ====================================================== -->
+
+        <main class="admin-main">
+
+
+            <!-- =================================================
+                 HEADER
+            ================================================== -->
+
+            <header class="admin-header">
+
+
+                <!-- LEFT -->
+
+                <div class="admin-header-left">
+
+                    <span class="admin-header-label">
+                        ROSALIE COFFEE
+                    </span>
+
+                    <h1>
+                        @title
+                    </h1>
+
+                </div>
+
+
+                <!-- RIGHT -->
+
+                <div class="admin-header-right">
+
+
+                    <!-- XEM WEBSITE -->
+
+                    <a asp-area=""
+                       asp-controller="Home"
+                       asp-action="Index"
+                       class="admin-view-site">
+
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                        <span>
+                            Xem website
+                        </span>
+
+                    </a>
+
+
+                    <!-- =================================================
+                         ACCOUNT
+                    ================================================== -->
+
+                    <div class="admin-account-dropdown">
+
+
+                        <button type="button"
+                                class="admin-account admin-account-button"
+                                id="staffAccountButton"
+                                aria-expanded="false">
+
+
+                            <!-- AVATAR -->
+
+                            <div class="admin-avatar">
+
+                                <i class="fa-solid fa-user"></i>
+
+                            </div>
+
+
+                            <!-- INFO -->
+
+                            <div class="admin-account-info">
+
+                                <strong>
+                                    @staffFullName
+                                </strong>
+
+                                <span>
+                                    Nhân viên
+                                </span>
+
+                            </div>
+
+
+                            <i class="fa-solid fa-chevron-down admin-account-arrow"></i>
+
+                        </button>
+
+
+                        <!-- =================================================
+                             ACCOUNT DROPDOWN
+                        ================================================== -->
+
+                        <div class="admin-account-menu"
+                             id="staffAccountMenu">
+
+
+                            <!-- USER -->
+
+                            <div class="admin-account-menu-header">
+
+                                <div class="admin-dropdown-avatar">
+
+                                    <span>
+                                        @avatarLetter
+                                    </span>
+
+                                </div>
+
+
+                                <div>
+
+                                    <strong>
+                                        @staffFullName
+                                    </strong>
+
+                                    <span>
+                                        @@staffUsername
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ROLE -->
+
+                            <div class="admin-account-role">
+
+                                <span>
+                                    Vai trò
+                                </span>
+
+                                <strong>
+                                    Nhân viên
+                                </strong>
+
+                            </div>
+
+
+                            <div class="admin-account-divider"></div>
+
+
+                            <!-- WEBSITE -->
+
+                            <a asp-area=""
+                               asp-controller="Home"
+                               asp-action="Index"
+                               class="admin-account-menu-item">
+
+                                <i class="fa-solid fa-house"></i>
+
+                                <span>
+                                    Xem website
+                                </span>
+
+                            </a>
+
+
+                            <!-- LOGOUT -->
+
+                            <a asp-area=""
+                               asp-controller="Account"
+                               asp-action="Logout"
+                               class="admin-account-menu-item">
+
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                                <span>
+                                    Đăng xuất
+                                </span>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- =================================================
+                 CONTENT
+            ================================================== -->
+
+            <section class="admin-content">
+
+                @RenderBody()
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- ACCOUNT DROPDOWN -->
+
+    <script>
+
+        document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+        const button =
+        document.getElementById(
+        "staffAccountButton"
+        );
+
+        const menu =
+        document.getElementById(
+        "staffAccountMenu"
+        );
+
+        if (!button || !menu) {
+        return;
+        }
+
+
+        // OPEN / CLOSE
+
+        button.addEventListener(
+        "click",
+        function (event) {
+
+        event.stopPropagation();
+
+        const isOpen =
+        menu.classList.toggle(
+        "show"
+        );
+
+        button.classList.toggle(
+        "active",
+        isOpen
+        );
+
+        button.setAttribute(
+        "aria-expanded",
+        isOpen
+        ? "true"
+        : "false"
+        );
+        }
+        );
+
+
+        // CLICK OUTSIDE
+
+        document.addEventListener(
+        "click",
+        function (event) {
+
+        if (
+        !menu.contains(event.target)
+        &&
+        !button.contains(event.target)
+        ) {
+
+        menu.classList.remove(
+        "show"
+        );
+
+        button.classList.remove(
+        "active"
+        );
+
+        button.setAttribute(
+        "aria-expanded",
+        "false"
+        );
+        }
+        }
+        );
+        }
+        );
+
+    </script>
+
+
+    <!-- PAGE JS -->
+    @await RenderSectionAsync(
+            "Scripts",
+            required: false
+        )
+
+</body>
+
+</html>

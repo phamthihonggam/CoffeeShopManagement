@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI',sans-serif;
+}
+
+html,
+body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    background: #F8F5F2;
+    color: #4b2e2b;
+}
+
+.container {
+    max-width: 100% !important;
+    padding: 0 !important;
+}

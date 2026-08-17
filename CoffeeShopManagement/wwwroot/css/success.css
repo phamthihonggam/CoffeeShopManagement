@@ -1,0 +1,854 @@
+﻿/* =========================================================
+   ROSALIE COFFEE
+   SUCCESS PAGE - SINGLE RECEIPT
+========================================================= */
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.success-page {
+    width: 100%;
+    min-height: calc(100vh - 80px);
+    padding: 34px 20px 55px;
+    background: radial-gradient( circle at 5% 18%, rgba(166, 106, 70, 0.06), transparent 26% ), radial-gradient( circle at 95% 78%, rgba(166, 106, 70, 0.05), transparent 28% ), #f8f5f1;
+}
+
+.success-wrapper {
+    width: 94%;
+    max-width: 1160px;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   RECEIPT
+========================================================= */
+
+.success-receipt {
+    position: relative;
+    width: 100%;
+    padding: 34px 40px 32px;
+    background: #ffffff;
+    border: 1px solid #eee4dc;
+    border-radius: 18px 18px 10px 10px;
+    box-shadow: 0 20px 55px rgba(70, 42, 30, 0.09);
+    overflow: visible;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.receipt-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 310px;
+    align-items: center;
+    gap: 45px;
+}
+
+.receipt-success {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.receipt-check {
+    width: 74px;
+    height: 74px;
+    flex: 0 0 74px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #ffffff;
+    font-size: 30px;
+    background: linear-gradient( 145deg, #38c463, #20a64d );
+    box-shadow: 0 10px 24px rgba(36, 170, 81, 0.25);
+}
+
+.receipt-success-content {
+    min-width: 0;
+}
+
+.receipt-brand {
+    display: block;
+    margin-bottom: 5px;
+    color: #a46945;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.receipt-success-content h1 {
+    margin: 0 0 9px;
+    color: #442a20;
+    font-family: inherit;
+    font-size: 31px;
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: normal;
+    word-spacing: normal;
+}
+
+.receipt-success-content p {
+    margin: 0;
+    color: #786b64;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+    .receipt-success-content p strong {
+        color: #5c3829;
+        font-weight: 850;
+    }
+
+
+/* =========================================================
+   ORDER INFO
+========================================================= */
+
+.receipt-order-info {
+    padding-left: 28px;
+    border-left: 1px solid #eadfd7;
+}
+
+.receipt-order-item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.receipt-order-icon {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a36a48;
+    font-size: 17px;
+}
+
+.receipt-order-item span {
+    display: block;
+    margin-bottom: 3px;
+    color: #9b8375;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.receipt-order-item strong {
+    display: block;
+    color: #4c3025;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: normal;
+    word-spacing: normal;
+}
+
+.receipt-order-code {
+    color: #573326 !important;
+    font-size: 22px !important;
+    letter-spacing: normal !important;
+}
+
+.receipt-order-divider {
+    height: 1px;
+    margin: 14px 0;
+    background: repeating-linear-gradient( to right, #e8dcd3 0, #e8dcd3 5px, transparent 5px, transparent 10px );
+}
+
+
+/* =========================================================
+   MAIN DIVIDER
+========================================================= */
+
+.receipt-divider {
+    width: 100%;
+    height: 1px;
+    margin: 25px 0;
+    background: repeating-linear-gradient( to right, #dbc8bb 0, #dbc8bb 5px, transparent 5px, transparent 10px );
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.receipt-status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 11px 15px;
+    margin-bottom: 25px;
+    border: 1px solid #efe5de;
+    border-radius: 10px;
+    background: #fbf8f5;
+}
+
+.receipt-status-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #765548;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+    .receipt-status-label i {
+        color: #a66a46;
+    }
+
+.order-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 850;
+}
+
+    .order-status.pending {
+        color: #a66e19;
+        background: #fff3d5;
+    }
+
+    .order-status.paid {
+        color: #208249;
+        background: #e9f8ee;
+    }
+
+    .order-status.failed {
+        color: #be473f;
+        background: #fde9e7;
+    }
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.receipt-section {
+    width: 100%;
+}
+
+
+/* =========================================================
+   SECTION TITLE
+   FIX CHỮ BỊ GIÃN
+========================================================= */
+
+.receipt-section-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0 0 14px;
+}
+
+.receipt-title-icon {
+    width: 25px;
+    height: 25px;
+    flex: 0 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a46945;
+    font-size: 14px;
+}
+
+.receipt-section-title h2 {
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #4b3025;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: 0 !important;
+    word-spacing: 0 !important;
+    text-transform: none !important;
+    font-kerning: normal;
+    font-stretch: normal;
+    white-space: normal;
+}
+
+
+/* =========================================================
+   PRODUCT BOX
+========================================================= */
+
+.receipt-products {
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid #eee4dd;
+    border-radius: 10px;
+}
+
+
+/* PRODUCT HEADER */
+
+.receipt-product-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1.8fr) 150px 100px 150px;
+    align-items: center;
+    min-height: 42px;
+    padding: 0 20px;
+    color: #ffffff;
+    background: linear-gradient( 135deg, #5a3326, #74452e );
+    font-size: 10.5px;
+    font-weight: 850;
+    letter-spacing: 0;
+}
+
+    .receipt-product-header span:nth-child(2),
+    .receipt-product-header span:nth-child(3),
+    .receipt-product-header span:nth-child(4) {
+        text-align: right;
+    }
+
+
+/* PRODUCT ROW */
+
+.receipt-product-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.8fr) 150px 100px 150px;
+    align-items: center;
+    min-height: 80px;
+    padding: 11px 20px;
+    border-bottom: 1px solid #f0e8e2;
+}
+
+    .receipt-product-row:last-child {
+        border-bottom: none;
+    }
+
+.receipt-product-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.receipt-product-image,
+.receipt-product-placeholder {
+    width: 56px;
+    height: 56px;
+    flex: 0 0 56px;
+    border-radius: 9px;
+}
+
+.receipt-product-image {
+    display: block;
+    object-fit: cover;
+    background: #f1e8e2;
+}
+
+.receipt-product-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #986247;
+    background: #f3e9e2;
+    font-size: 18px;
+}
+
+.receipt-product-name {
+    min-width: 0;
+}
+
+    .receipt-product-name strong {
+        display: block;
+        color: #4c3025;
+        font-size: 13px;
+        font-weight: 850;
+        line-height: 1.4;
+        letter-spacing: normal;
+        word-spacing: normal;
+    }
+
+.receipt-product-price,
+.receipt-product-quantity,
+.receipt-product-total {
+    text-align: right;
+    color: #6e5f57;
+    font-size: 12px;
+}
+
+.receipt-product-total {
+    color: #9c562d;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.receipt-empty {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px;
+    color: #807169;
+    border: 1px solid #eee5de;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   PAYMENT
+========================================================= */
+
+.receipt-payment {
+    width: 100%;
+}
+
+.receipt-payment-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 35px;
+    color: #66564e;
+    font-size: 12.5px;
+}
+
+    .receipt-payment-row strong {
+        color: #4b3026;
+        font-size: 13px;
+        font-weight: 850;
+    }
+
+    .receipt-payment-row.discount strong {
+        color: #229349;
+    }
+
+.free-shipping {
+    color: #229349 !important;
+}
+
+.receipt-payment-divider {
+    height: 1px;
+    margin: 10px 0 8px;
+    background: repeating-linear-gradient( to right, #dfcec2 0, #dfcec2 6px, transparent 6px, transparent 11px );
+}
+
+.receipt-grand-total {
+    min-height: 48px;
+}
+
+    .receipt-grand-total span {
+        color: #4d3126;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        font-weight: 850;
+        letter-spacing: 0;
+        word-spacing: 0;
+        text-transform: none;
+    }
+
+    .receipt-grand-total strong {
+        color: #9e582f;
+        font-size: 26px;
+        font-weight: 950;
+    }
+
+
+/* =========================================================
+   THANK YOU
+========================================================= */
+
+.receipt-thankyou {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 14px;
+    padding: 15px 19px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: linear-gradient( 100deg, #fbf4ec, #fffaf5 );
+}
+
+.receipt-thankyou-icon {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8c5637;
+    font-size: 17px;
+}
+
+.receipt-thankyou strong {
+    display: block;
+    margin-bottom: 3px;
+    color: #654231;
+    font-size: 12px;
+    font-weight: 850;
+}
+
+.receipt-thankyou span {
+    color: #89756b;
+    font-size: 11px;
+}
+
+.receipt-thankyou-coffee {
+    position: absolute;
+    right: 23px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(157, 99, 62, 0.18);
+    font-size: 43px;
+}
+
+
+/* =========================================================
+   SHIPPING
+========================================================= */
+
+.receipt-shipping-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    overflow: hidden;
+    border: 1px solid #eee4dd;
+    border-radius: 10px;
+}
+
+.receipt-shipping-item {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 16px 12px;
+    border-right: 1px solid #eee4dd;
+}
+
+    .receipt-shipping-item:last-child {
+        border-right: none;
+    }
+
+.receipt-shipping-icon {
+    width: 37px;
+    height: 37px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    border-radius: 50%;
+    color: #996143;
+    background: #f5eee9;
+    font-size: 14px;
+}
+
+.receipt-shipping-item span {
+    display: block;
+    margin-bottom: 5px;
+    color: #a08778;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0;
+    word-spacing: 0;
+    text-transform: none;
+}
+
+.receipt-shipping-item strong {
+    display: block;
+    max-width: 100%;
+    color: #51352a;
+    font-size: 11.5px;
+    font-weight: 850;
+    line-height: 1.4;
+    letter-spacing: normal;
+    word-spacing: normal;
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.receipt-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 24px;
+}
+
+.receipt-btn {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 18px;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 850;
+    text-decoration: none;
+    letter-spacing: normal;
+    word-spacing: normal;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+    .receipt-btn:hover {
+        transform: translateY(-2px);
+    }
+
+
+/* OUTLINE */
+
+.receipt-btn-outline {
+    color: #70462f;
+    background: #ffffff;
+    border: 1.5px solid #9b6544;
+}
+
+    .receipt-btn-outline:hover {
+        color: #5d3623;
+        background: #fbf7f3;
+        box-shadow: 0 8px 18px rgba(91, 52, 35, 0.08);
+    }
+
+
+/* PRIMARY */
+
+.receipt-btn-primary {
+    color: #ffffff;
+    border: 1.5px solid #693d27;
+    background: linear-gradient( 135deg, #75442a, #532d20 );
+    box-shadow: 0 8px 18px rgba(83, 45, 32, 0.15);
+}
+
+    .receipt-btn-primary:hover {
+        color: #ffffff;
+        background: linear-gradient( 135deg, #653822, #44241a );
+        box-shadow: 0 11px 24px rgba(83, 45, 32, 0.2);
+    }
+
+
+/* =========================================================
+   BOTTOM
+========================================================= */
+
+.receipt-bottom {
+    margin-top: 25px;
+    padding-top: 18px;
+    text-align: center;
+    border-top: 1px solid #eee4dd;
+}
+
+    .receipt-bottom span {
+        display: block;
+        margin-bottom: 3px;
+        color: #593629;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        font-weight: 900;
+        letter-spacing: 1px;
+    }
+
+    .receipt-bottom p {
+        margin: 0;
+        color: #9d897e;
+        font-size: 10px;
+        letter-spacing: normal;
+    }
+
+
+/* =========================================================
+   PAPER CUT
+========================================================= */
+
+.receipt-cut {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -10px;
+    height: 11px;
+    background: radial-gradient( circle at 10px -1px, transparent 10px, #ffffff 11px );
+    background-size: 20px 20px;
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 950px) {
+
+    .success-wrapper {
+        width: 96%;
+    }
+
+    .success-receipt {
+        padding: 30px 28px;
+    }
+
+    .receipt-header {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .receipt-order-info {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        padding: 18px 0 0;
+        border-left: none;
+        border-top: 1px solid #eee3db;
+    }
+
+    .receipt-order-divider {
+        width: 1px;
+        height: 45px;
+        margin: 0 20px;
+        background: #e7dbd2;
+    }
+
+    .receipt-product-header,
+    .receipt-product-row {
+        grid-template-columns: minmax(0, 1fr) 120px 70px 120px;
+    }
+
+    .receipt-shipping-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .receipt-shipping-item:nth-child(2) {
+        border-right: none;
+    }
+
+    .receipt-shipping-item:nth-child(-n+2) {
+        border-bottom: 1px solid #eee4dd;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .success-page {
+        padding: 20px 10px 40px;
+    }
+
+    .success-wrapper {
+        width: 100%;
+    }
+
+    .success-receipt {
+        padding: 24px 18px;
+        border-radius: 14px 14px 8px 8px;
+    }
+
+    .receipt-success {
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .receipt-check {
+        width: 54px;
+        height: 54px;
+        flex-basis: 54px;
+        font-size: 22px;
+    }
+
+    .receipt-success-content h1 {
+        font-size: 25px;
+    }
+
+    .receipt-success-content p {
+        font-size: 11.5px;
+    }
+
+    .receipt-order-info {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .receipt-order-divider {
+        width: 100%;
+        height: 1px;
+        margin: 0;
+        background: repeating-linear-gradient( to right, #e5d8cf 0, #e5d8cf 5px, transparent 5px, transparent 10px );
+    }
+
+    .receipt-status-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .receipt-products {
+        overflow-x: auto;
+    }
+
+    .receipt-product-header,
+    .receipt-product-row {
+        min-width: 670px;
+    }
+
+    .receipt-grand-total strong {
+        font-size: 23px;
+    }
+
+    .receipt-shipping-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .receipt-shipping-item {
+        border-right: none;
+        border-bottom: 1px solid #eee4dd;
+    }
+
+        .receipt-shipping-item:last-child {
+            border-bottom: none;
+        }
+
+    .receipt-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .success-receipt {
+        padding: 21px 14px;
+    }
+
+    .receipt-success {
+        flex-direction: column;
+    }
+
+    .receipt-success-content h1 {
+        font-size: 23px;
+    }
+
+    .receipt-section-title h2 {
+        font-size: 15px;
+    }
+
+    .receipt-thankyou {
+        padding-right: 15px;
+    }
+
+    .receipt-thankyou-coffee {
+        display: none;
+    }
+}

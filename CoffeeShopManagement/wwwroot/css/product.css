@@ -1,0 +1,29 @@
+﻿.product-detail {
+    max-width: 1200px;
+    margin: 80px auto;
+    display: flex;
+    gap: 50px;
+    align-items: center;
+}
+
+.detail-image img {
+    width: 500px;
+    border-radius: 25px;
+}
+
+.detail-info h1 {
+    color: #6b3f35;
+    font-size: 50px;
+}
+
+.detail-info .price {
+    font-size: 40px;
+    color: #a66a42;
+    font-weight: 800;
+    margin: 20px 0;
+}
+
+.detail-info p {
+    font-size: 20px;
+    line-height: 1.8;
+}

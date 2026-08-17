@@ -1,0 +1,135 @@
+﻿@model IEnumerable<CoffeeShopManagement.Models.SanPham>
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+@foreach (var item in Model)
+{
+    string category = item.MaLoai switch
+    {
+        1 => "coffee",
+        2 => "tea",
+        3 => "matcha",
+        4 => "soda",
+        5 => "cake",
+        6 => "juice",
+        7 => "yogurt",
+        8 => "blended",
+        _ => "all"
+    };
+
+
+    // =====================================================
+    // MENU LUÔN HIỂN THỊ GIÁ MENU
+    // KHÔNG DÙNG GIÁ KHUYẾN MÃI Ở ĐÂY
+    // =====================================================
+
+    var displayPrice =
+        item.DonGia;
+
+
+    <div class="menu-card"
+         data-id="@item.MaSp"
+         data-category="@category"
+         data-type="@item.MaLoai">
+
+
+        <!-- =================================================
+             IMAGE
+        ================================================== -->
+
+        <a asp-controller="Menu"
+           asp-action="Details"
+           asp-route-id="@item.MaSp"
+           class="menu-product-image-link">
+
+            <img src="~/images/menu/@item.HinhAnh"
+                 asp-append-version="true"
+                 alt="@item.TenSp" />
+
+        </a>
+
+
+        <!-- =================================================
+             FAVORITE
+        ================================================== -->
+
+        <button type="button"
+                class="favorite-btn"
+                aria-label="@T["Favorite"]">
+
+            <i class="fa-regular fa-heart"></i>
+
+        </button>
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+        <div class="menu-content">
+
+
+            <!-- NAME -->
+
+            <h3>
+
+                <a asp-controller="Menu"
+                   asp-action="Details"
+                   asp-route-id="@item.MaSp"
+                   class="menu-product-name-link">
+
+                    @item.TenSp
+
+                </a>
+
+            </h3>
+
+
+            <!-- DESCRIPTION -->
+
+            <p class="description">
+
+                @item.MoTa
+
+            </p>
+
+
+            <!-- =================================================
+                 PRICE
+            ================================================== -->
+
+            <div class="menu-price-wrapper">
+
+                <p class="price">
+
+                    @displayPrice.ToString("N0")đ
+
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 VIEW DETAIL
+            ================================================== -->
+
+            <a asp-controller="Menu"
+               asp-action="Details"
+               asp-route-id="@item.MaSp"
+               class="btn-view-detail">
+
+                <span>
+
+                    @T["ViewDetails"]
+
+                </span>
+
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+}

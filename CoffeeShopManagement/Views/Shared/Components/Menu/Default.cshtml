@@ -1,0 +1,50 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+<ul class="navbar-nav mx-auto align-items-center">
+
+    <!-- HOME -->
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="Home"
+           asp-action="Index">
+            @T["NavHome"]
+        </a>
+    </li>
+
+    <!-- MENU -->
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="Menu"
+           asp-action="Index">
+            @T["NavMenu"]
+        </a>
+    </li>
+
+    <!-- PROMOTION -->
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="Promotion"
+           asp-action="Index">
+            @T["NavPromotion"]
+        </a>
+    </li>
+
+    <!-- ABOUT -->
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="About"
+           asp-action="Index">
+            @T["NavAbout"]
+        </a>
+    </li>
+
+    <!-- CONTACT -->
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="Contact"
+           asp-action="Index">
+            @T["NavContact"]
+        </a>
+    </li>
+
+</ul>

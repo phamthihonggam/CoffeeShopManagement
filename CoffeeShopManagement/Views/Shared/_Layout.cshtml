@@ -1,0 +1,329 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Rosalie Coffee</title>
+
+
+    <!-- =====================================================
+         BOOTSTRAP
+    ====================================================== -->
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+
+    <!-- =====================================================
+         GLOBAL CSS
+    ====================================================== -->
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/header.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/hero.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/bestseller.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/gallery.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/promotion.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/contact.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/footer.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/modal.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/responsive.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/home-promotion.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/home-branch.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/cart-toast.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/menu-landing.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/toast.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/menu.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/CoffeeShopManagement.styles.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/home-promotion-products.css"
+          asp-append-version="true" />
+
+
+    <!-- =====================================================
+         ICONS
+    ====================================================== -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+
+    <!-- =====================================================
+         PAGE SPECIFIC CSS
+    ====================================================== -->
+    @RenderSection("Styles", required: false)
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <partial name="Partials/_Header" />
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main role="main">
+
+        @RenderBody()
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <partial name="Partials/_Footer" />
+
+
+    <!-- =====================================================
+         GLOBAL CART TOAST
+    ====================================================== -->
+
+    <partial name="_CartToast" />
+
+
+    <!-- =====================================================
+         GLOBAL APP TOAST
+         Dùng cho:
+         - Đăng nhập thành công
+         - Đăng xuất
+         - Cập nhật profile
+         - Thông báo hệ thống
+    ====================================================== -->
+
+    <partial name="_Toast" />
+
+
+    <!-- =====================================================
+         PRODUCT DETAIL ADD CART TOAST
+    ====================================================== -->
+
+    <div id="detailToast"
+         class="app-toast">
+
+        <!-- ICON -->
+
+        <div class="app-toast-icon">
+
+            <i class="fa-solid fa-check"></i>
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <div class="app-toast-content">
+
+            <div id="detailToastTitle"
+                 class="app-toast-title">
+
+                @T["AddedToCart"]
+
+            </div>
+
+
+            <div id="detailToastMessage"
+                 class="app-toast-message">
+
+                @T["AddedToCartMessage"]
+
+            </div>
+
+        </div>
+
+
+        <!-- VIEW CART -->
+
+        <a asp-controller="Cart"
+           asp-action="Index"
+           class="app-toast-cart">
+
+            <i class="fa-solid fa-bag-shopping"></i>
+
+            @T["ViewCart"]
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         MODAL CONTAINER
+    ====================================================== -->
+
+    <div id="modalContainer"></div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT LIBRARIES
+    ====================================================== -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- =====================================================
+         SITE JS
+    ====================================================== -->
+
+    <script src="~/js/site.js"
+            asp-append-version="true">
+    </script>
+
+
+    <!-- =====================================================
+         HERO JS
+    ====================================================== -->
+
+    <script src="~/js/hero.js"
+            asp-append-version="true">
+    </script>
+
+
+    <!-- =====================================================
+         CART TOAST JS
+    ====================================================== -->
+
+    <script src="~/js/cart-toast.js"
+            asp-append-version="true">
+    </script>
+
+
+    <!-- =====================================================
+         LANGUAGE JS
+    ====================================================== -->
+
+    <script src="~/js/language.js"
+            asp-append-version="true">
+    </script>
+
+
+    <!-- =====================================================
+         GLOBAL TOAST JS
+    ====================================================== -->
+
+    <script src="~/js/toast.js"
+            asp-append-version="true">
+    </script>
+
+
+    <!-- =====================================================
+         TEMPDATA TOAST
+    ====================================================== -->
+    @if (TempData["Toast"] != null)
+    {
+        <script>
+
+            document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+            if (typeof showToast === "function") {
+
+            showToast(
+            @Html.Raw(
+                System.Text.Json.JsonSerializer.Serialize(
+                    TempData["Toast"]?.ToString()
+                )
+            )
+            );
+
+            }
+
+            }
+            );
+
+        </script>
+    }
+
+
+    <!-- =====================================================
+         VALIDATION
+    ====================================================== -->
+
+    <partial name="_ValidationScriptsPartial" />
+
+
+    <!-- =====================================================
+         PAGE SPECIFIC JS
+    ====================================================== -->
+    @await RenderSectionAsync(
+            "Scripts",
+            required: false
+        )
+
+
+</body>
+
+</html>

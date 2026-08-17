@@ -1,0 +1,597 @@
+﻿@model List<CoffeeShopManagement.Models.CartItem>
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+@{
+    ViewData["Title"] = T["CartPageTitle"];
+
+    var tongTien = Model.Sum(x => x.ThanhTien);
+    var tongSoLuong = Model.Sum(x => x.SoLuong);
+
+    var maKh = Context.Session.GetInt32("MaKH");
+
+    var tongCong = tongTien;
+}
+
+
+<link rel="stylesheet"
+      href="~/css/cart.css"
+      asp-append-version="true" />
+
+
+<div class="cart-page">
+
+    <div class="cart-content">
+
+
+        <!-- =====================================================
+             LEFT
+        ====================================================== -->
+
+        <div class="cart-left">
+
+
+            <!-- =========================
+                 HEADER
+            ========================== -->
+
+            <div class="cart-header">
+
+                <div>
+
+                    <h2>
+                        @T["CartYourCart"]
+                    </h2>
+
+                    <span>
+                        @T["CartItemCount", tongSoLuong]
+                    </span>
+
+                </div>
+
+
+                <a asp-controller="Menu"
+                   asp-action="Index"
+                   class="continue-shopping">
+
+                    <i class="fas fa-arrow-left"></i>
+
+                    @T["ContinueShopping"]
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 CART
+            ================================================== -->
+            @if (!Model.Any())
+            {
+                <div class="empty-cart">
+
+                    <div class="empty-cart-icon">
+
+                        <i class="fas fa-shopping-bag"></i>
+
+                    </div>
+
+
+                    <h3>
+                        @T["CartEmptyTitle"]
+                    </h3>
+
+
+                    <p>
+                        @T["CartEmptyDescription"]
+                    </p>
+
+
+                    <a asp-controller="Menu"
+                       asp-action="Index"
+                       class="btn-shop">
+
+                        @T["ExploreMenu"]
+
+                    </a>
+
+                </div>
+            }
+            else
+            {
+                <div class="cart-list">
+
+                    @foreach (var item in Model)
+                    {
+                        <div class="cart-card">
+
+
+                            <!-- IMAGE -->
+
+                            <div class="cart-image">
+
+                                <img src="@Url.Content(
+                                                                         item.IsCombo
+                                                                             ? "~/images/combo/" + item.HinhAnh
+                                                                             : "~/images/menu/" + item.HinhAnh
+                                                                     )"
+                                     alt="@item.TenSP" />
+
+                            </div>
+
+
+                            <!-- INFO -->
+
+                            <div class="cart-info">
+
+                                <div class="cart-name">
+
+                                    <h4>
+                                        @item.TenSP
+                                    </h4>
+
+
+                                    <p class="cart-brand">
+
+                                        @if (item.IsCombo)
+                                        {
+                                            <text>
+                                                🎁 @T["CartSavingCombo"]
+                                            </text>
+                                        }
+                                        else
+                                        {
+                                            <text>
+                                                ☕ Rosalie Coffee
+                                            </text>
+                                        }
+
+                                    </p>
+
+
+                                    <div class="cart-option">
+
+
+                                        @if (!string.IsNullOrWhiteSpace(item.Size))
+                                        {
+                                            <div>
+
+                                                <strong>
+                                                    @T["CartSize"]:
+                                                </strong>
+
+                                                @item.Size
+
+                                            </div>
+                                        }
+
+
+                                        @if (!string.IsNullOrWhiteSpace(item.DoNgot))
+                                        {
+                                            <div>
+
+                                                <strong>
+                                                    @T["CartSugar"]:
+                                                </strong>
+
+                                                @item.DoNgot
+
+                                            </div>
+                                        }
+
+
+                                        @if (!string.IsNullOrWhiteSpace(item.MucDa))
+                                        {
+                                            <div>
+
+                                                <strong>
+                                                    @T["CartIce"]:
+                                                </strong>
+
+                                                @item.MucDa
+
+                                            </div>
+                                        }
+
+
+                                        @if (
+                                            item.Toppings != null &&
+                                            item.Toppings.Any()
+                                        )
+                                        {
+                                            <div>
+
+                                                <strong>
+                                                    @T["CartTopping"]:
+                                                </strong>
+
+                                                @string.Join(
+                                                    ", ",
+                                                    item.Toppings
+                                                )
+
+                                            </div>
+                                        }
+
+
+                                        @if (!string.IsNullOrWhiteSpace(item.GhiChu))
+                                        {
+                                            <div>
+
+                                                <strong>
+                                                    @T["CartNote"]:
+                                                </strong>
+
+                                                @item.GhiChu
+
+                                            </div>
+                                        }
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- UNIT PRICE -->
+
+                                <div class="cart-price">
+
+                                    @(
+                                        (
+                                            item.DonGia
+                                            + item.GiaSize
+                                            + item.GiaTopping
+                                        ).ToString("N0")
+                                    )đ
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ACTION -->
+
+                            <div class="cart-action">
+
+
+                                <!-- QUANTITY -->
+
+                                <div class="qty-box">
+
+                                    <a asp-action="Decrease"
+                                       asp-route-rowId="@item.RowId"
+                                       class="qty-btn"
+                                       aria-label="@T["DecreaseQuantity"]">
+
+                                        <i class="fas fa-minus"></i>
+
+                                    </a>
+
+
+                                    <span>
+                                        @item.SoLuong
+                                    </span>
+
+
+                                    <a asp-action="Increase"
+                                       asp-route-rowId="@item.RowId"
+                                       class="qty-btn"
+                                       aria-label="@T["IncreaseQuantity"]">
+
+                                        <i class="fas fa-plus"></i>
+
+                                    </a>
+
+                                </div>
+
+
+                                <!-- ITEM TOTAL -->
+
+                                <div class="item-total">
+
+                                    @item.ThanhTien.ToString("N0")đ
+
+                                </div>
+
+
+                                <!-- REMOVE -->
+
+                                <button type="button"
+                                        class="remove-btn"
+                                        data-remove-url="@Url.Action(
+                                                                                    "Remove",
+                                                                                    "Cart",
+                                                                                    new { rowId = item.RowId }
+                                                                                )"
+                                        data-product-name="@item.TenSP"
+                                        title="@T["RemoveProduct"]">
+
+                                    <i class="fas fa-trash-alt"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            }
+
+        </div>
+
+
+        <!-- END LEFT -->
+        <!-- =====================================================
+             RIGHT
+        ====================================================== -->
+
+        <div class="cart-right">
+
+            <div class="summary-card">
+
+
+                <h3>
+                    @T["PaymentSummary"]
+                </h3>
+
+
+                <!-- =========================
+                     SUBTOTAL
+                ========================== -->
+
+                <div class="summary-item">
+
+                    <span>
+                        @T["Subtotal"]
+                    </span>
+
+
+                    <strong id="subTotal"
+                            data-total="@Convert.ToInt32(tongTien)">
+
+                        @tongTien.ToString("N0")đ
+
+                    </strong>
+
+                </div>
+
+
+                <hr />
+
+
+                <!-- =========================
+                     TOTAL
+                ========================== -->
+
+                <div class="summary-total">
+
+                    <span>
+                        @T["GrandTotal"]
+                    </span>
+
+
+                    <strong id="grandTotal"
+                            data-total="@Convert.ToInt32(tongTien)">
+
+                        @tongTien.ToString("N0")đ
+
+                    </strong>
+
+                </div>
+
+
+                <!-- SHIPPING NOTE -->
+
+                <div class="shipping-note">
+
+                    <i class="fas fa-truck"></i>
+
+                    <span>
+                        Phí giao hàng và voucher sẽ được tính ở bước thanh toán.
+                    </span>
+
+                </div>
+
+
+                <!-- =========================
+                     CHECKOUT
+                ========================== -->
+                @if (!Model.Any())
+                {
+                    <!-- GIỎ HÀNG TRỐNG -->
+
+                    <button type="button"
+                            class="checkout-button disabled"
+                            disabled>
+
+                        <i class="fas fa-credit-card"></i>
+
+                        @T["CheckoutNow"]
+
+                    </button>
+                }
+                else if (maKh == null)
+                {
+                    <!-- CHƯA ĐĂNG NHẬP -->
+
+                    <a asp-controller="Account"
+                       asp-action="Login"
+                       class="checkout-button">
+
+                        <i class="fas fa-right-to-bracket"></i>
+
+                        @T["LoginToCheckout"]
+
+                    </a>
+                }
+                else
+                {
+                    <!-- ĐÃ ĐĂNG NHẬP -->
+
+                    <a asp-controller="Checkout"
+                       asp-action="Index"
+                       class="checkout-button">
+
+                        <i class="fas fa-credit-card"></i>
+
+                        @T["CheckoutNow"]
+
+                    </a>
+                }
+
+
+                <!-- CONTINUE -->
+
+                <a asp-controller="Menu"
+                   asp-action="Index"
+                   class="continue-btn">
+
+                    @T["ContinueShopping"]
+
+                </a>
+
+
+                <!-- SECURE -->
+
+                <div class="secure-box">
+
+                    <i class="fas fa-shield-alt"></i>
+
+                    <span>
+                        @T["SecurePaymentSSL"]
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- END RIGHT -->
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     REMOVE CONFIRM MODAL
+===================================================== -->
+
+<div id="removeConfirmOverlay"
+     class="remove-confirm-overlay">
+
+    <div class="remove-confirm-box">
+
+
+        <!-- ICON -->
+
+        <div class="remove-confirm-icon">
+
+            <i class="fas fa-trash-alt"></i>
+
+        </div>
+
+
+        <!-- TITLE -->
+
+        <h3>
+            Xóa sản phẩm?
+        </h3>
+
+
+        <!-- MESSAGE -->
+
+        <p id="removeConfirmMessage">
+
+            Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?
+
+        </p>
+
+
+        <!-- BUTTONS -->
+
+        <div class="remove-confirm-actions">
+
+
+            <button type="button"
+                    id="cancelRemoveBtn"
+                    class="remove-confirm-no">
+
+                Không
+
+            </button>
+
+
+            <button type="button"
+                    id="confirmRemoveBtn"
+                    class="remove-confirm-yes">
+
+                <i class="fas fa-trash-alt"></i>
+
+                Có, xóa
+
+            </button>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     CART TOAST
+===================================================== -->
+
+<div id="cartToast"
+     class="cart-toast warning">
+
+    <div class="cart-toast-icon">
+
+        <i id="cartToastIcon"
+           class="bi bi-exclamation-circle-fill">
+        </i>
+
+    </div>
+
+
+    <div class="cart-toast-content">
+
+        <h4 id="cartToastTitle">
+
+            @T["Notification"]
+
+        </h4>
+
+
+        <p id="cartToastMessage">
+        </p>
+
+    </div>
+
+
+    <button id="closeCartToast"
+            class="cart-toast-close"
+            type="button"
+            aria-label="@T["Close"]">
+
+        <i class="bi bi-x-lg"></i>
+
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     SCRIPTS
+===================================================== -->
+@section Scripts
+{
+    <script src="~/js/cart.js"
+            asp-append-version="true">
+    </script>
+}

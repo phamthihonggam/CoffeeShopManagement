@@ -1,0 +1,46 @@
+﻿@model IEnumerable<CoffeeShopManagement.Models.SanPham>
+
+<h2>Quản lý sản phẩm</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">
+        Thêm sản phẩm
+    </a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Mã</th>
+            <th>Tên sản phẩm</th>
+            <th>Giá</th>
+            <th>Chức năng</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaSp</td>
+                <td>@item.TenSp</td>
+                <td>@item.DonGia.ToString("N0") VNĐ</td>
+
+                <td>
+                    <a asp-action="Edit"
+                       asp-route-id="@item.MaSp"
+                       class="btn btn-warning">
+                        Sửa
+                    </a>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@item.MaSp"
+                       class="btn btn-danger"
+                       onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">
+                        Xóa
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

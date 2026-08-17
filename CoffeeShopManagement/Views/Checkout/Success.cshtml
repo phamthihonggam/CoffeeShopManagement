@@ -1,0 +1,484 @@
+﻿@model CoffeeShopManagement.Models.SuccessViewModel
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
+
+@{
+    ViewData["Title"] = T["SuccessPageTitle"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var statusClass =
+        Model.HoaDon.TrangThai == "Đã thanh toán"
+            ? "paid"
+            : Model.HoaDon.TrangThai == "Thanh toán thất bại"
+                ? "failed"
+                : "pending";
+
+    string statusText =
+        Model.HoaDon.TrangThai == "Đã thanh toán"
+            ? T["OrderStatusPaid"].Value
+            : Model.HoaDon.TrangThai == "Thanh toán thất bại"
+                ? T["OrderStatusFailed"].Value
+                : Model.HoaDon.TrangThai ?? T["OrderStatusPending"].Value;
+}
+
+<link rel="stylesheet"
+      href="~/css/success.css"
+      asp-append-version="true" />
+
+<section class="success-page">
+
+    <div class="success-wrapper">
+
+        <div class="success-receipt">
+
+            <!-- ==========================================
+                 HEADER
+            =========================================== -->
+            <div class="receipt-header">
+
+                <div class="receipt-success">
+
+                    <div class="receipt-check">
+                        <i class="fas fa-check"></i>
+                    </div>
+
+                    <div class="receipt-success-content">
+
+                        <span class="receipt-brand">
+                            ROSALIE COFFEE
+                        </span>
+
+                        <h1>@T["OrderSuccessTitle"]</h1>
+
+                        <p>
+                            @T["OrderSuccessThankYou"]
+                            <strong>Rosalie Coffee</strong>.
+                            <br />
+                            @T["OrderSuccessRecorded"]
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="receipt-order-info">
+
+                    <div class="receipt-order-item">
+
+                        <div class="receipt-order-icon">
+                            <i class="fas fa-receipt"></i>
+                        </div>
+
+                        <div>
+                            <span>@T["OrderCode"]</span>
+
+                            <strong class="receipt-order-code">
+                                #HD@(Model.HoaDon.MaHd.ToString("D5"))
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="receipt-order-divider"></div>
+
+
+                    <div class="receipt-order-item">
+
+                        <div class="receipt-order-icon">
+                            <i class="far fa-calendar-alt"></i>
+                        </div>
+
+                        <div>
+                            <span>@T["OrderDate"]</span>
+
+                            <strong>
+                                @Model.HoaDon.NgayDat?.ToString("dd/MM/yyyy HH:mm")
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="receipt-divider"></div>
+
+
+            <!-- ==========================================
+                 STATUS
+            =========================================== -->
+            <div class="receipt-status-row">
+
+                <div class="receipt-status-label">
+
+                    <i class="fas fa-circle-info"></i>
+
+                    <span>@T["OrderStatus"]</span>
+
+                </div>
+
+                <span class="order-status @statusClass">
+                    @statusText
+                </span>
+
+            </div>
+
+
+            <!-- ==========================================
+                 ORDER DETAILS
+            =========================================== -->
+            <div class="receipt-section">
+
+                <div class="receipt-section-title">
+
+                    <div class="receipt-title-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+
+                    <h2>@T["OrderDetails"]</h2>
+
+                </div>
+
+
+                @if (Model.SanPham != null && Model.SanPham.Any())
+                {
+                    <div class="receipt-products">
+
+                        <div class="receipt-product-header">
+
+                            <span>@T["Product"]</span>
+                            <span>@T["UnitPrice"]</span>
+                            <span>@T["QuantityShort"]</span>
+                            <span>@T["LineTotal"]</span>
+
+                        </div>
+
+
+                        @foreach (var item in Model.SanPham)
+                        {
+                            <div class="receipt-product-row">
+
+                                <div class="receipt-product-info">
+
+                                    @if (!string.IsNullOrWhiteSpace(item.HinhAnh))
+                                    {
+                                        var imagePath = "";
+
+                                        if (item.MaSP == 0)
+                                        {
+                                            imagePath =
+                                                item.HinhAnh.StartsWith("/")
+                                                    ? item.HinhAnh
+                                                    : "~/images/combo/" + item.HinhAnh;
+                                        }
+                                        else
+                                        {
+                                            imagePath =
+                                                item.HinhAnh.StartsWith("/")
+                                                    ? item.HinhAnh
+                                                    : "~/images/menu/" + item.HinhAnh;
+                                        }
+
+                                        <img src="@Url.Content(imagePath)"
+                                             alt="@item.TenSP"
+                                             class="receipt-product-image" />
+                                    }
+                                    else
+                                    {
+                                        <div class="receipt-product-placeholder">
+                                            <i class="fas fa-mug-hot"></i>
+                                        </div>
+                                    }
+
+
+                                    <div class="receipt-product-name">
+
+                                        <strong>
+                                            @item.TenSP
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="receipt-product-price">
+                                    @item.DonGia.ToString("N0")đ
+                                </div>
+
+
+                                <div class="receipt-product-quantity">
+                                    x @item.SoLuong
+                                </div>
+
+
+                                <div class="receipt-product-total">
+                                    @item.ThanhTien.ToString("N0")đ
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <div class="receipt-empty">
+
+                        <i class="fas fa-circle-info"></i>
+
+                        <span>
+                            @T["OrderProductDetailsUnavailable"]
+                        </span>
+
+                    </div>
+                }
+
+            </div>
+
+
+            <div class="receipt-divider"></div>
+
+
+            <!-- ==========================================
+                 PAYMENT
+            =========================================== -->
+            <div class="receipt-section">
+
+                <div class="receipt-section-title">
+
+                    <div class="receipt-title-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+
+                    <h2>@T["PaymentTotal"]</h2>
+
+                </div>
+
+
+                <div class="receipt-payment">
+
+                    <div class="receipt-payment-row">
+
+                        <span>@T["Subtotal"]</span>
+
+                        <strong>
+                            @((Model.HoaDon.TamTinh ?? 0).ToString("N0"))đ
+                        </strong>
+
+                    </div>
+
+
+                    <div class="receipt-payment-row discount">
+
+                        <span>@T["Discount"]</span>
+
+                        <strong>
+                            -@((Model.HoaDon.GiamGia ?? 0).ToString("N0"))đ
+                        </strong>
+
+                    </div>
+
+
+                    <div class="receipt-payment-row">
+
+                        <span>@T["ShippingFee"]</span>
+
+                        @if ((Model.HoaDon.PhiGiaoHang ?? 0) <= 0)
+                        {
+                            <strong class="free-shipping">
+                                @T["FreeShipping"]
+                            </strong>
+                        }
+                        else
+                        {
+                            <strong>
+                                @((Model.HoaDon.PhiGiaoHang ?? 0).ToString("N0"))đ
+                            </strong>
+                        }
+
+                    </div>
+
+
+                    <div class="receipt-payment-divider"></div>
+
+
+                    <div class="receipt-payment-row receipt-grand-total">
+
+                        <span>@T["PaymentTotal"]</span>
+
+                        <strong>
+                            @((Model.HoaDon.TongTien ?? 0).ToString("N0"))đ
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="receipt-thankyou">
+
+                    <div class="receipt-thankyou-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Cảm ơn bạn đã lựa chọn Rosalie Coffee.
+                        </strong>
+
+                        <span>
+                            Hẹn gặp lại bạn trong những đơn hàng tiếp theo!
+                        </span>
+
+                    </div>
+
+                    <div class="receipt-thankyou-coffee">
+                        <i class="fas fa-mug-hot"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="receipt-divider"></div>
+
+
+            <!-- ==========================================
+                 SHIPPING
+            =========================================== -->
+            <div class="receipt-section">
+
+                <div class="receipt-section-title">
+
+                    <div class="receipt-title-icon">
+                        <i class="fas fa-location-dot"></i>
+                    </div>
+
+                    <h2>@T["ShippingInformation"]</h2>
+
+                </div>
+
+
+                <div class="receipt-shipping-grid">
+
+                    <div class="receipt-shipping-item">
+
+                        <div class="receipt-shipping-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+
+                        <span>@T["Recipient"]</span>
+
+                        <strong>
+                            @Model.KhachHang.HoTen
+                        </strong>
+
+                    </div>
+
+
+                    <div class="receipt-shipping-item">
+
+                        <div class="receipt-shipping-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+
+                        <span>@T["PhoneNumber"]</span>
+
+                        <strong>
+                            @Model.KhachHang.DienThoai
+                        </strong>
+
+                    </div>
+
+
+                    <div class="receipt-shipping-item">
+
+                        <div class="receipt-shipping-icon">
+                            <i class="fas fa-house"></i>
+                        </div>
+
+                        <span>@T["ShippingAddress"]</span>
+
+                        <strong>
+                            @Model.KhachHang.DiaChi
+                        </strong>
+
+                    </div>
+
+
+                    <div class="receipt-shipping-item">
+
+                        <div class="receipt-shipping-icon">
+                            <i class="far fa-clock"></i>
+                        </div>
+
+                        <span>@T["EstimatedTime"]</span>
+
+                        <strong>
+                            @T["EstimatedTimeValue"]
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==========================================
+                 ACTIONS
+            =========================================== -->
+            <div class="receipt-actions">
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="receipt-btn receipt-btn-outline">
+
+                    <i class="fas fa-home"></i>
+
+                    <span>@T["BackToHome"]</span>
+
+                </a>
+
+
+                <a asp-controller="Menu"
+                   asp-action="Index"
+                   class="receipt-btn receipt-btn-primary">
+
+                    <i class="fas fa-bag-shopping"></i>
+
+                    <span>@T["ContinueShopping"]</span>
+
+                </a>
+
+            </div>
+
+
+            <!-- ==========================================
+                 BOTTOM
+            =========================================== -->
+            <div class="receipt-bottom">
+
+                <span>ROSALIE COFFEE</span>
+
+                <p>
+                    Cà phê ngon • Ngày mới trọn vẹn
+                </p>
+
+            </div>
+
+
+            <div class="receipt-cut"></div>
+
+        </div>
+
+    </div>
+
+</section>
