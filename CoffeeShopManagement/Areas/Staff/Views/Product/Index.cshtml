@@ -1,0 +1,1035 @@
+﻿@model IEnumerable<CoffeeShopManagement.Models.SanPham>
+
+@{
+    ViewData["Title"] = "Quản lý sản phẩm";
+
+    int currentPage =
+        ViewBag.CurrentPage ?? 1;
+
+    int pageSize =
+        ViewBag.PageSize ?? 10;
+
+    int totalPages =
+        ViewBag.TotalPages ?? 0;
+
+    int totalItems =
+        ViewBag.TotalItems ?? 0;
+
+    int startItem =
+        ViewBag.StartItem ?? 0;
+
+    int endItem =
+        ViewBag.EndItem ?? 0;
+
+    string keyword =
+        ViewBag.Keyword?.ToString()
+        ?? string.Empty;
+
+    string promotion =
+        ViewBag.Promotion?.ToString()
+        ?? string.Empty;
+
+    int? categoryId =
+        ViewBag.CategoryId != null
+            ? Convert.ToInt32(ViewBag.CategoryId)
+            : null;
+
+    var categories =
+        ViewBag.FilterCategories
+            as IEnumerable<CoffeeShopManagement.Models.LoaiSanPham>
+        ?? Enumerable.Empty<CoffeeShopManagement.Models.LoaiSanPham>();
+}
+
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-product.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/staff-product-index.css"
+          asp-append-version="true" />
+
+}
+
+
+<div class="staff-product-page">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <section class="staff-product-header">
+
+        <div>
+
+            <span class="staff-product-eyebrow">
+                ROSALIE COFFEE
+            </span>
+
+            <h1>
+                Quản lý sản phẩm
+            </h1>
+
+            <p>
+                Theo dõi và quản lý đồ uống,
+                món ăn trong hệ thống.
+            </p>
+
+        </div>
+
+
+        <a asp-area="Staff"
+           asp-controller="Product"
+           asp-action="Create"
+           class="staff-product-add-btn">
+
+            <i class="fa-solid fa-plus"></i>
+
+            Thêm sản phẩm
+
+        </a>
+
+    </section>
+
+
+    <!-- =====================================================
+         SERVER MESSAGE
+    ====================================================== -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="staff-product-toast success js-product-toast">
+
+            <div class="staff-product-toast-icon">
+
+                <i class="fa-solid fa-check"></i>
+
+            </div>
+
+
+            <div class="staff-product-toast-content">
+
+                <strong>
+                    Thành công
+                </strong>
+
+                <span>
+                    @TempData["SuccessMessage"]
+                </span>
+
+            </div>
+
+
+            <button type="button"
+                    class="staff-product-toast-close js-toast-close"
+                    aria-label="Đóng">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+    }
+
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="staff-product-toast error js-product-toast">
+
+            <div class="staff-product-toast-icon">
+
+                <i class="fa-solid fa-triangle-exclamation"></i>
+
+            </div>
+
+
+            <div class="staff-product-toast-content">
+
+                <strong>
+                    Không thể thực hiện
+                </strong>
+
+                <span>
+                    @TempData["ErrorMessage"]
+                </span>
+
+            </div>
+
+
+            <button type="button"
+                    class="staff-product-toast-close js-toast-close"
+                    aria-label="Đóng">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+    }
+
+
+    <!-- =====================================================
+         FILTER CARD
+    ====================================================== -->
+
+    <section class="staff-product-filter-card">
+
+        <form method="get"
+              asp-area="Staff"
+              asp-controller="Product"
+              asp-action="Index"
+              class="staff-product-filter-form">
+
+
+            <!-- SEARCH -->
+
+            <div class="staff-product-search">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input type="text"
+                       name="keyword"
+                       value="@keyword"
+                       placeholder="Tìm tên hoặc mô tả sản phẩm..."
+                       autocomplete="off" />
+
+            </div>
+
+
+            <!-- CATEGORY -->
+
+            <div class="staff-product-select-wrap">
+
+                <i class="fa-solid fa-layer-group"></i>
+
+
+                <select name="categoryId">
+
+                    <option value="">
+                        Tất cả danh mục
+                    </option>
+
+
+                    @foreach (var category in categories)
+                    {
+                        if (
+                            categoryId.HasValue
+                            &&
+                            categoryId.Value == category.MaLoai
+                        )
+                        {
+                            <option value="@category.MaLoai"
+                                    selected>
+
+                                @category.TenLoai
+
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@category.MaLoai">
+
+                                @category.TenLoai
+
+                            </option>
+                        }
+                    }
+
+                </select>
+
+            </div>
+
+
+            <!-- PROMOTION -->
+
+            <div class="staff-product-select-wrap">
+
+                <i class="fa-solid fa-tags"></i>
+
+
+                <select name="promotion">
+
+                    <option value="">
+                        Tất cả khuyến mãi
+                    </option>
+
+
+                    @if (promotion == "sale")
+                    {
+                        <option value="sale"
+                                selected>
+
+                            Đang khuyến mãi
+
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="sale">
+
+                            Đang khuyến mãi
+
+                        </option>
+                    }
+
+
+                    @if (promotion == "normal")
+                    {
+                        <option value="normal"
+                                selected>
+
+                            Không khuyến mãi
+
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="normal">
+
+                            Không khuyến mãi
+
+                        </option>
+                    }
+
+                </select>
+
+            </div>
+
+
+            <input type="hidden"
+                   name="pageSize"
+                   value="@pageSize" />
+
+
+            <!-- FILTER -->
+
+            <button type="submit"
+                    class="staff-product-filter-btn">
+
+                <i class="fa-solid fa-filter"></i>
+
+                Lọc
+
+            </button>
+
+
+            <!-- RESET -->
+            @if (
+                            !string.IsNullOrWhiteSpace(keyword)
+                            ||
+                            categoryId.HasValue
+                            ||
+                            !string.IsNullOrWhiteSpace(promotion)
+                        )
+            {
+                <a asp-area="Staff"
+                   asp-controller="Product"
+                   asp-action="Index"
+                   asp-route-pageSize="@pageSize"
+                   class="staff-product-reset-btn">
+
+                    <i class="fa-solid fa-rotate-left"></i>
+
+                    Đặt lại
+
+                </a>
+            }
+
+
+        </form>
+
+    </section>
+
+
+    <!-- =====================================================
+         SUMMARY CARD
+    ====================================================== -->
+
+    <section class="staff-product-summary-card">
+
+
+        <div class="staff-product-summary-left">
+
+            <div class="staff-product-summary-icon">
+
+                <i class="fa-solid fa-box-open"></i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Tổng sản phẩm
+                </span>
+
+                <strong>
+                    @totalItems
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        @if (totalItems > 0)
+        {
+            <div class="staff-product-summary-range">
+
+                Đang hiển thị
+
+                <strong>
+                    @startItem
+                </strong>
+
+                –
+
+                <strong>
+                    @endItem
+                </strong>
+
+            </div>
+        }
+
+
+    </section>
+
+
+    <!-- =====================================================
+         TABLE CARD
+    ====================================================== -->
+
+    <section class="staff-product-table-card">
+
+        <div class="staff-product-table-scroll">
+
+            <table class="staff-product-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th class="product-code-col">
+                            Mã
+                        </th>
+
+                        <th>
+                            Sản phẩm
+                        </th>
+
+                        <th>
+                            Danh mục
+                        </th>
+
+                        <th>
+                            Giá bán
+                        </th>
+
+                        <th>
+                            Khuyến mãi
+                        </th>
+
+                        <th class="product-action-col">
+                            Thao tác
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @if (
+                        Model != null
+                        &&
+                        Model.Any()
+                    )
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+
+
+                                <!-- =========================================
+                                     CODE
+                                ========================================== -->
+
+                                <td>
+
+                                    <span class="staff-product-code">
+
+                                        #SP@(item.MaSp.ToString("D4"))
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- =========================================
+                                     PRODUCT
+                                ========================================== -->
+
+                                <td>
+
+                                    <div class="staff-product-item">
+
+
+                                        <div class="staff-product-image">
+
+
+                                            @if (!string.IsNullOrWhiteSpace(item.HinhAnh))
+                                            {
+                                                <img src="~/images/menu/@item.HinhAnh"
+                                                     alt="@item.TenSp"
+                                                     class="js-product-image" />
+
+
+                                                <div class="staff-product-image-fallback">
+
+                                                    <i class="fa-solid fa-mug-hot"></i>
+
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="staff-product-image-fallback visible">
+
+                                                    <i class="fa-solid fa-mug-hot"></i>
+
+                                                </div>
+                                            }
+
+
+                                        </div>
+
+
+                                        <div class="staff-product-name">
+
+                                            <strong>
+                                                @item.TenSp
+                                            </strong>
+
+
+                                            @if (!string.IsNullOrWhiteSpace(item.MoTa))
+                                            {
+                                                <span>
+                                                    @item.MoTa
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="empty">
+                                                    Chưa có mô tả
+                                                </span>
+                                            }
+
+                                        </div>
+
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- =========================================
+                                     CATEGORY
+                                ========================================== -->
+
+                                <td>
+
+                                    <span class="staff-category-badge">
+
+                                        @(item.MaLoaiNavigation?.TenLoai
+                                            ?? "Chưa phân loại")
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- =========================================
+                                     PRICE
+                                ========================================== -->
+
+                                <td>
+
+                                    <div class="staff-product-price">
+
+
+                                        @if (
+                                            item.DangKhuyenMai
+                                            &&
+                                            item.GiaKhuyenMai.HasValue
+                                        )
+                                        {
+                                            <strong>
+
+                                                @(item.GiaKhuyenMai.Value
+                                                    .ToString("#,##0"))đ
+
+                                            </strong>
+
+
+                                            <del>
+
+                                                @(item.DonGia
+                                                    .ToString("#,##0"))đ
+
+                                            </del>
+                                        }
+                                        else
+                                        {
+                                            <strong>
+
+                                                @(item.DonGia
+                                                    .ToString("#,##0"))đ
+
+                                            </strong>
+                                        }
+
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- =========================================
+                                     PROMOTION
+                                ========================================== -->
+
+                                <td>
+
+                                    @if (item.DangKhuyenMai)
+                                    {
+                                        <span class="staff-product-status sale">
+
+                                            <i class="fa-solid fa-fire"></i>
+
+                                            Đang giảm
+
+                                            @if (item.PhanTramGiam.HasValue)
+                                            {
+                                                <text>
+                                                    @item.PhanTramGiam%
+                                                </text>
+                                            }
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="staff-product-status normal">
+
+                                            <i class="fa-solid fa-circle-check"></i>
+
+                                            Bình thường
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- =========================================
+                                     ACTIONS
+                                ========================================== -->
+
+                                <td>
+
+                                    <div class="staff-product-actions">
+
+
+                                        <!-- DETAILS -->
+
+                                        <a asp-area="Staff"
+                                           asp-controller="Product"
+                                           asp-action="Details"
+                                           asp-route-id="@item.MaSp"
+                                           class="staff-product-action-btn view"
+                                           title="Xem chi tiết">
+
+                                            <i class="fa-solid fa-eye"></i>
+
+                                        </a>
+
+
+                                        <!-- EDIT -->
+
+                                        <a asp-area="Staff"
+                                           asp-controller="Product"
+                                           asp-action="Edit"
+                                           asp-route-id="@item.MaSp"
+                                           class="staff-product-action-btn edit"
+                                           title="Chỉnh sửa">
+
+                                            <i class="fa-solid fa-pen"></i>
+
+                                        </a>
+
+
+                                        <!-- DELETE -->
+
+                                        <form asp-area="Staff"
+                                              asp-controller="Product"
+                                              asp-action="Delete"
+                                              asp-route-id="@item.MaSp"
+                                              method="post"
+                                              class="staff-product-delete-form"
+                                              data-product-name="@item.TenSp">
+
+                                            @Html.AntiForgeryToken()
+
+
+                                            <button type="submit"
+                                                    class="staff-product-action-btn delete"
+                                                    title="Xóa sản phẩm">
+
+                                                <i class="fa-solid fa-trash"></i>
+
+                                            </button>
+
+                                        </form>
+
+
+                                    </div>
+
+                                </td>
+
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="6">
+
+                                <div class="staff-product-empty">
+
+                                    <div>
+
+                                        <i class="fa-solid fa-mug-hot"></i>
+
+                                    </div>
+
+
+                                    <h3>
+                                        Không tìm thấy sản phẩm
+                                    </h3>
+
+
+                                    <p>
+                                        Thử thay đổi từ khóa,
+                                        danh mục hoặc bộ lọc khuyến mãi.
+                                    </p>
+
+
+                                    <a asp-area="Staff"
+                                       asp-controller="Product"
+                                       asp-action="Index">
+
+                                        Đặt lại bộ lọc
+
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PAGINATION
+    ====================================================== -->
+    @if (totalItems > 0)
+    {
+        <section class="staff-product-pagination-card">
+
+
+            <!-- RANGE -->
+
+            <div class="staff-product-pagination-info">
+
+                Hiển thị
+
+                <strong>
+                    @startItem
+                </strong>
+
+                –
+
+                <strong>
+                    @endItem
+                </strong>
+
+                trong
+
+                <strong>
+                    @totalItems
+                </strong>
+
+                sản phẩm
+
+            </div>
+
+
+            <!-- PAGE SIZE -->
+
+            <form method="get"
+                  asp-area="Staff"
+                  asp-controller="Product"
+                  asp-action="Index"
+                  class="staff-product-page-size">
+
+
+                <input type="hidden"
+                       name="keyword"
+                       value="@keyword" />
+
+
+                @if (categoryId.HasValue)
+                {
+                    <input type="hidden"
+                           name="categoryId"
+                           value="@categoryId" />
+                }
+
+
+                <input type="hidden"
+                       name="promotion"
+                       value="@promotion" />
+
+
+                <span>
+                    Hiển thị
+                </span>
+
+
+                <select name="pageSize"
+                        class="js-page-size">
+
+                    @foreach (
+                        var size
+                        in new[] { 10, 20, 50 }
+                    )
+                    {
+                        if (pageSize == size)
+                        {
+                            <option value="@size"
+                                    selected>
+
+                                @size
+
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@size">
+
+                                @size
+
+                            </option>
+                        }
+                    }
+
+                </select>
+
+
+                <span>
+                    dòng
+                </span>
+
+
+            </form>
+
+
+            <!-- PAGE NUMBER -->
+            @if (totalPages > 1)
+            {
+                <nav class="staff-product-pagination">
+
+
+                    <!-- PREVIOUS -->
+                    @if (currentPage > 1)
+                    {
+                        <a asp-area="Staff"
+                           asp-controller="Product"
+                           asp-action="Index"
+                           asp-route-keyword="@keyword"
+                           asp-route-categoryId="@categoryId"
+                           asp-route-promotion="@promotion"
+                           asp-route-pageSize="@pageSize"
+                           asp-route-page="@(currentPage - 1)"
+                           class="staff-page-btn">
+
+                            <i class="fa-solid fa-chevron-left"></i>
+
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="staff-page-btn disabled">
+
+                            <i class="fa-solid fa-chevron-left"></i>
+
+                        </span>
+                    }
+
+
+                    @{
+                        int firstPage =
+                            Math.Max(
+                                1,
+                                currentPage - 2
+                            );
+
+                        int lastPage =
+                            Math.Min(
+                                totalPages,
+                                currentPage + 2
+                            );
+                    }
+
+
+                    <!-- FIRST -->
+                    @if (firstPage > 1)
+                    {
+                        <a asp-area="Staff"
+                           asp-controller="Product"
+                           asp-action="Index"
+                           asp-route-keyword="@keyword"
+                           asp-route-categoryId="@categoryId"
+                           asp-route-promotion="@promotion"
+                           asp-route-pageSize="@pageSize"
+                           asp-route-page="1"
+                           class="staff-page-btn">
+
+                            1
+
+                        </a>
+
+
+                        @if (firstPage > 2)
+                        {
+                            <span class="staff-page-dots">
+                                ...
+                            </span>
+                        }
+                    }
+
+
+                    <!-- RANGE -->
+                    @for (
+                                            int i = firstPage;
+                                            i <= lastPage;
+                                            i++
+                                        )
+                    {
+                        <a asp-area="Staff"
+                           asp-controller="Product"
+                           asp-action="Index"
+                           asp-route-keyword="@keyword"
+                           asp-route-categoryId="@categoryId"
+                           asp-route-promotion="@promotion"
+                           asp-route-pageSize="@pageSize"
+                           asp-route-page="@i"
+                           class="staff-page-btn @(i == currentPage ? "active" : "")">
+
+                            @i
+
+                        </a>
+                    }
+
+
+                    <!-- LAST -->
+                    @if (lastPage < totalPages)
+                    {
+                        @if (lastPage < totalPages - 1)
+                        {
+                            <span class="staff-page-dots">
+                                ...
+                            </span>
+                        }
+
+
+                        <a asp-area="Staff"
+                           asp-controller="Product"
+                           asp-action="Index"
+                           asp-route-keyword="@keyword"
+                           asp-route-categoryId="@categoryId"
+                           asp-route-promotion="@promotion"
+                           asp-route-pageSize="@pageSize"
+                           asp-route-page="@totalPages"
+                           class="staff-page-btn">
+
+                            @totalPages
+
+                        </a>
+                    }
+
+
+                    <!-- NEXT -->
+                    @if (currentPage < totalPages)
+                    {
+                        <a asp-area="Staff"
+                           asp-controller="Product"
+                           asp-action="Index"
+                           asp-route-keyword="@keyword"
+                           asp-route-categoryId="@categoryId"
+                           asp-route-promotion="@promotion"
+                           asp-route-pageSize="@pageSize"
+                           asp-route-page="@(currentPage + 1)"
+                           class="staff-page-btn">
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="staff-page-btn disabled">
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </span>
+                    }
+
+
+                </nav>
+            }
+
+
+        </section>
+    }
+
+
+</div>
+
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    </script>
+
+    <script src="~/js/staff-product-index.js"
+            asp-append-version="true">
+    </script>
+
+}

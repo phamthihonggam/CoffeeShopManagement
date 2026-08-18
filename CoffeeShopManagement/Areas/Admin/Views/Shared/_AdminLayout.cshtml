@@ -321,9 +321,31 @@
                 }
 
                 <!-- =============================================
-                     REVIEW
-                ============================================== -->
-                @if (isAdmin)
+     REVIEW
+============================================== -->
+                @if (
+                    isAdmin
+                    ||
+                    adminRole.Equals(
+                        "NhanVien",
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                    ||
+                    adminRole.Equals(
+                        "Nhân viên",
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                    ||
+                    adminRole.Equals(
+                        "Nhan Vien",
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                    ||
+                    adminRole.Equals(
+                        "Staff",
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                )
                 {
                     <a asp-area="Admin"
                        asp-controller="Review"

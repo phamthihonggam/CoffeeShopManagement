@@ -1,13 +1,14 @@
 ﻿using CoffeeShopManagement.Data;
-using CoffeeShopManagement.Helpers;
 using CoffeeShopManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
-namespace CoffeeShopManagement.Areas.Admin.Controllers
+namespace CoffeeShopManagement.Areas.Staff.Controllers
 {
-    [Area("Admin")]
-    [AdminAuthorize]
+    [Area("Staff")]
+    [Authorize(Roles = "NhanVien")]
     public class ReviewController : Controller
     {
         private readonly CoffeeShopDbContext _context;
@@ -20,9 +21,52 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
         }
 
 
-        // =====================================================
+        // =========================================================
+        // LẤY MÃ TÀI KHOẢN NHÂN VIÊN HIỆN TẠI
+        // =========================================================
+
+        private int? GetCurrentAccountId()
+        {
+            string? claimId =
+                User.FindFirstValue(
+                    ClaimTypes.NameIdentifier
+                );
+
+
+            if (
+                !string.IsNullOrWhiteSpace(claimId)
+                &&
+                int.TryParse(
+                    claimId,
+                    out int id
+                )
+            )
+            {
+                return id;
+            }
+
+
+            int? sessionId =
+                HttpContext.Session.GetInt32(
+                    "MaTaiKhoan"
+                );
+
+
+            if (sessionId.HasValue)
+            {
+                return sessionId;
+            }
+
+
+            return HttpContext.Session.GetInt32(
+                "AdminAccountId"
+            );
+        }
+
+
+        // =========================================================
         // DANH SÁCH ĐÁNH GIÁ
-        // =====================================================
+        // =========================================================
 
         [HttpGet]
         public async Task<IActionResult> Index(
@@ -32,9 +76,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             int page = 1,
             int pageSize = 10)
         {
-            // =================================================
+            // =====================================================
             // PAGE
-            // =================================================
+            // =====================================================
 
             if (page < 1)
             {
@@ -54,9 +98,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             }
 
 
-            // =================================================
+            // =====================================================
             // TYPE
-            // =================================================
+            // =====================================================
 
             type =
                 string.IsNullOrWhiteSpace(type)
@@ -76,9 +120,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             }
 
 
-            // =================================================
+            // =====================================================
             // STAR
-            // =================================================
+            // =====================================================
 
             if (
                 star.HasValue
@@ -94,9 +138,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             }
 
 
-            // =================================================
+            // =====================================================
             // SEARCH
-            // =================================================
+            // =====================================================
 
             keyword =
                 keyword?.Trim();
@@ -120,17 +164,17 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             }
 
 
-            // =================================================
-            // REVIEW LIST
-            // =================================================
+            // =====================================================
+            // DANH SÁCH
+            // =====================================================
 
             var reviews =
-                new List<AdminReviewItemViewModel>();
+                new List<StaffReviewItemViewModel>();
 
 
-            // =================================================
-            // PRODUCT REVIEWS
-            // =================================================
+            // =====================================================
+            // PRODUCT
+            // =====================================================
 
             if (
                 type == "all"
@@ -144,23 +188,25 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                         .AsNoTracking();
 
 
-                // =============================================
+                // =================================================
                 // STAR
-                // =============================================
+                // =================================================
 
                 if (star.HasValue)
                 {
                     query =
                         query.Where(
                             x =>
-                                x.SoSao == star.Value
+                                x.SoSao
+                                ==
+                                star.Value
                         );
                 }
 
 
-                // =============================================
+                // =================================================
                 // SEARCH
-                // =============================================
+                // =================================================
 
                 if (!string.IsNullOrWhiteSpace(keyword))
                 {
@@ -171,19 +217,23 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                     query =
                         query.Where(
                             x =>
-                                x.MaKhNavigation.HoTen.Contains(search)
+
+                                x.MaKhNavigation.HoTen
+                                    .Contains(search)
 
                                 ||
 
                                 (
                                     x.MaKhNavigation.Email != null
                                     &&
-                                    x.MaKhNavigation.Email.Contains(search)
+                                    x.MaKhNavigation.Email
+                                        .Contains(search)
                                 )
 
                                 ||
 
-                                x.MaSpNavigation.TenSp.Contains(search)
+                                x.MaSpNavigation.TenSp
+                                    .Contains(search)
 
                                 ||
 
@@ -207,9 +257,15 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                                     numberKeyword.HasValue
                                     &&
                                     (
-                                        x.MaHd == numberKeyword.Value
+                                        x.MaHd
+                                            ==
+                                            numberKeyword.Value
+
                                         ||
-                                        x.MaDanhGia == numberKeyword.Value
+
+                                        x.MaDanhGia
+                                            ==
+                                            numberKeyword.Value
                                     )
                                 )
                         );
@@ -221,7 +277,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
                         .Select(
                             x =>
-                                new AdminReviewItemViewModel
+                                new StaffReviewItemViewModel
                                 {
                                     ReviewId =
                                         x.MaDanhGia,
@@ -275,9 +331,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             }
 
 
-            // =================================================
-            // COMBO REVIEWS
-            // =================================================
+            // =====================================================
+            // COMBO
+            // =====================================================
 
             if (
                 type == "all"
@@ -291,23 +347,25 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                         .AsNoTracking();
 
 
-                // =============================================
+                // =================================================
                 // STAR
-                // =============================================
+                // =================================================
 
                 if (star.HasValue)
                 {
                     query =
                         query.Where(
                             x =>
-                                x.SoSao == star.Value
+                                x.SoSao
+                                ==
+                                star.Value
                         );
                 }
 
 
-                // =============================================
+                // =================================================
                 // SEARCH
-                // =============================================
+                // =================================================
 
                 if (!string.IsNullOrWhiteSpace(keyword))
                 {
@@ -318,19 +376,23 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                     query =
                         query.Where(
                             x =>
-                                x.MaKhNavigation.HoTen.Contains(search)
+
+                                x.MaKhNavigation.HoTen
+                                    .Contains(search)
 
                                 ||
 
                                 (
                                     x.MaKhNavigation.Email != null
                                     &&
-                                    x.MaKhNavigation.Email.Contains(search)
+                                    x.MaKhNavigation.Email
+                                        .Contains(search)
                                 )
 
                                 ||
 
-                                x.MaComboNavigation.TenCombo.Contains(search)
+                                x.MaComboNavigation.TenCombo
+                                    .Contains(search)
 
                                 ||
 
@@ -354,9 +416,15 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                                     numberKeyword.HasValue
                                     &&
                                     (
-                                        x.MaHd == numberKeyword.Value
+                                        x.MaHd
+                                            ==
+                                            numberKeyword.Value
+
                                         ||
-                                        x.MaDanhGia == numberKeyword.Value
+
+                                        x.MaDanhGia
+                                            ==
+                                            numberKeyword.Value
                                     )
                                 )
                         );
@@ -368,7 +436,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
                         .Select(
                             x =>
-                                new AdminReviewItemViewModel
+                                new StaffReviewItemViewModel
                                 {
                                     ReviewId =
                                         x.MaDanhGia,
@@ -422,27 +490,29 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             }
 
 
-            // =================================================
+            // =====================================================
             // SORT
-            // =================================================
+            // =====================================================
 
             reviews =
                 reviews
 
                     .OrderByDescending(
-                        x => x.ReviewDate
+                        x =>
+                            x.ReviewDate
                     )
 
                     .ThenByDescending(
-                        x => x.ReviewId
+                        x =>
+                            x.ReviewId
                     )
 
                     .ToList();
 
 
-            // =================================================
+            // =====================================================
             // PAGINATION
-            // =================================================
+            // =====================================================
 
             int totalItems =
                 reviews.Count;
@@ -452,7 +522,8 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                 Math.Max(
                     1,
                     (int)Math.Ceiling(
-                        totalItems /
+                        totalItems
+                        /
                         (double)pageSize
                     )
                 );
@@ -481,9 +552,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                     .ToList();
 
 
-            // =================================================
-            // STATS
-            // =================================================
+            // =====================================================
+            // THỐNG KÊ
+            // =====================================================
 
             int productCount =
                 await _context
@@ -537,7 +608,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                     : 0;
 
 
-            int fiveStars =
+            int fiveStarReviews =
                 await _context
                     .DanhGiaSanPhams
                     .CountAsync(
@@ -555,7 +626,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                     );
 
 
-            int lowRatings =
+            int lowRatingReviews =
                 await _context
                     .DanhGiaSanPhams
                     .CountAsync(
@@ -573,12 +644,12 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                     );
 
 
-            // =================================================
+            // =====================================================
             // MODEL
-            // =================================================
+            // =====================================================
 
             var model =
-                new AdminReviewIndexViewModel
+                new StaffReviewIndexViewModel
                 {
                     Reviews =
                         pagedReviews,
@@ -617,10 +688,10 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                         averageRating,
 
                     FiveStarReviews =
-                        fiveStars,
+                        fiveStarReviews,
 
                     LowRatingReviews =
-                        lowRatings
+                        lowRatingReviews
                 };
 
 
@@ -630,9 +701,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
         }
 
 
-        // =====================================================
+        // =========================================================
         // CHI TIẾT ĐÁNH GIÁ
-        // =====================================================
+        // =========================================================
 
         [HttpGet]
         public async Task<IActionResult> Details(
@@ -641,16 +712,17 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
         {
             type =
                 type?.Trim().ToLower()
-                ?? "";
+                ??
+                "";
 
 
-            AdminReviewDetailsViewModel? model =
+            StaffReviewDetailsViewModel? model =
                 null;
 
 
-            // =================================================
+            // =====================================================
             // PRODUCT
-            // =================================================
+            // =====================================================
 
             if (type == "product")
             {
@@ -666,7 +738,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
                         .Select(
                             x =>
-                                new AdminReviewDetailsViewModel
+                                new StaffReviewDetailsViewModel
                                 {
                                     ReviewId =
                                         x.MaDanhGia,
@@ -714,17 +786,17 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                                         x.NgayPhanHoi,
 
                                     ReplierName =
-                                        x.MaTaiKhoanPhanHoiNavigation != null
+                                        x.MaTaiKhoanPhanHoiNavigation
+                                            != null
 
-                                            ? x.MaTaiKhoanPhanHoiNavigation.HoTen
+                                            ? x.MaTaiKhoanPhanHoiNavigation
+                                                .HoTen
 
                                             : null,
 
                                     ReplierRole =
-                                        x.MaTaiKhoanPhanHoiNavigation != null
-                                        &&
                                         x.MaTaiKhoanPhanHoiNavigation
-                                            .MaVaiTroNavigation != null
+                                            != null
 
                                             ? x.MaTaiKhoanPhanHoiNavigation
                                                 .MaVaiTroNavigation
@@ -738,9 +810,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             }
 
 
-            // =================================================
+            // =====================================================
             // COMBO
-            // =================================================
+            // =====================================================
 
             else if (type == "combo")
             {
@@ -756,7 +828,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
                         .Select(
                             x =>
-                                new AdminReviewDetailsViewModel
+                                new StaffReviewDetailsViewModel
                                 {
                                     ReviewId =
                                         x.MaDanhGia,
@@ -804,17 +876,17 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                                         x.NgayPhanHoi,
 
                                     ReplierName =
-                                        x.MaTaiKhoanPhanHoiNavigation != null
+                                        x.MaTaiKhoanPhanHoiNavigation
+                                            != null
 
-                                            ? x.MaTaiKhoanPhanHoiNavigation.HoTen
+                                            ? x.MaTaiKhoanPhanHoiNavigation
+                                                .HoTen
 
                                             : null,
 
                                     ReplierRole =
-                                        x.MaTaiKhoanPhanHoiNavigation != null
-                                        &&
                                         x.MaTaiKhoanPhanHoiNavigation
-                                            .MaVaiTroNavigation != null
+                                            != null
 
                                             ? x.MaTaiKhoanPhanHoiNavigation
                                                 .MaVaiTroNavigation
@@ -830,7 +902,13 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
             if (model == null)
             {
-                return NotFound();
+                TempData["ReviewError"] =
+                    "Không tìm thấy đánh giá.";
+
+
+                return RedirectToAction(
+                    nameof(Index)
+                );
             }
 
 
@@ -840,9 +918,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
         }
 
 
-        // =====================================================
-        // ADMIN PHẢN HỒI KHÁCH HÀNG
-        // =====================================================
+        // =========================================================
+        // NHÂN VIÊN PHẢN HỒI
+        // =========================================================
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -853,16 +931,17 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
         {
             type =
                 type?.Trim().ToLower()
-                ?? "";
+                ??
+                "";
 
 
             reply =
                 reply?.Trim();
 
 
-            // =================================================
-            // VALIDATE
-            // =================================================
+            // =====================================================
+            // VALIDATION
+            // =====================================================
 
             if (string.IsNullOrWhiteSpace(reply))
             {
@@ -884,7 +963,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             if (reply.Length > 1000)
             {
                 TempData["ReviewError"] =
-                    "Phản hồi tối đa 1000 ký tự.";
+                    "Nội dung phản hồi tối đa 1000 ký tự.";
 
 
                 return RedirectToAction(
@@ -898,20 +977,12 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             }
 
 
-            // =================================================
-            // ACCOUNT
-            // =================================================
+            // =====================================================
+            // TÀI KHOẢN NHÂN VIÊN
+            // =====================================================
 
             int? accountId =
-                HttpContext.Session.GetInt32(
-                    "MaTaiKhoan"
-                )
-
-                ??
-
-                HttpContext.Session.GetInt32(
-                    "AdminAccountId"
-                );
+                GetCurrentAccountId();
 
 
             if (!accountId.HasValue)
@@ -930,15 +1001,16 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             var account =
                 await _context
                     .TaiKhoans
-
                     .Include(
                         x =>
                             x.MaVaiTroNavigation
                     )
-
                     .FirstOrDefaultAsync(
                         x =>
-                            x.MaTaiKhoan == accountId.Value
+                            x.MaTaiKhoan
+                            ==
+                            accountId.Value
+
                             &&
                             x.IsActive
                     );
@@ -950,9 +1022,9 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             }
 
 
-            // =================================================
-            // ROLE
-            // =================================================
+            // =====================================================
+            // KIỂM TRA ROLE
+            // =====================================================
 
             string role =
                 account
@@ -961,14 +1033,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                     .Trim();
 
 
-            bool allowed =
-                role.Equals(
-                    "Admin",
-                    StringComparison.OrdinalIgnoreCase
-                )
-
-                ||
-
+            bool isStaff =
                 role.Equals(
                     "NhanVien",
                     StringComparison.OrdinalIgnoreCase
@@ -996,22 +1061,21 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                 );
 
 
-            if (!allowed)
+            if (!isStaff)
             {
                 return Forbid();
             }
 
 
-            // =================================================
+            // =====================================================
             // PRODUCT
-            // =================================================
+            // =====================================================
 
             if (type == "product")
             {
                 var review =
                     await _context
                         .DanhGiaSanPhams
-
                         .FirstOrDefaultAsync(
                             x =>
                                 x.MaDanhGia == id
@@ -1020,31 +1084,38 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
                 if (review == null)
                 {
-                    return NotFound();
+                    TempData["ReviewError"] =
+                        "Không tìm thấy đánh giá sản phẩm.";
+
+
+                    return RedirectToAction(
+                        nameof(Index)
+                    );
                 }
 
 
                 review.PhanHoi =
                     reply;
 
+
                 review.NgayPhanHoi =
                     DateTime.Now;
+
 
                 review.MaTaiKhoanPhanHoi =
                     account.MaTaiKhoan;
             }
 
 
-            // =================================================
+            // =====================================================
             // COMBO
-            // =================================================
+            // =====================================================
 
             else if (type == "combo")
             {
                 var review =
                     await _context
                         .DanhGiaCombos
-
                         .FirstOrDefaultAsync(
                             x =>
                                 x.MaDanhGia == id
@@ -1053,30 +1124,48 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
                 if (review == null)
                 {
-                    return NotFound();
+                    TempData["ReviewError"] =
+                        "Không tìm thấy đánh giá combo.";
+
+
+                    return RedirectToAction(
+                        nameof(Index)
+                    );
                 }
 
 
                 review.PhanHoi =
                     reply;
 
+
                 review.NgayPhanHoi =
                     DateTime.Now;
+
 
                 review.MaTaiKhoanPhanHoi =
                     account.MaTaiKhoan;
             }
 
 
+            // =====================================================
+            // INVALID TYPE
+            // =====================================================
+
             else
             {
-                return BadRequest();
+                TempData["ReviewError"] =
+                    "Loại đánh giá không hợp lệ.";
+
+
+                return RedirectToAction(
+                    nameof(Index)
+                );
             }
 
 
-            // =================================================
+            // =====================================================
             // SAVE
-            // =================================================
+            // =====================================================
 
             await _context
                 .SaveChangesAsync();
@@ -1098,203 +1187,331 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
     }
 
 
-    // =========================================================
-    // INDEX MODEL
-    // =========================================================
+    // =============================================================
+    // INDEX VIEW MODEL
+    // =============================================================
 
-    public sealed class AdminReviewIndexViewModel
+    public sealed class StaffReviewIndexViewModel
     {
-        public List<AdminReviewItemViewModel> Reviews
-        { get; set; } = new();
+        public List<StaffReviewItemViewModel> Reviews
+        {
+            get;
+            set;
+        } = new();
 
 
         public string? Keyword
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public string Type
-        { get; set; } = "all";
+        {
+            get;
+            set;
+        } = "all";
 
 
         public int? Star
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public int CurrentPage
-        { get; set; }
+        {
+            get;
+            set;
+        } = 1;
 
 
         public int PageSize
-        { get; set; }
+        {
+            get;
+            set;
+        } = 10;
 
 
         public int TotalItems
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public int TotalPages
-        { get; set; }
+        {
+            get;
+            set;
+        } = 1;
 
 
         public int TotalReviews
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public int ProductReviews
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public int ComboReviews
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public double AverageRating
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public int FiveStarReviews
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public int LowRatingReviews
-        { get; set; }
+        {
+            get;
+            set;
+        }
     }
 
 
-    // =========================================================
-    // ITEM MODEL
-    // =========================================================
+    // =============================================================
+    // ITEM VIEW MODEL
+    // =============================================================
 
-    public sealed class AdminReviewItemViewModel
+    public sealed class StaffReviewItemViewModel
     {
         public int ReviewId
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public string ReviewType
-        { get; set; } = "";
+        {
+            get;
+            set;
+        } = "";
 
 
         public string TypeName
-        { get; set; } = "";
+        {
+            get;
+            set;
+        } = "";
 
 
         public int ItemId
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public string ItemName
-        { get; set; } = "";
+        {
+            get;
+            set;
+        } = "";
 
 
         public int CustomerId
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public string CustomerName
-        { get; set; } = "";
+        {
+            get;
+            set;
+        } = "";
 
 
         public string? CustomerEmail
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public int OrderId
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public int Stars
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public string? Content
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public DateTime ReviewDate
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public bool HasReply
-        { get; set; }
+        {
+            get;
+            set;
+        }
     }
 
 
-    // =========================================================
-    // DETAILS MODEL
-    // =========================================================
+    // =============================================================
+    // DETAILS VIEW MODEL
+    // =============================================================
 
-    public sealed class AdminReviewDetailsViewModel
+    public sealed class StaffReviewDetailsViewModel
     {
         public int ReviewId
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public string ReviewType
-        { get; set; } = "";
+        {
+            get;
+            set;
+        } = "";
 
 
         public string TypeName
-        { get; set; } = "";
+        {
+            get;
+            set;
+        } = "";
 
 
         public int ItemId
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public string ItemName
-        { get; set; } = "";
+        {
+            get;
+            set;
+        } = "";
 
 
         public int CustomerId
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public string CustomerName
-        { get; set; } = "";
+        {
+            get;
+            set;
+        } = "";
 
 
         public string? CustomerEmail
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public string? CustomerPhone
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public int OrderId
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public int Stars
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public string? Content
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public DateTime ReviewDate
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
-
-        // =====================================================
-        // PHẢN HỒI
-        // =====================================================
 
         public string? Reply
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public DateTime? ReplyDate
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public string? ReplierName
-        { get; set; }
+        {
+            get;
+            set;
+        }
 
 
         public string? ReplierRole
-        { get; set; }
+        {
+            get;
+            set;
+        }
     }
 }

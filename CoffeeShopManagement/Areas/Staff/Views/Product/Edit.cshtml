@@ -1,0 +1,649 @@
+﻿@model CoffeeShopManagement.Models.SanPham
+
+@{
+    ViewData["Title"] = "Chỉnh sửa sản phẩm";
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-product.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/staff-product-edit.css"
+          asp-append-version="true" />
+}
+
+
+<div class="staff-product-edit-page">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <section class="staff-product-edit-header">
+
+        <div class="staff-product-edit-header-text">
+
+            <span class="staff-product-edit-eyebrow">
+                ROSALIE COFFEE
+            </span>
+
+            <h1>
+                Chỉnh sửa sản phẩm
+            </h1>
+
+            <p>
+                Cập nhật thông tin sản phẩm
+                <strong>#SP@(Model.MaSp.ToString("D4"))</strong>
+                trong hệ thống.
+            </p>
+
+        </div>
+
+
+        <a asp-area="Staff"
+           asp-controller="Product"
+           asp-action="Index"
+           class="staff-product-edit-back">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Quay lại
+
+        </a>
+
+    </section>
+
+
+    <!-- =====================================================
+         EDIT FORM
+    ====================================================== -->
+
+    <form asp-area="Staff"
+          asp-controller="Product"
+          asp-action="Edit"
+          asp-route-id="@Model.MaSp"
+          method="post"
+          enctype="multipart/form-data"
+          class="staff-product-edit-form"
+          id="staffProductEditForm">
+
+        @Html.AntiForgeryToken()
+
+
+        <!-- =================================================
+             HIDDEN
+        ================================================== -->
+
+        <input type="hidden"
+               asp-for="MaSp" />
+
+        <input type="hidden"
+               asp-for="HinhAnh" />
+
+
+        <!-- =================================================
+             VALIDATION
+        ================================================== -->
+
+        <div asp-validation-summary="ModelOnly"
+             class="staff-product-edit-validation text-danger">
+        </div>
+
+
+        <!-- =================================================
+             BASIC INFORMATION
+        ================================================== -->
+
+        <section class="staff-product-edit-card">
+
+            <div class="staff-product-edit-card-heading">
+
+                <div class="staff-product-edit-card-icon">
+
+                    <i class="fa-solid fa-mug-hot"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        THÔNG TIN CƠ BẢN
+                    </span>
+
+                    <h2>
+                        Thông tin sản phẩm
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="staff-product-edit-grid">
+
+                <!-- PRODUCT NAME -->
+
+                <div class="staff-product-edit-field staff-product-edit-full">
+
+                    <label asp-for="TenSp">
+                        Tên sản phẩm
+                    </label>
+
+                    <input asp-for="TenSp"
+                           class="staff-product-edit-control"
+                           placeholder="Ví dụ: Cafe Latte"
+                           autocomplete="off" />
+
+                    <span asp-validation-for="TenSp"
+                          class="text-danger staff-product-edit-error">
+                    </span>
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div class="staff-product-edit-field">
+
+                    <label asp-for="MaLoai">
+                        Danh mục
+                    </label>
+
+                    <div class="staff-product-edit-select">
+
+                        <i class="fa-solid fa-layer-group"></i>
+
+                        <select asp-for="MaLoai"
+                                asp-items="ViewBag.Categories"
+                                class="staff-product-edit-control">
+
+                            <option value="">
+                                -- Chọn danh mục --
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <span asp-validation-for="MaLoai"
+                          class="text-danger staff-product-edit-error">
+                    </span>
+
+                </div>
+
+
+                <!-- PRICE -->
+
+                <div class="staff-product-edit-field">
+
+                    <label asp-for="DonGia">
+                        Giá bán
+                    </label>
+
+                    <div class="staff-product-edit-price">
+
+                        <input asp-for="DonGia"
+                               type="number"
+                               min="0"
+                               step="1000"
+                               class="staff-product-edit-control"
+                               placeholder="45000" />
+
+                        <span>
+                            đ
+                        </span>
+
+                    </div>
+
+                    <span asp-validation-for="DonGia"
+                          class="text-danger staff-product-edit-error">
+                    </span>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="staff-product-edit-field staff-product-edit-full">
+
+                    <label asp-for="MoTa">
+                        Mô tả sản phẩm
+                    </label>
+
+                    <textarea asp-for="MoTa"
+                              class="staff-product-edit-control staff-product-edit-textarea"
+                              rows="4"
+                              placeholder="Nhập mô tả sản phẩm..."></textarea>
+
+                    <span asp-validation-for="MoTa"
+                          class="text-danger staff-product-edit-error">
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             IMAGE
+        ================================================== -->
+
+        <section class="staff-product-edit-card">
+
+            <div class="staff-product-edit-card-heading">
+
+                <div class="staff-product-edit-card-icon">
+
+                    <i class="fa-regular fa-image"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        HÌNH ẢNH
+                    </span>
+
+                    <h2>
+                        Ảnh sản phẩm
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="staff-product-edit-image-grid">
+
+
+                <!-- CURRENT IMAGE -->
+
+                <div class="staff-product-edit-image-panel">
+
+                    <div class="staff-product-edit-image-title">
+
+                        <strong>
+                            Ảnh hiện tại
+                        </strong>
+
+                        @if (!string.IsNullOrWhiteSpace(Model.HinhAnh))
+                        {
+                            <span>
+                                @Model.HinhAnh
+                            </span>
+                        }
+
+                    </div>
+
+
+                    <div class="staff-product-edit-current-image">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.HinhAnh))
+                        {
+                            <img src="~/images/menu/@Model.HinhAnh"
+                                 alt="@Model.TenSp"
+                                 id="currentProductImage"
+                                 class="js-current-product-image" />
+
+                            <div class="staff-product-edit-image-placeholder js-current-image-fallback">
+
+                                <i class="fa-solid fa-mug-hot"></i>
+
+                                <span>
+                                    Không tải được ảnh
+                                </span>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="staff-product-edit-image-placeholder visible">
+
+                                <i class="fa-solid fa-mug-hot"></i>
+
+                                <span>
+                                    Sản phẩm chưa có ảnh
+                                </span>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- NEW IMAGE -->
+
+                <div class="staff-product-edit-image-panel">
+
+                    <div class="staff-product-edit-image-title">
+
+                        <strong>
+                            Thay ảnh mới
+                        </strong>
+
+                        <span id="selectedFileName">
+                            JPG, JPEG, PNG hoặc WEBP · tối đa 5MB
+                        </span>
+
+                    </div>
+
+
+                    <label class="staff-product-edit-upload"
+                           for="imageFile"
+                           id="imageUploadBox">
+
+                        <input type="file"
+                               name="imageFile"
+                               id="imageFile"
+                               accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                               class="staff-product-edit-file-input" />
+
+
+                        <div class="staff-product-edit-upload-empty"
+                             id="uploadEmpty">
+
+                            <div class="staff-product-edit-upload-icon">
+
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                            </div>
+
+                            <strong>
+                                Chọn ảnh mới
+                            </strong>
+
+                            <span>
+                                Nhấn vào đây để chọn ảnh từ máy tính
+                            </span>
+
+                            <small>
+                                Không chọn nếu muốn giữ ảnh hiện tại
+                            </small>
+
+                        </div>
+
+
+                        <div class="staff-product-edit-new-preview"
+                             id="imagePreview">
+
+                            <img id="previewImage"
+                                 src=""
+                                 alt="Ảnh mới" />
+
+                            <div class="staff-product-edit-preview-overlay">
+
+                                <i class="fa-solid fa-camera-rotate"></i>
+
+                                Chọn ảnh khác
+
+                            </div>
+
+                        </div>
+
+                    </label>
+
+
+                    <span class="text-danger staff-product-edit-error"
+                          data-valmsg-for="imageFile">
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PROMOTION
+        ================================================== -->
+
+        <section class="staff-product-edit-card">
+
+            <div class="staff-product-edit-promotion-head">
+
+                <div class="staff-product-edit-card-heading">
+
+                    <div class="staff-product-edit-card-icon">
+
+                        <i class="fa-solid fa-tags"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            KHUYẾN MÃI
+                        </span>
+
+                        <h2>
+                            Thông tin ưu đãi
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <label class="staff-product-edit-switch-label">
+
+                    <span class="staff-product-edit-switch-text">
+
+                        <strong>
+                            Áp dụng khuyến mãi
+                        </strong>
+
+                        <small>
+                            Bật để cập nhật giá và thời gian ưu đãi
+                        </small>
+
+                    </span>
+
+
+                    <input asp-for="DangKhuyenMai"
+                           id="promotionToggle"
+                           type="checkbox" />
+
+
+                    <span class="staff-product-edit-switch">
+                    </span>
+
+                </label>
+
+            </div>
+
+
+            <div id="promotionFields"
+                 class="staff-product-edit-promotion-fields">
+
+
+                <!-- ORIGINAL PRICE -->
+
+                <div class="staff-product-edit-field">
+
+                    <label asp-for="GiaGoc">
+                        Giá gốc
+                    </label>
+
+                    <div class="staff-product-edit-price">
+
+                        <input asp-for="GiaGoc"
+                               type="number"
+                               min="0"
+                               step="1000"
+                               class="staff-product-edit-control"
+                               placeholder="50000" />
+
+                        <span>
+                            đ
+                        </span>
+
+                    </div>
+
+                    <span asp-validation-for="GiaGoc"
+                          class="text-danger staff-product-edit-error">
+                    </span>
+
+                </div>
+
+
+                <!-- PROMOTION PRICE -->
+
+                <div class="staff-product-edit-field">
+
+                    <label asp-for="GiaKhuyenMai">
+                        Giá khuyến mãi
+                    </label>
+
+                    <div class="staff-product-edit-price">
+
+                        <input asp-for="GiaKhuyenMai"
+                               type="number"
+                               min="0"
+                               step="1000"
+                               class="staff-product-edit-control"
+                               placeholder="40000" />
+
+                        <span>
+                            đ
+                        </span>
+
+                    </div>
+
+                    <span asp-validation-for="GiaKhuyenMai"
+                          class="text-danger staff-product-edit-error">
+                    </span>
+
+                </div>
+
+
+                <!-- DISCOUNT -->
+
+                <div class="staff-product-edit-field">
+
+                    <label asp-for="PhanTramGiam">
+                        Phần trăm giảm
+                    </label>
+
+                    <div class="staff-product-edit-price">
+
+                        <input asp-for="PhanTramGiam"
+                               type="number"
+                               min="0"
+                               max="100"
+                               class="staff-product-edit-control"
+                               placeholder="20" />
+
+                        <span>
+                            %
+                        </span>
+
+                    </div>
+
+                    <span asp-validation-for="PhanTramGiam"
+                          class="text-danger staff-product-edit-error">
+                    </span>
+
+                </div>
+
+
+                <!-- START DATE -->
+
+                <div class="staff-product-edit-field staff-product-edit-date">
+
+                    <label asp-for="NgayBatDau">
+                        Ngày bắt đầu
+                    </label>
+
+                    <input asp-for="NgayBatDau"
+                           asp-format="{0:yyyy-MM-ddTHH:mm}"
+                           type="datetime-local"
+                           class="staff-product-edit-control" />
+
+                    <span asp-validation-for="NgayBatDau"
+                          class="text-danger staff-product-edit-error">
+                    </span>
+
+                </div>
+
+
+                <!-- END DATE -->
+
+                <div class="staff-product-edit-field staff-product-edit-date">
+
+                    <label asp-for="NgayKetThuc">
+                        Ngày kết thúc
+                    </label>
+
+                    <input asp-for="NgayKetThuc"
+                           asp-format="{0:yyyy-MM-ddTHH:mm}"
+                           type="datetime-local"
+                           class="staff-product-edit-control" />
+
+                    <span asp-validation-for="NgayKetThuc"
+                          class="text-danger staff-product-edit-error">
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ACTIONS
+        ================================================== -->
+
+        <div class="staff-product-edit-actions">
+
+            <a asp-area="Staff"
+               asp-controller="Product"
+               asp-action="Index"
+               class="staff-product-edit-cancel">
+
+                <i class="fa-solid fa-xmark"></i>
+
+                Hủy
+
+            </a>
+
+
+            <button type="submit"
+                    class="staff-product-edit-submit"
+                    id="saveProductButton">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                <span>
+                    Lưu thay đổi
+                </span>
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/js/staff-product-edit.js"
+            asp-append-version="true">
+    </script>
+
+}

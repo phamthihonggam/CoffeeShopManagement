@@ -1,21 +1,505 @@
 ﻿/* =====================================================
-   ROSALIE COFFEE - STAFF DASHBOARD
+   ROSALIE COFFEE - STAFF
+   File: wwwroot/css/staff.css
 ===================================================== */
 
 
 /* =====================================================
-   QUICK ACTION SECTION
+   GLOBAL SAFETY
+===================================================== */
+
+.admin-wrapper {
+    position: relative;
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    pointer-events: auto;
+}
+
+    .admin-sidebar * {
+        pointer-events: auto;
+    }
+
+.admin-main {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    pointer-events: auto;
+    overflow: visible;
+    background: #f7f3ef;
+}
+
+.admin-header {
+    position: relative;
+    z-index: 6000 !important;
+    overflow: visible !important;
+}
+
+.admin-content {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* =====================================================
+   STAFF HEADER
+   THU GỌN PHẦN ĐẦU TRANG
+===================================================== */
+
+.admin-header {
+    min-height: 78px !important;
+    padding: 13px 28px !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    background: #ffffff;
+    border-bottom: 1px solid #eadfd8;
+    box-shadow: 0 4px 15px rgba(76, 45, 37, 0.045);
+}
+
+
+/* LEFT */
+
+.admin-header-left {
+    min-width: 0;
+}
+
+.admin-header-label {
+    display: block;
+    margin: 0 0 3px;
+    color: #a56b4e;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 1.7px;
+}
+
+.admin-header h1 {
+    margin: 0 !important;
+    color: #4b2d24;
+    font-size: 24px !important;
+    line-height: 1.2;
+    font-weight: 900;
+}
+
+
+/* RIGHT */
+
+.admin-header-right {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    pointer-events: auto;
+}
+
+
+/* =====================================================
+   CONTENT
+   GIẢM KHOẢNG TRẮNG GIỮA HEADER VÀ DASHBOARD
+===================================================== */
+
+.admin-content {
+    padding: 22px 28px 42px !important;
+}
+
+
+/* =====================================================
+   VIEW WEBSITE BUTTON
+===================================================== */
+
+.admin-view-site {
+    min-height: 40px;
+    height: 40px;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: 1px solid #dec9bc;
+    border-radius: 10px;
+    background: #fffaf7;
+    color: #744735;
+    font-size: 11px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+    .admin-view-site:hover {
+        border-color: #7e4c37;
+        background: #7e4c37;
+        color: #ffffff;
+        transform: translateY(-1px);
+    }
+
+
+/* =====================================================
+   STAFF SIDEBAR
+===================================================== */
+
+.admin-logo {
+    position: relative;
+    z-index: 10002;
+}
+
+    .admin-logo span {
+        letter-spacing: 2px;
+    }
+
+
+/* =====================================================
+   STAFF MENU
+===================================================== */
+
+.admin-menu {
+    position: relative;
+    z-index: 10002;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    pointer-events: auto;
+}
+
+.admin-menu-item {
+    position: relative;
+    z-index: 10003;
+    width: 100%;
+    min-height: 48px;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 11px;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 13px;
+    font-weight: 750;
+    text-decoration: none;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+    .admin-menu-item * {
+        pointer-events: none;
+    }
+
+    .admin-menu-item i {
+        width: 21px;
+        text-align: center;
+        color: #deb084;
+        font-size: 15px;
+    }
+
+    .admin-menu-item:hover {
+        background: rgba(255, 255, 255, 0.09);
+        color: #ffffff;
+        transform: translateX(3px);
+    }
+
+        .admin-menu-item:hover i {
+            color: #f3c995;
+        }
+
+
+    /* ACTIVE - NẾU SAU NÀY GẮN CLASS active */
+
+    .admin-menu-item.active {
+        background: rgba(255, 255, 255, 0.12);
+        color: #ffffff;
+        box-shadow: inset 3px 0 0 #e1af7e;
+    }
+
+
+/* =====================================================
+   SIDEBAR BOTTOM
+===================================================== */
+
+.admin-sidebar-bottom {
+    position: relative;
+    z-index: 10002;
+    pointer-events: auto;
+}
+
+.admin-sidebar-logout {
+    position: relative;
+    z-index: 10003;
+    min-height: 42px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 9px;
+    color: #f0d6c5;
+    font-size: 11px;
+    font-weight: 750;
+    text-decoration: none;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+    .admin-sidebar-logout * {
+        pointer-events: none;
+    }
+
+    .admin-sidebar-logout:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+    }
+
+
+/* =====================================================
+   HEADER ACCOUNT
+===================================================== */
+
+.admin-account-dropdown,
+.admin-account,
+.admin-account-button,
+.admin-account-menu {
+    position: relative;
+    pointer-events: auto;
+}
+
+.admin-account-dropdown {
+    position: relative;
+    z-index: 7000;
+}
+
+
+/* ACCOUNT BUTTON */
+
+.admin-account-button {
+    min-height: 44px;
+    padding: 5px 9px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+    .admin-account-button:hover,
+    .admin-account-button.active {
+        border-color: #ead8cd;
+        background: #faf5f1;
+    }
+
+
+    /* AVATAR */
+
+    .admin-account-button .admin-avatar {
+        width: 37px;
+        height: 37px;
+        min-width: 37px;
+        min-height: 37px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #a66342;
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 900;
+    }
+
+
+/* ACCOUNT TEXT */
+
+.admin-account-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    text-align: left;
+}
+
+    .admin-account-info strong {
+        max-width: 150px;
+        overflow: hidden;
+        color: #4d3027;
+        font-size: 11px;
+        font-weight: 900;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .admin-account-info span {
+        color: #9a857b;
+        font-size: 9px;
+        font-weight: 700;
+    }
+
+.admin-account-arrow {
+    margin-left: 2px;
+    color: #9c7868;
+    font-size: 9px;
+    transition: transform 0.2s ease;
+}
+
+.admin-account-button.active .admin-account-arrow {
+    transform: rotate(180deg);
+}
+
+
+/* =====================================================
+   ACCOUNT DROPDOWN
+===================================================== */
+
+.admin-account-menu {
+    position: absolute !important;
+    top: calc(100% + 9px);
+    right: 0;
+    width: 250px;
+    padding: 9px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    border: 1px solid #eadbd3;
+    border-radius: 13px;
+    background: #ffffff;
+    box-shadow: 0 16px 36px rgba(70, 43, 34, 0.14);
+    z-index: 8000 !important;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+}
+
+    .admin-account-menu.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+
+/* =====================================================
+   ACCOUNT DROPDOWN CONTENT
+   TÁCH RIÊNG CHO STAFF - KHÔNG PHỤ THUỘC ADMIN.CSS
+===================================================== */
+
+.admin-account-menu-header {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 9px;
+}
+
+.admin-dropdown-avatar {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f1dfd4;
+    color: #80472f;
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.admin-account-menu-header > div:last-child {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-account-menu-header strong {
+    max-width: 155px;
+    overflow: hidden;
+    color: #4b2a21;
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.admin-account-menu-header span {
+    margin-top: 2px;
+    color: #9c857b;
+    font-size: 10px;
+}
+
+.admin-account-role {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 3px;
+    padding: 9px 10px;
+    border-radius: 9px;
+    background: #faf5f1;
+}
+
+    .admin-account-role span {
+        color: #998178;
+        font-size: 10px;
+    }
+
+    .admin-account-role strong {
+        color: #75412f;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+.admin-account-divider {
+    height: 1px;
+    margin: 9px 4px;
+    background: #eee2dc;
+}
+
+.admin-account-menu-item {
+    width: 100%;
+    height: 40px;
+    padding: 0 11px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: #69493c;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+    .admin-account-menu-item i {
+        width: 16px;
+        color: #a16d54;
+        text-align: center;
+    }
+
+    .admin-account-menu-item:hover {
+        background: #f8efea;
+        color: #633726;
+    }
+
+/* =====================================================
+   DASHBOARD ACTION SECTION
 ===================================================== */
 
 .staff-actions {
-    margin-top: 35px;
+    position: relative;
+    z-index: 1;
+    margin-top: 25px;
 }
 
     .staff-actions h3 {
-        margin: 0 0 20px;
+        margin: 0 0 15px;
         color: #4f302a;
-        font-size: 24px;
-        font-weight: 800;
+        font-size: 21px;
+        font-weight: 900;
     }
 
 
@@ -26,7 +510,7 @@
 .staff-action-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
+    gap: 15px;
 }
 
 
@@ -35,23 +519,41 @@
 ===================================================== */
 
 .staff-action-card {
+    position: relative;
+    z-index: 2;
+    min-height: 95px;
+    padding: 18px 20px;
     display: flex;
     align-items: center;
-    gap: 18px;
-    min-height: 110px;
-    padding: 24px;
+    gap: 14px;
+    overflow: hidden;
+    border: 1px solid #eadfd8;
+    border-radius: 15px;
     background: #ffffff;
-    border-radius: 18px;
-    text-decoration: none;
     color: #4f302a;
-    box-shadow: 0 8px 25px rgba(75, 48, 42, 0.08);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    text-decoration: none;
+    box-shadow: 0 6px 18px rgba(75, 48, 42, 0.055);
+    cursor: pointer;
+    pointer-events: auto;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+    .staff-action-card::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 75px;
+        height: 75px;
+        border-radius: 0 0 0 100%;
+        background: rgba(157, 103, 74, 0.035);
+        pointer-events: none;
+    }
 
     .staff-action-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 32px rgba(75, 48, 42, 0.14);
+        border-color: #d8c3b7;
+        transform: translateY(-3px);
+        box-shadow: 0 11px 25px rgba(75, 48, 42, 0.10);
         color: #4f302a;
     }
 
@@ -61,16 +563,24 @@
 ===================================================== */
 
     .staff-action-card > i {
-        width: 52px;
-        height: 52px;
+        width: 45px;
+        height: 45px;
+        flex: 0 0 45px;
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-shrink: 0;
-        border-radius: 14px;
+        border-radius: 12px;
         background: #f3e8df;
         color: #8d5d45;
-        font-size: 22px;
+        font-size: 17px;
+        pointer-events: none;
+        transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+
+    .staff-action-card:hover > i {
+        background: #85513b;
+        color: #ffffff;
+        transform: scale(1.04);
     }
 
 
@@ -79,32 +589,130 @@
 ===================================================== */
 
     .staff-action-card div {
+        min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 3px;
+        pointer-events: none;
     }
-
 
     .staff-action-card strong {
         color: #4f302a;
-        font-size: 17px;
-        font-weight: 800;
+        font-size: 14px;
+        font-weight: 900;
     }
-
 
     .staff-action-card span {
         color: #8a7b75;
-        font-size: 14px;
+        font-size: 11px;
         line-height: 1.5;
     }
 
 
 /* =====================================================
-   STAFF SIDEBAR
+   DASHBOARD WELCOME CARD
 ===================================================== */
 
-.admin-logo span {
-    letter-spacing: 2px;
+.admin-welcome {
+    margin-bottom: 18px !important;
+    padding: 21px 24px !important;
+    border: 1px solid #eadfd8;
+    border-radius: 16px !important;
+    background: #ffffff;
+    box-shadow: 0 7px 20px rgba(75, 48, 42, 0.045);
+}
+
+    .admin-welcome h2 {
+        margin: 0 0 6px !important;
+        color: #4a2d24;
+        font-size: 22px !important;
+        font-weight: 900;
+    }
+
+    .admin-welcome p {
+        max-width: 760px;
+        margin: 0 !important;
+        color: #89776f;
+        font-size: 12px !important;
+        line-height: 1.65;
+    }
+
+
+/* =====================================================
+   DASHBOARD STAT GRID
+===================================================== */
+
+.admin-stat-grid {
+    gap: 14px !important;
+}
+
+.admin-stat-card {
+    min-height: 125px !important;
+    padding: 18px !important;
+    border: 1px solid #eadfd8;
+    border-radius: 15px !important;
+    background: #ffffff;
+    box-shadow: 0 6px 18px rgba(75, 48, 42, 0.05) !important;
+}
+
+.admin-stat-icon {
+    width: 40px !important;
+    height: 40px !important;
+    margin-bottom: 11px !important;
+    border-radius: 10px !important;
+    font-size: 15px !important;
+}
+
+.admin-stat-card span {
+    font-size: 10px !important;
+}
+
+.admin-stat-card strong {
+    margin-top: 4px !important;
+    font-size: 22px !important;
+}
+
+
+/* =====================================================
+   PREVENT PAGE OVERLAY
+===================================================== */
+
+.admin-main::before,
+.admin-main::after,
+.admin-content::before,
+.admin-content::after,
+.admin-header::before,
+.admin-header::after {
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   REVIEW PAGE SAFETY
+===================================================== */
+
+.admin-review-stat-grid,
+.admin-review-type-grid,
+.admin-review-filter-card,
+.admin-review-table-card,
+.admin-review-details-grid,
+.admin-review-detail-card {
+    position: relative;
+    z-index: 1;
+}
+
+.review-view-btn,
+.review-filter-btn,
+.review-reset-btn,
+.review-page-btn,
+.review-back-btn,
+.review-order-btn,
+.review-back-secondary-btn,
+.review-reply-form button {
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    pointer-events: auto;
 }
 
 
@@ -114,8 +722,39 @@
 
 @media (max-width: 1100px) {
 
+    .admin-header {
+        padding-left: 22px !important;
+        padding-right: 22px !important;
+    }
+
+    .admin-content {
+        padding-left: 22px !important;
+        padding-right: 22px !important;
+    }
+
     .staff-action-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* =====================================================
+   RESPONSIVE - SMALL TABLET
+===================================================== */
+
+@media (max-width: 850px) {
+
+    .admin-header h1 {
+        font-size: 22px !important;
+    }
+
+    .admin-view-site span {
+        display: none;
+    }
+
+    .admin-view-site {
+        width: 40px;
+        padding: 0;
     }
 }
 
@@ -126,12 +765,67 @@
 
 @media (max-width: 768px) {
 
+    .admin-header {
+        min-height: auto !important;
+        padding: 15px 16px !important;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .admin-header-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .admin-content {
+        padding: 18px 14px 35px !important;
+    }
+
     .staff-action-grid {
         grid-template-columns: 1fr;
     }
 
+    .staff-action-card {
+        min-height: 90px;
+        padding: 17px;
+    }
+
+    .staff-actions {
+        margin-top: 22px;
+    }
+
+        .staff-actions h3 {
+            font-size: 19px;
+        }
+
+    .admin-account-info {
+        display: none;
+    }
+
+    .admin-account-menu {
+        width: 235px;
+    }
+}
+
+
+/* =====================================================
+   VERY SMALL MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .admin-header-right {
+        gap: 7px;
+    }
 
     .staff-action-card {
-        padding: 20px;
+        gap: 12px;
     }
+
+        .staff-action-card > i {
+            width: 42px;
+            height: 42px;
+            flex-basis: 42px;
+        }
 }

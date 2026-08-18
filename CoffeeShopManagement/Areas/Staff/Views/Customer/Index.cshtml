@@ -1,0 +1,672 @@
+﻿@model IEnumerable<CoffeeShopManagement.Models.KhachHang>
+
+@{
+    ViewData["Title"] = "Quản lý khách hàng";
+
+    string keyword =
+        ViewBag.Keyword?.ToString()
+        ?? string.Empty;
+
+    int currentPage =
+        ViewBag.CurrentPage ?? 1;
+
+    int pageSize =
+        ViewBag.PageSize ?? 10;
+
+    int totalItems =
+        ViewBag.TotalItems ?? 0;
+
+    int totalPages =
+        ViewBag.TotalPages ?? 0;
+
+    int startItem =
+        ViewBag.StartItem ?? 0;
+
+    int endItem =
+        ViewBag.EndItem ?? 0;
+
+    int totalCustomers =
+        ViewBag.TotalCustomers ?? 0;
+
+    int customersWithOrders =
+        ViewBag.CustomersWithOrders ?? 0;
+
+    int newCustomers =
+        ViewBag.NewCustomers ?? 0;
+}
+
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/staff-customer.css"
+          asp-append-version="true" />
+
+}
+
+
+<div class="staff-customer-page">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <section class="staff-customer-header">
+
+        <div>
+
+            <span class="staff-customer-eyebrow">
+                ROSALIE COFFEE
+            </span>
+
+            <h1>
+                Quản lý khách hàng
+            </h1>
+
+            <p>
+                Theo dõi thông tin và lịch sử mua hàng của khách hàng.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         STATS
+    ====================================================== -->
+
+    <section class="staff-customer-stats">
+
+        <div class="staff-customer-stat-card">
+
+            <div class="staff-customer-stat-icon">
+
+                <i class="fa-solid fa-users"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    TỔNG KHÁCH HÀNG
+                </span>
+
+                <strong>
+                    @totalCustomers
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="staff-customer-stat-card">
+
+            <div class="staff-customer-stat-icon">
+
+                <i class="fa-solid fa-bag-shopping"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    ĐÃ CÓ ĐƠN HÀNG
+                </span>
+
+                <strong>
+                    @customersWithOrders
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="staff-customer-stat-card">
+
+            <div class="staff-customer-stat-icon">
+
+                <i class="fa-solid fa-user-plus"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    KHÁCH MỚI 30 NGÀY
+                </span>
+
+                <strong>
+                    @newCustomers
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FILTER
+    ====================================================== -->
+
+    <section class="staff-customer-filter-card">
+
+        <form method="get"
+              asp-area="Staff"
+              asp-controller="Customer"
+              asp-action="Index"
+              class="staff-customer-filter-form">
+
+            <div class="staff-customer-search">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input type="text"
+                       name="keyword"
+                       value="@keyword"
+                       placeholder="Tìm theo tên, email hoặc số điện thoại..."
+                       autocomplete="off" />
+
+            </div>
+
+
+            <input type="hidden"
+                   name="pageSize"
+                   value="@pageSize" />
+
+
+            <button type="submit"
+                    class="staff-customer-filter-btn">
+
+                <i class="fa-solid fa-filter"></i>
+
+                Tìm kiếm
+
+            </button>
+
+
+            @if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                <a asp-area="Staff"
+                   asp-controller="Customer"
+                   asp-action="Index"
+                   asp-route-pageSize="@pageSize"
+                   class="staff-customer-reset-btn">
+
+                    <i class="fa-solid fa-rotate-left"></i>
+
+                    Đặt lại
+
+                </a>
+            }
+
+        </form>
+
+    </section>
+
+
+    <!-- =====================================================
+         SUMMARY
+    ====================================================== -->
+
+    <section class="staff-customer-summary">
+
+        <div>
+
+            <i class="fa-solid fa-address-book"></i>
+
+            <span>
+                Tìm thấy
+                <strong>@totalItems</strong>
+                khách hàng
+            </span>
+
+        </div>
+
+
+        @if (totalItems > 0)
+        {
+            <span>
+                Đang hiển thị
+                <strong>@startItem</strong>
+                –
+                <strong>@endItem</strong>
+            </span>
+        }
+
+    </section>
+
+
+    <!-- =====================================================
+         TABLE
+    ====================================================== -->
+
+    <section class="staff-customer-table-card">
+
+        <div class="staff-customer-table-scroll">
+
+            <table class="staff-customer-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th class="customer-code-col">
+                            Mã
+                        </th>
+
+                        <th>
+                            Khách hàng
+                        </th>
+
+                        <th>
+                            Số điện thoại
+                        </th>
+
+                        <th>
+                            Địa chỉ
+                        </th>
+
+                        <th>
+                            Đơn hàng
+                        </th>
+
+                        <th>
+                            Ngày tham gia
+                        </th>
+
+                        <th class="customer-action-col">
+                            Thao tác
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            string customerInitial =
+                                !string.IsNullOrWhiteSpace(item.HoTen)
+                                    ? item.HoTen.Trim()
+                                        .Substring(0, 1)
+                                        .ToUpper()
+                                    : "R";
+
+                            <tr>
+
+                                <td>
+
+                                    <span class="staff-customer-code">
+                                        #KH@(item.MaKh.ToString("D4"))
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="staff-customer-person">
+
+                                        <div class="staff-customer-avatar">
+                                            @customerInitial
+                                        </div>
+
+
+                                        <div class="staff-customer-person-info">
+
+                                            <strong>
+                                                @item.HoTen
+                                            </strong>
+
+                                            <span>
+                                                @(string.IsNullOrWhiteSpace(item.Email)
+                                                    ? "Chưa có email"
+                                                    : item.Email)
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="staff-customer-phone">
+
+                                        @(string.IsNullOrWhiteSpace(item.DienThoai)
+                                            ? "Chưa cập nhật"
+                                            : item.DienThoai)
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="staff-customer-address">
+
+                                        @(string.IsNullOrWhiteSpace(item.DiaChi)
+                                            ? "Chưa cập nhật"
+                                            : item.DiaChi)
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="staff-customer-order-count">
+
+                                        <i class="fa-solid fa-receipt"></i>
+
+                                        @item.HoaDons.Count
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="staff-customer-date">
+
+                                        @item.NgayTao.ToString("dd/MM/yyyy")
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="staff-customer-actions">
+
+                                        <a asp-area="Staff"
+                                           asp-controller="Customer"
+                                           asp-action="Details"
+                                           asp-route-id="@item.MaKh"
+                                           class="staff-customer-action-btn"
+                                           title="Xem chi tiết">
+
+                                            <i class="fa-solid fa-eye"></i>
+
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="7">
+
+                                <div class="staff-customer-empty">
+
+                                    <div>
+
+                                        <i class="fa-solid fa-users-slash"></i>
+
+                                    </div>
+
+                                    <h3>
+                                        Không tìm thấy khách hàng
+                                    </h3>
+
+                                    <p>
+                                        Thử thay đổi từ khóa tìm kiếm.
+                                    </p>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PAGINATION
+    ====================================================== -->
+    @if (totalItems > 0)
+    {
+        <section class="staff-customer-pagination-card">
+
+            <div class="staff-customer-pagination-info">
+
+                Hiển thị
+
+                <strong>
+                    @startItem
+                </strong>
+
+                –
+
+                <strong>
+                    @endItem
+                </strong>
+
+                trong
+
+                <strong>
+                    @totalItems
+                </strong>
+
+                khách hàng
+
+            </div>
+
+
+            <form method="get"
+                  asp-area="Staff"
+                  asp-controller="Customer"
+                  asp-action="Index"
+                  class="staff-customer-page-size">
+
+                <input type="hidden"
+                       name="keyword"
+                       value="@keyword" />
+
+                <span>
+                    Hiển thị
+                </span>
+
+
+                <select name="pageSize"
+                        class="js-customer-page-size">
+
+                    @foreach (var size in new[] { 10, 20, 50 })
+                    {
+                        if (pageSize == size)
+                        {
+                            <option value="@size"
+                                    selected>
+                                @size
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@size">
+                                @size
+                            </option>
+                        }
+                    }
+
+                </select>
+
+                <span>
+                    dòng
+                </span>
+
+            </form>
+
+
+            @if (totalPages > 1)
+            {
+                <nav class="staff-customer-pagination">
+
+                    @if (currentPage > 1)
+                    {
+                        <a asp-area="Staff"
+                           asp-controller="Customer"
+                           asp-action="Index"
+                           asp-route-keyword="@keyword"
+                           asp-route-pageSize="@pageSize"
+                           asp-route-page="@(currentPage - 1)"
+                           class="staff-customer-page-btn">
+
+                            <i class="fa-solid fa-chevron-left"></i>
+
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="staff-customer-page-btn disabled">
+
+                            <i class="fa-solid fa-chevron-left"></i>
+
+                        </span>
+                    }
+
+
+                    @{
+                        int firstPage =
+                            Math.Max(
+                                1,
+                                currentPage - 2
+                            );
+
+                        int lastPage =
+                            Math.Min(
+                                totalPages,
+                                currentPage + 2
+                            );
+                    }
+
+
+                    @if (firstPage > 1)
+                    {
+                        <a asp-area="Staff"
+                           asp-controller="Customer"
+                           asp-action="Index"
+                           asp-route-keyword="@keyword"
+                           asp-route-pageSize="@pageSize"
+                           asp-route-page="1"
+                           class="staff-customer-page-btn">
+                            1
+                        </a>
+
+                        @if (firstPage > 2)
+                        {
+                            <span class="staff-customer-page-dots">
+                                ...
+                            </span>
+                        }
+                    }
+
+
+                    @for (int i = firstPage;
+                          i <= lastPage;
+                          i++)
+                    {
+                        <a asp-area="Staff"
+                           asp-controller="Customer"
+                           asp-action="Index"
+                           asp-route-keyword="@keyword"
+                           asp-route-pageSize="@pageSize"
+                           asp-route-page="@i"
+                           class="staff-customer-page-btn @(i == currentPage ? "active" : "")">
+
+                            @i
+
+                        </a>
+                    }
+
+
+                    @if (lastPage < totalPages)
+                    {
+                        @if (lastPage < totalPages - 1)
+                        {
+                            <span class="staff-customer-page-dots">
+                                ...
+                            </span>
+                        }
+
+                        <a asp-area="Staff"
+                           asp-controller="Customer"
+                           asp-action="Index"
+                           asp-route-keyword="@keyword"
+                           asp-route-pageSize="@pageSize"
+                           asp-route-page="@totalPages"
+                           class="staff-customer-page-btn">
+
+                            @totalPages
+
+                        </a>
+                    }
+
+
+                    @if (currentPage < totalPages)
+                    {
+                        <a asp-area="Staff"
+                           asp-controller="Customer"
+                           asp-action="Index"
+                           asp-route-keyword="@keyword"
+                           asp-route-pageSize="@pageSize"
+                           asp-route-page="@(currentPage + 1)"
+                           class="staff-customer-page-btn">
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="staff-customer-page-btn disabled">
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </span>
+                    }
+
+                </nav>
+            }
+
+        </section>
+    }
+
+</div>
+
+
+@section Scripts {
+
+    <script src="~/js/staff-customer.js"
+            asp-append-version="true">
+    </script>
+
+}

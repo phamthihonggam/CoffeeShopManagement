@@ -1,0 +1,1142 @@
+﻿@model IEnumerable<CoffeeShopManagement.Models.HoaDon>
+
+@{
+    ViewData["Title"] = "Quản lý đơn hàng";
+
+    int currentPage =
+        ViewBag.CurrentPage ?? 1;
+
+    int pageSize =
+        ViewBag.PageSize ?? 10;
+
+    int totalPages =
+        ViewBag.TotalPages ?? 0;
+
+    int totalItems =
+        ViewBag.TotalItems ?? 0;
+
+    int startItem =
+        ViewBag.StartItem ?? 0;
+
+    int endItem =
+        ViewBag.EndItem ?? 0;
+
+    string? keyword =
+        ViewBag.Keyword?.ToString();
+
+    string? status =
+        ViewBag.Status?.ToString();
+}
+
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-order.css"
+          asp-append-version="true" />
+
+}
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="admin-welcome">
+
+    <div class="order-admin-heading">
+
+        <div>
+
+            <h2>
+                Quản lý đơn hàng
+            </h2>
+
+            <p>
+                Theo dõi và xử lý các đơn hàng
+                của Rosalie Coffee.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TOAST SUCCESS
+===================================================== -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="admin-toast admin-toast-success"
+         id="adminToast">
+
+        <div class="admin-toast-icon">
+
+            <i class="fa-solid fa-check"></i>
+
+        </div>
+
+
+        <div class="admin-toast-body">
+
+            <strong>
+                Thành công
+            </strong>
+
+            <span>
+                @TempData["SuccessMessage"]
+            </span>
+
+        </div>
+
+
+        <button type="button"
+                class="admin-toast-close"
+                id="adminToastClose">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+}
+
+
+<!-- =====================================================
+     TOAST ERROR
+===================================================== -->
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="admin-toast admin-toast-error"
+         id="adminToast">
+
+        <div class="admin-toast-icon">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+        </div>
+
+
+        <div class="admin-toast-body">
+
+            <strong>
+                Không thể thực hiện
+            </strong>
+
+            <span>
+                @TempData["ErrorMessage"]
+            </span>
+
+        </div>
+
+
+        <button type="button"
+                class="admin-toast-close"
+                id="adminToastClose">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+}
+
+
+<!-- =====================================================
+     QUICK STATS
+===================================================== -->
+
+<div class="admin-order-stats">
+
+
+    <!-- TOTAL -->
+
+    <div class="admin-order-stat-card">
+
+        <div class="admin-order-stat-icon">
+
+            <i class="fa-solid fa-receipt"></i>
+
+        </div>
+
+        <span>
+            Tổng đơn hàng
+        </span>
+
+        <strong>
+            @ViewBag.TotalOrders
+        </strong>
+
+    </div>
+
+
+    <!-- PENDING -->
+
+    <div class="admin-order-stat-card">
+
+        <div class="admin-order-stat-icon">
+
+            <i class="fa-solid fa-clock"></i>
+
+        </div>
+
+        <span>
+            Chờ xử lý
+        </span>
+
+        <strong>
+            @ViewBag.PendingOrders
+        </strong>
+
+    </div>
+
+
+    <!-- COMPLETED -->
+
+    <div class="admin-order-stat-card">
+
+        <div class="admin-order-stat-icon">
+
+            <i class="fa-solid fa-circle-check"></i>
+
+        </div>
+
+        <span>
+            Hoàn thành
+        </span>
+
+        <strong>
+            @ViewBag.CompletedOrders
+        </strong>
+
+    </div>
+
+
+    <!-- REVENUE -->
+
+    <div class="admin-order-stat-card">
+
+        <div class="admin-order-stat-icon">
+
+            <i class="fa-solid fa-coins"></i>
+
+        </div>
+
+        <span>
+            Doanh thu
+        </span>
+
+        <strong>
+            @(((decimal)ViewBag.TotalRevenue)
+                .ToString("#,##0"))đ
+        </strong>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FILTER
+===================================================== -->
+
+<div class="admin-order-toolbar">
+
+    <form method="get"
+          asp-area="Staff"
+          asp-controller="Order"
+          asp-action="Index"
+          class="admin-order-filter">
+
+
+        <!-- SEARCH -->
+
+        <div class="admin-order-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input type="text"
+                   name="keyword"
+                   value="@keyword"
+                   placeholder="Tìm mã đơn, khách hàng, email, số điện thoại..."
+                   autocomplete="off" />
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <select name="status"
+                class="admin-order-status-filter">
+
+            <option value="">
+                Tất cả trạng thái
+            </option>
+
+
+            <option value="Chờ xác nhận"
+                    selected="@(status == "Chờ xác nhận")">
+
+                Chờ xác nhận
+
+            </option>
+
+
+            <option value="Chờ xử lý"
+                    selected="@(status == "Chờ xử lý")">
+
+                Chờ xử lý
+
+            </option>
+
+
+            <option value="Đã thanh toán"
+                    selected="@(status == "Đã thanh toán")">
+
+                Đã thanh toán
+
+            </option>
+
+
+            <option value="Đã xác nhận"
+                    selected="@(status == "Đã xác nhận")">
+
+                Đã xác nhận
+
+            </option>
+
+
+            <option value="Đang xử lý"
+                    selected="@(status == "Đang xử lý")">
+
+                Đang xử lý
+
+            </option>
+
+
+            <option value="Đang chuẩn bị"
+                    selected="@(status == "Đang chuẩn bị")">
+
+                Đang chuẩn bị
+
+            </option>
+
+
+            <option value="Chờ giao hàng"
+                    selected="@(status == "Chờ giao hàng")">
+
+                Chờ giao hàng
+
+            </option>
+
+
+            <option value="Đang giao hàng"
+                    selected="@(status == "Đang giao hàng")">
+
+                Đang giao hàng
+
+            </option>
+
+
+            <option value="Hoàn thành"
+                    selected="@(status == "Hoàn thành")">
+
+                Hoàn thành
+
+            </option>
+
+
+            <option value="Yêu cầu hủy"
+                    selected="@(status == "Yêu cầu hủy")">
+
+                Yêu cầu hủy
+
+            </option>
+
+
+            <option value="Yêu cầu hủy khi đang giao"
+                    selected="@(status == "Yêu cầu hủy khi đang giao")">
+
+                Yêu cầu hủy khi đang giao
+
+            </option>
+
+
+            <option value="Đã hủy"
+                    selected="@(status == "Đã hủy")">
+
+                Đã hủy
+
+            </option>
+
+
+            <option value="Đã hủy - Chờ hoàn tiền"
+                    selected="@(status == "Đã hủy - Chờ hoàn tiền")">
+
+                Đã hủy - Chờ hoàn tiền
+
+            </option>
+
+
+            <option value="Đã hủy - Đã hoàn tiền"
+                    selected="@(status == "Đã hủy - Đã hoàn tiền")">
+
+                Đã hủy - Đã hoàn tiền
+
+            </option>
+
+        </select>
+
+
+        <!-- KEEP PAGE SIZE -->
+
+        <input type="hidden"
+               name="pageSize"
+               value="@pageSize" />
+
+
+        <!-- FILTER -->
+
+        <button type="submit"
+                class="admin-order-search-btn">
+
+            <i class="fa-solid fa-filter"></i>
+
+            Lọc
+
+        </button>
+
+
+        <!-- RESET -->
+        @if (
+                    !string.IsNullOrWhiteSpace(keyword)
+                    ||
+                    !string.IsNullOrWhiteSpace(status)
+                )
+        {
+            <a asp-area="Staff"
+               asp-controller="Order"
+               asp-action="Index"
+               class="admin-order-reset-btn">
+
+                <i class="fa-solid fa-rotate-left"></i>
+
+                Đặt lại
+
+            </a>
+        }
+
+    </form>
+
+</div>
+
+
+<!-- =====================================================
+     ORDER TABLE
+===================================================== -->
+
+<div class="admin-order-card">
+
+    <div class="admin-order-table-wrap">
+
+        <table class="admin-order-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Mã đơn
+                    </th>
+
+                    <th>
+                        Khách hàng
+                    </th>
+
+                    <th>
+                        Ngày đặt
+                    </th>
+
+                    <th>
+                        Tổng tiền
+                    </th>
+
+                    <th>
+                        Trạng thái
+                    </th>
+
+                    <th>
+                        Thao tác
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @if (
+                    Model != null
+                    &&
+                    Model.Any()
+                )
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+
+
+                            <!-- MÃ ĐƠN -->
+
+                            <td>
+
+                                <span class="admin-order-id">
+
+                                    @($"#HD{item.MaHd:D5}")
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- KHÁCH HÀNG -->
+
+                            <td>
+
+                                <div class="admin-order-customer">
+
+                                    <div class="admin-order-avatar">
+
+                                        <i class="fa-solid fa-user"></i>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <strong>
+
+                                            @(
+                                                item.MaKhNavigation?.HoTen
+                                                ??
+                                                item.HoTenNguoiNhan
+                                                ??
+                                                "Khách hàng"
+                                            )
+
+                                        </strong>
+
+
+                                        @if (
+                                            !string.IsNullOrWhiteSpace(
+                                                item.MaKhNavigation?.DienThoai
+                                            )
+                                        )
+                                        {
+                                            <span>
+                                                @item.MaKhNavigation.DienThoai
+                                            </span>
+                                        }
+                                        else if (
+                                            !string.IsNullOrWhiteSpace(
+                                                item.DienThoaiNguoiNhan
+                                            )
+                                        )
+                                        {
+                                            <span>
+                                                @item.DienThoaiNguoiNhan
+                                            </span>
+                                        }
+
+
+                                        @if (
+                                            !string.IsNullOrWhiteSpace(
+                                                item.MaKhNavigation?.Email
+                                            )
+                                        )
+                                        {
+                                            <small>
+                                                @item.MaKhNavigation.Email
+                                            </small>
+                                        }
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- NGÀY ĐẶT -->
+
+                            <td>
+
+                                @if (item.NgayDat.HasValue)
+                                {
+                                    <div class="admin-order-date">
+
+                                        <strong>
+                                            @(item.NgayDat.Value.ToString("dd/MM/yyyy"))
+                                        </strong>
+
+                                        <span>
+                                            @(item.NgayDat.Value.ToString("HH:mm"))
+                                        </span>
+
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="admin-order-muted">
+                                        —
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- TỔNG TIỀN -->
+
+                            <td>
+
+                                <strong class="admin-order-total">
+
+                                    @((item.TongTien ?? 0)
+                                        .ToString("#,##0"))đ
+
+                                </strong>
+
+                            </td>
+
+
+                            <!-- TRẠNG THÁI -->
+
+                            <td>
+
+                                @{
+                                    var statusClass =
+                                        item.TrangThai switch
+                                        {
+                                            "Chờ xác nhận"
+                                                => "status-pending",
+
+                                            "Chờ xử lý"
+                                                => "status-pending",
+
+                                            "Đã thanh toán"
+                                                => "status-confirmed",
+
+                                            "Đã xác nhận"
+                                                => "status-confirmed",
+
+                                            "Đang xử lý"
+                                                => "status-preparing",
+
+                                            "Đang chuẩn bị"
+                                                => "status-preparing",
+
+                                            "Chờ giao hàng"
+                                                => "status-shipping",
+
+                                            "Đang giao hàng"
+                                                => "status-shipping",
+
+                                            "Hoàn thành"
+                                                => "status-completed",
+
+                                            "Yêu cầu hủy"
+                                                => "status-cancelled",
+
+                                            "Yêu cầu hủy khi đang giao"
+                                                => "status-cancelled",
+
+                                            "Đã hủy"
+                                                => "status-cancelled",
+
+                                            "Đã hủy - Chờ hoàn tiền"
+                                                => "status-cancelled",
+
+                                            "Đã hủy - Đã hoàn tiền"
+                                                => "status-cancelled",
+
+                                            _ => "status-default"
+                                        };
+                                }
+
+
+                                <span class="admin-order-status @statusClass">
+
+                                    @(item.TrangThai ?? "Chưa xác định")
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- THAO TÁC -->
+
+                            <td>
+
+                                <div class="admin-order-actions">
+
+
+                                    <!-- VIEW -->
+
+                                    <a asp-area="Staff"
+                                       asp-controller="Order"
+                                       asp-action="Details"
+                                       asp-route-id="@item.MaHd"
+                                       class="admin-order-action-btn admin-order-view-btn"
+                                       title="Xem chi tiết">
+
+                                        <i class="fa-solid fa-eye"></i>
+
+                                    </a>
+
+
+                                    <!-- UPDATE STATUS -->
+                                    @if (
+                                                                            item.TrangThai != "Hoàn thành"
+                                                                            &&
+                                                                            item.TrangThai != "Đã hủy"
+                                                                            &&
+                                                                            item.TrangThai != "Đã hủy - Chờ hoàn tiền"
+                                                                            &&
+                                                                            item.TrangThai != "Đã hủy - Đã hoàn tiền"
+                                                                            &&
+                                                                            item.TrangThai != "Yêu cầu hủy"
+                                                                            &&
+                                                                            item.TrangThai != "Yêu cầu hủy khi đang giao"
+                                                                            &&
+                                                                            item.TrangThai != "Chờ giao hàng"
+                                                                            &&
+                                                                            item.TrangThai != "Đang giao hàng"
+                                                                        )
+                                    {
+                                        <button type="button"
+                                                class="admin-order-action-btn
+                                            admin-order-status-btn
+                                            js-order-status"
+                                                data-order-id="@item.MaHd"
+                                                data-current-status="@item.TrangThai"
+                                                title="Cập nhật trạng thái">
+
+                                            <i class="fa-solid fa-pen-to-square"></i>
+
+                                        </button>
+                                    }
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="6">
+
+                            <div class="admin-order-empty">
+
+                                <i class="fa-solid fa-receipt"></i>
+
+                                <h3>
+                                    Không tìm thấy đơn hàng
+                                </h3>
+
+                                <p>
+                                    Thử thay đổi từ khóa
+                                    hoặc trạng thái lọc.
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     PAGINATION
+===================================================== -->
+@if (totalItems > 0)
+{
+    <div class="admin-order-pagination-wrap">
+
+
+        <!-- INFO -->
+
+        <div class="admin-order-pagination-info">
+
+            Hiển thị
+
+            <strong>
+                @startItem
+            </strong>
+
+            –
+
+            <strong>
+                @endItem
+            </strong>
+
+            trong
+
+            <strong>
+                @totalItems
+            </strong>
+
+            đơn hàng
+
+        </div>
+
+
+        <!-- PAGE SIZE -->
+
+        <form method="get"
+              asp-area="Staff"
+              asp-controller="Order"
+              asp-action="Index"
+              class="admin-order-page-size">
+
+            <input type="hidden"
+                   name="keyword"
+                   value="@keyword" />
+
+            <input type="hidden"
+                   name="status"
+                   value="@status" />
+
+
+            <span>
+                Hiển thị
+            </span>
+
+
+            <select name="pageSize"
+                    onchange="this.form.submit()">
+
+                @foreach (var size in new[] { 10, 20, 50 })
+                {
+                    if (pageSize == size)
+                    {
+                        <option value="@size"
+                                selected>
+                            @size
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@size">
+                            @size
+                        </option>
+                    }
+                }
+
+            </select>
+
+
+            <span>
+                dòng / trang
+            </span>
+
+        </form>
+
+
+        <!-- PAGE LINKS -->
+        @if (totalPages > 1)
+        {
+            <div class="admin-order-pagination">
+
+
+                <!-- PREVIOUS -->
+                @if (currentPage > 1)
+                {
+                    <a asp-area="Staff"
+                       asp-controller="Order"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-status="@status"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="@(currentPage - 1)"
+                       class="admin-order-page-link">
+
+                        <i class="fa-solid fa-chevron-left"></i>
+
+                        Trước
+
+                    </a>
+                }
+                else
+                {
+                    <span class="admin-order-page-link disabled">
+
+                        <i class="fa-solid fa-chevron-left"></i>
+
+                        Trước
+
+                    </span>
+                }
+
+
+                @{
+                    int startPage =
+                        Math.Max(
+                            1,
+                            currentPage - 2
+                        );
+
+                    int endPage =
+                        Math.Min(
+                            totalPages,
+                            currentPage + 2
+                        );
+                }
+
+
+                <!-- FIRST -->
+                @if (startPage > 1)
+                {
+                    <a asp-area="Staff"
+                       asp-controller="Order"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-status="@status"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="1"
+                       class="admin-order-page-link">
+
+                        1
+
+                    </a>
+
+
+                    @if (startPage > 2)
+                    {
+                        <span class="admin-order-page-dots">
+                            ...
+                        </span>
+                    }
+                }
+
+
+                <!-- RANGE -->
+                @for (
+                                    int i = startPage;
+                                    i <= endPage;
+                                    i++
+                                )
+                {
+                    <a asp-area="Staff"
+                       asp-controller="Order"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-status="@status"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="@i"
+                       class="admin-order-page-link
+                        @(i == currentPage ? "active" : "")">
+
+                        @i
+
+                    </a>
+                }
+
+
+                <!-- LAST -->
+                @if (endPage < totalPages)
+                {
+                    @if (
+                        endPage
+                        <
+                        totalPages - 1
+                    )
+                    {
+                        <span class="admin-order-page-dots">
+                            ...
+                        </span>
+                    }
+
+
+                    <a asp-area="Staff"
+                       asp-controller="Order"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-status="@status"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="@totalPages"
+                       class="admin-order-page-link">
+
+                        @totalPages
+
+                    </a>
+                }
+
+
+                <!-- NEXT -->
+                @if (currentPage < totalPages)
+                {
+                    <a asp-area="Staff"
+                       asp-controller="Order"
+                       asp-action="Index"
+                       asp-route-keyword="@keyword"
+                       asp-route-status="@status"
+                       asp-route-pageSize="@pageSize"
+                       asp-route-page="@(currentPage + 1)"
+                       class="admin-order-page-link">
+
+                        Sau
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+                }
+                else
+                {
+                    <span class="admin-order-page-link disabled">
+
+                        Sau
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </span>
+                }
+
+            </div>
+        }
+
+    </div>
+}
+
+
+<!-- =====================================================
+     UPDATE STATUS MODAL
+===================================================== -->
+
+<div class="admin-order-modal"
+     id="orderStatusModal">
+
+    <div class="admin-order-modal-backdrop"
+         id="orderStatusBackdrop">
+    </div>
+
+
+    <div class="admin-order-modal-box">
+
+        <div class="admin-order-modal-icon">
+
+            <i class="fa-solid fa-receipt"></i>
+
+        </div>
+
+
+        <h3>
+            Cập nhật trạng thái
+        </h3>
+
+
+        <p>
+
+            Chọn trạng thái mới cho đơn hàng
+
+            <strong id="orderStatusOrderId"></strong>
+
+        </p>
+
+
+        <form asp-area="Staff"
+              asp-controller="Order"
+              asp-action="UpdateStatus"
+              method="post"
+              id="orderStatusForm">
+
+            @Html.AntiForgeryToken()
+
+
+            <input type="hidden"
+                   name="id"
+                   id="orderStatusId" />
+
+
+            <div class="admin-order-modal-field">
+
+                <label for="orderStatusSelect">
+                    Trạng thái
+                </label>
+
+
+                <select name="trangThai"
+                        id="orderStatusSelect">
+
+                    <option value="Đã xác nhận">
+                        Đã xác nhận
+                    </option>
+
+                    <option value="Đang xử lý">
+                        Đang xử lý
+                    </option>
+
+                    <option value="Đang chuẩn bị">
+                        Đang chuẩn bị
+                    </option>
+
+                    <option value="Chờ giao hàng">
+                        Chờ giao hàng
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="admin-order-modal-actions">
+
+                <button type="button"
+                        class="admin-order-modal-cancel"
+                        id="orderStatusCancel">
+
+                    Hủy
+
+                </button>
+
+
+                <button type="submit"
+                        class="admin-order-modal-confirm">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Cập nhật
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script src="~/js/admin-order.js"
+            asp-append-version="true">
+    </script>
+
+}

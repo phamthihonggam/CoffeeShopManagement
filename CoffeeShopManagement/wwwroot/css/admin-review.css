@@ -1168,3 +1168,219 @@
         font-size: 45px;
     }
 }
+/* =====================================================
+   REVIEW REPLY STATUS
+===================================================== */
+
+.review-reply-status {
+    width: fit-content;
+    margin-top: 6px;
+    padding: 5px 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 7px;
+    font-size: 9px;
+    font-weight: 850;
+}
+
+    .review-reply-status.replied {
+        background: #eaf4ed;
+        color: #558264;
+    }
+
+    .review-reply-status.waiting {
+        background: #fff4df;
+        color: #a97a26;
+    }
+
+
+/* =====================================================
+   ALERT
+===================================================== */
+
+.review-alert {
+    margin-bottom: 14px;
+    padding: 11px 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 750;
+}
+
+    .review-alert.success {
+        border: 1px solid #cfe4d4;
+        background: #eef8f0;
+        color: #4c7b59;
+    }
+
+    .review-alert.error {
+        border: 1px solid #f0cbc7;
+        background: #fff0ee;
+        color: #ac5048;
+    }
+
+
+/* =====================================================
+   CURRENT REPLY
+===================================================== */
+
+.review-current-reply {
+    margin-bottom: 18px;
+    padding: 17px;
+    border: 1px solid #e6d8d0;
+    border-left: 4px solid #774936;
+    border-radius: 12px;
+    background: #fcf8f5;
+}
+
+.review-current-reply-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 12px;
+}
+
+    .review-current-reply-head > div {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+.review-rosalie-avatar {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #704535;
+    color: #fff;
+}
+
+.review-current-reply-head strong {
+    display: block;
+    color: #4e342b;
+    font-size: 12px;
+}
+
+.review-current-reply-head span {
+    display: block;
+    margin-top: 2px;
+    color: #9a887f;
+    font-size: 9.5px;
+}
+
+.review-current-reply-head time {
+    color: #a09189;
+    font-size: 9.5px;
+}
+
+.review-current-reply p {
+    margin: 0;
+    color: #655149;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+
+/* =====================================================
+   REPLY FORM
+===================================================== */
+
+.review-reply-form {
+    margin-top: 4px;
+}
+
+    .review-reply-form label {
+        display: block;
+        margin-bottom: 8px;
+        color: #584037;
+        font-size: 11px;
+        font-weight: 850;
+    }
+
+    .review-reply-form textarea {
+        width: 100%;
+        min-height: 135px;
+        padding: 13px 14px;
+        border: 1px solid #ded2cb;
+        border-radius: 11px;
+        outline: none;
+        resize: vertical;
+        background: #fff;
+        color: #513b32;
+        font-family: inherit;
+        font-size: 12px;
+        line-height: 1.7;
+        transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+        .review-reply-form textarea:focus {
+            border-color: #9e7059;
+            box-shadow: 0 0 0 3px rgba(158, 112, 89, .09);
+        }
+
+.review-reply-footer {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+    .review-reply-footer > span {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        color: #9e8e86;
+        font-size: 9.5px;
+    }
+
+    .review-reply-footer button {
+        min-height: 40px;
+        padding: 0 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        border: 1px solid #694134;
+        border-radius: 10px;
+        background: #694134;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 850;
+        cursor: pointer;
+        transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    }
+
+        .review-reply-footer button:hover {
+            border-color: #503027;
+            background: #503027;
+            transform: translateY(-1px);
+        }
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 600px) {
+
+    .review-current-reply-head {
+        flex-direction: column;
+    }
+
+    .review-reply-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+        .review-reply-footer button {
+            width: 100%;
+        }
+}

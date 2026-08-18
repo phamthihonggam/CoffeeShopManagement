@@ -1,0 +1,650 @@
+﻿@model CoffeeShopManagement.Models.SanPham
+
+@{
+    ViewData["Title"] = "Thêm sản phẩm";
+}
+
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-product.css"
+          asp-append-version="true" />
+
+}
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="admin-welcome">
+
+    <div class="product-admin-heading">
+
+        <div>
+
+            <h2>
+                Thêm sản phẩm mới
+            </h2>
+
+            <p>
+                Thêm đồ uống hoặc sản phẩm mới
+                vào hệ thống Rosalie Coffee.
+            </p>
+
+        </div>
+
+
+        <a asp-area="Staff"
+           asp-controller="Product"
+           asp-action="Index"
+           class="admin-reset-search">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Quay lại
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     CREATE FORM
+===================================================== -->
+
+<form asp-area="Staff"
+      asp-controller="Product"
+      asp-action="Create"
+      method="post"
+      enctype="multipart/form-data"
+      class="admin-product-form">
+
+    @Html.AntiForgeryToken()
+
+
+    <!-- =================================================
+         VALIDATION
+    ================================================== -->
+
+    <div asp-validation-summary="ModelOnly"
+         class="text-danger">
+    </div>
+
+
+    <div class="admin-form-grid">
+
+
+        <!-- =================================================
+             PRODUCT NAME
+        ================================================== -->
+
+        <div class="admin-form-group admin-form-full">
+
+            <label asp-for="TenSp">
+                Tên sản phẩm
+            </label>
+
+
+            <input asp-for="TenSp"
+                   class="admin-form-control"
+                   placeholder="Ví dụ: Cafe Latte"
+                   autocomplete="off" />
+
+
+            <span asp-validation-for="TenSp"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             CATEGORY
+        ================================================== -->
+
+        <div class="admin-form-group">
+
+            <label asp-for="MaLoai">
+                Danh mục
+            </label>
+
+
+            <select asp-for="MaLoai"
+                    asp-items="ViewBag.Categories"
+                    class="admin-form-control">
+
+                <option value="">
+                    -- Chọn danh mục --
+                </option>
+
+            </select>
+
+
+            <span asp-validation-for="MaLoai"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             PRICE
+        ================================================== -->
+
+        <div class="admin-form-group">
+
+            <label asp-for="DonGia">
+                Giá bán
+            </label>
+
+
+            <div class="admin-form-price">
+
+                <input asp-for="DonGia"
+                       type="number"
+                       min="0"
+                       step="1000"
+                       class="admin-form-control"
+                       placeholder="45000" />
+
+                <span>
+                    đ
+                </span>
+
+            </div>
+
+
+            <span asp-validation-for="DonGia"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             DESCRIPTION
+        ================================================== -->
+
+        <div class="admin-form-group admin-form-full">
+
+            <label asp-for="MoTa">
+                Mô tả sản phẩm
+            </label>
+
+
+            <textarea asp-for="MoTa"
+                      class="admin-form-control admin-form-textarea"
+                      rows="5"
+                      placeholder="Nhập mô tả sản phẩm..."></textarea>
+
+
+            <span asp-validation-for="MoTa"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             IMAGE
+        ================================================== -->
+
+        <div class="admin-form-group admin-form-full">
+
+            <label>
+                Hình ảnh sản phẩm
+            </label>
+
+
+            <div class="admin-upload-box">
+
+                <input type="file"
+                       name="imageFile"
+                       id="imageFile"
+                       accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                       class="admin-file-input" />
+
+
+                <div class="admin-upload-content">
+
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+
+
+                    <strong>
+                        Chọn ảnh sản phẩm
+                    </strong>
+
+
+                    <span>
+                        JPG, JPEG, PNG hoặc WEBP · Tối đa 5MB
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <span class="text-danger"
+                  data-valmsg-for="imageFile">
+            </span>
+
+
+            <!-- IMAGE PREVIEW -->
+
+            <div class="admin-image-preview"
+                 id="imagePreview">
+
+                <img id="previewImage"
+                     src=""
+                     alt="Ảnh xem trước" />
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PROMOTION SWITCH
+        ================================================== -->
+
+        <div class="admin-form-group admin-form-full">
+
+            <div class="admin-promotion-switch">
+
+                <label class="admin-switch-label">
+
+                    <input asp-for="DangKhuyenMai"
+                           id="promotionToggle"
+                           type="checkbox" />
+
+
+                    <span class="admin-switch">
+                    </span>
+
+
+                    <strong>
+                        Áp dụng khuyến mãi
+                    </strong>
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PROMOTION FIELDS
+        ================================================== -->
+
+        <div id="promotionFields"
+             class="admin-promotion-fields admin-form-full">
+
+
+            <!-- ORIGINAL PRICE -->
+
+            <div class="admin-form-group">
+
+                <label asp-for="GiaGoc">
+                    Giá gốc
+                </label>
+
+
+                <div class="admin-form-price">
+
+                    <input asp-for="GiaGoc"
+                           type="number"
+                           min="0"
+                           step="1000"
+                           class="admin-form-control"
+                           placeholder="50000" />
+
+                    <span>
+                        đ
+                    </span>
+
+                </div>
+
+
+                <span asp-validation-for="GiaGoc"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- PROMOTION PRICE -->
+
+            <div class="admin-form-group">
+
+                <label asp-for="GiaKhuyenMai">
+                    Giá khuyến mãi
+                </label>
+
+
+                <div class="admin-form-price">
+
+                    <input asp-for="GiaKhuyenMai"
+                           type="number"
+                           min="0"
+                           step="1000"
+                           class="admin-form-control"
+                           placeholder="40000" />
+
+                    <span>
+                        đ
+                    </span>
+
+                </div>
+
+
+                <span asp-validation-for="GiaKhuyenMai"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- DISCOUNT PERCENT -->
+
+            <div class="admin-form-group">
+
+                <label asp-for="PhanTramGiam">
+                    Phần trăm giảm
+                </label>
+
+
+                <div class="admin-form-price">
+
+                    <input asp-for="PhanTramGiam"
+                           type="number"
+                           min="0"
+                           max="100"
+                           class="admin-form-control"
+                           placeholder="20" />
+
+                    <span>
+                        %
+                    </span>
+
+                </div>
+
+
+                <span asp-validation-for="PhanTramGiam"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- START -->
+
+            <div class="admin-form-group">
+
+                <label asp-for="NgayBatDau">
+                    Ngày bắt đầu
+                </label>
+
+
+                <input asp-for="NgayBatDau"
+                       type="datetime-local"
+                       class="admin-form-control" />
+
+
+                <span asp-validation-for="NgayBatDau"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- END -->
+
+            <div class="admin-form-group">
+
+                <label asp-for="NgayKetThuc">
+                    Ngày kết thúc
+                </label>
+
+
+                <input asp-for="NgayKetThuc"
+                       type="datetime-local"
+                       class="admin-form-control" />
+
+
+                <span asp-validation-for="NgayKetThuc"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ACTIONS
+    ================================================== -->
+
+    <div class="admin-form-actions">
+
+
+        <a asp-area="Staff"
+           asp-controller="Product"
+           asp-action="Index"
+           class="admin-form-cancel">
+
+            Hủy
+
+        </a>
+
+
+        <button type="submit"
+                class="admin-form-submit">
+
+            <i class="fa-solid fa-floppy-disk"></i>
+
+            Lưu sản phẩm
+
+        </button>
+
+
+    </div>
+
+</form>
+
+
+<!-- =====================================================
+     SCRIPT
+===================================================== -->
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const input =
+                    document.getElementById(
+                        "imageFile"
+                    );
+
+                const preview =
+                    document.getElementById(
+                        "imagePreview"
+                    );
+
+                const previewImage =
+                    document.getElementById(
+                        "previewImage"
+                    );
+
+                const toggle =
+                    document.getElementById(
+                        "promotionToggle"
+                    );
+
+                const promotionFields =
+                    document.getElementById(
+                        "promotionFields"
+                    );
+
+
+                // =========================================
+                // IMAGE PREVIEW
+                // =========================================
+
+                input?.addEventListener(
+                    "change",
+                    function () {
+
+                        const file =
+                            this.files?.[0];
+
+
+                        if (!file) {
+
+                            preview?.classList.remove(
+                                "show"
+                            );
+
+                            if (previewImage) {
+
+                                previewImage.src =
+                                    "";
+
+                            }
+
+                            return;
+                        }
+
+
+                        // =================================
+                        // IMAGE TYPE
+                        // =================================
+
+                        const allowedTypes = [
+                            "image/jpeg",
+                            "image/png",
+                            "image/webp"
+                        ];
+
+
+                        if (
+                            !allowedTypes.includes(
+                                file.type
+                            )
+                        ) {
+
+                            alert(
+                                "Chỉ chấp nhận ảnh JPG, JPEG, PNG hoặc WEBP."
+                            );
+
+                            this.value =
+                                "";
+
+                            preview?.classList.remove(
+                                "show"
+                            );
+
+                            return;
+                        }
+
+
+                        // =================================
+                        // MAX 5MB
+                        // =================================
+
+                        const maxSize =
+                            5 * 1024 * 1024;
+
+
+                        if (
+                            file.size >
+                            maxSize
+                        ) {
+
+                            alert(
+                                "Ảnh sản phẩm không được vượt quá 5MB."
+                            );
+
+                            this.value =
+                                "";
+
+                            preview?.classList.remove(
+                                "show"
+                            );
+
+                            return;
+                        }
+
+
+                        if (previewImage) {
+
+                            previewImage.src =
+                                URL.createObjectURL(
+                                    file
+                                );
+
+                        }
+
+
+                        preview?.classList.add(
+                            "show"
+                        );
+
+                    }
+                );
+
+
+                // =========================================
+                // PROMOTION
+                // =========================================
+
+                function updatePromotion() {
+
+                    if (
+                        !toggle
+                        ||
+                        !promotionFields
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    promotionFields
+                        .classList
+                        .toggle(
+                            "show",
+                            toggle.checked
+                        );
+
+                }
+
+
+                toggle?.addEventListener(
+                    "change",
+                    updatePromotion
+                );
+
+
+                updatePromotion();
+
+            }
+        );
+
+    </script>
+
+}

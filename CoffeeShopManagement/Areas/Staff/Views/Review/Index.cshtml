@@ -1,4 +1,4 @@
-﻿@model CoffeeShopManagement.Areas.Admin.Controllers.AdminReviewIndexViewModel
+﻿@model CoffeeShopManagement.Areas.Staff.Controllers.StaffReviewIndexViewModel
 
 @{
     ViewData["Title"] = "Quản lý đánh giá";
@@ -55,15 +55,13 @@
 
             </span>
 
-
             <h2>
                 Quản lý đánh giá
             </h2>
 
-
             <p>
-                Theo dõi phản hồi của khách hàng
-                dành cho sản phẩm và combo.
+                Xem đánh giá của khách hàng và hỗ trợ
+                phản hồi sản phẩm, combo.
             </p>
 
         </div>
@@ -105,7 +103,6 @@
 
         </div>
 
-
         <div>
 
             <span>
@@ -134,7 +131,6 @@
             <i class="fa-solid fa-star"></i>
 
         </div>
-
 
         <div>
 
@@ -165,7 +161,6 @@
 
         </div>
 
-
         <div>
 
             <span>
@@ -195,7 +190,6 @@
 
         </div>
 
-
         <div>
 
             <span>
@@ -214,7 +208,6 @@
 
     </div>
 
-
 </div>
 
 
@@ -224,8 +217,6 @@
 
 <div class="admin-review-type-grid">
 
-
-    <!-- PRODUCT -->
 
     <div class="review-type-card">
 
@@ -241,13 +232,10 @@
 
         </div>
 
-
         <i class="fa-solid fa-mug-hot"></i>
 
     </div>
 
-
-    <!-- COMBO -->
 
     <div class="review-type-card">
 
@@ -263,11 +251,9 @@
 
         </div>
 
-
         <i class="fa-solid fa-box-open"></i>
 
     </div>
-
 
 </div>
 
@@ -278,16 +264,14 @@
 
 <div class="admin-review-filter-card">
 
-    <form asp-area="Admin"
+    <form asp-area="Staff"
           asp-controller="Review"
           asp-action="Index"
           method="get"
           class="admin-review-filter-form">
 
 
-        <!-- =================================================
-             SEARCH
-        ================================================== -->
+        <!-- SEARCH -->
 
         <div class="review-filter-search">
 
@@ -295,11 +279,9 @@
                 Tìm kiếm
             </label>
 
-
             <div class="review-search-box">
 
                 <i class="fa-solid fa-magnifying-glass"></i>
-
 
                 <input type="text"
                        id="keyword"
@@ -312,9 +294,7 @@
         </div>
 
 
-        <!-- =================================================
-             TYPE
-        ================================================== -->
+        <!-- TYPE -->
 
         <div class="review-filter-group">
 
@@ -322,59 +302,30 @@
                 Loại đánh giá
             </label>
 
-
             <select id="type"
                     name="type">
 
-                @if (Model.Type == "all")
-                {
-                    <option value="all" selected>
-                        Tất cả
-                    </option>
-                }
-                else
-                {
-                    <option value="all">
-                        Tất cả
-                    </option>
-                }
+                <option value="all"
+                        selected="@(Model.Type == "all")">
+                    Tất cả
+                </option>
 
+                <option value="product"
+                        selected="@(Model.Type == "product")">
+                    Sản phẩm
+                </option>
 
-                @if (Model.Type == "product")
-                {
-                    <option value="product" selected>
-                        Sản phẩm
-                    </option>
-                }
-                else
-                {
-                    <option value="product">
-                        Sản phẩm
-                    </option>
-                }
-
-
-                @if (Model.Type == "combo")
-                {
-                    <option value="combo" selected>
-                        Combo
-                    </option>
-                }
-                else
-                {
-                    <option value="combo">
-                        Combo
-                    </option>
-                }
+                <option value="combo"
+                        selected="@(Model.Type == "combo")">
+                    Combo
+                </option>
 
             </select>
 
         </div>
 
 
-        <!-- =================================================
-             STAR
-        ================================================== -->
+        <!-- STAR -->
 
         <div class="review-filter-group">
 
@@ -382,43 +333,20 @@
                 Số sao
             </label>
 
-
             <select id="star"
                     name="star">
 
-                @if (!Model.Star.HasValue)
-                {
-                    <option value="" selected>
-                        Tất cả số sao
-                    </option>
-                }
-                else
-                {
-                    <option value="">
-                        Tất cả số sao
-                    </option>
-                }
-
+                <option value=""
+                        selected="@(!Model.Star.HasValue)">
+                    Tất cả số sao
+                </option>
 
                 @for (int star = 5; star >= 1; star--)
                 {
-                    if (Model.Star == star)
-                    {
-                        <option value="@star"
-                                selected>
-
-                            @star sao
-
-                        </option>
-                    }
-                    else
-                    {
-                        <option value="@star">
-
-                            @star sao
-
-                        </option>
-                    }
+                    <option value="@star"
+                            selected="@(Model.Star == star)">
+                        @star sao
+                    </option>
                 }
 
             </select>
@@ -426,9 +354,7 @@
         </div>
 
 
-        <!-- =================================================
-             PAGE SIZE
-        ================================================== -->
+        <!-- PAGE SIZE -->
 
         <div class="review-filter-group">
 
@@ -436,29 +362,15 @@
                 Hiển thị
             </label>
 
-
             <select id="pageSize"
                     name="pageSize">
 
                 @foreach (var size in new[] { 10, 20, 50 })
                 {
-                    if (Model.PageSize == size)
-                    {
-                        <option value="@size"
-                                selected>
-
-                            @size dòng
-
-                        </option>
-                    }
-                    else
-                    {
-                        <option value="@size">
-
-                            @size dòng
-
-                        </option>
-                    }
+                    <option value="@size"
+                            selected="@(Model.PageSize == size)">
+                        @size dòng
+                    </option>
                 }
 
             </select>
@@ -466,9 +378,7 @@
         </div>
 
 
-        <!-- =================================================
-             ACTION
-        ================================================== -->
+        <!-- ACTION -->
 
         <div class="review-filter-actions">
 
@@ -482,7 +392,7 @@
             </button>
 
 
-            <a asp-area="Admin"
+            <a asp-area="Staff"
                asp-controller="Review"
                asp-action="Index"
                class="review-reset-btn">
@@ -495,22 +405,19 @@
 
         </div>
 
-
     </form>
 
 </div>
 
 
 <!-- =====================================================
-     REVIEW TABLE
+     TABLE
 ===================================================== -->
 
 <div class="admin-review-table-card">
 
 
-    <!-- =================================================
-         TABLE HEADER
-    ================================================== -->
+    <!-- HEADER -->
 
     <div class="admin-review-table-heading">
 
@@ -519,7 +426,6 @@
             <span>
                 DANH SÁCH
             </span>
-
 
             <h3>
                 Đánh giá khách hàng
@@ -533,11 +439,7 @@
             @if (Model.TotalItems > 0)
             {
                 <span>
-
-                    @startItem - @endItem
-                    /
-                    @Model.TotalItems
-
+                    @startItem - @endItem / @Model.TotalItems
                 </span>
             }
             else
@@ -552,9 +454,7 @@
     </div>
 
 
-    <!-- =================================================
-         TABLE
-    ================================================== -->
+    <!-- TABLE -->
 
     <div class="admin-review-table-wrap">
 
@@ -564,44 +464,21 @@
 
                 <tr>
 
-                    <th>
-                        Mã
-                    </th>
+                    <th>Mã</th>
 
+                    <th>Khách hàng</th>
 
-                    <th>
-                        Khách hàng
-                    </th>
+                    <th>Đánh giá cho</th>
 
+                    <th>Số sao</th>
 
-                    <th>
-                        Đánh giá cho
-                    </th>
+                    <th>Nội dung</th>
 
+                    <th>Phản hồi</th>
 
-                    <th>
-                        Số sao
-                    </th>
+                    <th>Ngày đánh giá</th>
 
-
-                    <th>
-                        Nội dung
-                    </th>
-
-
-                    <th>
-                        Phản hồi
-                    </th>
-
-
-                    <th>
-                        Ngày đánh giá
-                    </th>
-
-
-                    <th>
-                        Thao tác
-                    </th>
+                    <th>Thao tác</th>
 
                 </tr>
 
@@ -621,24 +498,18 @@
                         <tr>
 
 
-                            <!-- =================================
-                                 ID
-                            ================================== -->
+                            <!-- ID -->
 
                             <td>
 
                                 <span class="review-id">
-
                                     @($"#DG{item.ReviewId:D4}")
-
                                 </span>
 
                             </td>
 
 
-                            <!-- =================================
-                                 CUSTOMER
-                            ================================== -->
+                            <!-- CUSTOMER -->
 
                             <td>
 
@@ -655,10 +526,8 @@
                                                         .Trim()
                                                         .Substring(0, 1)
                                                         .ToUpper()
-
                                                     : "R";
                                         }
-
 
                                         @customerInitial
 
@@ -671,15 +540,8 @@
                                             @item.CustomerName
                                         </strong>
 
-
                                         <span>
-
-                                            @(
-                                                item.CustomerEmail
-                                                ??
-                                                "Chưa có email"
-                                            )
-
+                                            @(item.CustomerEmail ?? "Chưa có email")
                                         </span>
 
                                     </div>
@@ -689,16 +551,11 @@
                             </td>
 
 
-                            <!-- =================================
-                                 PRODUCT / COMBO
-                            ================================== -->
+                            <!-- ITEM -->
 
                             <td>
 
                                 <div class="review-item-info">
-
-
-                                    <!-- TYPE -->
 
                                     <span class="review-type-badge
                                         @(item.ReviewType == "combo"
@@ -714,36 +571,26 @@
                                             <i class="fa-solid fa-mug-hot"></i>
                                         }
 
-
                                         @item.TypeName
 
                                     </span>
 
-
-                                    <!-- NAME -->
 
                                     <strong>
                                         @item.ItemName
                                     </strong>
 
 
-                                    <!-- ORDER -->
-
                                     <small>
-
                                         @($"Đơn #HD{item.OrderId:D5}")
-
                                     </small>
-
 
                                 </div>
 
                             </td>
 
 
-                            <!-- =================================
-                                 STAR
-                            ================================== -->
+                            <!-- STAR -->
 
                             <td>
 
@@ -763,45 +610,34 @@
 
                                 </div>
 
-
                                 <span class="review-star-number">
-
                                     @($"{item.Stars}/5")
-
                                 </span>
 
                             </td>
 
 
-                            <!-- =================================
-                                 CONTENT
-                            ================================== -->
+                            <!-- CONTENT -->
 
                             <td>
 
                                 @if (!string.IsNullOrWhiteSpace(item.Content))
                                 {
                                     <p class="review-content-preview">
-
                                         @item.Content
-
                                     </p>
                                 }
                                 else
                                 {
                                     <span class="review-no-content">
-
                                         Không có nội dung
-
                                     </span>
                                 }
 
                             </td>
 
 
-                            <!-- =================================
-                                 REPLY STATUS
-                            ================================== -->
+                            <!-- REPLY STATUS -->
 
                             <td>
 
@@ -828,9 +664,8 @@
 
                             </td>
 
-                            <!-- =================================
-                                 DATE
-                            ================================== -->
+
+                            <!-- DATE -->
 
                             <td>
 
@@ -849,13 +684,11 @@
                             </td>
 
 
-                            <!-- =================================
-                                 ACTION
-                            ================================== -->
+                            <!-- ACTION -->
 
                             <td>
 
-                                <a asp-area="Admin"
+                                <a asp-area="Staff"
                                    asp-controller="Review"
                                    asp-action="Details"
                                    asp-route-type="@item.ReviewType"
@@ -868,7 +701,6 @@
                                 </a>
 
                             </td>
-
 
                         </tr>
                     }
@@ -887,11 +719,9 @@
 
                                 </div>
 
-
                                 <h3>
                                     Không tìm thấy đánh giá
                                 </h3>
-
 
                                 <p>
                                     Chưa có đánh giá phù hợp
@@ -920,10 +750,6 @@
         <div class="admin-review-pagination">
 
 
-            <!-- =================================================
-                 INFO
-            ================================================== -->
-
             <div class="review-pagination-info">
 
                 Hiển thị
@@ -943,19 +769,13 @@
             </div>
 
 
-            <!-- =================================================
-                 PAGE BUTTONS
-            ================================================== -->
-
             <div class="review-pagination-pages">
 
 
-                <!-- =============================================
-                     PREVIOUS
-                ============================================== -->
+                <!-- PREVIOUS -->
                 @if (Model.CurrentPage > 1)
                 {
-                    <a asp-area="Admin"
+                    <a asp-area="Staff"
                        asp-controller="Review"
                        asp-action="Index"
                        asp-route-keyword="@Model.Keyword"
@@ -979,12 +799,10 @@
                 }
 
 
-                <!-- =============================================
-                     FIRST PAGE
-                ============================================== -->
+                <!-- FIRST -->
                 @if (startPage > 1)
                 {
-                    <a asp-area="Admin"
+                    <a asp-area="Staff"
                        asp-controller="Review"
                        asp-action="Index"
                        asp-route-keyword="@Model.Keyword"
@@ -1008,22 +826,18 @@
                 }
 
 
-                <!-- =============================================
-                     PAGE NUMBERS
-                ============================================== -->
+                <!-- PAGES -->
                 @for (int p = startPage; p <= endPage; p++)
                 {
                     if (p == Model.CurrentPage)
                     {
                         <span class="review-page-btn active">
-
                             @p
-
                         </span>
                     }
                     else
                     {
-                        <a asp-area="Admin"
+                        <a asp-area="Staff"
                            asp-controller="Review"
                            asp-action="Index"
                            asp-route-keyword="@Model.Keyword"
@@ -1040,9 +854,7 @@
                 }
 
 
-                <!-- =============================================
-                     LAST PAGE
-                ============================================== -->
+                <!-- LAST -->
                 @if (endPage < Model.TotalPages)
                 {
                     @if (endPage < Model.TotalPages - 1)
@@ -1053,7 +865,7 @@
                     }
 
 
-                    <a asp-area="Admin"
+                    <a asp-area="Staff"
                        asp-controller="Review"
                        asp-action="Index"
                        asp-route-keyword="@Model.Keyword"
@@ -1069,12 +881,10 @@
                 }
 
 
-                <!-- =============================================
-                     NEXT
-                ============================================== -->
+                <!-- NEXT -->
                 @if (Model.CurrentPage < Model.TotalPages)
                 {
-                    <a asp-area="Admin"
+                    <a asp-area="Staff"
                        asp-controller="Review"
                        asp-action="Index"
                        asp-route-keyword="@Model.Keyword"
@@ -1097,11 +907,9 @@
                     </span>
                 }
 
-
             </div>
 
         </div>
     }
-
 
 </div>

@@ -19,6 +19,11 @@ namespace CoffeeShopManagement.Models
 
         public DateTime NgayDanhGia { get; set; }
 
+        public string? PhanHoi { get; set; }
+
+        public DateTime? NgayPhanHoi { get; set; }
+
+        public int? MaTaiKhoanPhanHoi { get; set; }
 
         // =========================================
         // NAVIGATION
@@ -34,5 +39,9 @@ namespace CoffeeShopManagement.Models
 
         [ForeignKey(nameof(MaHd))]
         public virtual HoaDon MaHdNavigation { get; set; } = null!;
+
+        [ForeignKey(nameof(MaTaiKhoanPhanHoi))]
+        public virtual TaiKhoan? MaTaiKhoanPhanHoiNavigation { get; set; }
     }
+
 }

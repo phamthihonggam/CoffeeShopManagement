@@ -1,0 +1,845 @@
+﻿/* =========================================================
+   ROSALIE COFFEE
+   STAFF - PRODUCT DETAILS
+   File: wwwroot/css/staff-product-details.css
+========================================================= */
+
+/* =========================================================
+   PAGE
+========================================================= */
+.staff-product-detail-page {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 32px 34px 55px;
+    color: #42251d;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+.staff-product-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 26px;
+}
+
+    .staff-product-detail-header h2 {
+        margin: 0 0 7px;
+        color: #3f2119;
+        font-size: 30px;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    .staff-product-detail-header p {
+        margin: 0;
+        color: #8a756d;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+/* =========================================================
+   HEADER ACTIONS
+========================================================= */
+.staff-product-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   COMMON BUTTON
+========================================================= */
+.staff-detail-btn {
+    min-height: 42px;
+    padding: 0 17px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 10px;
+    text-decoration: none !important;
+    font-size: 14px;
+    font-weight: 700;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+    .staff-detail-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    .staff-detail-btn.back {
+        color: #664337;
+        background: #ffffff;
+        border: 1px solid #dfd1ca;
+        box-shadow: 0 3px 10px rgba(69, 39, 29, 0.04);
+    }
+
+        .staff-detail-btn.back:hover {
+            color: #4d2d24;
+            background: #faf6f3;
+            border-color: #cfb9ae;
+        }
+
+    .staff-detail-btn.edit {
+        color: #ffffff;
+        background: #9a5b3e;
+        border: 1px solid #9a5b3e;
+        box-shadow: 0 6px 16px rgba(154, 91, 62, 0.18);
+    }
+
+        .staff-detail-btn.edit:hover {
+            color: #ffffff;
+            background: #7d452f;
+            border-color: #7d452f;
+            box-shadow: 0 8px 20px rgba(125, 69, 47, 0.22);
+        }
+
+/* =========================================================
+   CONTENT STACK
+========================================================= */
+.staff-product-detail-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+/* =========================================================
+   MAIN PRODUCT CARD
+========================================================= */
+.staff-product-main-card {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+    gap: 34px;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #eadfd9;
+    border-radius: 18px;
+    box-shadow: 0 8px 30px rgba(68, 38, 29, 0.06);
+    overflow: hidden;
+}
+
+/* =========================================================
+   PRODUCT IMAGE
+========================================================= */
+.staff-product-detail-image {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    overflow: hidden;
+    border-radius: 15px;
+    background: #f3ece8;
+    border: 1px solid #eadfd9;
+}
+
+    .staff-product-detail-image img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        transition: transform 0.35s ease;
+    }
+
+    .staff-product-detail-image:hover img {
+        transform: scale(1.025);
+    }
+
+/* =========================================================
+   SALE BADGE
+========================================================= */
+.staff-product-sale {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 12px;
+    color: #ffffff;
+    background: #c2503c;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+    box-shadow: 0 5px 15px rgba(194, 80, 60, 0.22);
+}
+
+/* =========================================================
+   IMAGE PLACEHOLDER
+========================================================= */
+.staff-product-image-placeholder {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 30px;
+    text-align: center;
+    color: #94796f;
+    background: #f6efeb;
+}
+
+    .staff-product-image-placeholder.visible {
+        display: flex;
+    }
+
+    .staff-product-image-placeholder i {
+        font-size: 46px;
+        color: #b78972;
+    }
+
+    .staff-product-image-placeholder span {
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+/* =========================================================
+   PRODUCT INFORMATION AREA
+========================================================= */
+.staff-product-detail-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 7px 5px 5px 0;
+}
+
+/* =========================================================
+   CATEGORY
+========================================================= */
+.staff-product-category {
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 7px 11px;
+    color: #986044;
+    background: #fbf3ed;
+    border: 1px solid #efdace;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+}
+
+/* =========================================================
+   PRODUCT NAME
+========================================================= */
+.staff-product-detail-info h1 {
+    margin: 0 0 9px;
+    color: #3d2018;
+    font-size: 32px;
+    font-weight: 850;
+    line-height: 1.25;
+}
+
+/* =========================================================
+   PRODUCT CODE
+========================================================= */
+.staff-product-code {
+    margin-bottom: 21px;
+    color: #8b7770;
+    font-size: 14px;
+}
+
+    .staff-product-code strong {
+        color: #5a392f;
+    }
+
+/* =========================================================
+   PRICE BOX
+========================================================= */
+.staff-product-price-box {
+    padding: 17px 19px;
+    margin-bottom: 20px;
+    background: #fbf7f4;
+    border: 1px solid #eaded7;
+    border-radius: 13px;
+}
+
+    .staff-product-price-box > span {
+        display: block;
+        margin-bottom: 6px;
+        color: #927e75;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+    }
+
+.staff-product-prices {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 11px;
+}
+
+.staff-current-price {
+    color: #8d4e35;
+    font-size: 27px;
+    font-weight: 850;
+}
+
+.staff-old-price {
+    color: #aaa09b;
+    font-size: 15px;
+    text-decoration: line-through;
+}
+
+.staff-discount-badge {
+    padding: 4px 9px;
+    color: #b23d2f;
+    background: #fff0ed;
+    border: 1px solid #ffd9d3;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+.staff-product-description {
+    margin-bottom: 22px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee5e0;
+}
+
+    .staff-product-description h3 {
+        margin: 0 0 8px;
+        color: #513229;
+        font-size: 15px;
+        font-weight: 800;
+    }
+
+    .staff-product-description p {
+        margin: 0;
+        color: #74645e;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+        .staff-product-description p.empty {
+            color: #a19088;
+            font-style: italic;
+        }
+
+/* =========================================================
+   BASIC INFORMATION GRID
+========================================================= */
+.staff-product-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 11px;
+}
+
+.staff-product-info-item {
+    min-width: 0;
+    min-height: 76px;
+    padding: 13px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: #fcfaf8;
+    border: 1px solid #eee4df;
+    border-radius: 11px;
+}
+
+    .staff-product-info-item > span {
+        color: #99857c;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.45px;
+    }
+
+    .staff-product-info-item > strong {
+        min-width: 0;
+        color: #51342b;
+        font-size: 13px;
+        font-weight: 750;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+    }
+
+/* =========================================================
+   PRODUCT STATUS
+========================================================= */
+.staff-product-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+    .staff-product-status.sale {
+        color: #c24c36;
+    }
+
+    .staff-product-status.normal {
+        color: #43835a;
+    }
+
+/* =========================================================
+   PROMOTION CARD
+========================================================= */
+.staff-promotion-card {
+    width: 100%;
+    padding: 23px 25px;
+    background: #ffffff;
+    border: 1px solid #eadfd9;
+    border-radius: 18px;
+    box-shadow: 0 8px 26px rgba(68, 38, 29, 0.05);
+}
+
+/* =========================================================
+   PROMOTION HEADING
+========================================================= */
+.staff-promotion-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 20px;
+}
+
+.staff-promotion-heading-icon {
+    width: 43px;
+    height: 43px;
+    flex: 0 0 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a45e3f;
+    background: #fbefe7;
+    border: 1px solid #f0d7c8;
+    border-radius: 12px;
+    font-size: 17px;
+}
+
+.staff-promotion-heading span {
+    display: block;
+    margin-bottom: 2px;
+    color: #ae7459;
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: 1.4px;
+}
+
+.staff-promotion-heading h3 {
+    margin: 0;
+    color: #492b22;
+    font-size: 19px;
+    font-weight: 800;
+}
+
+/* =========================================================
+   PROMOTION GRID
+========================================================= */
+.staff-promotion-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.staff-promotion-item {
+    min-height: 82px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    padding: 14px 16px;
+    background: #fcf9f7;
+    border: 1px solid #eee2dc;
+    border-radius: 11px;
+}
+
+    .staff-promotion-item span {
+        color: #9a847a;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.45px;
+    }
+
+    .staff-promotion-item strong {
+        color: #56362c;
+        font-size: 14px;
+        font-weight: 800;
+        line-height: 1.4;
+    }
+
+/* =========================================================
+   NO PROMOTION
+========================================================= */
+.staff-promotion-empty {
+    min-height: 72px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 17px;
+    color: #8a736a;
+    background: #fbf8f6;
+    border: 1px dashed #dbcac1;
+    border-radius: 11px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+    .staff-promotion-empty i {
+        color: #b47a5c;
+        font-size: 18px;
+    }
+
+/* =========================================================
+   BOTTOM ACTIONS
+========================================================= */
+.staff-product-bottom {
+    margin-top: 23px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.staff-product-delete-form {
+    margin: 0;
+}
+
+/* =========================================================
+   DELETE BUTTON
+========================================================= */
+.staff-product-delete-btn {
+    min-height: 42px;
+    padding: 0 17px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #b54436;
+    background: #ffffff;
+    border: 1px solid #e9c6c0;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .staff-product-delete-btn:hover {
+        color: #ffffff;
+        background: #b54436;
+        border-color: #b54436;
+        transform: translateY(-1px);
+        box-shadow: 0 7px 17px rgba(181, 68, 54, 0.18);
+    }
+
+    .staff-product-delete-btn:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+/* =========================================================
+   SWEETALERT - DELETE PRODUCT
+   GỌN, ĐỒNG BỘ STAFF ROSALIE
+   Hỗ trợ cả rosalie-swal-* và rosalie-delete-*
+========================================================= */
+
+.swal2-container.swal2-backdrop-show {
+    background: rgba(53, 34, 28, 0.40) !important;
+    backdrop-filter: blur(1px);
+}
+
+.rosalie-swal-popup,
+.rosalie-delete-popup {
+    width: 390px !important;
+    max-width: calc(100vw - 32px) !important;
+    padding: 22px 24px 23px !important;
+    border: 1px solid #eadbd4 !important;
+    border-radius: 18px !important;
+    background: #fffdfb !important;
+    font-family: inherit !important;
+    box-shadow: 0 22px 55px rgba(66, 37, 29, 0.20) !important;
+}
+
+
+    /* ICON CẢNH BÁO */
+
+    .rosalie-swal-popup .swal2-icon,
+    .rosalie-delete-popup .swal2-icon {
+        width: 62px !important;
+        height: 62px !important;
+        margin: 0 auto 14px !important;
+        border-width: 3px !important;
+        color: #d99a69 !important;
+        border-color: #efb47e !important;
+    }
+
+        .rosalie-swal-popup .swal2-icon .swal2-icon-content,
+        .rosalie-delete-popup .swal2-icon .swal2-icon-content {
+            font-size: 38px !important;
+            font-weight: 500 !important;
+        }
+
+
+/* TITLE */
+
+.rosalie-swal-title,
+.rosalie-delete-title {
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #4b2c23 !important;
+    font-size: 22px !important;
+    line-height: 1.25 !important;
+    font-weight: 900 !important;
+}
+
+
+/* CONTENT */
+
+.rosalie-swal-content,
+.rosalie-delete-html {
+    margin: 10px 0 0 !important;
+    color: #78645c !important;
+    font-size: 13px !important;
+    line-height: 1.65 !important;
+}
+
+    .rosalie-swal-content strong,
+    .rosalie-delete-html strong {
+        color: #54352b !important;
+        font-weight: 900 !important;
+    }
+
+
+/* ACTION AREA */
+
+.rosalie-swal-popup .swal2-actions,
+.rosalie-delete-popup .swal2-actions {
+    width: 100% !important;
+    margin: 20px 0 0 !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1.15fr !important;
+    gap: 10px !important;
+}
+
+
+/* BUTTON COMMON */
+
+.rosalie-swal-confirm,
+.rosalie-swal-cancel,
+.rosalie-delete-confirm,
+.rosalie-delete-cancel {
+    width: 100% !important;
+    min-height: 42px !important;
+    margin: 0 !important;
+    padding: 0 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    border-radius: 10px !important;
+    font-family: inherit !important;
+    font-size: 12px !important;
+    font-weight: 850 !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+    transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease !important;
+}
+
+
+/* HỦY */
+
+.rosalie-swal-cancel,
+.rosalie-delete-cancel {
+    border: 1px solid #dfd1ca !important;
+    background: #ffffff !important;
+    color: #6b5046 !important;
+}
+
+    .rosalie-swal-cancel:hover,
+    .rosalie-delete-cancel:hover {
+        border-color: #cbb8ae !important;
+        background: #f7f1ed !important;
+        color: #4f362d !important;
+        transform: translateY(-1px);
+    }
+
+
+/* XÓA */
+
+.rosalie-swal-confirm,
+.rosalie-delete-confirm {
+    border: 1px solid #a44b3f !important;
+    background: #a44b3f !important;
+    color: #ffffff !important;
+}
+
+    .rosalie-swal-confirm:hover,
+    .rosalie-delete-confirm:hover {
+        border-color: #873a31 !important;
+        background: #873a31 !important;
+        color: #ffffff !important;
+        transform: translateY(-1px);
+    }
+
+
+    /* BỎ FOCUS RING MẶC ĐỊNH */
+
+    .rosalie-swal-confirm:focus,
+    .rosalie-swal-cancel:focus,
+    .rosalie-delete-confirm:focus,
+    .rosalie-delete-cancel:focus {
+        box-shadow: none !important;
+    }
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+@media (max-width: 1100px) {
+    .staff-product-detail-page {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .staff-product-main-card {
+        grid-template-columns: minmax(280px, 350px) minmax(0, 1fr);
+        gap: 25px;
+    }
+
+    .staff-product-detail-image {
+        height: 360px;
+    }
+
+    .staff-product-info-grid,
+    .staff-promotion-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* =========================================================
+   MOBILE / SMALL TABLET
+========================================================= */
+@media (max-width: 850px) {
+    .staff-product-detail-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .staff-product-main-card {
+        grid-template-columns: 1fr;
+    }
+
+    .staff-product-detail-image {
+        width: 100%;
+        height: 420px;
+    }
+
+    .staff-product-detail-info {
+        padding: 0;
+    }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+@media (max-width: 600px) {
+    .staff-product-detail-page {
+        padding: 22px 15px 40px;
+    }
+
+    .staff-product-detail-header h2 {
+        font-size: 25px;
+    }
+
+    .staff-product-header-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .staff-detail-btn {
+        width: 100%;
+    }
+
+    .staff-product-main-card {
+        padding: 15px;
+        gap: 22px;
+        border-radius: 14px;
+    }
+
+    .staff-product-detail-image {
+        height: 320px;
+        border-radius: 11px;
+    }
+
+    .staff-product-detail-info h1 {
+        font-size: 26px;
+    }
+
+    .staff-current-price {
+        font-size: 23px;
+    }
+
+    .staff-product-info-grid,
+    .staff-promotion-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .staff-promotion-card {
+        padding: 18px 16px;
+        border-radius: 14px;
+    }
+
+    .staff-product-bottom {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+        .staff-product-bottom .staff-detail-btn,
+        .staff-product-delete-form,
+        .staff-product-delete-btn {
+            width: 100%;
+        }
+
+    .rosalie-swal-popup,
+    .rosalie-delete-popup {
+        width: calc(100% - 30px) !important;
+        padding: 25px 20px !important;
+    }
+}
+
+
+/* =========================================================
+   SWEETALERT MOBILE
+========================================================= */
+@media (max-width: 600px) {
+    .rosalie-swal-popup,
+    .rosalie-delete-popup {
+        width: calc(100% - 28px) !important;
+        padding: 21px 18px 20px !important;
+    }
+
+        .rosalie-swal-popup .swal2-actions,
+        .rosalie-delete-popup .swal2-actions {
+            grid-template-columns: 1fr !important;
+        }
+
+    .rosalie-swal-confirm,
+    .rosalie-swal-cancel,
+    .rosalie-delete-confirm,
+    .rosalie-delete-cancel {
+        width: 100% !important;
+        margin: 0 !important;
+        min-height: 43px !important;
+    }
+}

@@ -1,4 +1,4 @@
-﻿@model CoffeeShopManagement.Areas.Admin.Controllers.AdminReviewDetailsViewModel
+﻿@model CoffeeShopManagement.Areas.Staff.Controllers.StaffReviewDetailsViewModel
 
 @{
     ViewData["Title"] = "Chi tiết đánh giá";
@@ -52,7 +52,7 @@
         </div>
 
 
-        <a asp-area="Admin"
+        <a asp-area="Staff"
            asp-controller="Review"
            asp-action="Index"
            class="review-back-btn">
@@ -120,7 +120,6 @@
                     @Model.CustomerName
                 </strong>
 
-
                 <span>
                     @($"Khách hàng #KH{Model.CustomerId:D4}")
                 </span>
@@ -132,8 +131,6 @@
 
         <div class="review-detail-info-list">
 
-
-            <!-- EMAIL -->
 
             <div>
 
@@ -147,8 +144,6 @@
 
             </div>
 
-
-            <!-- PHONE -->
 
             <div>
 
@@ -201,14 +196,11 @@
         <div class="review-detail-info-list">
 
 
-            <!-- TYPE -->
-
             <div>
 
                 <span>
                     Loại
                 </span>
-
 
                 <strong>
 
@@ -235,8 +227,6 @@
             </div>
 
 
-            <!-- REVIEW CODE -->
-
             <div>
 
                 <span>
@@ -249,8 +239,6 @@
 
             </div>
 
-
-            <!-- ORDER CODE -->
 
             <div>
 
@@ -265,8 +253,6 @@
             </div>
 
 
-            <!-- DATE -->
-
             <div>
 
                 <span>
@@ -274,7 +260,7 @@
                 </span>
 
                 <strong>
-                    @Model.ReviewDate.ToString("dd/MM/yyyy HH:mm")
+                    @(Model.ReviewDate.ToString("dd/MM/yyyy HH:mm"))
                 </strong>
 
             </div>
@@ -327,7 +313,6 @@
 
     <div class="review-detail-product">
 
-
         <div>
 
             <span>
@@ -353,7 +338,6 @@
 
         </div>
 
-
     </div>
 
 </div>
@@ -369,20 +353,12 @@
 
     <div class="review-rating-score">
 
-
-        <!-- SCORE -->
-
         <span class="review-rating-number">
-
             @($"{Model.Stars}.0")
-
         </span>
 
 
         <div>
-
-
-            <!-- STARS -->
 
             <div class="review-detail-stars">
 
@@ -409,7 +385,6 @@
             <span>
                 Đánh giá từ khách hàng đã mua hàng
             </span>
-
 
         </div>
 
@@ -454,7 +429,6 @@
 
             <i class="fa-solid fa-quote-left"></i>
 
-
             <p>
                 @Model.Content
             </p>
@@ -467,10 +441,8 @@
 
             <i class="fa-regular fa-comment"></i>
 
-
             <p>
-                Khách hàng đã chấm
-                @Model.Stars sao
+                Khách hàng đã chấm @Model.Stars sao
                 nhưng không để lại nội dung nhận xét.
             </p>
 
@@ -551,14 +523,10 @@
     {
         <div class="review-current-reply">
 
-
             <div class="review-current-reply-head">
 
 
                 <div>
-
-
-                    <!-- ROSALIE ICON -->
 
                     <span class="review-rosalie-avatar">
 
@@ -567,38 +535,30 @@
                     </span>
 
 
-                    <!-- ACCOUNT -->
-
                     <div>
 
                         <strong>
-
                             @(
                                 string.IsNullOrWhiteSpace(Model.ReplierName)
                                     ? "Rosalie Coffee"
                                     : Model.ReplierName
                             )
-
                         </strong>
 
 
                         <span>
-
                             @(
                                 string.IsNullOrWhiteSpace(Model.ReplierRole)
                                     ? "Nhân viên Rosalie"
                                     : Model.ReplierRole
                             )
-
                         </span>
 
                     </div>
 
-
                 </div>
 
 
-                <!-- TIME -->
                 @if (Model.ReplyDate.HasValue)
                 {
                     <time>
@@ -606,14 +566,12 @@
                     </time>
                 }
 
-
             </div>
 
 
             <p>
                 @Model.Reply
             </p>
-
 
         </div>
     }
@@ -623,7 +581,7 @@
          REPLY FORM
     ================================================== -->
 
-    <form asp-area="Admin"
+    <form asp-area="Staff"
           asp-controller="Review"
           asp-action="Reply"
           method="post"
@@ -633,21 +591,15 @@
         @Html.AntiForgeryToken()
 
 
-        <!-- REVIEW TYPE -->
-
         <input type="hidden"
                name="type"
                value="@Model.ReviewType" />
 
 
-        <!-- REVIEW ID -->
-
         <input type="hidden"
                name="id"
                value="@Model.ReviewId" />
 
-
-        <!-- LABEL -->
 
         <label for="reply">
 
@@ -667,19 +619,14 @@
         </label>
 
 
-        <!-- TEXTAREA -->
-
         <textarea id="reply"
                   name="reply"
                   maxlength="1000"
                   required
-                  placeholder="Ví dụ: Cảm ơn bạn đã yêu thích sản phẩm của Rosalie Coffee. Chúng mình rất mong được phục vụ bạn lần sau!">@Model.Reply</textarea>
+                  placeholder="Nhập nội dung phản hồi khách hàng...">@Model.Reply</textarea>
 
-
-        <!-- FOOTER -->
 
         <div class="review-reply-footer">
-
 
             <span>
 
@@ -692,9 +639,7 @@
 
             <button type="submit">
 
-
                 <i class="fa-solid fa-paper-plane"></i>
-
 
                 @if (string.IsNullOrWhiteSpace(Model.Reply))
                 {
@@ -709,9 +654,7 @@
                     </span>
                 }
 
-
             </button>
-
 
         </div>
 
@@ -722,15 +665,13 @@
 
 
 <!-- =====================================================
-     FOOTER ACTION
+     FOOTER
 ===================================================== -->
 
 <div class="review-detail-footer">
 
 
-    <!-- ORDER -->
-
-    <a asp-area="Admin"
+    <a asp-area="Staff"
        asp-controller="Order"
        asp-action="Details"
        asp-route-id="@Model.OrderId"
@@ -743,9 +684,7 @@
     </a>
 
 
-    <!-- BACK -->
-
-    <a asp-area="Admin"
+    <a asp-area="Staff"
        asp-controller="Review"
        asp-action="Index"
        class="review-back-secondary-btn">

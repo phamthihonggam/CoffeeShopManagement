@@ -3,7 +3,6 @@
         ViewData["Title"]?.ToString()
         ?? "Nhân viên";
 
-    // Dùng đúng Session của AccountController mới
     var staffFullName =
         Context.Session.GetString("HoTen")
         ?? User.Identity?.Name
@@ -40,33 +39,43 @@
     </title>
 
 
-    <!-- BOOTSTRAP -->
+    <!-- =====================================================
+         BOOTSTRAP
+    ====================================================== -->
 
     <link rel="stylesheet"
           href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
 
-    <!-- FONT AWESOME -->
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
 
-    <!-- DÙNG CHUNG STYLE ADMIN -->
+    <!-- =====================================================
+         ADMIN SHARED CSS
+    ====================================================== -->
 
     <link rel="stylesheet"
           href="~/css/admin.css"
           asp-append-version="true" />
 
 
-    <!-- STAFF CSS -->
+    <!-- =====================================================
+         STAFF CSS
+    ====================================================== -->
 
     <link rel="stylesheet"
           href="~/css/staff.css"
           asp-append-version="true" />
 
 
-    <!-- CSS RIÊNG TỪNG PAGE -->
+    <!-- =====================================================
+         PAGE CSS
+    ====================================================== -->
     @RenderSection(
             "Styles",
             required: false
@@ -87,9 +96,15 @@
         <aside class="admin-sidebar">
 
 
-            <!-- LOGO -->
+            <!-- =================================================
+                 LOGO
+            ================================================== -->
 
-            <div class="admin-logo">
+            <a asp-area="Staff"
+               asp-controller="Dashboard"
+               asp-action="Index"
+               class="admin-logo"
+               style="text-decoration:none;">
 
                 <img src="~/images/logo/logo.png"
                      alt="Rosalie Coffee" />
@@ -106,7 +121,7 @@
 
                 </div>
 
-            </div>
+            </a>
 
 
             <!-- =================================================
@@ -179,6 +194,23 @@
 
                 </a>
 
+
+                <!-- ĐÁNH GIÁ -->
+
+                <a asp-area="Staff"
+                   asp-controller="Review"
+                   asp-action="Index"
+                   class="admin-menu-item">
+
+                    <i class="fa-solid fa-star"></i>
+
+                    <span>
+                        Đánh giá
+                    </span>
+
+                </a>
+
+
             </nav>
 
 
@@ -187,6 +219,21 @@
             ================================================== -->
 
             <div class="admin-sidebar-bottom">
+
+
+                <a asp-area=""
+                   asp-controller="Home"
+                   asp-action="Index"
+                   class="admin-sidebar-logout">
+
+                    <i class="fa-solid fa-house"></i>
+
+                    <span>
+                        Website
+                    </span>
+
+                </a>
+
 
                 <a asp-area=""
                    asp-controller="Account"
@@ -201,7 +248,9 @@
 
                 </a>
 
+
             </div>
+
 
         </aside>
 
@@ -240,7 +289,7 @@
                 <div class="admin-header-right">
 
 
-                    <!-- XEM WEBSITE -->
+                    <!-- WEBSITE -->
 
                     <a asp-area=""
                        asp-controller="Home"
@@ -257,7 +306,7 @@
 
 
                     <!-- =================================================
-                         ACCOUNT
+                         ACCOUNT DROPDOWN
                     ================================================== -->
 
                     <div class="admin-account-dropdown">
@@ -266,19 +315,18 @@
                         <button type="button"
                                 class="admin-account admin-account-button"
                                 id="staffAccountButton"
+                                aria-haspopup="true"
+                                aria-controls="staffAccountMenu"
                                 aria-expanded="false">
-
-
-                            <!-- AVATAR -->
 
                             <div class="admin-avatar">
 
-                                <i class="fa-solid fa-user"></i>
+                                <span>
+                                    @avatarLetter
+                                </span>
 
                             </div>
 
-
-                            <!-- INFO -->
 
                             <div class="admin-account-info">
 
@@ -298,17 +346,14 @@
                         </button>
 
 
-                        <!-- =================================================
-                             ACCOUNT DROPDOWN
-                        ================================================== -->
+                        <!-- ACCOUNT MENU -->
 
                         <div class="admin-account-menu"
                              id="staffAccountMenu">
 
 
-                            <!-- USER -->
-
                             <div class="admin-account-menu-header">
+
 
                                 <div class="admin-dropdown-avatar">
 
@@ -326,15 +371,14 @@
                                     </strong>
 
                                     <span>
-                                        @@staffUsername
+                                        @staffUsername
                                     </span>
 
                                 </div>
 
+
                             </div>
 
-
-                            <!-- ROLE -->
 
                             <div class="admin-account-role">
 
@@ -352,8 +396,6 @@
                             <div class="admin-account-divider"></div>
 
 
-                            <!-- WEBSITE -->
-
                             <a asp-area=""
                                asp-controller="Home"
                                asp-action="Index"
@@ -368,8 +410,6 @@
                             </a>
 
 
-                            <!-- LOGOUT -->
-
                             <a asp-area=""
                                asp-controller="Account"
                                asp-action="Logout"
@@ -383,11 +423,15 @@
 
                             </a>
 
+
                         </div>
+
 
                     </div>
 
+
                 </div>
+
 
             </header>
 
@@ -402,7 +446,9 @@
 
             </section>
 
+
         </main>
+
 
     </div>
 
@@ -416,95 +462,119 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 
-    <!-- ACCOUNT DROPDOWN -->
+    <!-- =====================================================
+         ACCOUNT DROPDOWN
+    ====================================================== -->
 
     <script>
 
-        document.addEventListener(
-        "DOMContentLoaded",
-        function () {
+            document.addEventListener(
+                    "DOMContentLoaded",
+                    function () {
 
-        const button =
-        document.getElementById(
-        "staffAccountButton"
-        );
+                            const button =
+                                    document.getElementById(
+                                            "staffAccountButton"
+                                    );
 
-        const menu =
-        document.getElementById(
-        "staffAccountMenu"
-        );
-
-        if (!button || !menu) {
-        return;
-        }
+                            const menu =
+                                    document.getElementById(
+                                            "staffAccountMenu"
+                                    );
 
 
-        // OPEN / CLOSE
+                                if (!button || !menu) {
 
-        button.addEventListener(
-        "click",
-        function (event) {
+                                return;
 
-        event.stopPropagation();
-
-        const isOpen =
-        menu.classList.toggle(
-        "show"
-        );
-
-        button.classList.toggle(
-        "active",
-        isOpen
-        );
-
-        button.setAttribute(
-        "aria-expanded",
-        isOpen
-        ? "true"
-        : "false"
-        );
-        }
-        );
+                            }
 
 
-        // CLICK OUTSIDE
+                                button.addEventListener(
+                                    "click",
+                                function (event) {
 
-        document.addEventListener(
-        "click",
-        function (event) {
+                                    event.stopPropagation();
 
-        if (
-        !menu.contains(event.target)
-        &&
-        !button.contains(event.target)
-        ) {
+                                                const isOpen =
+                                                        menu.classList.toggle(
+                                                        "show"
+                                        );
 
-        menu.classList.remove(
-        "show"
-        );
+                                                button.classList.toggle(
+                                                    "active",
+                                                isOpen
+                                    );
 
-        button.classList.remove(
-        "active"
-        );
+                                                button.setAttribute(
+                                                    "aria-expanded",
+                                                        isOpen
+                                                            ? "true"
+                                                    : "false"
+                                        );
 
-        button.setAttribute(
-        "aria-expanded",
-        "false"
-        );
-        }
-        }
-        );
-        }
-        );
+                                }
+                            );
+
+
+                            document.addEventListener(
+                                    "click",
+                                    function (event) {
+
+                                            if (
+                                                    !menu.contains(event.target)
+                                                    &&
+                                                    !button.contains(event.target)
+                                            ) {
+
+                                                    menu.classList.remove(
+                                                            "show"
+                                                    );
+
+                                                    button.classList.remove(
+                                                            "active"
+                                                    );
+
+                                                    button.setAttribute(
+                                                            "aria-expanded",
+                                                            "false"
+                                                    );
+
+                                        }
+
+                            }
+                    );
+
+
+                            document.addEventListener(
+                                "keydown",
+                                function (event) {
+
+                                    if (event.key !== "Escape") {
+                                        return;
+                                    }
+
+                                    menu.classList.remove("show");
+                                    button.classList.remove("active");
+                                    button.setAttribute("aria-expanded", "false");
+
+                                }
+                            );
+
+                        }
+                    );
 
     </script>
 
 
-    <!-- PAGE JS -->
+    <!-- =====================================================
+         PAGE JS
+    ====================================================== -->
     @await RenderSectionAsync(
             "Scripts",
             required: false
         )
+
 
 </body>
 

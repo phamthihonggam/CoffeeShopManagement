@@ -1,0 +1,658 @@
+﻿@model CoffeeShopManagement.Models.SanPham
+
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+
+    bool hasPromotion =
+        Model.DangKhuyenMai
+        && Model.GiaKhuyenMai.HasValue;
+
+    decimal currentPrice =
+        hasPromotion
+            ? Model.GiaKhuyenMai!.Value
+            : Model.DonGia;
+
+    string categoryName =
+        Model.MaLoaiNavigation?.TenLoai
+        ?? "Chưa phân loại";
+}
+
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/staff-product-details.css"
+          asp-append-version="true" />
+
+}
+
+
+<div class="staff-product-detail-page">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="staff-product-detail-header">
+
+        <div>
+
+            <h2>
+                Chi tiết sản phẩm
+            </h2>
+
+            <p>
+                Thông tin sản phẩm
+                @($"#SP{Model.MaSp:D4}")
+                tại Rosalie Coffee.
+            </p>
+
+        </div>
+
+
+        <div class="staff-product-header-actions">
+
+
+            <a asp-area="Staff"
+               asp-controller="Product"
+               asp-action="Index"
+               class="staff-detail-btn back">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Quay lại
+
+            </a>
+
+
+            <a asp-area="Staff"
+               asp-controller="Product"
+               asp-action="Edit"
+               asp-route-id="@Model.MaSp"
+               class="staff-detail-btn edit">
+
+                <i class="fa-solid fa-pen"></i>
+
+                Chỉnh sửa
+
+            </a>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CONTENT STACK
+         2 CARD TÁCH NHAU BẰNG GAP
+    ====================================================== -->
+
+    <div class="staff-product-detail-stack">
+
+
+        <!-- =================================================
+             CARD 1
+             PRODUCT INFORMATION
+        ================================================== -->
+
+        <div class="staff-product-main-card">
+
+
+            <!-- =============================================
+                 IMAGE
+            ============================================== -->
+
+            <div class="staff-product-detail-image">
+
+
+                @if (
+                    hasPromotion
+                    &&
+                    Model.PhanTramGiam.HasValue
+                )
+                {
+                    <div class="staff-product-sale">
+
+                        <i class="fa-solid fa-fire"></i>
+
+                        Giảm @Model.PhanTramGiam%
+
+                    </div>
+                }
+
+
+                @if (!string.IsNullOrWhiteSpace(Model.HinhAnh))
+                {
+                    <img src="~/images/menu/@Model.HinhAnh"
+                         alt="@Model.TenSp"
+                         class="js-product-detail-image" />
+
+
+                    <div class="staff-product-image-placeholder js-product-image-fallback">
+
+                        <i class="fa-solid fa-mug-hot"></i>
+
+                        <span>
+                            Không tải được hình ảnh
+                        </span>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="staff-product-image-placeholder visible">
+
+                        <i class="fa-solid fa-mug-hot"></i>
+
+                        <span>
+                            Sản phẩm chưa có hình ảnh
+                        </span>
+
+                    </div>
+                }
+
+
+            </div>
+
+
+            <!-- =============================================
+                 PRODUCT INFO
+            ============================================== -->
+
+            <div class="staff-product-detail-info">
+
+
+                <!-- CATEGORY -->
+
+                <div class="staff-product-category">
+
+                    <i class="fa-solid fa-layer-group"></i>
+
+                    @categoryName
+
+                </div>
+
+
+                <!-- NAME -->
+
+                <h1>
+                    @Model.TenSp
+                </h1>
+
+
+                <!-- CODE -->
+
+                <div class="staff-product-code">
+
+                    Mã sản phẩm:
+
+                    <strong>
+                        @($"#SP{Model.MaSp:D4}")
+                    </strong>
+
+                </div>
+
+
+                <!-- =========================================
+                     PRICE
+                ========================================== -->
+
+                <div class="staff-product-price-box">
+
+                    <span>
+                        Giá bán hiện tại
+                    </span>
+
+
+                    <div class="staff-product-prices">
+
+
+                        <strong class="staff-current-price">
+
+                            @(currentPrice.ToString("#,##0"))đ
+
+                        </strong>
+
+
+                        @if (hasPromotion)
+                        {
+                            <span class="staff-old-price">
+
+                                @(Model.DonGia.ToString("#,##0"))đ
+
+                            </span>
+
+
+                            @if (Model.PhanTramGiam.HasValue)
+                            {
+                                <span class="staff-discount-badge">
+
+                                    -@Model.PhanTramGiam%
+
+                                </span>
+                            }
+                        }
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     DESCRIPTION
+                ========================================== -->
+
+                <div class="staff-product-description">
+
+                    <h3>
+                        Mô tả sản phẩm
+                    </h3>
+
+
+                    @if (!string.IsNullOrWhiteSpace(Model.MoTa))
+                    {
+                        <p>
+                            @Model.MoTa
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="empty">
+                            Chưa có mô tả cho sản phẩm này.
+                        </p>
+                    }
+
+                </div>
+
+
+                <!-- =========================================
+                     BASIC INFORMATION
+                ========================================== -->
+
+                <div class="staff-product-info-grid">
+
+
+                    <div class="staff-product-info-item">
+
+                        <span>
+                            Danh mục
+                        </span>
+
+                        <strong>
+                            @categoryName
+                        </strong>
+
+                    </div>
+
+
+                    <div class="staff-product-info-item">
+
+                        <span>
+                            Mã danh mục
+                        </span>
+
+                        <strong>
+                            #@Model.MaLoai
+                        </strong>
+
+                    </div>
+
+
+                    <div class="staff-product-info-item">
+
+                        <span>
+                            Giá niêm yết
+                        </span>
+
+                        <strong>
+                            @(Model.DonGia.ToString("#,##0"))đ
+                        </strong>
+
+                    </div>
+
+
+                    <div class="staff-product-info-item">
+
+                        <span>
+                            Trạng thái
+                        </span>
+
+
+                        @if (Model.DangKhuyenMai)
+                        {
+                            <strong class="staff-product-status sale">
+
+                                <i class="fa-solid fa-fire"></i>
+
+                                Đang khuyến mãi
+
+                            </strong>
+                        }
+                        else
+                        {
+                            <strong class="staff-product-status normal">
+
+                                <i class="fa-solid fa-circle-check"></i>
+
+                                Bình thường
+
+                            </strong>
+                        }
+
+                    </div>
+
+
+                    <div class="staff-product-info-item">
+
+                        <span>
+                            Tên file ảnh
+                        </span>
+
+                        <strong>
+
+                            @if (!string.IsNullOrWhiteSpace(Model.HinhAnh))
+                            {
+                                @Model.HinhAnh
+                            }
+                            else
+                            {
+                                <text>
+                                    Chưa có
+                                </text>
+                            }
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="staff-product-info-item">
+
+                        <span>
+                            ID sản phẩm
+                        </span>
+
+                        <strong>
+                            @Model.MaSp
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             CARD 2
+             PROMOTION
+        ================================================== -->
+
+        <div class="staff-promotion-card">
+
+
+            <div class="staff-promotion-heading">
+
+
+                <div class="staff-promotion-heading-icon">
+
+                    <i class="fa-solid fa-tags"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        KHUYẾN MÃI
+                    </span>
+
+                    <h3>
+                        Thông tin ưu đãi
+                    </h3>
+
+                </div>
+
+
+            </div>
+
+
+            @if (Model.DangKhuyenMai)
+            {
+                <div class="staff-promotion-grid">
+
+
+                    <!-- GIÁ GỐC -->
+
+                    <div class="staff-promotion-item">
+
+                        <span>
+                            Giá gốc
+                        </span>
+
+                        <strong>
+
+                            @(Model.GiaGoc.HasValue
+                                ? Model.GiaGoc.Value.ToString("#,##0") + "đ"
+                                : Model.DonGia.ToString("#,##0") + "đ")
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- GIÁ KHUYẾN MÃI -->
+
+                    <div class="staff-promotion-item">
+
+                        <span>
+                            Giá khuyến mãi
+                        </span>
+
+                        <strong>
+
+                            @(Model.GiaKhuyenMai.HasValue
+                                ? Model.GiaKhuyenMai.Value.ToString("#,##0") + "đ"
+                                : "Chưa cập nhật")
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- PHẦN TRĂM -->
+
+                    <div class="staff-promotion-item">
+
+                        <span>
+                            Phần trăm giảm
+                        </span>
+
+                        <strong>
+
+                            @(Model.PhanTramGiam.HasValue
+                                ? Model.PhanTramGiam.Value + "%"
+                                : "Chưa cập nhật")
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- START -->
+
+                    <div class="staff-promotion-item">
+
+                        <span>
+                            Bắt đầu
+                        </span>
+
+                        <strong>
+
+                            @(Model.NgayBatDau.HasValue
+                                ? Model.NgayBatDau.Value.ToString("dd/MM/yyyy HH:mm")
+                                : "Chưa cập nhật")
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- END -->
+
+                    <div class="staff-promotion-item">
+
+                        <span>
+                            Kết thúc
+                        </span>
+
+                        <strong>
+
+                            @(Model.NgayKetThuc.HasValue
+                                ? Model.NgayKetThuc.Value.ToString("dd/MM/yyyy HH:mm")
+                                : "Chưa cập nhật")
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="staff-promotion-item">
+
+                        <span>
+                            Trạng thái
+                        </span>
+
+                        <strong>
+
+                            @if (
+                                Model.NgayBatDau.HasValue
+                                &&
+                                Model.NgayBatDau.Value > DateTime.Now
+                            )
+                            {
+                                <text>
+                                    Chưa bắt đầu
+                                </text>
+                            }
+                            else if (
+                                Model.NgayKetThuc.HasValue
+                                &&
+                                Model.NgayKetThuc.Value < DateTime.Now
+                            )
+                            {
+                                <text>
+                                    Đã kết thúc
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    Đang áp dụng
+                                </text>
+                            }
+
+                        </strong>
+
+                    </div>
+
+
+                </div>
+            }
+            else
+            {
+                <div class="staff-promotion-empty">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    Sản phẩm hiện không áp dụng khuyến mãi.
+
+                </div>
+            }
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         ACTIONS
+    ====================================================== -->
+
+    <div class="staff-product-bottom">
+
+
+        <a asp-area="Staff"
+           asp-controller="Product"
+           asp-action="Index"
+           class="staff-detail-btn back">
+
+            <i class="fa-solid fa-list"></i>
+
+            Danh sách sản phẩm
+
+        </a>
+
+
+        <a asp-area="Staff"
+           asp-controller="Product"
+           asp-action="Edit"
+           asp-route-id="@Model.MaSp"
+           class="staff-detail-btn edit">
+
+            <i class="fa-solid fa-pen"></i>
+
+            Chỉnh sửa sản phẩm
+
+        </a>
+
+
+        <form asp-area="Staff"
+              asp-controller="Product"
+              asp-action="Delete"
+              asp-route-id="@Model.MaSp"
+              method="post"
+              class="staff-product-delete-form"
+              data-product-name="@Model.TenSp">
+
+            @Html.AntiForgeryToken()
+
+
+            <button type="submit"
+                    class="staff-product-delete-btn">
+
+                <i class="fa-solid fa-trash"></i>
+
+                Xóa sản phẩm
+
+            </button>
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    </script>
+
+    <script src="~/js/staff-product-details.js"
+            asp-append-version="true">
+    </script>
+
+}

@@ -1,0 +1,442 @@
+﻿@model CoffeeShopManagement.Models.KhachHang
+
+@{
+    ViewData["Title"] = "Chi tiết khách hàng";
+
+    string customerInitial =
+        !string.IsNullOrWhiteSpace(Model.HoTen)
+            ? Model.HoTen.Trim()
+                .Substring(0, 1)
+                .ToUpper()
+            : "R";
+}
+
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/staff-customer.css"
+          asp-append-version="true" />
+
+}
+
+
+<div class="staff-customer-page">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <section class="staff-customer-header
+        staff-customer-detail-header">
+
+        <div>
+
+            <span class="staff-customer-eyebrow">
+                ROSALIE COFFEE
+            </span>
+
+
+            <h1>
+                Chi tiết khách hàng
+            </h1>
+
+
+            <p>
+
+                Thông tin khách hàng
+
+                <strong>
+                    #KH@(Model.MaKh.ToString("D4"))
+                </strong>.
+
+            </p>
+
+        </div>
+
+
+        <a asp-area="Staff"
+           asp-controller="Customer"
+           asp-action="Index"
+           class="staff-customer-back-btn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Quay lại
+
+        </a>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         CUSTOMER PROFILE + INFORMATION
+    ====================================================== -->
+
+    <section class="staff-customer-detail-grid">
+
+
+        <!-- =================================================
+             PROFILE
+        ================================================== -->
+
+        <div class="staff-customer-profile-card">
+
+
+            <div class="staff-customer-profile-avatar">
+
+                @customerInitial
+
+            </div>
+
+
+            <h2>
+
+                @(string.IsNullOrWhiteSpace(Model.HoTen)
+                    ? "Khách hàng"
+                    : Model.HoTen)
+
+            </h2>
+
+
+            <span class="staff-customer-profile-code">
+
+                #KH@(Model.MaKh.ToString("D4"))
+
+            </span>
+
+
+            <div class="staff-customer-profile-orders">
+
+                <i class="fa-solid fa-receipt"></i>
+
+
+                <strong>
+
+                    @(Model.HoaDons?.Count ?? 0)
+
+                </strong>
+
+
+                <span>
+                    đơn hàng
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             CONTACT INFORMATION
+        ================================================== -->
+
+        <div class="staff-customer-info-card">
+
+
+            <div class="staff-customer-info-heading">
+
+
+                <div>
+
+                    <i class="fa-solid fa-address-card"></i>
+
+                </div>
+
+
+                <span>
+
+                    <small>
+                        THÔNG TIN
+                    </small>
+
+
+                    <strong>
+                        Thông tin liên hệ
+                    </strong>
+
+                </span>
+
+            </div>
+
+
+
+            <div class="staff-customer-info-grid">
+
+
+                <!-- NAME -->
+
+                <div>
+
+                    <span>
+                        Họ và tên
+                    </span>
+
+
+                    <strong>
+
+                        @(string.IsNullOrWhiteSpace(Model.HoTen)
+                            ? "Chưa cập nhật"
+                            : Model.HoTen)
+
+                    </strong>
+
+                </div>
+
+
+
+                <!-- EMAIL -->
+
+                <div>
+
+                    <span>
+                        Email
+                    </span>
+
+
+                    <strong>
+
+                        @(string.IsNullOrWhiteSpace(Model.Email)
+                            ? "Chưa cập nhật"
+                            : Model.Email)
+
+                    </strong>
+
+                </div>
+
+
+
+                <!-- PHONE -->
+
+                <div>
+
+                    <span>
+                        Số điện thoại
+                    </span>
+
+
+                    <strong>
+
+                        @(string.IsNullOrWhiteSpace(Model.DienThoai)
+                            ? "Chưa cập nhật"
+                            : Model.DienThoai)
+
+                    </strong>
+
+                </div>
+
+
+
+                <!-- CREATED DATE -->
+
+                <div>
+
+                    <span>
+                        Ngày tham gia
+                    </span>
+
+
+                    <strong>
+
+                        @Model.NgayTao.ToString(
+                            "dd/MM/yyyy HH:mm"
+                        )
+
+                    </strong>
+
+                </div>
+
+
+
+                <!-- ADDRESS -->
+
+                <div class="staff-customer-info-full">
+
+                    <span>
+                        Địa chỉ
+                    </span>
+
+
+                    <strong>
+
+                        @(string.IsNullOrWhiteSpace(Model.DiaChi)
+                            ? "Chưa cập nhật"
+                            : Model.DiaChi)
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         ORDER HISTORY
+    ====================================================== -->
+
+    <section class="staff-customer-orders-card">
+
+
+        <div class="staff-customer-orders-heading">
+
+
+            <div>
+
+                <span>
+                    LỊCH SỬ
+                </span>
+
+
+                <h2>
+                    Đơn hàng của khách
+                </h2>
+
+            </div>
+
+
+            <strong>
+
+                @(Model.HoaDons?.Count ?? 0) đơn
+
+            </strong>
+
+        </div>
+
+
+
+        @if (
+            Model.HoaDons != null
+            &&
+            Model.HoaDons.Any()
+        )
+        {
+
+            <div class="staff-customer-orders-list">
+
+
+                @foreach (
+                    var order
+                    in Model.HoaDons
+                        .OrderByDescending(
+                            x => x.NgayDat
+                        )
+                        .Take(10)
+                )
+                {
+
+                    <a asp-area="Staff"
+                       asp-controller="Order"
+                       asp-action="Details"
+                       asp-route-id="@order.MaHd"
+                       class="staff-customer-order-row">
+
+
+                        <!-- =====================================
+                             ORDER CODE + DATE
+                        ====================================== -->
+
+                        <div>
+
+                            <strong>
+
+                                #HD@(order.MaHd.ToString("D5"))
+
+                            </strong>
+
+
+                            <span>
+
+                                @(order.NgayDat.HasValue
+                                    ? order.NgayDat.Value
+                                        .ToString(
+                                            "dd/MM/yyyy HH:mm"
+                                        )
+                                    : "Chưa xác định")
+
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- =====================================
+                             TOTAL + STATUS
+                        ====================================== -->
+
+                        <div>
+
+                            <strong>
+
+                                @((order.TongTien ?? 0)
+                                    .ToString("#,##0"))đ
+
+                            </strong>
+
+
+                            <span>
+
+                                @(string.IsNullOrWhiteSpace(
+                                        order.TrangThai
+                                    )
+                                    ? "Chưa xác định"
+                                    : order.TrangThai)
+
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- ARROW -->
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+
+                }
+
+            </div>
+
+        }
+        else
+        {
+
+            <!-- =================================================
+                 EMPTY ORDER
+            ================================================== -->
+
+            <div class="staff-customer-empty compact">
+
+
+                <div>
+
+                    <i class="fa-solid fa-receipt"></i>
+
+                </div>
+
+
+                <h3>
+                    Khách hàng chưa có đơn hàng
+                </h3>
+
+
+                <p>
+                    Khi khách hàng đặt món,
+                    lịch sử đơn hàng sẽ hiển thị tại đây.
+                </p>
+
+            </div>
+
+        }
+
+    </section>
+
+</div>

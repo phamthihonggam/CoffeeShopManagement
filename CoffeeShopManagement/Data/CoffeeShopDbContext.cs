@@ -579,6 +579,8 @@ public partial class CoffeeShopDbContext : DbContext
         // =================================================
 
         modelBuilder.Entity<DanhGiaSanPham>(
+
+
             entity =>
             {
                 entity.HasKey(
@@ -648,7 +650,43 @@ public partial class CoffeeShopDbContext : DbContext
                 .HasDefaultValueSql(
                     "(getdate())"
                 );
+                entity.Property(
+                    e => e.PhanHoi
+                )
+                .HasMaxLength(
+                    1000
+                );
 
+
+                entity.Property(
+                    e => e.NgayPhanHoi
+                )
+                .HasColumnType(
+                    "datetime"
+                );
+
+
+                entity.Property(
+                    e => e.MaTaiKhoanPhanHoi
+                )
+                .HasColumnName(
+                    "MaTaiKhoanPhanHoi"
+                );
+
+
+                entity.HasOne(
+                    d => d.MaTaiKhoanPhanHoiNavigation
+                )
+                .WithMany()
+                .HasForeignKey(
+                    d => d.MaTaiKhoanPhanHoi
+                )
+                .OnDelete(
+                    DeleteBehavior.SetNull
+                )
+                .HasConstraintName(
+                    "FK_DanhGiaSanPham_TaiKhoanPhanHoi"
+                );
 
                 // =========================================
                 // KHÁCH HÀNG
@@ -803,6 +841,43 @@ public partial class CoffeeShopDbContext : DbContext
                     "(getdate())"
                 );
 
+                entity.Property(
+                    e => e.PhanHoi
+                )
+                .HasMaxLength(
+                    1000
+                );
+
+
+                entity.Property(
+                    e => e.NgayPhanHoi
+                )
+                .HasColumnType(
+                    "datetime"
+                );
+
+
+                entity.Property(
+                    e => e.MaTaiKhoanPhanHoi
+                )
+                .HasColumnName(
+                    "MaTaiKhoanPhanHoi"
+                );
+
+
+                entity.HasOne(
+                    d => d.MaTaiKhoanPhanHoiNavigation
+                )
+                .WithMany()
+                .HasForeignKey(
+                    d => d.MaTaiKhoanPhanHoi
+                )
+                .OnDelete(
+                    DeleteBehavior.SetNull
+                )
+                .HasConstraintName(
+                    "FK_DanhGiaCombo_TaiKhoanPhanHoi"
+                );
 
                 // =========================================
                 // KHÁCH HÀNG
