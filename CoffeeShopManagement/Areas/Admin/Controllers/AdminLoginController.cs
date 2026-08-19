@@ -23,7 +23,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
         // =====================================================
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             // Nếu đã đăng nhập thì về Dashboard
 
@@ -41,15 +41,6 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                 );
             }
 
-
-            // =================================================
-            // TẠO TÀI KHOẢN MẶC ĐỊNH
-            // CHỈ TẠO NẾU CHƯA TỒN TẠI
-            // =================================================
-
-            await CreateDefaultAccountsAsync();
-
-
             return View();
         }
 
@@ -65,7 +56,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             string password)
         {
             // =================================================
-            // KIỂM TRA RỖNG
+            // 1. KIỂM TRA RỖNG
             // =================================================
 
             if (string.IsNullOrWhiteSpace(username) ||
@@ -82,23 +73,21 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             // =================================================
-            // TÌM TÀI KHOẢN
+            // 2. TÌM TÀI KHOẢN
             // =================================================
 
             var account =
                 await _context.TaiKhoans
-
                     .Include(
                         x => x.MaVaiTroNavigation
                     )
-
                     .FirstOrDefaultAsync(
                         x => x.TenDangNhap == username
                     );
 
 
             // =================================================
-            // KHÔNG TÌM THẤY TÀI KHOẢN
+            // 3. KHÔNG TÌM THẤY TÀI KHOẢN
             // =================================================
 
             if (account == null)
@@ -111,7 +100,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             // =================================================
-            // TÀI KHOẢN BỊ KHÓA
+            // 4. KIỂM TRA TÀI KHOẢN BỊ KHÓA
             // =================================================
 
             if (!account.IsActive)
@@ -124,7 +113,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             // =================================================
-            // VAI TRÒ KHÔNG HOẠT ĐỘNG
+            // 5. KIỂM TRA VAI TRÒ
             // =================================================
 
             if (account.MaVaiTroNavigation == null ||
@@ -138,12 +127,11 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             // =================================================
-            // KIỂM TRA MẬT KHẨU HASH
+            // 6. KIỂM TRA MẬT KHẨU HASH
             // =================================================
 
             var passwordHasher =
                 new PasswordHasher<TaiKhoan>();
-
 
             var verifyResult =
                 passwordHasher.VerifyHashedPassword(
@@ -164,15 +152,31 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             // =================================================
-            // CHỈ ADMIN / NHÂN VIÊN ĐƯỢC VÀO ADMIN
+            // 7. KIỂM TRA ROLE
+            // CHỈ ADMIN / NHÂN VIÊN ĐƯỢC VÀO KHU QUẢN TRỊ
             // =================================================
 
             var roleName =
                 account.MaVaiTroNavigation.TenVaiTro;
 
 
-            if (roleName != "Admin" &&
-                roleName != "Nhân viên")
+            var isAdmin =
+                string.Equals(
+                    roleName,
+                    "Admin",
+                    StringComparison.OrdinalIgnoreCase
+                );
+
+
+            var isStaff =
+                string.Equals(
+                    roleName,
+                    "Nhân viên",
+                    StringComparison.OrdinalIgnoreCase
+                );
+
+
+            if (!isAdmin && !isStaff)
             {
                 ViewBag.ErrorMessage =
                     "Tài khoản này không có quyền truy cập khu vực quản trị.";
@@ -182,34 +186,30 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             // =================================================
-            // LẤY QUYỀN CỦA VAI TRÒ
+            // 8. LẤY QUYỀN CỦA VAI TRÒ TỪ DATABASE
             // =================================================
 
             var permissions =
                 await _context.VaiTros
-
                     .Where(
                         x => x.MaVaiTro ==
                              account.MaVaiTro
                     )
-
                     .SelectMany(
                         x => x.MaQuyens
                     )
-
                     .Where(
                         x => x.IsActive
                     )
-
                     .Select(
                         x => x.TenQuyen
                     )
-
+                    .Distinct()
                     .ToListAsync();
 
 
             // =================================================
-            // LƯU SESSION
+            // 9. LƯU SESSION
             // =================================================
 
 
@@ -241,7 +241,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
             HttpContext.Session.SetString(
                 "AdminFullName",
-                account.HoTen
+                account.HoTen ?? account.TenDangNhap
             );
 
 
@@ -253,9 +253,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             );
 
 
-            // =================================================
-            // ẢNH ĐẠI DIỆN
-            // =================================================
+            // Ảnh đại diện
 
             HttpContext.Session.SetString(
                 "AdminAvatar",
@@ -263,9 +261,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             );
 
 
-            // =================================================
-            // DANH SÁCH QUYỀN
-            // =================================================
+            // Danh sách quyền
 
             HttpContext.Session.SetString(
                 "AdminPermissions",
@@ -277,7 +273,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             // =================================================
-            // ĐĂNG NHẬP THÀNH CÔNG
+            // 10. ĐĂNG NHẬP THÀNH CÔNG
             // =================================================
 
             return RedirectToAction(
@@ -310,41 +306,33 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Logout()
         {
-            // =================================================
-            // XÓA SESSION
-            // =================================================
+            // Chỉ xóa session của khu quản trị
+            // Không Session.Clear() để tránh ảnh hưởng
+            // các session khác như giỏ hàng khách hàng.
 
             HttpContext.Session.Remove(
                 "AdminLoggedIn"
             );
 
-
             HttpContext.Session.Remove(
                 "AdminAccountId"
             );
-
 
             HttpContext.Session.Remove(
                 "AdminUsername"
             );
 
-
             HttpContext.Session.Remove(
                 "AdminFullName"
             );
-
 
             HttpContext.Session.Remove(
                 "AdminRole"
             );
 
-
-            // Ảnh đại diện
-
             HttpContext.Session.Remove(
                 "AdminAvatar"
             );
-
 
             HttpContext.Session.Remove(
                 "AdminPermissions"
@@ -363,164 +351,6 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                     area = "Admin"
                 }
             );
-        }
-
-
-        // =====================================================
-        // TẠO TÀI KHOẢN MẶC ĐỊNH
-        // =====================================================
-
-        private async Task CreateDefaultAccountsAsync()
-        {
-            var passwordHasher =
-                new PasswordHasher<TaiKhoan>();
-
-
-            // =================================================
-            // 1. TẠO ADMIN
-            // =================================================
-
-            var adminRole =
-                await _context.VaiTros
-
-                    .FirstOrDefaultAsync(
-                        x => x.TenVaiTro == "Admin"
-                    );
-
-
-            if (adminRole != null)
-            {
-                var adminExists =
-                    await _context.TaiKhoans
-
-                        .AnyAsync(
-                            x => x.TenDangNhap == "admin"
-                        );
-
-
-                if (!adminExists)
-                {
-                    var admin =
-                        new TaiKhoan
-                        {
-                            TenDangNhap =
-                                "admin",
-
-                            HoTen =
-                                "Quản trị viên",
-
-                            Email =
-                                null,
-
-                            DienThoai =
-                                null,
-
-                            HinhAnh =
-                                null,
-
-                            MaVaiTro =
-                                adminRole.MaVaiTro,
-
-                            IsActive =
-                                true,
-
-                            NgayTao =
-                                DateTime.Now,
-
-                            MatKhau =
-                                ""
-                        };
-
-
-                    admin.MatKhau =
-                        passwordHasher.HashPassword(
-                            admin,
-                            "123456"
-                        );
-
-
-                    _context.TaiKhoans.Add(
-                        admin
-                    );
-                }
-            }
-
-
-            // =================================================
-            // 2. TẠO NHÂN VIÊN
-            // =================================================
-
-            var employeeRole =
-                await _context.VaiTros
-
-                    .FirstOrDefaultAsync(
-                        x => x.TenVaiTro == "Nhân viên"
-                    );
-
-
-            if (employeeRole != null)
-            {
-                var employeeExists =
-                    await _context.TaiKhoans
-
-                        .AnyAsync(
-                            x => x.TenDangNhap == "nhanvien"
-                        );
-
-
-                if (!employeeExists)
-                {
-                    var employee =
-                        new TaiKhoan
-                        {
-                            TenDangNhap =
-                                "nhanvien",
-
-                            HoTen =
-                                "Nhân viên Rosalie",
-
-                            Email =
-                                null,
-
-                            DienThoai =
-                                null,
-
-                            HinhAnh =
-                                null,
-
-                            MaVaiTro =
-                                employeeRole.MaVaiTro,
-
-                            IsActive =
-                                true,
-
-                            NgayTao =
-                                DateTime.Now,
-
-                            MatKhau =
-                                ""
-                        };
-
-
-                    employee.MatKhau =
-                        passwordHasher.HashPassword(
-                            employee,
-                            "123456"
-                        );
-
-
-                    _context.TaiKhoans.Add(
-                        employee
-                    );
-                }
-            }
-
-
-            // =================================================
-            // SAVE
-            // =================================================
-
-            await _context.SaveChangesAsync();
         }
     }
 }

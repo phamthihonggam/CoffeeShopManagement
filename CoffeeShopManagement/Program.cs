@@ -9,6 +9,7 @@ using CoffeeShopManagement.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // =====================================================
 // DATABASE
 // =====================================================
@@ -99,7 +100,7 @@ builder.Services
         options.SlidingExpiration = true;
     })
 
-    // Google vẫn giữ lại
+    // Google Login
     .AddGoogle(options =>
     {
         options.ClientId =
@@ -120,7 +121,10 @@ builder.Services
 
 builder.Services.AddAuthorization(options =>
 {
-    // Chỉ Admin
+    // =================================================
+    // CHỈ ADMIN
+    // =================================================
+
     options.AddPolicy(
         "AdminOnly",
         policy =>
@@ -129,19 +133,27 @@ builder.Services.AddAuthorization(options =>
         }
     );
 
-    // Admin hoặc Nhân viên
+
+    // =================================================
+    // ADMIN HOẶC NHÂN VIÊN
+    // =================================================
+
     options.AddPolicy(
         "StaffOrAdmin",
         policy =>
         {
             policy.RequireRole(
                 "Admin",
-                "NhanVien"
+                "Nhân viên"
             );
         }
     );
 
-    // Khách hàng
+
+    // =================================================
+    // KHÁCH HÀNG
+    // =================================================
+
     options.AddPolicy(
         "CustomerOnly",
         policy =>
@@ -231,13 +243,14 @@ app.UseRouting();
 
 // =====================================================
 // SESSION
+// PHẢI ĐẶT TRƯỚC AUTHENTICATION / AUTHORIZATION
 // =====================================================
 
 app.UseSession();
 
 
 // =====================================================
-// AUTHENTICATION
+// AUTHENTICATION + AUTHORIZATION
 // =====================================================
 
 app.UseAuthentication();
@@ -248,7 +261,7 @@ app.UseAuthorization();
 // =====================================================
 // AREA ROUTE
 // ADMIN / STAFF
-// PHẢI NẰM TRƯỚC DEFAULT
+// PHẢI NẰM TRƯỚC DEFAULT ROUTE
 // =====================================================
 
 app.MapControllerRoute(
