@@ -1,205 +1,442 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http
+
+@{
     ViewData["Title"] = "Trang nhân viên";
+
+
+    // =====================================================
+    // STAFF INFO
+    // =====================================================
+
+    var staffName =
+        Context.Session.GetString("AdminFullName")
+        ?? Context.Session.GetString("HoTen")
+        ?? ViewBag.StaffName
+        ?? "Nhân viên Rosalie";
+
+
+    // =====================================================
+    // PERMISSIONS
+    // =====================================================
+
+    var permissionString =
+        Context.Session.GetString("AdminPermissions")
+        ?? "";
+
+
+    var permissions =
+        permissionString.Split(
+            '|',
+            StringSplitOptions.RemoveEmptyEntries
+        );
+
+
+    bool HasPermission(string permission)
+    {
+        return permissions.Any(
+            x => string.Equals(
+                x,
+                permission,
+                StringComparison.OrdinalIgnoreCase
+            )
+        );
+    }
+
+
+    // =====================================================
+    // STATISTICS
+    // =====================================================
+
+    var totalOrders =
+        ViewBag.TotalOrders ?? 0;
+
+
+    var totalProducts =
+        ViewBag.TotalProducts ?? 0;
+
+
+    var totalCustomers =
+        ViewBag.TotalCustomers ?? 0;
+
+
+    decimal totalRevenue = 0;
+
+
+    if (ViewBag.TotalRevenue != null)
+    {
+        totalRevenue =
+            Convert.ToDecimal(
+                ViewBag.TotalRevenue
+            );
+    }
 }
 
 
+<!-- =====================================================
+     WELCOME
+====================================================== -->
+
 <div class="admin-welcome">
 
-    <h2>
-        Xin chào @ViewBag.StaffName
-    </h2>
+    <div>
 
-    <p>
-        Chào mừng bạn đến với hệ thống nhân viên
-        Rosalie Coffee. Theo dõi đơn hàng, sản phẩm
-        và hỗ trợ hoạt động bán hàng tại cửa hàng.
-    </p>
+        <span class="staff-welcome-label">
+            ROSALIE COFFEE
+        </span>
+
+        <h2>
+            Xin chào @staffName
+        </h2>
+
+        <p>
+            Chào mừng bạn đến với hệ thống nhân viên Rosalie Coffee.
+            Theo dõi đơn hàng, sản phẩm, khách hàng và hỗ trợ
+            hoạt động bán hàng tại cửa hàng.
+        </p>
+
+    </div>
 
 </div>
 
+
+<!-- =====================================================
+     STATISTICS
+====================================================== -->
 
 <div class="admin-stat-grid">
 
 
-    <!-- =====================================
-         ĐƠN HÀNG
-    ====================================== -->
+    <!-- =================================================
+         ORDER
+    ================================================== -->
+    @if (HasPermission("ORDER_MANAGE"))
+    {
+        <div class="admin-stat-card">
 
-    <div class="admin-stat-card">
+            <div class="admin-stat-icon">
 
-        <div class="admin-stat-icon">
+                <i class="fa-solid fa-receipt"></i>
 
-            <i class="fa-solid fa-receipt"></i>
+            </div>
 
-        </div>
+            <span>
+                ĐƠN HÀNG
+            </span>
 
-        <span>
-            ĐƠN HÀNG
-        </span>
-
-        <strong>
-            @ViewBag.TotalOrders
-        </strong>
-
-    </div>
-
-
-    <!-- =====================================
-         SẢN PHẨM
-    ====================================== -->
-
-    <div class="admin-stat-card">
-
-        <div class="admin-stat-icon">
-
-            <i class="fa-solid fa-mug-hot"></i>
+            <strong>
+                @totalOrders
+            </strong>
 
         </div>
-
-        <span>
-            SẢN PHẨM
-        </span>
-
-        <strong>
-            @ViewBag.TotalProducts
-        </strong>
-
-    </div>
+    }
 
 
-    <!-- =====================================
-         KHÁCH HÀNG
-    ====================================== -->
+    <!-- =================================================
+         PRODUCT
+    ================================================== -->
+    @if (HasPermission("PRODUCT_MANAGE"))
+    {
+        <div class="admin-stat-card">
 
-    <div class="admin-stat-card">
+            <div class="admin-stat-icon">
 
-        <div class="admin-stat-icon">
+                <i class="fa-solid fa-mug-hot"></i>
 
-            <i class="fa-solid fa-users"></i>
+            </div>
 
-        </div>
+            <span>
+                SẢN PHẨM
+            </span>
 
-        <span>
-            KHÁCH HÀNG
-        </span>
-
-        <strong>
-            @ViewBag.TotalCustomers
-        </strong>
-
-    </div>
-
-
-    <!-- =====================================
-         DOANH THU
-    ====================================== -->
-
-    <div class="admin-stat-card">
-
-        <div class="admin-stat-icon">
-
-            <i class="fa-solid fa-coins"></i>
+            <strong>
+                @totalProducts
+            </strong>
 
         </div>
+    }
 
-        <span>
-            DOANH THU
-        </span>
 
-        <strong>
-            @(((decimal)ViewBag.TotalRevenue)
-                .ToString("#,##0"))đ
-        </strong>
+    <!-- =================================================
+         CUSTOMER
+    ================================================== -->
+    @if (HasPermission("CUSTOMER_VIEW"))
+    {
+        <div class="admin-stat-card">
 
-    </div>
+            <div class="admin-stat-icon">
+
+                <i class="fa-solid fa-users"></i>
+
+            </div>
+
+            <span>
+                KHÁCH HÀNG
+            </span>
+
+            <strong>
+                @totalCustomers
+            </strong>
+
+        </div>
+    }
+
+
+    <!-- =================================================
+         REVENUE
+         CHỈ HIỆN NẾU NHÂN VIÊN CÓ QUYỀN THỐNG KÊ
+    ================================================== -->
+    @if (HasPermission("STATISTICS_VIEW"))
+    {
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+
+                <i class="fa-solid fa-coins"></i>
+
+            </div>
+
+            <span>
+                DOANH THU
+            </span>
+
+            <strong>
+                @totalRevenue.ToString("#,##0")đ
+            </strong>
+
+        </div>
+    }
+
 
 </div>
 
 
-<!-- =========================================
-     CHỨC NĂNG NHANH
-========================================= -->
+<!-- =====================================================
+     QUICK FUNCTIONS
+====================================================== -->
 
 <div class="staff-actions">
 
-    <h3>
-        Chức năng nhân viên
-    </h3>
+
+    <div class="staff-action-heading">
+
+        <div>
+
+            <span class="staff-action-label">
+                THAO TÁC NHANH
+            </span>
+
+            <h3>
+                Chức năng nhân viên
+            </h3>
+
+            <p>
+                Truy cập nhanh những chức năng bạn được cấp quyền sử dụng.
+            </p>
+
+        </div>
+
+    </div>
 
 
     <div class="staff-action-grid">
 
 
-        <!-- ĐƠN HÀNG -->
+        <!-- =================================================
+             ORDER
+        ================================================== -->
+        @if (HasPermission("ORDER_MANAGE"))
+        {
+            <a asp-area="Staff"
+               asp-controller="Order"
+               asp-action="Index"
+               class="staff-action-card">
+
+                <div class="staff-action-icon">
+
+                    <i class="fa-solid fa-receipt"></i>
+
+                </div>
+
+
+                <div class="staff-action-content">
+
+                    <strong>
+                        Quản lý đơn hàng
+                    </strong>
+
+                    <span>
+                        Xem, cập nhật và xử lý đơn hàng của khách hàng.
+                    </span>
+
+                </div>
+
+
+                <div class="staff-action-arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </div>
+
+            </a>
+        }
+
+
+        <!-- =================================================
+             PRODUCT
+        ================================================== -->
+        @if (HasPermission("PRODUCT_MANAGE"))
+        {
+            <a asp-area="Staff"
+               asp-controller="Product"
+               asp-action="Index"
+               class="staff-action-card">
+
+                <div class="staff-action-icon">
+
+                    <i class="fa-solid fa-mug-hot"></i>
+
+                </div>
+
+
+                <div class="staff-action-content">
+
+                    <strong>
+                        Quản lý sản phẩm
+                    </strong>
+
+                    <span>
+                        Theo dõi và cập nhật thông tin sản phẩm của cửa hàng.
+                    </span>
+
+                </div>
+
+
+                <div class="staff-action-arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </div>
+
+            </a>
+        }
+
+
+        <!-- =================================================
+             CUSTOMER
+        ================================================== -->
+        @if (HasPermission("CUSTOMER_VIEW"))
+        {
+            <a asp-area="Staff"
+               asp-controller="Customer"
+               asp-action="Index"
+               class="staff-action-card">
+
+                <div class="staff-action-icon">
+
+                    <i class="fa-solid fa-users"></i>
+
+                </div>
+
+
+                <div class="staff-action-content">
+
+                    <strong>
+                        Khách hàng
+                    </strong>
+
+                    <span>
+                        Xem thông tin khách hàng và hỗ trợ chăm sóc khách.
+                    </span>
+
+                </div>
+
+
+                <div class="staff-action-arrow">
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </div>
+
+            </a>
+        }
+
+
+        <!-- =================================================
+             REVIEW
+        ================================================== -->
 
         <a asp-area="Staff"
-           asp-controller="Order"
+           asp-controller="Review"
            asp-action="Index"
            class="staff-action-card">
 
-            <i class="fa-solid fa-receipt"></i>
+            <div class="staff-action-icon">
 
-            <div>
+                <i class="fa-solid fa-star"></i>
+
+            </div>
+
+
+            <div class="staff-action-content">
 
                 <strong>
-                    Quản lý đơn hàng
+                    Quản lý đánh giá
                 </strong>
 
                 <span>
-                    Xem và xử lý đơn hàng khách hàng
+                    Theo dõi và xử lý phản hồi, đánh giá từ khách hàng.
                 </span>
+
+            </div>
+
+
+            <div class="staff-action-arrow">
+
+                <i class="fa-solid fa-arrow-right"></i>
 
             </div>
 
         </a>
 
 
-        <!-- HOME -->
+        <!-- =================================================
+             STATISTICS
+        ================================================== -->
+        @if (HasPermission("STATISTICS_VIEW"))
+        {
+            <a asp-area="Staff"
+               asp-controller="Statistics"
+               asp-action="Index"
+               class="staff-action-card">
 
-        <a asp-area=""
-           asp-controller="Home"
-           asp-action="Index"
-           class="staff-action-card">
+                <div class="staff-action-icon">
 
-            <i class="fa-solid fa-house"></i>
+                    <i class="fa-solid fa-chart-line"></i>
 
-            <div>
-
-                <strong>
-                    Xem cửa hàng
-                </strong>
-
-                <span>
-                    Quay lại website Rosalie Coffee
-                </span>
-
-            </div>
-
-        </a>
+                </div>
 
 
-        <!-- LOGOUT -->
+                <div class="staff-action-content">
 
-        <a asp-area=""
-           asp-controller="Account"
-           asp-action="Logout"
-           class="staff-action-card">
+                    <strong>
+                        Xem thống kê
+                    </strong>
 
-            <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>
+                        Theo dõi số liệu hoạt động và kết quả kinh doanh.
+                    </span>
 
-            <div>
+                </div>
 
-                <strong>
-                    Đăng xuất
-                </strong>
 
-                <span>
-                    Thoát khỏi tài khoản nhân viên
-                </span>
+                <div class="staff-action-arrow">
 
-            </div>
+                    <i class="fa-solid fa-arrow-right"></i>
 
-        </a>
+                </div>
+
+            </a>
+        }
 
 
     </div>

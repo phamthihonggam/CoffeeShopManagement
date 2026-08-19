@@ -1,20 +1,63 @@
-﻿<div id="appToast" class="app-toast">
+﻿<!-- =========================================================
+     ROSALIE GLOBAL TOAST
+========================================================= -->
 
-    <div class="app-toast-icon">
-        <i class="bi bi-check-circle-fill"></i>
-    </div>
+<div id="rosalieToastContainer"
+     class="rosalie-toast-container"
+     aria-live="polite"
+     aria-atomic="true">
 
-    <div class="app-toast-content">
-        <div class="app-toast-title" id="toastTitle">
-            Thành công
+    <div id="rosalieToast"
+         class="rosalie-toast"
+         role="alert">
+
+        <!-- ICON -->
+
+        <div id="rosalieToastIcon"
+             class="rosalie-toast-icon">
+
+            <i class="fa-solid fa-check"></i>
+
         </div>
 
-        <div class="app-toast-message" id="toastMessage">
-        </div>
-    </div>
 
-    <button id="toastCloseBtn" class="app-toast-close">
-        <i class="bi bi-x-lg"></i>
-    </button>
+        <!-- CONTENT -->
+
+        <div class="rosalie-toast-content">
+
+            <div id="rosalieToastTitle"
+                 class="rosalie-toast-title">
+
+                Thành công
+
+            </div>
+
+
+            <div id="rosalieToastMessage"
+                 class="rosalie-toast-message">
+            </div>
+
+        </div>
+
+
+        <!-- CLOSE -->
+
+        <button type="button"
+                id="rosalieToastClose"
+                class="rosalie-toast-close"
+                aria-label="Đóng thông báo">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+
+        <!-- PROGRESS -->
+
+        <div id="rosalieToastProgress"
+             class="rosalie-toast-progress">
+        </div>
+
+    </div>
 
 </div>

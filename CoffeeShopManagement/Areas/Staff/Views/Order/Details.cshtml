@@ -80,40 +80,246 @@
 }
 
 
+
 @section Styles {
 
     <link rel="stylesheet"
           href="~/css/admin-order.css"
           asp-append-version="true" />
 
+    <style>
+        /* =========================================================
+                   STAFF ORDER DETAIL TOAST
+                ========================================================= */
+
+        .staff-detail-toast-stack {
+            position: fixed;
+            top: 92px;
+            right: 28px;
+            z-index: 2000000;
+            width: min(400px, calc(100vw - 32px));
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .staff-detail-toast {
+            position: relative;
+            display: grid;
+            grid-template-columns: 46px 1fr 32px;
+            gap: 13px;
+            align-items: center;
+            padding: 16px 15px 16px 16px;
+            overflow: hidden;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 18px 45px rgba(72, 43, 31, 0.16), 0 4px 12px rgba(72, 43, 31, 0.08);
+            border: 1px solid rgba(91, 57, 47, 0.10);
+            pointer-events: auto;
+            animation: staffDetailToastIn .32s ease both;
+        }
+
+            .staff-detail-toast.success {
+                border-left: 4px solid #2aa566;
+            }
+
+            .staff-detail-toast.error {
+                border-left: 4px solid #d84a4a;
+            }
+
+        .staff-detail-toast-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .staff-detail-toast.success .staff-detail-toast-icon {
+            background: #e8f7ef;
+            color: #24995d;
+        }
+
+        .staff-detail-toast.error .staff-detail-toast-icon {
+            background: #fdecec;
+            color: #d34444;
+        }
+
+        .staff-detail-toast-content {
+            min-width: 0;
+        }
+
+        .staff-detail-toast-title {
+            margin-bottom: 4px;
+            color: #4b3028;
+            font-size: 14px;
+            font-weight: 900;
+            line-height: 1.2;
+        }
+
+        .staff-detail-toast-message {
+            color: #74645d;
+            font-size: 13px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .staff-detail-toast-close {
+            width: 30px;
+            height: 30px;
+            align-self: start;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            border-radius: 50%;
+            background: transparent;
+            color: #9b8880;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+            .staff-detail-toast-close:hover {
+                background: #f6eee9;
+                color: #5b392f;
+            }
+
+        .staff-detail-toast-progress {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 4px;
+            transform-origin: left center;
+            animation: staffDetailToastProgress 4s linear forwards;
+        }
+
+        .staff-detail-toast.success .staff-detail-toast-progress {
+            background: #2aa566;
+        }
+
+        .staff-detail-toast.error .staff-detail-toast-progress {
+            background: #d84a4a;
+        }
+
+        .staff-detail-toast.is-hiding {
+            opacity: 0;
+            transform: translateX(28px);
+            transition: opacity .22s ease, transform .22s ease;
+        }
+
+        @@keyframes staffDetailToastIn {
+            from {
+                opacity: 0;
+                transform: translateX(34px) scale(.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @@keyframes staffDetailToastProgress {
+            from {
+                transform: scaleX(1);
+            }
+
+            to {
+                transform: scaleX(0);
+            }
+        }
+    </style>
+
 }
 
 
-<!-- =====================================================
-     SUCCESS
-===================================================== -->
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success mb-3">
-
-        <i class="fa-solid fa-circle-check me-2"></i>
-
-        @TempData["SuccessMessage"]
-
-    </div>
-}
-
 
 <!-- =====================================================
-     ERROR
+     ROSALIE TOAST
 ===================================================== -->
-@if (TempData["ErrorMessage"] != null)
+@if (
+    TempData["SuccessMessage"] != null
+    ||
+    TempData["ErrorMessage"] != null
+)
 {
-    <div class="alert alert-danger mb-3">
+    <div class="staff-detail-toast-stack"
+         id="staffDetailToastStack">
 
-        <i class="fa-solid fa-circle-exclamation me-2"></i>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="staff-detail-toast success"
+                 data-staff-toast>
 
-        @TempData["ErrorMessage"]
+                <div class="staff-detail-toast-icon">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+
+                <div class="staff-detail-toast-content">
+
+                    <div class="staff-detail-toast-title">
+                        Cập nhật thành công
+                    </div>
+
+                    <div class="staff-detail-toast-message">
+                        @TempData["SuccessMessage"]
+                    </div>
+
+                </div>
+
+                <button type="button"
+                        class="staff-detail-toast-close"
+                        aria-label="Đóng thông báo"
+                        data-staff-toast-close>
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+                <div class="staff-detail-toast-progress"></div>
+
+            </div>
+        }
+
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="staff-detail-toast error"
+                 data-staff-toast>
+
+                <div class="staff-detail-toast-icon">
+                    <i class="fa-solid fa-exclamation"></i>
+                </div>
+
+                <div class="staff-detail-toast-content">
+
+                    <div class="staff-detail-toast-title">
+                        Có lỗi xảy ra
+                    </div>
+
+                    <div class="staff-detail-toast-message">
+                        @TempData["ErrorMessage"]
+                    </div>
+
+                </div>
+
+                <button type="button"
+                        class="staff-detail-toast-close"
+                        aria-label="Đóng thông báo"
+                        data-staff-toast-close>
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+                <div class="staff-detail-toast-progress"></div>
+
+            </div>
+        }
 
     </div>
 }
@@ -1716,6 +1922,88 @@
 
     <script src="~/js/staff-order-details.js"
             asp-append-version="true">
+    </script>
+
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const hideToast =
+                    function (toast) {
+
+                        if (!toast) {
+                            return;
+                        }
+
+
+                        toast.classList.add(
+                            "is-hiding"
+                        );
+
+
+                        setTimeout(
+                            function () {
+
+                                toast.remove();
+
+                            },
+                            230
+                        );
+
+                    };
+
+
+                document
+                    .querySelectorAll(
+                        "[data-staff-toast-close]"
+                    )
+                    .forEach(
+                        function (button) {
+
+                            button.addEventListener(
+                                "click",
+                                function () {
+
+                                    hideToast(
+                                        button.closest(
+                                            "[data-staff-toast]"
+                                        )
+                                    );
+
+                                }
+                            );
+
+                        }
+                    );
+
+
+                document
+                    .querySelectorAll(
+                        "[data-staff-toast]"
+                    )
+                    .forEach(
+                        function (toast) {
+
+                            setTimeout(
+                                function () {
+
+                                    hideToast(
+                                        toast
+                                    );
+
+                                },
+                                4000
+                            );
+
+                        }
+                    );
+
+            }
+        );
+
     </script>
 
 }

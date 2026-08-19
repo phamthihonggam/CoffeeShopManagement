@@ -1,66 +1,277 @@
-﻿const appToast = document.getElementById("appToast");
-const toastTitle = document.getElementById("toastTitle");
-const toastMessage = document.getElementById("toastMessage");
-const toastCloseBtn = document.getElementById("toastCloseBtn");
+﻿/* =========================================================
+   ROSALIE COFFEE
+   GLOBAL APP TOAST
+========================================================= */
 
-let appToastTimer = null;
+let rosalieToastTimer = null;
 
 
 /* =========================================================
    SHOW TOAST
+
+   Backward compatible:
+   showToast("Đăng xuất thành công!")
+
+   Có thể dùng:
+   showToast("Sai mật khẩu", "error")
 ========================================================= */
 
-function showToast(message, title = "Thành công") {
+function showToast(
+    message,
+    type = "success",
+    title = null,
+    duration = 4000
+) {
 
-    // Nếu trang hiện tại không có toast thì dừng
-    if (!appToast || !toastTitle || !toastMessage) {
+    const toast =
+        document.getElementById(
+            "rosalieToast"
+        );
+
+
+    const toastIcon =
+        document.getElementById(
+            "rosalieToastIcon"
+        );
+
+
+    const toastTitle =
+        document.getElementById(
+            "rosalieToastTitle"
+        );
+
+
+    const toastMessage =
+        document.getElementById(
+            "rosalieToastMessage"
+        );
+
+
+    const progress =
+        document.getElementById(
+            "rosalieToastProgress"
+        );
+
+
+    if (
+        !toast
+        ||
+        !toastIcon
+        ||
+        !toastTitle
+        ||
+        !toastMessage
+        ||
+        !progress
+    ) {
         return;
     }
 
 
-    // Nội dung
-    toastTitle.textContent = title;
-    toastMessage.innerHTML = message;
+    /* =====================================================
+       CLEAR OLD TIMER
+    ===================================================== */
 
+    if (rosalieToastTimer) {
 
-    // Hiện toast
-    appToast.classList.add("show");
+        clearTimeout(
+            rosalieToastTimer
+        );
 
-
-    // Nếu toast trước đang chạy thì hủy timer cũ
-    if (appToastTimer) {
-        clearTimeout(appToastTimer);
     }
 
 
-    // Sau 2 giây tự biến mất
-    appToastTimer = setTimeout(function () {
+    /* =====================================================
+       TYPE
+    ===================================================== */
 
-        hideToast();
+    const validTypes =
+        [
+            "success",
+            "error",
+            "warning",
+            "info"
+        ];
 
-    }, 2000);
+
+    if (!validTypes.includes(type)) {
+
+        type =
+            "success";
+
+    }
+
+
+    toast.classList.remove(
+        "success",
+        "error",
+        "warning",
+        "info",
+        "show"
+    );
+
+
+    toast.classList.add(
+        type
+    );
+
+
+    /* =====================================================
+       CONFIG
+    ===================================================== */
+
+    let defaultTitle =
+        "Thành công";
+
+
+    let iconClass =
+        "fa-solid fa-check";
+
+
+    switch (type) {
+
+        case "error":
+
+            defaultTitle =
+                "Có lỗi xảy ra";
+
+            iconClass =
+                "fa-solid fa-xmark";
+
+            break;
+
+
+        case "warning":
+
+            defaultTitle =
+                "Thông báo";
+
+            iconClass =
+                "fa-solid fa-exclamation";
+
+            break;
+
+
+        case "info":
+
+            defaultTitle =
+                "Thông tin";
+
+            iconClass =
+                "fa-solid fa-info";
+
+            break;
+
+
+        default:
+
+            defaultTitle =
+                "Thành công";
+
+            iconClass =
+                "fa-solid fa-check";
+
+            break;
+
+    }
+
+
+    /* =====================================================
+       CONTENT
+    ===================================================== */
+
+    toastTitle.textContent =
+        title || defaultTitle;
+
+
+    toastMessage.textContent =
+        message || "";
+
+
+    toastIcon.innerHTML =
+        `<i class="${iconClass}"></i>`;
+
+
+    /* =====================================================
+       RESET PROGRESS
+    ===================================================== */
+
+    progress.style.animation =
+        "none";
+
+
+    void progress.offsetWidth;
+
+
+    progress.style.animation =
+        `rosalieToastProgress ${duration}ms linear forwards`;
+
+
+    /* =====================================================
+       SHOW
+    ===================================================== */
+
+    requestAnimationFrame(
+        function () {
+
+            toast.classList.add(
+                "show"
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       AUTO HIDE
+    ===================================================== */
+
+    rosalieToastTimer =
+        setTimeout(
+            function () {
+
+                hideToast();
+
+            },
+            duration
+        );
 }
 
 
 /* =========================================================
-   HIDE TOAST
+   HIDE
 ========================================================= */
 
 function hideToast() {
 
-    if (!appToast) {
+    const toast =
+        document.getElementById(
+            "rosalieToast"
+        );
+
+
+    if (!toast) {
         return;
     }
 
-    appToast.classList.remove("show");
+
+    toast.classList.remove(
+        "show"
+    );
 
 
-    if (appToastTimer) {
+    if (rosalieToastTimer) {
 
-        clearTimeout(appToastTimer);
+        clearTimeout(
+            rosalieToastTimer
+        );
 
-        appToastTimer = null;
+
+        rosalieToastTimer =
+            null;
+
     }
+
 }
 
 
@@ -68,19 +279,24 @@ function hideToast() {
    CLOSE BUTTON
 ========================================================= */
 
-if (toastCloseBtn) {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    toastCloseBtn.addEventListener("click", function () {
-
-        hideToast();
-
-    });
-}
+        const closeButton =
+            document.getElementById(
+                "rosalieToastClose"
+            );
 
 
-/* =========================================================
-   EXPORT GLOBAL FUNCTION
-========================================================= */
+        closeButton?.addEventListener(
+            "click",
+            function () {
 
-window.showToast = showToast;
-window.hideToast = hideToast;
+                hideToast();
+
+            }
+        );
+
+    }
+);

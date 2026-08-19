@@ -1,7 +1,9 @@
 ﻿@using CoffeeShopManagement.Models
 
+@model CoffeeShopManagement.Models.TaiKhoan
+
 @{
-    ViewData["Title"] = "Thêm tài khoản";
+    ViewData["Title"] = "Chỉnh sửa tài khoản";
 
     var roles =
         ViewBag.Roles as List<VaiTro>
@@ -12,16 +14,16 @@
 }
 
 @section Styles {
+
     <link rel="stylesheet"
           href="~/css/admin-account.css"
           asp-append-version="true" />
+
 }
 
 
 <div class="account-page">
 
-
-    <!-- HEADER -->
 
     <div class="account-intro">
 
@@ -29,19 +31,19 @@
 
             <span class="account-label">
 
-                <i class="fa-solid fa-user-plus"></i>
+                <i class="fa-solid fa-user-pen"></i>
 
                 ROSALIE COFFEE
 
             </span>
 
             <h2>
-                Thêm tài khoản mới
+                Chỉnh sửa tài khoản
             </h2>
 
             <p>
-                Tạo tài khoản mới và thiết lập thông tin,
-                vai trò truy cập cho người dùng trong hệ thống.
+                Cập nhật thông tin cá nhân, ảnh đại diện
+                và vai trò của tài khoản.
             </p>
 
         </div>
@@ -61,8 +63,6 @@
     </div>
 
 
-    <!-- ERROR -->
-
     @if (TempData["ErrorMessage"] != null)
     {
         <div class="account-alert account-alert-error">
@@ -77,8 +77,6 @@
     }
 
 
-    <!-- FORM CARD -->
-
     <div class="account-table-card">
 
         <div class="account-table-header account-form-header">
@@ -86,31 +84,34 @@
             <div>
 
                 <span class="account-table-label">
-                    THÔNG TIN
+                    CHỈNH SỬA
                 </span>
 
                 <h3>
-                    Thông tin tài khoản
+                    @Model.TenDangNhap
                 </h3>
 
                 <p>
-                    Các trường có dấu * là thông tin bắt buộc.
+                    ID tài khoản: @Model.MaTaiKhoan
                 </p>
 
             </div>
 
-            <div class="account-form-header-icon">
+            <span class="account-status @(Model.IsActive ? "active" : "locked")">
 
-                <i class="fa-solid fa-user-gear"></i>
+                <span class="status-dot"></span>
 
-            </div>
+                @(Model.IsActive ? "Hoạt động" : "Đã khóa")
+
+            </span>
 
         </div>
 
 
         <form asp-area="Admin"
               asp-controller="AccountManagement"
-              asp-action="Create"
+              asp-action="Edit"
+              asp-route-id="@Model.MaTaiKhoan"
               method="post"
               enctype="multipart/form-data"
               class="account-create-form">
@@ -130,15 +131,34 @@
 
                     <div class="account-avatar-preview">
 
-                        <img id="avatarPreview"
-                             alt="Ảnh đại diện" />
+                        @if (!string.IsNullOrWhiteSpace(Model.HinhAnh))
+                        {
+                            <img id="avatarPreview"
+                                 src="~/images/avatars/@Model.HinhAnh"
+                                 asp-append-version="true"
+                                 alt="@Model.HoTen"
+                                 style="display:block;" />
 
-                        <div id="avatarPlaceholder"
-                             class="account-avatar-placeholder">
+                            <div id="avatarPlaceholder"
+                                 class="account-avatar-placeholder"
+                                 style="display:none;">
 
-                            <i class="fa-solid fa-user"></i>
+                                <i class="fa-solid fa-user"></i>
 
-                        </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <img id="avatarPreview"
+                                 alt="@Model.HoTen" />
+
+                            <div id="avatarPlaceholder"
+                                 class="account-avatar-placeholder">
+
+                                <i class="fa-solid fa-user"></i>
+
+                            </div>
+                        }
 
                     </div>
 
@@ -150,7 +170,7 @@
 
                             <i class="fa-regular fa-image"></i>
 
-                            Chọn ảnh
+                            Đổi ảnh
 
                         </label>
 
@@ -160,7 +180,7 @@
                                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" />
 
                         <span>
-                            JPG, JPEG, PNG hoặc WEBP · tối đa 5MB
+                            Bỏ trống nếu muốn giữ ảnh hiện tại.
                         </span>
 
                     </div>
@@ -174,81 +194,23 @@
 
             <div class="account-form-group">
 
-                <label for="tenDangNhap">
+                <label>
                     Tên đăng nhập
-                    <span>*</span>
                 </label>
 
-                <div class="account-form-control-wrap">
+                <div class="account-form-control-wrap account-readonly">
 
                     <i class="fa-solid fa-user"></i>
 
                     <input type="text"
-                           id="tenDangNhap"
-                           name="tenDangNhap"
-                           placeholder="Ví dụ: nhanvien01"
-                           autocomplete="off"
-                           required />
+                           value="@Model.TenDangNhap"
+                           readonly />
 
                 </div>
 
-            </div>
-
-
-            <!-- PASSWORD -->
-
-            <div class="account-form-group">
-
-                <label for="matKhau">
-                    Mật khẩu
-                    <span>*</span>
-                </label>
-
-                <div class="account-form-control-wrap account-password-control">
-
-                    <i class="fa-solid fa-lock"></i>
-
-                    <input type="password"
-                           id="matKhau"
-                           name="matKhau"
-                           placeholder="Tối thiểu 6 ký tự"
-                           minlength="6"
-                           required />
-
-                    <button type="button"
-                            class="account-password-toggle"
-                            onclick="togglePassword('matKhau', this)"
-                            aria-label="Hiện mật khẩu">
-
-                        <i class="fa-regular fa-eye"></i>
-
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <!-- FULL NAME -->
-
-            <div class="account-form-group">
-
-                <label for="hoTen">
-                    Họ và tên
-                    <span>*</span>
-                </label>
-
-                <div class="account-form-control-wrap">
-
-                    <i class="fa-solid fa-id-card"></i>
-
-                    <input type="text"
-                           id="hoTen"
-                           name="hoTen"
-                           placeholder="Nhập họ và tên"
-                           required />
-
-                </div>
+                <small class="account-field-note">
+                    Tên đăng nhập không thể thay đổi.
+                </small>
 
             </div>
 
@@ -269,10 +231,6 @@
                     <select id="maVaiTro"
                             name="maVaiTro"
                             required>
-
-                        <option value="">
-                            -- Chọn vai trò --
-                        </option>
 
                         @foreach (var role in roles)
                         {
@@ -299,6 +257,30 @@
             </div>
 
 
+            <!-- FULL NAME -->
+
+            <div class="account-form-group">
+
+                <label for="hoTen">
+                    Họ và tên
+                    <span>*</span>
+                </label>
+
+                <div class="account-form-control-wrap">
+
+                    <i class="fa-solid fa-id-card"></i>
+
+                    <input type="text"
+                           id="hoTen"
+                           name="hoTen"
+                           value="@Model.HoTen"
+                           required />
+
+                </div>
+
+            </div>
+
+
             <!-- EMAIL -->
 
             <div class="account-form-group">
@@ -314,6 +296,7 @@
                     <input type="email"
                            id="email"
                            name="email"
+                           value="@Model.Email"
                            placeholder="example@gmail.com" />
 
                 </div>
@@ -336,6 +319,7 @@
                     <input type="text"
                            id="dienThoai"
                            name="dienThoai"
+                           value="@Model.DienThoai"
                            placeholder="Nhập số điện thoại" />
 
                 </div>
@@ -343,29 +327,34 @@
             </div>
 
 
-            <!-- NOTE -->
+            <!-- SECURITY -->
 
-            <div class="account-form-note">
+            <div class="account-form-group">
 
-                <i class="fa-solid fa-circle-info"></i>
+                <label>
+                    Bảo mật
+                </label>
 
-                <div>
-
-                    <strong>
-                        Lưu ý
-                    </strong>
+                <a asp-area="Admin"
+                   asp-controller="AccountManagement"
+                   asp-action="ResetPassword"
+                   asp-route-id="@Model.MaTaiKhoan"
+                   class="account-security-link">
 
                     <span>
-                        Quyền sử dụng chức năng được xác định
-                        theo vai trò được chọn cho tài khoản.
+
+                        <i class="fa-solid fa-key"></i>
+
+                        Đặt lại mật khẩu
+
                     </span>
 
-                </div>
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                </a>
 
             </div>
 
-
-            <!-- ACTIONS -->
 
             <div class="account-form-actions">
 
@@ -374,8 +363,6 @@
                    asp-action="Index"
                    class="account-cancel-btn">
 
-                    <i class="fa-solid fa-xmark"></i>
-
                     Hủy
 
                 </a>
@@ -383,9 +370,9 @@
                 <button type="submit"
                         class="account-submit-btn">
 
-                    <i class="fa-solid fa-user-plus"></i>
+                    <i class="fa-solid fa-floppy-disk"></i>
 
-                    Tạo tài khoản
+                    Lưu thay đổi
 
                 </button>
 
@@ -404,7 +391,7 @@
 
         document.addEventListener(
             "DOMContentLoaded",
-            function () {
+            function() {
 
                 const input =
                     document.getElementById("hinhAnh");
@@ -423,45 +410,23 @@
 
                 input.addEventListener(
                     "change",
-                    function () {
+                    function() {
 
                         const file =
-                            this.files &&
-                            this.files.length > 0
-                                ? this.files[0]
-                                : null;
+                            this.files?.[0];
 
                         if (!file) {
-
-                            preview.removeAttribute("src");
-
-                            preview.style.display =
-                                "none";
-
-                            placeholder.style.display =
-                                "flex";
-
                             return;
                         }
 
-                        const maxSize =
-                            5 * 1024 * 1024;
-
-                        if (file.size > maxSize) {
+                        if (file.size >
+                            5 * 1024 * 1024) {
 
                             alert(
                                 "Ảnh đại diện không được vượt quá 5MB."
                             );
 
                             input.value = "";
-
-                            preview.removeAttribute("src");
-
-                            preview.style.display =
-                                "none";
-
-                            placeholder.style.display =
-                                "flex";
 
                             return;
                         }
@@ -470,7 +435,7 @@
                             new FileReader();
 
                         reader.onload =
-                            function (event) {
+                            function(event) {
 
                                 preview.src =
                                     event.target.result;
@@ -480,6 +445,7 @@
 
                                 placeholder.style.display =
                                     "none";
+
                             };
 
                         reader.readAsDataURL(
@@ -491,43 +457,6 @@
 
             }
         );
-
-
-        function togglePassword(
-            inputId,
-            button
-        ) {
-
-            const input =
-                document.getElementById(
-                    inputId
-                );
-
-            const icon =
-                button.querySelector("i");
-
-            if (!input || !icon) {
-                return;
-            }
-
-            if (input.type === "password") {
-
-                input.type = "text";
-
-                icon.className =
-                    "fa-regular fa-eye-slash";
-
-            }
-            else {
-
-                input.type = "password";
-
-                icon.className =
-                    "fa-regular fa-eye";
-
-            }
-
-        }
 
     </script>
 

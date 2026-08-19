@@ -6,14 +6,17 @@
 
 /* =========================================================
    HEADER
+   LUÔN NẰM TRÊN NỘI DUNG TRANG
 ========================================================= */
 
 header {
     width: 100%;
     margin: 0;
     padding: 0;
-    position: relative;
-    z-index: 1000;
+    position: relative !important;
+    z-index: 1000000 !important;
+    overflow: visible !important;
+    isolation: isolate;
 }
 
 
@@ -25,9 +28,13 @@ header {
     width: 100%;
     min-height: 112px;
     padding: 0 32px;
+    position: relative !important;
+    z-index: 1000001 !important;
+    overflow: visible !important;
     background: #4b2e2b;
     box-shadow: 0 4px 16px rgba(45, 25, 20, 0.15);
 }
+
 
     .navbar .container-fluid {
         width: 100%;
@@ -35,6 +42,9 @@ header {
         margin: 0 auto;
         display: flex;
         align-items: center;
+        position: relative;
+        z-index: 1000002;
+        overflow: visible !important;
     }
 
 
@@ -47,6 +57,7 @@ header {
     margin: 0 42px 0 0;
     padding: 0;
 }
+
 
     .navbar-brand img,
     .navbar-brand .logo {
@@ -67,6 +78,9 @@ header {
     align-items: center;
     flex: 1;
     min-width: 0;
+    position: relative;
+    z-index: 1000003;
+    overflow: visible !important;
 }
 
 
@@ -82,10 +96,12 @@ header {
     padding: 0;
 }
 
+
     .navbar-nav .nav-item {
         margin: 0;
         padding: 0;
     }
+
 
     .navbar-nav .nav-link {
         position: relative;
@@ -101,8 +117,9 @@ header {
         line-height: 1;
         white-space: nowrap;
         border-radius: 10px;
-        transition: color .25s ease, background .25s ease;
+        transition: color 0.25s ease, background 0.25s ease;
     }
+
 
         .navbar-nav .nav-link:hover {
             color: #e4b17e !important;
@@ -124,8 +141,9 @@ header {
             border-radius: 20px;
             background: #d9a16d;
             transform: translateX(-50%);
-            transition: width .25s ease;
+            transition: width 0.25s ease;
         }
+
 
         .navbar-nav .nav-link:hover::after {
             width: 30px;
@@ -140,12 +158,13 @@ header {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    /* QUAN TRỌNG:
-       tăng khoảng cách giữa 3 cụm bên phải */
     gap: 18px;
     margin-left: auto;
     padding-left: 35px;
     flex-shrink: 0;
+    position: relative;
+    z-index: 1000010;
+    overflow: visible !important;
 }
 
 
@@ -165,19 +184,21 @@ header {
     background: #ffffff;
     color: #4b2e2b;
     text-decoration: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, .14);
-    transition: transform .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
+
 
     .cart-btn i {
         font-size: 20px;
     }
 
+
     .cart-btn:hover {
         background: #d4a373;
         color: #ffffff;
         transform: translateY(-2px);
-        box-shadow: 0 7px 16px rgba(0, 0, 0, .16);
+        box-shadow: 0 7px 16px rgba(0, 0, 0, 0.16);
     }
 
 
@@ -202,6 +223,7 @@ header {
     font-size: 10px;
     font-weight: 800;
     line-height: 1;
+    z-index: 2;
 }
 
 
@@ -212,10 +234,14 @@ header {
 .language-dropdown {
     position: relative;
     margin: 0;
+    z-index: 1000020;
+    overflow: visible !important;
 }
 
 
-/* LANGUAGE BUTTON */
+/* =========================================================
+   LANGUAGE BUTTON
+========================================================= */
 
 .lang-toggle {
     min-width: 150px;
@@ -225,38 +251,45 @@ header {
     justify-content: center;
     gap: 10px;
     padding: 0 16px;
-    border: 1.5px solid rgba(255, 255, 255, .28);
+    border: 1.5px solid rgba(255, 255, 255, 0.28);
     border-radius: 50px;
-    background: rgba(255, 255, 255, .025);
+    background: rgba(255, 255, 255, 0.025);
     color: #ffffff;
     cursor: pointer;
-    transition: border-color .2s ease, background .2s ease, transform .2s ease;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
+
 
     .lang-toggle:hover {
         border-color: #d4a373;
-        background: rgba(255, 255, 255, .06);
+        background: rgba(255, 255, 255, 0.06);
         transform: translateY(-1px);
     }
 
 
-/* GLOBE */
+/* =========================================================
+   LANGUAGE - GLOBE
+========================================================= */
 
 .globe {
     font-size: 19px;
 }
 
 
-/* DIVIDER */
+/* =========================================================
+   LANGUAGE - DIVIDER
+========================================================= */
 
 .divider {
     width: 1px;
     height: 20px;
-    background: rgba(255, 255, 255, .28);
+    background: rgba(255, 255, 255, 0.28);
 }
 
 
-/* VN */
+/* =========================================================
+   LANGUAGE - CURRENT
+========================================================= */
 
 .lang-current {
     color: #e0a66e;
@@ -266,23 +299,28 @@ header {
 }
 
 
-/* US */
+/* =========================================================
+   LANGUAGE - OTHER
+========================================================= */
 
 .lang-other {
-    color: rgba(255, 255, 255, .95);
+    color: rgba(255, 255, 255, 0.95);
     font-size: 16px;
     font-weight: 700;
     line-height: 1;
 }
 
 
-/* ARROW */
+/* =========================================================
+   LANGUAGE - ARROW
+========================================================= */
 
 .arrow {
     margin-left: 2px;
     font-size: 11px;
-    transition: transform .2s ease;
+    transition: transform 0.2s ease;
 }
+
 
 .lang-toggle:hover .arrow {
     transform: rotate(180deg);
@@ -294,9 +332,10 @@ header {
 ========================================================= */
 
 .lang-menu {
-    position: absolute;
+    position: absolute !important;
     top: 62px;
     right: 0;
+    left: auto;
     width: 260px;
     display: none;
     padding: 7px;
@@ -304,13 +343,14 @@ header {
     border: 1px solid #eee4dc;
     border-radius: 16px;
     background: #ffffff;
-    box-shadow: 0 16px 35px rgba(0, 0, 0, .16);
-    z-index: 9999;
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.16);
+    z-index: 1000050 !important;
 }
+
 
     .lang-menu.show {
         display: block;
-        animation: langFade .2s ease;
+        animation: langFade 0.2s ease;
     }
 
 
@@ -344,21 +384,25 @@ header {
     border-radius: 10px;
     color: #4b2e2b;
     text-decoration: none;
-    transition: background .2s ease;
+    transition: background 0.2s ease;
 }
+
 
     .lang-item:hover {
         background: #faf5f0;
     }
 
+
     .lang-item.active {
         background: #f8f1eb;
     }
+
 
 .lang-left {
     display: flex;
     align-items: center;
 }
+
 
     .lang-left img {
         width: 36px;
@@ -368,10 +412,12 @@ header {
         object-fit: cover;
     }
 
+
     .lang-left span {
         font-size: 15px;
         font-weight: 650;
     }
+
 
 .check {
     color: #9b6a43;
@@ -400,31 +446,37 @@ header {
     font-weight: 700;
     line-height: 1;
     white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, .10);
-    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
+
 
     .btn-login i,
     .btn-register i {
         font-size: 16px;
     }
 
+
     .btn-login:hover,
     .btn-register:hover {
         color: #ffffff !important;
         background: linear-gradient( 135deg, #c98f59, #b97945 );
         transform: translateY(-2px);
-        box-shadow: 0 7px 16px rgba(0, 0, 0, .14);
+        box-shadow: 0 7px 16px rgba(0, 0, 0, 0.14);
     }
 
 
 /* =========================================================
-   ACCOUNT DROPDOWN
+   ACCOUNT DROPDOWN WRAPPER
 ========================================================= */
 
 .account-dropdown {
+    position: relative !important;
     flex-shrink: 0;
+    z-index: 1000100 !important;
+    overflow: visible !important;
 }
+
 
     .account-dropdown .btn-login {
         max-width: 250px;
@@ -432,24 +484,83 @@ header {
         text-overflow: ellipsis;
     }
 
+
+    /* =========================================================
+   ACCOUNT DROPDOWN MENU
+   FIX KHÔNG BỊ PAGE CONTENT CHE
+========================================================= */
+
     .account-dropdown .dropdown-menu {
+        position: absolute !important;
+        top: calc(100% + 10px) !important;
+        right: 0 !important;
+        left: auto !important;
         min-width: 240px;
-        margin-top: 10px;
+        margin: 0 !important;
         padding: 8px;
+        overflow: visible !important;
         border: 1px solid #eee3da;
         border-radius: 15px;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+        background: #ffffff !important;
+        box-shadow: 0 18px 45px rgba(48, 27, 20, 0.22);
+        z-index: 1000200 !important;
+        transform: none;
     }
+
+
+        .account-dropdown .dropdown-menu.show {
+            display: block !important;
+            z-index: 1000200 !important;
+        }
+
+
+    /* =========================================================
+   ACCOUNT DROPDOWN ITEM
+========================================================= */
 
     .account-dropdown .dropdown-item,
     .account-dropdown .dropdown-item-text {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        width: 100%;
         padding: 11px 12px;
         border-radius: 8px;
+        color: #4f3831;
         font-size: 15px;
+        text-decoration: none;
+        white-space: nowrap;
     }
+
 
         .account-dropdown .dropdown-item:hover {
             background: #f8f2ed;
+        }
+
+
+    /* =========================================================
+   ACCOUNT DROPDOWN DIVIDER
+========================================================= */
+
+    .account-dropdown .dropdown-divider {
+        margin: 6px 4px;
+        border-color: #eee2db;
+    }
+
+
+    /* =========================================================
+   ACCOUNT LOGOUT
+========================================================= */
+
+    .account-dropdown .dropdown-item.text-danger {
+        color: #d64b45 !important;
+    }
+
+
+        .account-dropdown .dropdown-item.text-danger:hover {
+            color: #bd3e39 !important;
+            background: #fff0ef;
         }
 
 
@@ -459,16 +570,31 @@ header {
 
 .navbar-toggler {
     padding: 8px 10px;
-    border: 1px solid rgba(255, 255, 255, .35);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     border-radius: 9px;
 }
+
 
     .navbar-toggler:focus {
         box-shadow: none;
     }
 
+
 .navbar-toggler-icon {
     filter: invert(1);
+}
+
+
+/* =========================================================
+   PAGE CONTENT LAYER
+   GIỮ NỘI DUNG DƯỚI HEADER
+========================================================= */
+
+main,
+.order-history-page,
+.order-history-container {
+    position: relative;
+    z-index: 1;
 }
 
 
@@ -483,9 +609,11 @@ header {
         padding: 0 20px;
     }
 
+
     .navbar-brand {
         margin-right: 25px;
     }
+
 
         .navbar-brand img,
         .navbar-brand .logo {
@@ -493,9 +621,11 @@ header {
             height: 80px;
         }
 
+
     .navbar-nav {
         gap: 3px;
     }
+
 
         .navbar-nav .nav-link {
             padding: 0 10px !important;
@@ -503,12 +633,11 @@ header {
         }
 
 
-    /* vẫn giữ khoảng cách rõ ràng */
-
     .navbar-right {
         gap: 14px;
         padding-left: 20px;
     }
+
 
     .cart-btn {
         width: 46px;
@@ -516,9 +645,11 @@ header {
         flex-basis: 46px;
     }
 
+
         .cart-btn i {
             font-size: 18px;
         }
+
 
     .lang-toggle {
         min-width: 130px;
@@ -526,10 +657,12 @@ header {
         padding: 0 11px;
     }
 
+
     .lang-current,
     .lang-other {
         font-size: 14px;
     }
+
 
     .btn-login,
     .btn-register {
@@ -541,15 +674,21 @@ header {
 
 
 /* =========================================================
-   TABLET
+   RESPONSIVE - TABLET
 ========================================================= */
 
 @media (max-width: 991.98px) {
+
+    header {
+        z-index: 1000000 !important;
+    }
+
 
     .navbar {
         min-height: 90px;
         padding: 6px 20px;
     }
+
 
     .navbar-brand img,
     .navbar-brand .logo {
@@ -557,12 +696,15 @@ header {
         height: 76px;
     }
 
+
     .navbar-collapse {
         display: block;
         margin-top: 8px;
         padding: 15px 0 12px;
-        border-top: 1px solid rgba(255, 255, 255, .12);
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        overflow: visible !important;
     }
+
 
     .navbar-nav {
         width: 100%;
@@ -570,6 +712,7 @@ header {
         align-items: stretch;
         gap: 3px;
     }
+
 
         .navbar-nav .nav-link {
             width: 100%;
@@ -580,16 +723,20 @@ header {
             font-size: 17px;
         }
 
+
             .navbar-nav .nav-link::after {
                 display: none;
             }
 
+
             .navbar-nav .nav-link:hover {
-                background: rgba(255, 255, 255, .06);
+                background: rgba(255, 255, 255, 0.06);
             }
 
 
-    /* RIGHT SIDE */
+    /* =====================================================
+       RIGHT SIDE
+    ====================================================== */
 
     .navbar-right {
         width: 100%;
@@ -600,13 +747,24 @@ header {
         gap: 15px;
         margin-top: 13px;
         padding: 14px 0 0;
-        border-top: 1px solid rgba(255, 255, 255, .12);
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        overflow: visible !important;
     }
+
+
+    .account-dropdown {
+        z-index: 1000100 !important;
+    }
+
+
+        .account-dropdown .dropdown-menu {
+            z-index: 1000200 !important;
+        }
 }
 
 
 /* =========================================================
-   MOBILE
+   RESPONSIVE - MOBILE
 ========================================================= */
 
 @media (max-width: 767.98px) {
@@ -616,11 +774,13 @@ header {
         padding: 6px 14px;
     }
 
+
     .navbar-brand img,
     .navbar-brand .logo {
         width: 68px;
         height: 68px;
     }
+
 
     .cart-btn {
         width: 44px;
@@ -628,9 +788,11 @@ header {
         flex-basis: 44px;
     }
 
+
     .lang-toggle {
         height: 44px;
     }
+
 
     .btn-login,
     .btn-register {
@@ -640,31 +802,35 @@ header {
 
 
 /* =========================================================
-   SMALL MOBILE
+   RESPONSIVE - SMALL MOBILE
 ========================================================= */
 
 @media (max-width: 575.98px) {
 
     .navbar-right {
+        width: 100%;
         display: grid;
         grid-template-columns: 44px 1fr;
         column-gap: 14px;
         row-gap: 12px;
-        width: 100%;
     }
+
 
     .cart-btn {
         grid-column: 1;
     }
+
 
     .language-dropdown {
         grid-column: 2;
         width: 100%;
     }
 
+
     .lang-toggle {
         width: 100%;
     }
+
 
     .account-dropdown,
     .navbar-right > .btn-login,
@@ -673,6 +839,7 @@ header {
         width: 100%;
     }
 
+
         .account-dropdown .btn-login,
         .navbar-right > .btn-login,
         .navbar-right > .btn-register {
@@ -680,8 +847,17 @@ header {
             max-width: none;
         }
 
+
     .lang-menu {
         width: 100%;
         min-width: 225px;
+    }
+
+
+    .account-dropdown .dropdown-menu {
+        width: 100%;
+        min-width: 100%;
+        right: 0 !important;
+        left: 0 !important;
     }
 }

@@ -1,8 +1,12 @@
 ﻿using CoffeeShopManagement.Data;
 using CoffeeShopManagement.Models;
+
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace CoffeeShopManagement.Areas.Admin.Controllers
 {
@@ -10,6 +14,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
     public class AdminLoginController : Controller
     {
         private readonly CoffeeShopDbContext _context;
+
 
         public AdminLoginController(
             CoffeeShopDbContext context)
@@ -19,13 +24,14 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
         // =====================================================
-        // TRANG ĐĂNG NHẬP
+        // TRANG ĐĂNG NHẬP QUẢN TRỊ
         // =====================================================
 
         [HttpGet]
         public IActionResult Index()
         {
-            // Nếu đã đăng nhập thì về Dashboard
+            // Nếu đã đăng nhập khu quản trị
+            // thì chuyển thẳng về Dashboard.
 
             if (HttpContext.Session.GetString(
                     "AdminLoggedIn"
@@ -40,6 +46,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                     }
                 );
             }
+
 
             return View();
         }
@@ -69,7 +76,8 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             }
 
 
-            username = username.Trim();
+            username =
+                username.Trim();
 
 
             // =================================================
@@ -78,9 +86,11 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
             var account =
                 await _context.TaiKhoans
+
                     .Include(
                         x => x.MaVaiTroNavigation
                     )
+
                     .FirstOrDefaultAsync(
                         x => x.TenDangNhap == username
                     );
@@ -133,6 +143,7 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             var passwordHasher =
                 new PasswordHasher<TaiKhoan>();
 
+
             var verifyResult =
                 passwordHasher.VerifyHashedPassword(
                     account,
@@ -176,7 +187,8 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
                 );
 
 
-            if (!isAdmin && !isStaff)
+            if (!isAdmin &&
+                !isStaff)
             {
                 ViewBag.ErrorMessage =
                     "Tài khoản này không có quyền truy cập khu vực quản trị.";
@@ -186,30 +198,36 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             // =================================================
-            // 8. LẤY QUYỀN CỦA VAI TRÒ TỪ DATABASE
+            // 8. LẤY QUYỀN CỦA ROLE TỪ DATABASE
             // =================================================
 
             var permissions =
                 await _context.VaiTros
+
                     .Where(
                         x => x.MaVaiTro ==
                              account.MaVaiTro
                     )
+
                     .SelectMany(
                         x => x.MaQuyens
                     )
+
                     .Where(
                         x => x.IsActive
                     )
+
                     .Select(
                         x => x.TenQuyen
                     )
+
                     .Distinct()
+
                     .ToListAsync();
 
 
             // =================================================
-            // 9. LƯU SESSION
+            // 9. LƯU SESSION QUẢN TRỊ
             // =================================================
 
 
@@ -237,11 +255,12 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             );
 
 
-            // Họ tên
+            // Họ và tên
 
             HttpContext.Session.SetString(
                 "AdminFullName",
-                account.HoTen ?? account.TenDangNhap
+                account.HoTen
+                ?? account.TenDangNhap
             );
 
 
@@ -253,11 +272,12 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
             );
 
 
-            // Ảnh đại diện
+            // Avatar
 
             HttpContext.Session.SetString(
                 "AdminAvatar",
-                account.HinhAnh ?? ""
+                account.HinhAnh
+                ?? ""
             );
 
 
@@ -304,35 +324,41 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            // Chỉ xóa session của khu quản trị
-            // Không Session.Clear() để tránh ảnh hưởng
-            // các session khác như giỏ hàng khách hàng.
+            // =================================================
+            // 1. XÓA SESSION KHU QUẢN TRỊ
+            // =================================================
 
             HttpContext.Session.Remove(
                 "AdminLoggedIn"
             );
 
+
             HttpContext.Session.Remove(
                 "AdminAccountId"
             );
+
 
             HttpContext.Session.Remove(
                 "AdminUsername"
             );
 
+
             HttpContext.Session.Remove(
                 "AdminFullName"
             );
+
 
             HttpContext.Session.Remove(
                 "AdminRole"
             );
 
+
             HttpContext.Session.Remove(
                 "AdminAvatar"
             );
+
 
             HttpContext.Session.Remove(
                 "AdminPermissions"
@@ -340,15 +366,66 @@ namespace CoffeeShopManagement.Areas.Admin.Controllers
 
 
             // =================================================
-            // QUAY VỀ LOGIN
+            // 2. XÓA SESSION ĐĂNG NHẬP WEBSITE CÒN SÓT
+            //
+            // Phần Header website đang dùng các Session này
+            // để xác định người dùng đã đăng nhập hay chưa.
+            //
+            // Nếu không xóa MaKH / MaTaiKhoan thì sau khi
+            // Admin logout, Header có thể hiểu nhầm thành
+            // tài khoản Khách hàng.
+            // =================================================
+
+            HttpContext.Session.Remove(
+                "HoTen"
+            );
+
+
+            HttpContext.Session.Remove(
+                "VaiTro"
+            );
+
+
+            HttpContext.Session.Remove(
+                "TenDangNhap"
+            );
+
+
+            HttpContext.Session.Remove(
+                "MaKH"
+            );
+
+
+            HttpContext.Session.Remove(
+                "MaTaiKhoan"
+            );
+
+
+            // =================================================
+            // 3. XÓA COOKIE AUTHENTICATION
+            //
+            // Tránh trường hợp User.Identity vẫn còn
+            // IsAuthenticated = true sau khi logout.
+            // =================================================
+
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                await HttpContext.SignOutAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme
+                );
+            }
+
+
+            // =================================================
+            // 4. QUAY VỀ TRANG CHỦ WEBSITE
             // =================================================
 
             return RedirectToAction(
                 "Index",
-                "AdminLogin",
+                "Home",
                 new
                 {
-                    area = "Admin"
+                    area = ""
                 }
             );
         }

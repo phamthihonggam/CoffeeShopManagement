@@ -5,115 +5,230 @@
 
 @inject Microsoft.Extensions.Localization.IStringLocalizer<CoffeeShopManagement.SharedResource> T
 
+
 @{
-    // =================================================
+    // =========================================================
     // CART
-    // =================================================
+    // =========================================================
 
     var cart =
         Context.Session
             .GetObjectFromJson<List<CartItem>>("CART")
         ?? new List<CartItem>();
 
+
     var cartCount =
-        cart.Sum(x => x.SoLuong);
+        cart.Sum(
+            x => x.SoLuong
+        );
 
 
-    // =================================================
+    // =========================================================
     // LANGUAGE
-    // =================================================
+    // =========================================================
 
     var currentCulture =
-        CultureInfo.CurrentUICulture
+        CultureInfo
+            .CurrentUICulture
             .TwoLetterISOLanguageName;
+
 
     var isVietnamese =
         currentCulture == "vi";
 
 
-    // =================================================
-    // ACCOUNT SESSION
-    // =================================================
+    // =========================================================
+    // ADMIN / STAFF SESSION
+    // =========================================================
 
-    var hoTen =
+    var adminLoggedIn =
+        Context.Session
+            .GetString("AdminLoggedIn")
+        == "true";
+
+
+    var adminFullName =
+        Context.Session
+            .GetString("AdminFullName");
+
+
+    var adminUsername =
+        Context.Session
+            .GetString("AdminUsername");
+
+
+    var adminRole =
+        Context.Session
+            .GetString("AdminRole");
+
+
+    var adminAvatar =
+        Context.Session
+            .GetString("AdminAvatar");
+
+
+    // =========================================================
+    // CUSTOMER / WEBSITE SESSION
+    // =========================================================
+
+    var customerFullName =
         Context.Session
             .GetString("HoTen");
 
-    var vaiTro =
+
+    var customerRole =
         Context.Session
             .GetString("VaiTro");
+
 
     var maKh =
         Context.Session
             .GetInt32("MaKH");
+
 
     var maTaiKhoan =
         Context.Session
             .GetInt32("MaTaiKhoan");
 
 
-    // =================================================
+    // =========================================================
     // ADMIN
-    // =================================================
+    // =========================================================
 
     var isAdmin =
-        User.IsInRole("Admin")
-        ||
+        adminLoggedIn
+        &&
         string.Equals(
-            vaiTro,
+            adminRole,
             "Admin",
             StringComparison.OrdinalIgnoreCase
         );
 
 
-    // =================================================
+    // =========================================================
     // STAFF
-    // =================================================
+    // =========================================================
 
     var isStaff =
-        User.IsInRole("NhanVien")
-        ||
-        string.Equals(
-            vaiTro,
-            "NhanVien",
-            StringComparison.OrdinalIgnoreCase
+        adminLoggedIn
+        &&
+        (
+            string.Equals(
+                adminRole,
+                "Nhân viên",
+                StringComparison.OrdinalIgnoreCase
+            )
+            ||
+            string.Equals(
+                adminRole,
+                "NhanVien",
+                StringComparison.OrdinalIgnoreCase
+            )
+            ||
+            string.Equals(
+                adminRole,
+                "Nhan Vien",
+                StringComparison.OrdinalIgnoreCase
+            )
+            ||
+            string.Equals(
+                adminRole,
+                "Staff",
+                StringComparison.OrdinalIgnoreCase
+            )
         );
 
 
-    // =================================================
-    // LOGIN STATUS
-    // =================================================
+    // =========================================================
+    // CUSTOMER
+    //
+    // Chỉ coi là khách hàng nếu KHÔNG có phiên Admin / Staff.
+    // =========================================================
 
-    var isLoggedIn =
-        User.Identity?.IsAuthenticated == true
-        ||
-        !string.IsNullOrWhiteSpace(hoTen)
+    var hasCustomerSession =
+        !string.IsNullOrWhiteSpace(
+            customerFullName
+        )
         ||
         maKh.HasValue
         ||
         maTaiKhoan.HasValue;
 
 
-    // =================================================
-    // CUSTOMER
-    // =================================================
+    var hasCustomerIdentity =
+        User.Identity?.IsAuthenticated == true
+        &&
+        !string.IsNullOrWhiteSpace(
+            User.Identity?.Name
+        );
+
 
     var isCustomer =
-        maKh.HasValue
-        ||
-        string.Equals(
-            vaiTro,
-            "KhachHang",
-            StringComparison.OrdinalIgnoreCase
-        )
-        ||
+        !isAdmin
+        &&
+        !isStaff
+        &&
         (
-            isLoggedIn
-            &&
-            !isAdmin
-            &&
-            !isStaff
+            hasCustomerSession
+            ||
+            hasCustomerIdentity
         );
+
+
+    // =========================================================
+    // LOGIN STATUS
+    // =========================================================
+
+    var isLoggedIn =
+        isAdmin
+        ||
+        isStaff
+        ||
+        isCustomer;
+
+
+    // =========================================================
+    // DISPLAY NAME
+    // =========================================================
+
+    string displayName;
+
+
+    if (isAdmin)
+    {
+        displayName =
+            !string.IsNullOrWhiteSpace(
+                adminFullName
+            )
+                ? adminFullName
+                : "Quản trị viên";
+    }
+    else if (isStaff)
+    {
+        displayName =
+            !string.IsNullOrWhiteSpace(
+                adminFullName
+            )
+                ? adminFullName
+                : "Nhân viên";
+    }
+    else if (isCustomer)
+    {
+        displayName =
+            !string.IsNullOrWhiteSpace(
+                customerFullName
+            )
+                ? customerFullName
+                : (
+                    User.Identity?.Name
+                    ?? "Tài khoản"
+                );
+    }
+    else
+    {
+        displayName =
+            "";
+    }
 }
 
 
@@ -123,11 +238,13 @@
 
         <div class="container-fluid px-0">
 
-            <!-- =================================================
+
+            <!-- =====================================================
                  LOGO
-            ================================================== -->
+            ====================================================== -->
 
             <a class="navbar-brand d-flex align-items-center"
+               asp-area=""
                asp-controller="Home"
                asp-action="Index">
 
@@ -138,9 +255,9 @@
             </a>
 
 
-            <!-- =================================================
+            <!-- =====================================================
                  MOBILE TOGGLER
-            ================================================== -->
+            ====================================================== -->
 
             <button class="navbar-toggler"
                     type="button"
@@ -155,12 +272,13 @@
             </button>
 
 
-            <!-- =================================================
+            <!-- =====================================================
                  NAVBAR CONTENT
-            ================================================== -->
+            ====================================================== -->
 
             <div class="collapse navbar-collapse"
                  id="navbarContent">
+
 
                 <!-- =================================================
                      MENU
@@ -169,7 +287,7 @@
 
 
                 <!-- =================================================
-                     RIGHT SIDE
+                     RIGHT
                 ================================================== -->
 
                 <div class="navbar-right">
@@ -179,7 +297,8 @@
                          CART
                     ================================================== -->
 
-                    <a asp-controller="Cart"
+                    <a asp-area=""
+                       asp-controller="Cart"
                        asp-action="Index"
                        class="cart-btn"
                        aria-label="@T["Cart"]">
@@ -198,6 +317,7 @@
                     ================================================== -->
 
                     <div class="language-dropdown">
+
 
                         <button type="button"
                                 class="lang-toggle"
@@ -239,11 +359,10 @@
                              id="langMenu">
 
 
-                            <!-- ============================
-                                 VIETNAMESE
-                            ============================= -->
+                            <!-- VIETNAMESE -->
 
-                            <a asp-controller="Language"
+                            <a asp-area=""
+                               asp-controller="Language"
                                asp-action="SetLanguage"
                                asp-route-culture="vi"
                                asp-route-returnUrl="@(Context.Request.Path + Context.Request.QueryString)"
@@ -252,7 +371,7 @@
                                 <div class="lang-left">
 
                                     <img src="~/images/flags/vn.png"
-                                         alt="Vietnam">
+                                         alt="Vietnam" />
 
                                     <span>
                                         Tiếng Việt
@@ -269,11 +388,10 @@
                             </a>
 
 
-                            <!-- ============================
-                                 ENGLISH
-                            ============================= -->
+                            <!-- ENGLISH -->
 
-                            <a asp-controller="Language"
+                            <a asp-area=""
+                               asp-controller="Language"
                                asp-action="SetLanguage"
                                asp-route-culture="en"
                                asp-route-returnUrl="@(Context.Request.Path + Context.Request.QueryString)"
@@ -282,7 +400,7 @@
                                 <div class="lang-left">
 
                                     <img src="~/images/flags/us.png"
-                                         alt="English">
+                                         alt="English" />
 
                                     <span>
                                         English (US)
@@ -298,6 +416,7 @@
 
                             </a>
 
+
                         </div>
 
                     </div>
@@ -308,27 +427,33 @@
                     ================================================== -->
                     @if (!isLoggedIn)
                     {
-                        <!-- ============================
+                        <!-- =============================================
                              CHƯA ĐĂNG NHẬP
-                        ============================= -->
+                        ============================================== -->
 
-                        <a asp-controller="Account"
+                        <a asp-area=""
+                           asp-controller="Account"
                            asp-action="Login"
                            class="btn-login">
 
                             <i class="bi bi-person me-1"></i>
 
-                            @T["Login"]
+                            <span>
+                                @T["Login"]
+                            </span>
 
                         </a>
                     }
                     else
                     {
-                        <!-- ============================
+                        <!-- =============================================
                              ĐÃ ĐĂNG NHẬP
-                        ============================= -->
+                        ============================================== -->
 
                         <div class="dropdown account-dropdown">
+
+
+                            <!-- ACCOUNT BUTTON -->
 
                             <button class="btn-login dropdown-toggle"
                                     type="button"
@@ -337,25 +462,21 @@
 
                                 <i class="bi bi-person-circle me-2"></i>
 
-
-                                @if (!string.IsNullOrWhiteSpace(hoTen))
-                                {
-                                    @hoTen
-                                }
-                                else
-                                {
-                                    @User.Identity?.Name
-                                }
+                                <span>
+                                    @displayName
+                                </span>
 
                             </button>
 
 
+                            <!-- DROPDOWN MENU -->
+
                             <ul class="dropdown-menu dropdown-menu-end">
 
 
-                                <!-- =================================================
+                                <!-- =====================================
                                      ADMIN
-                                ================================================== -->
+                                ====================================== -->
                                 @if (isAdmin)
                                 {
                                     <li>
@@ -364,11 +485,12 @@
 
                                             <i class="bi bi-shield-lock-fill me-2"></i>
 
-                                            ADMIN
+                                            QUẢN TRỊ VIÊN
 
                                         </span>
 
                                     </li>
+
 
                                     <li>
                                         <hr class="dropdown-divider" />
@@ -391,42 +513,44 @@
                                     </li>
 
 
-                                    <li>
+                                    @if (
+                                        Context.Session
+                                            .GetString("AdminPermissions")
+                                            ?.Split(
+                                                '|',
+                                                StringSplitOptions.RemoveEmptyEntries
+                                            )
+                                            .Any(
+                                                x => string.Equals(
+                                                    x,
+                                                    "ACCOUNT_MANAGE",
+                                                    StringComparison.OrdinalIgnoreCase
+                                                )
+                                            )
+                                        == true
+                                    )
+                                    {
+                                        <li>
 
-                                        <a class="dropdown-item"
-                                           asp-area="Admin"
-                                           asp-controller="Order"
-                                           asp-action="Index">
+                                            <a class="dropdown-item"
+                                               asp-area="Admin"
+                                               asp-controller="AccountManagement"
+                                               asp-action="Index">
 
-                                            <i class="bi bi-receipt me-2"></i>
+                                                <i class="bi bi-people me-2"></i>
 
-                                            Quản lý đơn hàng
+                                                Quản lý tài khoản
 
-                                        </a>
+                                            </a>
 
-                                    </li>
-
-
-                                    <li>
-
-                                        <a class="dropdown-item"
-                                           asp-area="Admin"
-                                           asp-controller="Product"
-                                           asp-action="Index">
-
-                                            <i class="bi bi-cup-hot me-2"></i>
-
-                                            Quản lý sản phẩm
-
-                                        </a>
-
-                                    </li>
+                                        </li>
+                                    }
                                 }
 
 
-                                <!-- =================================================
-                                     NHÂN VIÊN
-                                ================================================== -->
+                                <!-- =====================================
+                                     STAFF
+                                ====================================== -->
                                 @if (isStaff)
                                 {
                                     <li>
@@ -441,6 +565,7 @@
 
                                     </li>
 
+
                                     <li>
                                         <hr class="dropdown-divider" />
                                     </li>
@@ -449,29 +574,13 @@
                                     <li>
 
                                         <a class="dropdown-item"
-                                           asp-area="Staff"
+                                           asp-area="Admin"
                                            asp-controller="Dashboard"
                                            asp-action="Index">
 
                                             <i class="bi bi-speedometer2 me-2"></i>
 
-                                            Trang nhân viên
-
-                                        </a>
-
-                                    </li>
-
-
-                                    <li>
-
-                                        <a class="dropdown-item"
-                                           asp-area="Staff"
-                                           asp-controller="Order"
-                                           asp-action="Index">
-
-                                            <i class="bi bi-receipt me-2"></i>
-
-                                            Quản lý đơn hàng
+                                            Trang quản trị
 
                                         </a>
 
@@ -479,9 +588,9 @@
                                 }
 
 
-                                <!-- =================================================
-                                     KHÁCH HÀNG
-                                ================================================== -->
+                                <!-- =====================================
+                                     CUSTOMER
+                                ====================================== -->
                                 @if (isCustomer)
                                 {
                                     <li>
@@ -517,34 +626,73 @@
                                 }
 
 
-                                <!-- =================================================
-                                     LOGOUT
-                                ================================================== -->
+                                <!-- =====================================
+                                     LOGOUT DIVIDER
+                                ====================================== -->
 
                                 <li>
                                     <hr class="dropdown-divider" />
                                 </li>
 
 
-                                <li>
+                                <!-- =====================================
+                                     ADMIN / STAFF LOGOUT
+                                ====================================== -->
+                                @if (isAdmin || isStaff)
+                                {
+                                    <li>
 
-                                    <a class="dropdown-item text-danger"
-                                       asp-area=""
-                                       asp-controller="Account"
-                                       asp-action="Logout">
+                                        <form asp-area="Admin"
+                                              asp-controller="AdminLogin"
+                                              asp-action="Logout"
+                                              method="post"
+                                              class="m-0">
 
-                                        <i class="bi bi-box-arrow-right me-2"></i>
+                                            @Html.AntiForgeryToken()
 
-                                        @T["Logout"]
 
-                                    </a>
+                                            <button type="submit"
+                                                    class="dropdown-item text-danger border-0 bg-transparent w-100 text-start">
 
-                                </li>
+                                                <i class="bi bi-box-arrow-right me-2"></i>
+
+                                                @T["Logout"]
+
+                                            </button>
+
+                                        </form>
+
+                                    </li>
+                                }
+
+
+                                <!-- =====================================
+                                     CUSTOMER LOGOUT
+                                ====================================== -->
+                                @if (isCustomer)
+                                {
+                                    <li>
+
+                                        <a class="dropdown-item text-danger"
+                                           asp-area=""
+                                           asp-controller="Account"
+                                           asp-action="Logout">
+
+                                            <i class="bi bi-box-arrow-right me-2"></i>
+
+                                            @T["Logout"]
+
+                                        </a>
+
+                                    </li>
+                                }
+
 
                             </ul>
 
                         </div>
                     }
+
 
                 </div>
 

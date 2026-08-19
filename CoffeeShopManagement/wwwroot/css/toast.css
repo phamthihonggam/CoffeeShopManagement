@@ -1,162 +1,269 @@
-﻿/* =========================================
-   ROSALIE - ADD TO CART TOAST
-========================================= */
+﻿/* =========================================================
+   ROSALIE COFFEE
+   GLOBAL APP TOAST
+========================================================= */
 
-.app-toast {
-    position: fixed !important;
-    top: 95px !important;
-    right: 28px !important;
-    left: auto !important;
-    bottom: auto !important;
-    width: 430px;
-    max-width: calc(100vw - 40px);
-    padding: 16px 18px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: #ffffff;
-    border: 1px solid #eee3dc;
-    border-radius: 14px;
-    box-shadow: 0 12px 35px rgba(75, 46, 43, 0.18);
-    z-index: 999999 !important;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-15px);
-    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.rosalie-toast-container {
+    position: fixed;
+    /* nằm dưới navbar */
+    top: 105px;
+    right: 28px;
+    width: min(390px, calc(100vw - 32px));
+    z-index: 2000000;
+    pointer-events: none;
 }
 
 
-    /* =========================================
-   SHOW
-========================================= */
+/* =========================================================
+   TOAST
+========================================================= */
 
-    .app-toast.show {
+.rosalie-toast {
+    position: relative;
+    width: 100%;
+    min-height: 86px;
+    display: grid;
+    grid-template-columns: 48px 1fr 34px;
+    align-items: center;
+    gap: 13px;
+    padding: 16px 15px 16px 16px;
+    overflow: hidden;
+    border: 1px solid rgba(104, 67, 52, 0.12);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 18px 45px rgba(64, 38, 28, 0.16), 0 4px 12px rgba(64, 38, 28, 0.08);
+    backdrop-filter: blur(14px);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(30px) scale(0.97);
+    transition: opacity 0.28s ease, visibility 0.28s ease, transform 0.32s cubic-bezier(.2, .8, .2, 1);
+    pointer-events: auto;
+}
+
+
+    /* =========================================================
+   SHOW
+========================================================= */
+
+    .rosalie-toast.show {
         opacity: 1;
         visibility: visible;
-        transform: translateY(0);
+        transform: translateX(0) scale(1);
     }
 
 
-/* =========================================
+/* =========================================================
    ICON
-========================================= */
+========================================================= */
 
-.app-toast-icon {
-    width: 42px;
-    height: 42px;
-    flex: 0 0 42px;
+.rosalie-toast-icon {
+    width: 46px;
+    height: 46px;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
     border-radius: 50%;
-    background: #e8f7ed;
-    color: #2ca65a;
     font-size: 18px;
 }
 
 
-/* =========================================
+/* =========================================================
    CONTENT
-========================================= */
+========================================================= */
 
-.app-toast-content {
-    flex: 1;
+.rosalie-toast-content {
     min-width: 0;
 }
 
 
-/* =========================================
-   TITLE
-========================================= */
-
-.app-toast-title {
-    margin: 0 0 4px;
-    color: #4b2e2b;
+.rosalie-toast-title {
+    margin-bottom: 4px;
+    color: #4b2d25;
     font-size: 15px;
-    font-weight: 800;
-    line-height: 1.3;
+    line-height: 1.2;
+    font-weight: 900;
 }
 
 
-/* =========================================
-   MESSAGE
-========================================= */
-
-.app-toast-message {
-    margin: 0;
-    color: #766861;
-    font-size: 12px;
-    font-weight: 500;
+.rosalie-toast-message {
+    color: #79665d;
+    font-size: 13px;
     line-height: 1.5;
-    white-space: normal;
+    font-weight: 500;
+    word-break: break-word;
 }
 
 
-/* =========================================
-   XEM GIỎ
-========================================= */
+/* =========================================================
+   CLOSE
+========================================================= */
 
-.app-toast-cart {
-    flex-shrink: 0;
-    display: inline-flex;
+.rosalie-toast-close {
+    width: 32px;
+    height: 32px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 9px 13px;
-    background: #f6eee8;
-    border-radius: 9px;
-    color: #8f4d2e;
-    font-size: 12px;
-    font-weight: 700;
-    text-decoration: none;
-    transition: 0.2s ease;
+    align-self: start;
+    margin-top: 1px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #9b887f;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
 
-    .app-toast-cart:hover {
-        background: #8f4d2e;
-        color: #ffffff;
-        text-decoration: none;
+    .rosalie-toast-close:hover {
+        background: #f6eee9;
+        color: #5a372c;
+        transform: rotate(5deg);
     }
 
 
-/* =========================================
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.rosalie-toast-progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 4px;
+    transform-origin: left center;
+}
+
+
+/* =========================================================
+   SUCCESS
+========================================================= */
+
+.rosalie-toast.success {
+    border-left: 4px solid #29a866;
+}
+
+
+    .rosalie-toast.success .rosalie-toast-icon {
+        background: #e8f7ef;
+        color: #27a865;
+    }
+
+
+    .rosalie-toast.success .rosalie-toast-progress {
+        background: #29a866;
+    }
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.rosalie-toast.error {
+    border-left: 4px solid #dc4c4c;
+}
+
+
+    .rosalie-toast.error .rosalie-toast-icon {
+        background: #fdecec;
+        color: #d94343;
+    }
+
+
+    .rosalie-toast.error .rosalie-toast-progress {
+        background: #dc4c4c;
+    }
+
+
+/* =========================================================
+   WARNING
+========================================================= */
+
+.rosalie-toast.warning {
+    border-left: 4px solid #dc9a27;
+}
+
+
+    .rosalie-toast.warning .rosalie-toast-icon {
+        background: #fff4dd;
+        color: #d18d17;
+    }
+
+
+    .rosalie-toast.warning .rosalie-toast-progress {
+        background: #dc9a27;
+    }
+
+
+/* =========================================================
+   INFO
+========================================================= */
+
+.rosalie-toast.info {
+    border-left: 4px solid #3989db;
+}
+
+
+    .rosalie-toast.info .rosalie-toast-icon {
+        background: #eaf3fd;
+        color: #317dcc;
+    }
+
+
+    .rosalie-toast.info .rosalie-toast-progress {
+        background: #3989db;
+    }
+
+
+/* =========================================================
+   PROGRESS ANIMATION
+========================================================= */
+
+@keyframes rosalieToastProgress {
+
+    from {
+        transform: scaleX(1);
+    }
+
+    to {
+        transform: scaleX(0);
+    }
+}
+
+
+/* =========================================================
    MOBILE
-========================================= */
+========================================================= */
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
 
-    .app-toast {
-        position: fixed !important;
-        top: 80px !important;
-        right: 15px !important;
-        left: 15px !important;
-        bottom: auto !important;
+    .rosalie-toast-container {
+        top: 88px;
+        right: 16px;
+        left: 16px;
         width: auto;
-        max-width: none;
+    }
+
+
+    .rosalie-toast {
+        min-height: 80px;
+        grid-template-columns: 44px 1fr 30px;
         padding: 14px;
+        border-radius: 16px;
     }
 
 
-    .app-toast-icon {
-        width: 38px;
-        height: 38px;
-        flex-basis: 38px;
-    }
-
-
-    .app-toast-title {
-        font-size: 14px;
-    }
-
-
-    .app-toast-message {
-        font-size: 11px;
-    }
-
-
-    .app-toast-cart {
-        padding: 8px 10px;
-        font-size: 11px;
+    .rosalie-toast-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 16px;
     }
 }

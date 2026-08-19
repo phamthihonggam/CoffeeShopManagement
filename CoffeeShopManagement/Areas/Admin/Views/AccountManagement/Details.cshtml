@@ -1,0 +1,319 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@model CoffeeShopManagement.Models.TaiKhoan
+
+@{
+    ViewData["Title"] = "Chi tiết tài khoản";
+
+    var roleName =
+        Model.MaVaiTroNavigation?.TenVaiTro
+        ?? "Chưa xác định";
+
+    var currentRole =
+        Context.Session.GetString("AdminRole") ?? "";
+
+    bool currentUserIsAdmin =
+        currentRole.Equals(
+            "Admin",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+    bool targetIsAdmin =
+        roleName.Equals(
+            "Admin",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+    bool canManage =
+        currentUserIsAdmin ||
+        !targetIsAdmin;
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/admin-account.css"
+          asp-append-version="true" />
+
+}
+
+
+<div class="account-page">
+
+
+    <div class="account-intro">
+
+        <div class="account-intro-content">
+
+            <span class="account-label">
+
+                <i class="fa-solid fa-address-card"></i>
+
+                ROSALIE COFFEE
+
+            </span>
+
+            <h2>
+                Chi tiết tài khoản
+            </h2>
+
+            <p>
+                Thông tin hồ sơ và trạng thái truy cập
+                của tài khoản trong hệ thống.
+            </p>
+
+        </div>
+
+
+        <a asp-area="Admin"
+           asp-controller="AccountManagement"
+           asp-action="Index"
+           class="account-reset-btn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Quay lại
+
+        </a>
+
+    </div>
+
+
+    <div class="account-details-layout">
+
+
+        <!-- PROFILE -->
+
+        <div class="account-profile-card">
+
+            <div class="account-profile-cover"></div>
+
+
+            <div class="account-profile-body">
+
+                <div class="account-profile-avatar">
+
+                    @if (!string.IsNullOrWhiteSpace(Model.HinhAnh))
+                    {
+                        <img src="~/images/avatars/@Model.HinhAnh"
+                             asp-append-version="true"
+                             alt="@Model.HoTen" />
+                    }
+                    else
+                    {
+                        <i class="fa-solid fa-user"></i>
+                    }
+
+                </div>
+
+
+                <h3>
+                    @Model.HoTen
+                </h3>
+
+                <span class="account-profile-username">
+                    @@ @Model.TenDangNhap
+                </span>
+
+
+                <div class="account-profile-badges">
+
+                    <span class="account-role @(targetIsAdmin ? "admin" : "staff")">
+
+                        <i class="fa-solid @(targetIsAdmin ? "fa-user-shield" : "fa-user-tie")"></i>
+
+                        @roleName
+
+                    </span>
+
+                    <span class="account-status @(Model.IsActive ? "active" : "locked")">
+
+                        <span class="status-dot"></span>
+
+                        @(Model.IsActive ? "Hoạt động" : "Đã khóa")
+
+                    </span>
+
+                </div>
+
+
+                @if (canManage)
+                {
+                    <div class="account-profile-actions">
+
+                        <a asp-area="Admin"
+                           asp-controller="AccountManagement"
+                           asp-action="Edit"
+                           asp-route-id="@Model.MaTaiKhoan"
+                           class="account-profile-primary">
+
+                            <i class="fa-solid fa-pen"></i>
+
+                            Chỉnh sửa
+
+                        </a>
+
+                        <a asp-area="Admin"
+                           asp-controller="AccountManagement"
+                           asp-action="ResetPassword"
+                           asp-route-id="@Model.MaTaiKhoan"
+                           class="account-profile-secondary">
+
+                            <i class="fa-solid fa-key"></i>
+
+                            Đặt lại mật khẩu
+
+                        </a>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- INFORMATION -->
+
+        <div class="account-detail-card">
+
+            <div class="account-detail-heading">
+
+                <div>
+
+                    <span class="account-table-label">
+                        HỒ SƠ
+                    </span>
+
+                    <h3>
+                        Thông tin tài khoản
+                    </h3>
+
+                </div>
+
+                <i class="fa-solid fa-user-gear"></i>
+
+            </div>
+
+
+            <div class="account-detail-grid">
+
+
+                <div class="account-detail-item">
+
+                    <span>
+                        Mã tài khoản
+                    </span>
+
+                    <strong>
+                        #@Model.MaTaiKhoan
+                    </strong>
+
+                </div>
+
+
+                <div class="account-detail-item">
+
+                    <span>
+                        Tên đăng nhập
+                    </span>
+
+                    <strong>
+                        @Model.TenDangNhap
+                    </strong>
+
+                </div>
+
+
+                <div class="account-detail-item">
+
+                    <span>
+                        Họ và tên
+                    </span>
+
+                    <strong>
+                        @Model.HoTen
+                    </strong>
+
+                </div>
+
+
+                <div class="account-detail-item">
+
+                    <span>
+                        Vai trò
+                    </span>
+
+                    <strong>
+                        @roleName
+                    </strong>
+
+                </div>
+
+
+                <div class="account-detail-item">
+
+                    <span>
+                        Email
+                    </span>
+
+                    <strong>
+                        @(string.IsNullOrWhiteSpace(Model.Email)
+                            ? "Chưa cập nhật"
+                            : Model.Email)
+                    </strong>
+
+                </div>
+
+
+                <div class="account-detail-item">
+
+                    <span>
+                        Số điện thoại
+                    </span>
+
+                    <strong>
+                        @(string.IsNullOrWhiteSpace(Model.DienThoai)
+                            ? "Chưa cập nhật"
+                            : Model.DienThoai)
+                    </strong>
+
+                </div>
+
+
+                <div class="account-detail-item">
+
+                    <span>
+                        Ngày tạo
+                    </span>
+
+                    <strong>
+                        @Model.NgayTao.ToString("dd/MM/yyyy HH:mm")
+                    </strong>
+
+                </div>
+
+
+                <div class="account-detail-item">
+
+                    <span>
+                        Trạng thái
+                    </span>
+
+                    <strong>
+                        @(Model.IsActive
+                            ? "Đang hoạt động"
+                            : "Đã khóa")
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>

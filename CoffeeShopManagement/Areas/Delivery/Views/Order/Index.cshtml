@@ -18,6 +18,145 @@
       asp-append-version="true" />
 
 
+<style>
+    /* =========================================================
+           ROSALIE - DELIVERY SUCCESS CONFIRM MODAL
+        ========================================================= */
+
+    .delivery-success-modal {
+        border: 0;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 24px 70px rgba(72, 43, 31, 0.22);
+    }
+
+    .delivery-success-modal-header {
+        padding: 24px 26px 18px;
+        border-bottom: 1px solid #eee2da;
+        background: #fffaf6;
+    }
+
+        .delivery-success-modal-header span {
+            display: block;
+            margin-bottom: 4px;
+            color: #a15f39;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .delivery-success-modal-header .modal-title {
+            margin: 0;
+            color: #4c2f26;
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+    .delivery-success-modal-body {
+        padding: 28px 26px 24px;
+        background: #ffffff;
+    }
+
+    .delivery-success-icon {
+        width: 68px;
+        height: 68px;
+        margin: 0 auto 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #e8f7ed;
+        color: #1e9b53;
+        font-size: 32px;
+    }
+
+    .delivery-success-message {
+        margin: 0;
+        text-align: center;
+        color: #59433a;
+        font-size: 16px;
+        line-height: 1.7;
+    }
+
+        .delivery-success-message strong {
+            color: #4c2f26;
+            font-weight: 900;
+        }
+
+    .delivery-success-note {
+        margin-top: 18px;
+        padding: 13px 14px;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        border: 1px solid #d8ecdf;
+        border-radius: 14px;
+        background: #f4fbf6;
+        color: #477055;
+        font-size: 13px;
+        line-height: 1.55;
+    }
+
+        .delivery-success-note i {
+            margin-top: 2px;
+            color: #1e9b53;
+            font-size: 16px;
+        }
+
+    .delivery-success-modal-footer {
+        padding: 18px 26px 24px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        border-top: 1px solid #eee2da;
+        background: #ffffff;
+    }
+
+    .delivery-success-cancel,
+    .delivery-success-confirm {
+        min-width: 132px;
+        padding: 11px 18px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 800;
+        transition: all 0.2s ease;
+    }
+
+    .delivery-success-cancel {
+        border: 1px solid #ddcfc6;
+        background: #ffffff;
+        color: #68483b;
+    }
+
+        .delivery-success-cancel:hover {
+            background: #f8f1ec;
+        }
+
+    .delivery-success-confirm {
+        border: 1px solid #1e9b53;
+        background: #1e9b53;
+        color: #ffffff;
+    }
+
+        .delivery-success-confirm:hover {
+            background: #178247;
+            border-color: #178247;
+            transform: translateY(-1px);
+        }
+
+    @@media (max-width: 575.98px) {
+        .delivery-success-modal-footer {
+            flex-direction: column-reverse;
+        }
+
+        .delivery-success-cancel,
+        .delivery-success-confirm {
+            width: 100%;
+        }
+    }
+</style>
+
+
 <section class="delivery-page">
 
     <div class="delivery-container">
@@ -731,30 +870,18 @@
                                 {
                                     <!-- SUCCESS -->
 
-                                    <form asp-area="Delivery"
-                                          asp-controller="Order"
-                                          asp-action="Delivered"
-                                          method="post"
-                                          onsubmit="return confirm('Xác nhận khách đã nhận đơn hàng này?');">
+                                    <button type="button"
+                                            class="delivery-btn success"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deliveredModal"
+                                            data-order-id="@order.MaHd"
+                                            data-order-code="#HD@(order.MaHd.ToString("D5"))">
 
-                                        @Html.AntiForgeryToken()
+                                        <i class="bi bi-check-circle-fill"></i>
 
+                                        Giao thành công
 
-                                        <input type="hidden"
-                                               name="id"
-                                               value="@order.MaHd" />
-
-
-                                        <button type="submit"
-                                                class="delivery-btn success">
-
-                                            <i class="bi bi-check-circle-fill"></i>
-
-                                            Giao thành công
-
-                                        </button>
-
-                                    </form>
+                                    </button>
 
 
 
@@ -1035,6 +1162,126 @@
 
 
 <!-- =========================================================
+     DELIVERED SUCCESS CONFIRM MODAL
+========================================================= -->
+
+<div class="modal fade"
+     id="deliveredModal"
+     tabindex="-1"
+     aria-labelledby="deliveredModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content delivery-success-modal">
+
+            <div class="modal-header delivery-success-modal-header">
+
+                <div>
+
+                    <span>
+                        ROSALIE COFFEE
+                    </span>
+
+                    <h5 class="modal-title"
+                        id="deliveredModalLabel">
+
+                        Xác nhận giao hàng
+
+                    </h5>
+
+                </div>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+
+            </div>
+
+
+            <form asp-area="Delivery"
+                  asp-controller="Order"
+                  asp-action="Delivered"
+                  method="post"
+                  id="deliveredForm">
+
+                @Html.AntiForgeryToken()
+
+
+                <input type="hidden"
+                       name="id"
+                       id="deliveredOrderId" />
+
+
+                <div class="modal-body delivery-success-modal-body">
+
+                    <div class="delivery-success-icon">
+
+                        <i class="bi bi-check-lg"></i>
+
+                    </div>
+
+
+                    <p class="delivery-success-message">
+
+                        Xác nhận khách hàng đã nhận đơn
+                        <strong id="deliveredOrderCode">
+                            #HD00000
+                        </strong>
+                        thành công?
+
+                    </p>
+
+
+                    <div class="delivery-success-note">
+
+                        <i class="bi bi-info-circle-fill"></i>
+
+                        <span>
+                            Sau khi xác nhận, đơn hàng sẽ được cập nhật
+                            sang trạng thái <strong>Đã giao</strong>.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer delivery-success-modal-footer">
+
+                    <button type="button"
+                            class="delivery-success-cancel"
+                            data-bs-dismiss="modal">
+
+                        Hủy
+
+                    </button>
+
+
+                    <button type="submit"
+                            class="delivery-success-confirm">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                        Xác nhận đã giao
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
      FAILED DELIVERY MODAL
 ========================================================= -->
 
@@ -1245,10 +1492,60 @@
 
         document.addEventListener(
             "DOMContentLoaded",
-            function () {
+            function() {
 
                 // =============================================
-                // ELEMENT
+                // DELIVERED SUCCESS MODAL
+                // =============================================
+
+                const deliveredModal =
+                    document.getElementById(
+                        "deliveredModal"
+                    );
+
+
+                const deliveredOrderId =
+                    document.getElementById(
+                        "deliveredOrderId"
+                    );
+
+
+                const deliveredOrderCode =
+                    document.getElementById(
+                        "deliveredOrderCode"
+                    );
+
+
+                deliveredModal?.addEventListener(
+                    "show.bs.modal",
+                    function(event) {
+
+                        const button =
+                            event.relatedTarget;
+
+
+                        if (!button) {
+                            return;
+                        }
+
+
+                        deliveredOrderId.value =
+                            button.getAttribute(
+                                "data-order-id"
+                            ) ?? "";
+
+
+                        deliveredOrderCode.textContent =
+                            button.getAttribute(
+                                "data-order-code"
+                            ) ?? "#HD00000";
+
+                    }
+                );
+
+
+                // =============================================
+                // FAILED MODAL ELEMENT
                 // =============================================
 
                 const modal =
@@ -1311,7 +1608,7 @@
 
                 modal?.addEventListener(
                     "show.bs.modal",
-                    function (event) {
+                    function(event) {
 
                         const button =
                             event.relatedTarget;
@@ -1363,7 +1660,7 @@
 
                 select?.addEventListener(
                     "change",
-                    function () {
+                    function() {
 
                         error.textContent =
                             "";
@@ -1405,7 +1702,7 @@
 
                 otherReason?.addEventListener(
                     "input",
-                    function () {
+                    function() {
 
                         if (
                             select.value === "Khác"
@@ -1426,7 +1723,7 @@
 
                 form?.addEventListener(
                     "submit",
-                    function (event) {
+                    function(event) {
 
                         error.textContent =
                             "";

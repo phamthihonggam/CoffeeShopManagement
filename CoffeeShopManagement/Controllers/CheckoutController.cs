@@ -10,6 +10,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 
+
 namespace CoffeeShopManagement.Controllers
 {
     public class CheckoutController : Controller
@@ -17,6 +18,7 @@ namespace CoffeeShopManagement.Controllers
         private readonly CoffeeShopDbContext _context;
         private readonly IConfiguration _configuration;
         private readonly IStringLocalizer<SharedResource> _localizer;
+
 
         public CheckoutController(
             CoffeeShopDbContext context,
@@ -33,13 +35,17 @@ namespace CoffeeShopManagement.Controllers
         // SESSION KEYS
         // =====================================================
 
-        private const string CARTKEY = "CART";
+        private const string CARTKEY =
+            "CART";
+
 
         private const string VOUCHER_CODE =
             "VoucherCode";
 
+
         private const string VOUCHER_DISCOUNT =
             "VoucherDiscount";
+
 
         private const string VOUCHER_MIN_ORDER =
             "VoucherMinOrder";
@@ -54,27 +60,52 @@ namespace CoffeeShopManagement.Controllers
 
 
         // =====================================================
-        // VNPAY CONFIG FROM USER SECRETS
+        // WEBSITE LOCAL
+        //
+        // VNPay trả callback về NGROK.
+        // Sau khi kiểm tra callback xong,
+        // chuyển browser về localhost để lấy lại đúng
+        // Session / Cookie đăng nhập khách hàng.
+        // =====================================================
+
+        private const string LOCAL_SITE_URL =
+            "https://localhost:7231";
+
+
+        // =====================================================
+        // VNPAY CONFIG FROM USER SECRETS / CONFIG
         // =====================================================
 
         private string VnPayTmnCode =>
-            _configuration["VNPay:TmnCode"]
+            _configuration[
+                "VNPay:TmnCode"
+            ]
             ?? throw new Exception(
-                _localizer["VnPayTmnCodeMissing"].Value
+                _localizer[
+                    "VnPayTmnCodeMissing"
+                ].Value
             );
 
 
         private string VnPayHashSecret =>
-            _configuration["VNPay:HashSecret"]
+            _configuration[
+                "VNPay:HashSecret"
+            ]
             ?? throw new Exception(
-                _localizer["VnPayHashSecretMissing"].Value
+                _localizer[
+                    "VnPayHashSecretMissing"
+                ].Value
             );
 
 
         private string VnPayReturnUrl =>
-            _configuration["VNPay:ReturnUrl"]
+            _configuration[
+                "VNPay:ReturnUrl"
+            ]
             ?? throw new Exception(
-                _localizer["VnPayReturnUrlMissing"].Value
+                _localizer[
+                    "VnPayReturnUrlMissing"
+                ].Value
             );
 
 
@@ -87,7 +118,9 @@ namespace CoffeeShopManagement.Controllers
             get
             {
                 return HttpContext.Session
-                    .GetObjectFromJson<List<CartItem>>(CARTKEY)
+                    .GetObjectFromJson<List<CartItem>>(
+                        CARTKEY
+                    )
                     ?? new List<CartItem>();
             }
         }
@@ -121,13 +154,18 @@ namespace CoffeeShopManagement.Controllers
         private void ClearVoucher()
         {
             HttpContext.Session.Remove(
-                VOUCHER_CODE);
+                VOUCHER_CODE
+            );
+
 
             HttpContext.Session.Remove(
-                VOUCHER_DISCOUNT);
+                VOUCHER_DISCOUNT
+            );
+
 
             HttpContext.Session.Remove(
-                VOUCHER_MIN_ORDER);
+                VOUCHER_MIN_ORDER
+            );
         }
 
 
@@ -140,16 +178,24 @@ namespace CoffeeShopManagement.Controllers
             int Discount,
             decimal Shipping,
             decimal Total
-        ) CalculateTotals(string? districtName = null)
+        )
+        CalculateTotals(
+            string? districtName = null)
         {
             decimal subTotal =
-                Cart.Sum(x => x.ThanhTien);
+                Cart.Sum(
+                    x => x.ThanhTien
+                );
 
 
-            // Giỏ trống
+            // =================================================
+            // GIỎ HÀNG TRỐNG
+            // =================================================
+
             if (subTotal <= 0)
             {
                 ClearVoucher();
+
 
                 return (
                     0,
@@ -162,10 +208,13 @@ namespace CoffeeShopManagement.Controllers
 
             var maKh =
                 HttpContext.Session
-                    .GetInt32("MaKH");
+                    .GetInt32(
+                        "MaKH"
+                    );
 
 
-            int discount = 0;
+            int discount =
+                0;
 
 
             // =================================================
@@ -181,12 +230,15 @@ namespace CoffeeShopManagement.Controllers
                         );
 
 
-                if (!string.IsNullOrWhiteSpace(code) &&
+                if (!string.IsNullOrWhiteSpace(code)
+                    &&
                     _validVouchers.TryGetValue(
                         code,
-                        out var voucher))
+                        out var voucher
+                    ))
                 {
-                    if (subTotal >= voucher.MinOrder)
+                    if (subTotal >=
+                        voucher.MinOrder)
                     {
                         discount =
                             voucher.Discount;
@@ -203,7 +255,10 @@ namespace CoffeeShopManagement.Controllers
             }
 
 
-            // Không giảm quá tiền hàng
+            // =================================================
+            // KHÔNG GIẢM QUÁ TIỀN HÀNG
+            // =================================================
+
             if (discount > subTotal)
             {
                 discount =
@@ -214,20 +269,12 @@ namespace CoffeeShopManagement.Controllers
 
 
             decimal afterDiscount =
-                subTotal - discount;
+                subTotal
+                - discount;
 
 
             // =================================================
-            // SHIPPING THEO KHU VỰC
-            //
-            // Sau giảm >= 150k => freeship
-            // Dưới 150k:
-            // Bình Thạnh => 15k
-            // Quận 1     => 20k
-            // Quận 3     => 20k
-            // Quận 7     => 25k
-            // Thủ Đức    => 30k
-            // Khu vực khác => 35k
+            // SHIPPING
             // =================================================
 
             decimal shipping =
@@ -259,17 +306,28 @@ namespace CoffeeShopManagement.Controllers
             decimal afterDiscount,
             string? districtName)
         {
-            // Đơn sau giảm từ 150.000đ trở lên: miễn phí ship
-            if (afterDiscount >= 150000)
+            // =================================================
+            // SAU GIẢM >= 150.000đ
+            // MIỄN PHÍ SHIP
+            // =================================================
+
+            if (afterDiscount >=
+                150000)
             {
                 return 0;
             }
 
-            // Chưa chọn quận/huyện thì chưa tính phí
-            if (string.IsNullOrWhiteSpace(districtName))
+
+            // =================================================
+            // CHƯA CHỌN QUẬN/HUYỆN
+            // =================================================
+
+            if (string.IsNullOrWhiteSpace(
+                    districtName))
             {
                 return 0;
             }
+
 
             string district =
                 RemoveVietnameseDiacritics(
@@ -278,48 +336,111 @@ namespace CoffeeShopManagement.Controllers
                 .ToLowerInvariant()
                 .Trim();
 
-            // Chuẩn hóa một số tiền tố thường gặp
-            district = district
-                .Replace("district ", "quan ")
-                .Replace("q. ", "quan ")
-                .Replace("q.", "quan ")
-                .Replace("tp. ", "")
-                .Replace("tp.", "");
+
+            // =================================================
+            // CHUẨN HÓA TÊN QUẬN
+            // =================================================
+
+            district =
+                district
+
+                    .Replace(
+                        "district ",
+                        "quan "
+                    )
+
+                    .Replace(
+                        "q. ",
+                        "quan "
+                    )
+
+                    .Replace(
+                        "q.",
+                        "quan "
+                    )
+
+                    .Replace(
+                        "tp. ",
+                        ""
+                    )
+
+                    .Replace(
+                        "tp.",
+                        ""
+                    );
 
 
             // =================================================
-            // PHÍ SHIP THEO KHU VỰC
+            // BÌNH THẠNH
             // =================================================
 
-            if (district == "binh thanh" ||
-                district == "quan binh thanh")
+            if (
+                district == "binh thanh"
+                ||
+                district ==
+                "quan binh thanh"
+            )
             {
                 return 15000;
             }
 
-            if (district == "quan 1")
+
+            // =================================================
+            // QUẬN 1
+            // =================================================
+
+            if (district ==
+                "quan 1")
             {
                 return 20000;
             }
 
-            if (district == "quan 3")
+
+            // =================================================
+            // QUẬN 3
+            // =================================================
+
+            if (district ==
+                "quan 3")
             {
                 return 20000;
             }
 
-            if (district == "quan 7")
+
+            // =================================================
+            // QUẬN 7
+            // =================================================
+
+            if (district ==
+                "quan 7")
             {
                 return 25000;
             }
 
-            if (district == "thu duc" ||
-                district == "thanh pho thu duc" ||
-                district == "quan thu duc")
+
+            // =================================================
+            // THỦ ĐỨC
+            // =================================================
+
+            if (
+                district ==
+                "thu duc"
+                ||
+                district ==
+                "thanh pho thu duc"
+                ||
+                district ==
+                "quan thu duc"
+            )
             {
                 return 30000;
             }
 
-            // Các quận/huyện khác
+
+            // =================================================
+            // KHU VỰC KHÁC
+            // =================================================
+
             return 35000;
         }
 
@@ -336,14 +457,18 @@ namespace CoffeeShopManagement.Controllers
                     NormalizationForm.FormD
                 );
 
+
             var builder =
                 new StringBuilder();
 
 
-            foreach (char c in normalized)
+            foreach (
+                char c in normalized)
             {
                 UnicodeCategory category =
-                    CharUnicodeInfo.GetUnicodeCategory(c);
+                    CharUnicodeInfo
+                        .GetUnicodeCategory(c);
+
 
                 if (category !=
                     UnicodeCategory.NonSpacingMark)
@@ -355,11 +480,20 @@ namespace CoffeeShopManagement.Controllers
 
             return builder
                 .ToString()
+
                 .Normalize(
                     NormalizationForm.FormC
                 )
-                .Replace("đ", "d")
-                .Replace("Đ", "D");
+
+                .Replace(
+                    "đ",
+                    "d"
+                )
+
+                .Replace(
+                    "Đ",
+                    "D"
+                );
         }
 
 
@@ -371,20 +505,26 @@ namespace CoffeeShopManagement.Controllers
             string? districtName = null)
         {
             var totals =
-                CalculateTotals(districtName);
+                CalculateTotals(
+                    districtName
+                );
 
 
             ViewBag.SubTotal =
                 totals.SubTotal;
 
+
             ViewBag.Discount =
                 totals.Discount;
+
 
             ViewBag.Shipping =
                 totals.Shipping;
 
+
             ViewBag.Total =
                 totals.Total;
+
 
             ViewBag.VoucherCode =
                 HttpContext.Session
@@ -406,53 +546,87 @@ namespace CoffeeShopManagement.Controllers
         {
             var maKh =
                 HttpContext.Session
-                    .GetInt32("MaKH");
+                    .GetInt32(
+                        "MaKH"
+                    );
 
 
-            // Chưa login
+            // =================================================
+            // CHƯA LOGIN
+            // =================================================
+
             if (maKh == null)
             {
-                return Json(new
-                {
-                    success = false,
+                return Json(
+                    new
+                    {
+                        success = false,
 
-                    message =
-                        _localizer["LoginRequiredForVoucher"].Value
-                });
+                        message =
+                            _localizer[
+                                "LoginRequiredForVoucher"
+                            ].Value
+                    }
+                );
             }
 
 
-            // Code không tồn tại
-            if (string.IsNullOrWhiteSpace(code) ||
+            // =================================================
+            // CODE KHÔNG TỒN TẠI
+            // =================================================
+
+            if (
+                string.IsNullOrWhiteSpace(code)
+                ||
                 !_validVouchers.TryGetValue(
                     code,
-                    out var voucher))
+                    out var voucher
+                )
+            )
             {
                 ClearVoucher();
 
-                return Json(new
-                {
-                    success = false,
 
-                    message =
-                        _localizer["VoucherInvalid"].Value
-                });
+                return Json(
+                    new
+                    {
+                        success = false,
+
+                        message =
+                            _localizer[
+                                "VoucherInvalid"
+                            ].Value
+                    }
+                );
             }
 
 
-            // Không tin discount từ JS
-            if (voucher.Discount != discount ||
-                voucher.MinOrder != minOrder)
+            // =================================================
+            // KHÔNG TIN DỮ LIỆU DISCOUNT TỪ JS
+            // =================================================
+
+            if (
+                voucher.Discount !=
+                discount
+                ||
+                voucher.MinOrder !=
+                minOrder
+            )
             {
                 ClearVoucher();
 
-                return Json(new
-                {
-                    success = false,
 
-                    message =
-                        _localizer["VoucherInfoInvalid"].Value
-                });
+                return Json(
+                    new
+                    {
+                        success = false,
+
+                        message =
+                            _localizer[
+                                "VoucherInfoInvalid"
+                            ].Value
+                    }
+                );
             }
 
 
@@ -462,48 +636,63 @@ namespace CoffeeShopManagement.Controllers
                 );
 
 
-            // Không đủ đơn tối thiểu
-            if (subTotal < voucher.MinOrder)
+            // =================================================
+            // KHÔNG ĐỦ ĐƠN TỐI THIỂU
+            // =================================================
+
+            if (subTotal <
+                voucher.MinOrder)
             {
                 ClearVoucher();
 
-                return Json(new
-                {
-                    success = false,
 
-                    message =
-                        _localizer[
-                            "VoucherMinimumOrderServer",
-                            code,
-                            $"{voucher.MinOrder:N0}đ"
-                        ].Value
-                });
+                return Json(
+                    new
+                    {
+                        success = false,
+
+                        message =
+                            _localizer[
+                                "VoucherMinimumOrderServer",
+                                code,
+                                $"{voucher.MinOrder:N0}đ"
+                            ].Value
+                    }
+                );
             }
 
 
-            // Lưu Session
+            // =================================================
+            // LƯU SESSION
+            // =================================================
+
             HttpContext.Session.SetString(
                 VOUCHER_CODE,
-                code);
+                code
+            );
 
 
             HttpContext.Session.SetInt32(
                 VOUCHER_DISCOUNT,
-                voucher.Discount);
+                voucher.Discount
+            );
 
 
             HttpContext.Session.SetInt32(
                 VOUCHER_MIN_ORDER,
-                voucher.MinOrder);
+                voucher.MinOrder
+            );
 
 
-            return Json(new
-            {
-                success = true,
+            return Json(
+                new
+                {
+                    success = true,
 
-                discount =
-                    voucher.Discount
-            });
+                    discount =
+                        voucher.Discount
+                }
+            );
         }
 
 
@@ -516,10 +705,13 @@ namespace CoffeeShopManagement.Controllers
         {
             ClearVoucher();
 
-            return Json(new
-            {
-                success = true
-            });
+
+            return Json(
+                new
+                {
+                    success = true
+                }
+            );
         }
 
 
@@ -530,34 +722,47 @@ namespace CoffeeShopManagement.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            // Giỏ trống
+            // =================================================
+            // GIỎ HÀNG TRỐNG
+            // =================================================
+
             if (!Cart.Any())
             {
                 return RedirectToAction(
                     "Index",
-                    "Cart");
+                    "Cart"
+                );
             }
 
 
-            // Phải đăng nhập để checkout
+            // =================================================
+            // PHẢI ĐĂNG NHẬP
+            // =================================================
+
             var maKh =
                 HttpContext.Session
-                    .GetInt32("MaKH");
+                    .GetInt32(
+                        "MaKH"
+                    );
 
 
             if (maKh == null)
             {
                 TempData["Toast"] =
-                    _localizer["LoginRequiredForCheckout"].Value;
+                    _localizer[
+                        "LoginRequiredForCheckout"
+                    ].Value;
+
 
                 return RedirectToAction(
                     "Login",
-                    "Account");
+                    "Account"
+                );
             }
 
 
             // =================================================
-            // USER HIỆN TẠI
+            // KHÁCH HÀNG HIỆN TẠI
             // =================================================
 
             var khachHang =
@@ -573,9 +778,11 @@ namespace CoffeeShopManagement.Controllers
             {
                 HttpContext.Session.Clear();
 
+
                 return RedirectToAction(
                     "Login",
-                    "Account");
+                    "Account"
+                );
             }
 
 
@@ -590,17 +797,21 @@ namespace CoffeeShopManagement.Controllers
                         khachHang.HoTen,
 
                     DienThoai =
-                        khachHang.DienThoai ?? "",
+                        khachHang.DienThoai
+                        ?? "",
 
                     DiaChi =
-                        khachHang.DiaChi ?? ""
+                        khachHang.DiaChi
+                        ?? ""
                 };
 
 
             PrepareCheckoutView();
 
 
-            return View(model);
+            return View(
+                model
+            );
         }
 
 
@@ -621,7 +832,8 @@ namespace CoffeeShopManagement.Controllers
             {
                 return RedirectToAction(
                     "Index",
-                    "Cart");
+                    "Cart"
+                );
             }
 
 
@@ -631,14 +843,17 @@ namespace CoffeeShopManagement.Controllers
 
             var maKh =
                 HttpContext.Session
-                    .GetInt32("MaKH");
+                    .GetInt32(
+                        "MaKH"
+                    );
 
 
             if (maKh == null)
             {
                 return RedirectToAction(
                     "Login",
-                    "Account");
+                    "Account"
+                );
             }
 
 
@@ -647,12 +862,15 @@ namespace CoffeeShopManagement.Controllers
             // =================================================
 
             string districtName =
-                Request.Form["DistrictName"]
-                    .ToString()
-                    .Trim();
+                Request.Form[
+                    "DistrictName"
+                ]
+                .ToString()
+                .Trim();
 
 
-            if (string.IsNullOrWhiteSpace(districtName))
+            if (string.IsNullOrWhiteSpace(
+                    districtName))
             {
                 ModelState.AddModelError(
                     "",
@@ -667,9 +885,14 @@ namespace CoffeeShopManagement.Controllers
 
             if (!ModelState.IsValid)
             {
-                PrepareCheckoutView(districtName);
+                PrepareCheckoutView(
+                    districtName
+                );
 
-                return View(model);
+
+                return View(
+                    model
+                );
             }
 
 
@@ -691,8 +914,11 @@ namespace CoffeeShopManagement.Controllers
             }
 
 
-            if (paymentMethod != "COD" &&
-                paymentMethod != "VNPAY")
+            if (
+                paymentMethod != "COD"
+                &&
+                paymentMethod != "VNPAY"
+            )
             {
                 paymentMethod =
                     "COD";
@@ -715,7 +941,9 @@ namespace CoffeeShopManagement.Controllers
             if (khachHang == null)
             {
                 return BadRequest(
-                    _localizer["CustomerNotFound"].Value
+                    _localizer[
+                        "CustomerNotFound"
+                    ].Value
                 );
             }
 
@@ -744,14 +972,17 @@ namespace CoffeeShopManagement.Controllers
             // =================================================
 
             var totals =
-                CalculateTotals(districtName);
+                CalculateTotals(
+                    districtName
+                );
 
 
             if (totals.Total <= 0)
             {
                 return RedirectToAction(
                     "Index",
-                    "Cart");
+                    "Cart"
+                );
             }
 
 
@@ -765,26 +996,27 @@ namespace CoffeeShopManagement.Controllers
                     MaKh =
                         khachHang.MaKh,
 
+
                     NgayDat =
                         DateTime.Now,
+
 
                     // =========================================
                     // TIỀN
                     // =========================================
 
-                    // Tiền hàng trước khi giảm
                     TamTinh =
                         totals.SubTotal,
 
-                    // Voucher
+
                     GiamGia =
                         totals.Discount,
 
-                    // Phí giao hàng
+
                     PhiGiaoHang =
                         totals.Shipping,
 
-                    // Số tiền cuối cùng khách trả
+
                     TongTien =
                         totals.Total,
 
@@ -794,13 +1026,19 @@ namespace CoffeeShopManagement.Controllers
                     // =========================================
 
                     HoTenNguoiNhan =
-                        model.HoTen?.Trim(),
+                        model.HoTen?
+                            .Trim(),
+
 
                     DienThoaiNguoiNhan =
-                        model.DienThoai?.Trim(),
+                        model.DienThoai?
+                            .Trim(),
+
 
                     DiaChiGiaoHang =
-                        model.DiaChi?.Trim(),
+                        model.DiaChi?
+                            .Trim(),
+
 
                     QuanHuyenGiaoHang =
                         districtName,
@@ -819,14 +1057,25 @@ namespace CoffeeShopManagement.Controllers
                     // =========================================
 
                     TrangThai =
-                        paymentMethod == "VNPAY"
+                        paymentMethod ==
+                        "VNPAY"
                             ? "Chờ thanh toán"
                             : "Chờ xác nhận"
                 };
 
-            // LƯU HÓA ĐƠN TRƯỚC ĐỂ SQL TẠO MaHd
-            _context.HoaDons.Add(hoaDon);
+
+            // =================================================
+            // LƯU HÓA ĐƠN
+            // SQL TẠO MaHd
+            // =================================================
+
+            _context.HoaDons.Add(
+                hoaDon
+            );
+
+
             _context.SaveChanges();
+
 
             // =================================================
             // ORDER DETAILS
@@ -845,6 +1094,7 @@ namespace CoffeeShopManagement.Controllers
                         continue;
                     }
 
+
                     var combo =
                         _context.Combos
                             .FirstOrDefault(
@@ -853,30 +1103,39 @@ namespace CoffeeShopManagement.Controllers
                                     item.MaCombo.Value
                             );
 
+
                     if (combo == null)
                     {
                         continue;
                     }
 
-                    _context.ChiTietHoaDons.Add(
-                        new ChiTietHoaDon
-                        {
-                            MaHd =
-                                hoaDon.MaHd,
 
-                            MaSp =
-                                null,
+                    _context
+                        .ChiTietHoaDons
+                        .Add(
+                            new ChiTietHoaDon
+                            {
+                                MaHd =
+                                    hoaDon.MaHd,
 
-                            MaCombo =
-                                combo.MaCombo,
 
-                            SoLuong =
-                                item.SoLuong,
+                                MaSp =
+                                    null,
 
-                            DonGia =
-                                item.DonGia
-                        }
-                    );
+
+                                MaCombo =
+                                    combo.MaCombo,
+
+
+                                SoLuong =
+                                    item.SoLuong,
+
+
+                                DonGia =
+                                    item.DonGia
+                            }
+                        );
+
 
                     continue;
                 }
@@ -894,6 +1153,7 @@ namespace CoffeeShopManagement.Controllers
                                 item.MaSP
                         );
 
+
                 if (sanPham == null)
                 {
                     continue;
@@ -906,44 +1166,56 @@ namespace CoffeeShopManagement.Controllers
                     + item.GiaTopping;
 
 
-                _context.ChiTietHoaDons.Add(
-                    new ChiTietHoaDon
-                    {
-                        MaHd =
-                            hoaDon.MaHd,
+                _context
+                    .ChiTietHoaDons
+                    .Add(
+                        new ChiTietHoaDon
+                        {
+                            MaHd =
+                                hoaDon.MaHd,
 
-                        MaSp =
-                            sanPham.MaSp,
 
-                        MaCombo =
-                            null,
+                            MaSp =
+                                sanPham.MaSp,
 
-                        SoLuong =
-                            item.SoLuong,
 
-                        DonGia =
-                            donGiaThucTe
-                    }
-                );
+                            MaCombo =
+                                null,
+
+
+                            SoLuong =
+                                item.SoLuong,
+
+
+                            DonGia =
+                                donGiaThucTe
+                        }
+                    );
             }
 
+
             _context.SaveChanges();
+
 
             // =================================================
             // VNPAY
             // =================================================
 
-            if (paymentMethod == "VNPAY")
+            if (paymentMethod ==
+                "VNPAY")
             {
                 string paymentUrl =
                     CreateVnPayPaymentUrl(
                         hoaDon.MaHd,
-                        hoaDon.TongTien ?? 0
+                        hoaDon.TongTien
+                        ?? 0
                     );
 
 
-                // KHÔNG xóa Cart ở đây
-                // vì người dùng chưa thanh toán xong.
+                // =============================================
+                // KHÔNG XÓA CART Ở ĐÂY.
+                // KHÁCH CHƯA THANH TOÁN XONG.
+                // =============================================
 
                 return Redirect(
                     paymentUrl
@@ -956,7 +1228,8 @@ namespace CoffeeShopManagement.Controllers
             // =================================================
 
             HttpContext.Session.Remove(
-                CARTKEY);
+                CARTKEY
+            );
 
 
             ClearVoucher();
@@ -968,7 +1241,8 @@ namespace CoffeeShopManagement.Controllers
                 {
                     id =
                         hoaDon.MaHd
-                });
+                }
+            );
         }
 
 
@@ -983,7 +1257,9 @@ namespace CoffeeShopManagement.Controllers
             if (amount <= 0)
             {
                 throw new Exception(
-                    _localizer["InvalidPaymentAmount"].Value
+                    _localizer[
+                        "InvalidPaymentAmount"
+                    ].Value
                 );
             }
 
@@ -1002,20 +1278,25 @@ namespace CoffeeShopManagement.Controllers
                 );
 
 
-            // Thanh toán hết hạn sau 15 phút
+            // =================================================
+            // HẾT HẠN SAU 15 PHÚT
+            // =================================================
+
             var expireDate =
-                now.AddMinutes(15)
+                now
+                    .AddMinutes(15)
                     .ToString(
                         "yyyyMMddHHmmss"
                     );
 
 
             // =================================================
-            // UNIQUE TRANSACTION REFERENCE
+            // TRANSACTION REFERENCE
             // =================================================
 
             string txnRef =
-                hoaDonId.ToString();
+                hoaDonId
+                    .ToString();
 
 
             // =================================================
@@ -1047,44 +1328,64 @@ namespace CoffeeShopManagement.Controllers
                     string>
                 {
                     ["vnp_Amount"] =
-                        ((long)(amount * 100))
+                        ((long)(
+                            amount * 100
+                        ))
                         .ToString(),
+
 
                     ["vnp_Command"] =
                         "pay",
 
+
                     ["vnp_CreateDate"] =
                         createDate,
+
 
                     ["vnp_CurrCode"] =
                         "VND",
 
+
                     ["vnp_ExpireDate"] =
                         expireDate,
+
 
                     ["vnp_IpAddr"] =
                         ipAddress,
 
+
                     ["vnp_Locale"] =
-                        CultureInfo.CurrentUICulture
-                            .TwoLetterISOLanguageName == "en"
-                                ? "en"
-                                : "vn",
+                        CultureInfo
+                            .CurrentUICulture
+                            .TwoLetterISOLanguageName
+                        == "en"
+                            ? "en"
+                            : "vn",
+
 
                     ["vnp_OrderInfo"] =
                         orderInfo,
 
+
                     ["vnp_OrderType"] =
                         "other",
+
+
+                    // =========================================
+                    // RETURN URL PHẢI LÀ NGROK
+                    // =========================================
 
                     ["vnp_ReturnUrl"] =
                         VnPayReturnUrl,
 
+
                     ["vnp_TmnCode"] =
                         VnPayTmnCode,
 
+
                     ["vnp_TxnRef"] =
                         txnRef,
+
 
                     ["vnp_Version"] =
                         "2.1.0"
@@ -1133,13 +1434,16 @@ namespace CoffeeShopManagement.Controllers
         // =====================================================
 
         private string BuildVnPayQuery(
-            SortedDictionary<string, string> parameters)
+            SortedDictionary<
+                string,
+                string> parameters)
         {
             var query =
                 new StringBuilder();
 
 
-            foreach (var item in parameters)
+            foreach (
+                var item in parameters)
             {
                 if (string.IsNullOrWhiteSpace(
                         item.Value))
@@ -1150,7 +1454,9 @@ namespace CoffeeShopManagement.Controllers
 
                 if (query.Length > 0)
                 {
-                    query.Append("&");
+                    query.Append(
+                        "&"
+                    );
                 }
 
 
@@ -1161,7 +1467,9 @@ namespace CoffeeShopManagement.Controllers
                 );
 
 
-                query.Append("=");
+                query.Append(
+                    "="
+                );
 
 
                 query.Append(
@@ -1189,14 +1497,20 @@ namespace CoffeeShopManagement.Controllers
                 ?? "127.0.0.1";
 
 
-            // localhost IPv6
+            // =================================================
+            // LOCALHOST IPV6
+            // =================================================
+
             if (ip == "::1")
             {
                 return "127.0.0.1";
             }
 
 
-            // IPv4 mapped IPv6
+            // =================================================
+            // IPV4 MAPPED IPV6
+            // =================================================
+
             if (ip.StartsWith(
                     "::ffff:",
                     StringComparison.OrdinalIgnoreCase))
@@ -1223,15 +1537,17 @@ namespace CoffeeShopManagement.Controllers
             string data)
         {
             byte[] keyBytes =
-                Encoding.UTF8.GetBytes(
-                    key
-                );
+                Encoding.UTF8
+                    .GetBytes(
+                        key
+                    );
 
 
             byte[] dataBytes =
-                Encoding.UTF8.GetBytes(
-                    data
-                );
+                Encoding.UTF8
+                    .GetBytes(
+                        data
+                    );
 
 
             using var hmac =
@@ -1247,20 +1563,24 @@ namespace CoffeeShopManagement.Controllers
 
 
             return Convert
-                .ToHexString(hash)
+                .ToHexString(
+                    hash
+                )
                 .ToLowerInvariant();
         }
 
 
         // =====================================================
         // VNPAY RETURN
+        //
+        // REQUEST NÀY ĐẾN TỪ DOMAIN NGROK
         // =====================================================
 
         [HttpGet]
         public IActionResult VnPayReturn()
         {
             // =================================================
-            // GET ALL VNP PARAMETERS
+            // 1. GET ALL VNP PARAMETERS
             // =================================================
 
             var inputData =
@@ -1269,7 +1589,8 @@ namespace CoffeeShopManagement.Controllers
                     string>();
 
 
-            foreach (var item in Request.Query)
+            foreach (
+                var item in Request.Query)
             {
                 if (item.Key.StartsWith(
                         "vnp_",
@@ -1278,13 +1599,14 @@ namespace CoffeeShopManagement.Controllers
                     inputData[
                         item.Key
                     ] =
-                        item.Value.ToString();
+                        item.Value
+                            .ToString();
                 }
             }
 
 
             // =================================================
-            // GET RECEIVED HASH
+            // 2. RECEIVED HASH
             // =================================================
 
             if (!inputData.TryGetValue(
@@ -1292,22 +1614,29 @@ namespace CoffeeShopManagement.Controllers
                     out string? receivedHash))
             {
                 return BadRequest(
-                    _localizer["VnPaySignatureNotFound"].Value
+                    _localizer[
+                        "VnPaySignatureNotFound"
+                    ].Value
                 );
             }
 
 
-            // Không dùng khi verify
+            // =================================================
+            // KHÔNG DÙNG KHI VERIFY
+            // =================================================
+
             inputData.Remove(
-                "vnp_SecureHash");
+                "vnp_SecureHash"
+            );
 
 
             inputData.Remove(
-                "vnp_SecureHashType");
+                "vnp_SecureHashType"
+            );
 
 
             // =================================================
-            // REBUILD HASH DATA
+            // 3. REBUILD HASH DATA
             // =================================================
 
             string hashData =
@@ -1324,7 +1653,7 @@ namespace CoffeeShopManagement.Controllers
 
 
             // =================================================
-            // VERIFY SIGNATURE
+            // 4. VERIFY SIGNATURE
             // =================================================
 
             if (!string.Equals(
@@ -1333,13 +1662,15 @@ namespace CoffeeShopManagement.Controllers
                     StringComparison.OrdinalIgnoreCase))
             {
                 return BadRequest(
-                    _localizer["VnPayInvalidSignature"].Value
+                    _localizer[
+                        "VnPayInvalidSignature"
+                    ].Value
                 );
             }
 
 
             // =================================================
-            // GET ORDER ID
+            // 5. GET ORDER ID
             // =================================================
 
             if (!inputData.TryGetValue(
@@ -1347,7 +1678,9 @@ namespace CoffeeShopManagement.Controllers
                     out string? txnRef))
             {
                 return BadRequest(
-                    _localizer["OrderCodeNotFound"].Value
+                    _localizer[
+                        "OrderCodeNotFound"
+                    ].Value
                 );
             }
 
@@ -1357,13 +1690,15 @@ namespace CoffeeShopManagement.Controllers
                     out int hoaDonId))
             {
                 return BadRequest(
-                    _localizer["InvalidOrderCode"].Value
+                    _localizer[
+                        "InvalidOrderCode"
+                    ].Value
                 );
             }
 
 
             // =================================================
-            // FIND ORDER
+            // 6. FIND ORDER
             // =================================================
 
             var hoaDon =
@@ -1378,38 +1713,49 @@ namespace CoffeeShopManagement.Controllers
             if (hoaDon == null)
             {
                 return NotFound(
-                    _localizer["InvoiceNotFound"].Value
+                    _localizer[
+                        "InvoiceNotFound"
+                    ].Value
                 );
             }
 
 
             // =================================================
-            // RESPONSE CODE
+            // 7. RESPONSE CODE
             // =================================================
 
             string responseCode =
                 inputData.TryGetValue(
                     "vnp_ResponseCode",
-                    out var response)
-                        ? response
-                        : "";
+                    out var response
+                )
+                    ? response
+                    : "";
 
 
             string transactionStatus =
                 inputData.TryGetValue(
                     "vnp_TransactionStatus",
-                    out var status)
-                        ? status
-                        : "";
+                    out var status
+                )
+                    ? status
+                    : "";
 
 
             // =================================================
-            // SUCCESS
+            // 8. PAYMENT SUCCESS
             // =================================================
 
-            if (responseCode == "00" &&
-                transactionStatus == "00")
+            if (
+                responseCode == "00"
+                &&
+                transactionStatus == "00"
+            )
             {
+                // =============================================
+                // CẬP NHẬT ĐƠN HÀNG
+                // =============================================
+
                 hoaDon.TrangThai =
                     "Đã thanh toán";
 
@@ -1417,26 +1763,37 @@ namespace CoffeeShopManagement.Controllers
                 _context.SaveChanges();
 
 
-                // Xóa giỏ sau khi VNPay thành công
-                HttpContext.Session.Remove(
-                    CARTKEY);
+                // =============================================
+                // QUAN TRỌNG:
+                //
+                // KHÔNG XÓA CART / VOUCHER Ở REQUEST NÀY.
+                //
+                // REQUEST HIỆN TẠI ĐANG Ở DOMAIN NGROK:
+                //
+                // radio-tamer-charging.ngrok-free.dev
+                //
+                // SESSION CỦA KHÁCH HÀNG NẰM Ở:
+                //
+                // localhost:7231
+                //
+                // NÊN PHẢI REDIRECT VỀ LOCALHOST TRƯỚC.
+                // =============================================
 
 
-                ClearVoucher();
+                string successUrl =
+                    $"{LOCAL_SITE_URL}" +
+                    $"/Checkout/Success/{hoaDonId}" +
+                    "?fromVnPay=1";
 
 
-                return RedirectToAction(
-                    nameof(Success),
-                    new
-                    {
-                        id =
-                            hoaDonId
-                    });
+                return Redirect(
+                    successUrl
+                );
             }
 
 
             // =================================================
-            // FAILED / CANCEL
+            // 9. PAYMENT FAILED / CANCEL
             // =================================================
 
             hoaDon.TrangThai =
@@ -1446,13 +1803,19 @@ namespace CoffeeShopManagement.Controllers
             _context.SaveChanges();
 
 
-            return RedirectToAction(
-                nameof(PaymentFailed),
-                new
-                {
-                    id =
-                        hoaDonId
-                });
+            // =================================================
+            // KHÔNG XÓA CART KHI THẤT BẠI
+            // ĐỂ KHÁCH CÓ THỂ THANH TOÁN LẠI
+            // =================================================
+
+            string failedUrl =
+                $"{LOCAL_SITE_URL}" +
+                $"/Checkout/PaymentFailed/{hoaDonId}";
+
+
+            return Redirect(
+                failedUrl
+            );
         }
 
 
@@ -1476,7 +1839,8 @@ namespace CoffeeShopManagement.Controllers
             {
                 return RedirectToAction(
                     "Index",
-                    "Home");
+                    "Home"
+                );
             }
 
 
@@ -1486,8 +1850,50 @@ namespace CoffeeShopManagement.Controllers
         }
 
 
-        public IActionResult Success(int id)
+        // =====================================================
+        // SUCCESS
+        // =====================================================
+
+        public IActionResult Success(
+            int id)
         {
+            // =================================================
+            // VNPAY ĐÃ THANH TOÁN THÀNH CÔNG
+            //
+            // LÚC NÀY URL ĐÃ TRỞ VỀ:
+            //
+            // https://localhost:7231
+            //
+            // NÊN SESSION KHÁCH HÀNG ĐÃ TRỞ LẠI.
+            // =================================================
+
+            string fromVnPay =
+                Request.Query[
+                    "fromVnPay"
+                ]
+                .ToString();
+
+
+            if (fromVnPay ==
+                "1")
+            {
+                // =============================================
+                // XÓA GIỎ ĐÚNG SESSION LOCALHOST
+                // =============================================
+
+                HttpContext.Session.Remove(
+                    CARTKEY
+                );
+
+
+                // =============================================
+                // XÓA VOUCHER
+                // =============================================
+
+                ClearVoucher();
+            }
+
+
             // =================================================
             // HÓA ĐƠN
             // =================================================
@@ -1495,8 +1901,11 @@ namespace CoffeeShopManagement.Controllers
             var hoaDon =
                 _context.HoaDons
                     .FirstOrDefault(
-                        x => x.MaHd == id
+                        x =>
+                            x.MaHd ==
+                            id
                     );
+
 
             if (hoaDon == null)
             {
@@ -1519,6 +1928,7 @@ namespace CoffeeShopManagement.Controllers
                             hoaDon.MaKh
                     );
 
+
             if (khachHang == null)
             {
                 return RedirectToAction(
@@ -1534,9 +1944,13 @@ namespace CoffeeShopManagement.Controllers
 
             var chiTietHoaDons =
                 _context.ChiTietHoaDons
+
                     .Where(
-                        x => x.MaHd == id
+                        x =>
+                            x.MaHd ==
+                            id
                     )
+
                     .ToList();
 
 
@@ -1544,7 +1958,8 @@ namespace CoffeeShopManagement.Controllers
                 new List<SuccessItem>();
 
 
-            foreach (var ct in chiTietHoaDons)
+            foreach (
+                var ct in chiTietHoaDons)
             {
                 // =============================================
                 // COMBO
@@ -1560,6 +1975,7 @@ namespace CoffeeShopManagement.Controllers
                                     ct.MaCombo.Value
                             );
 
+
                     if (combo != null)
                     {
                         dsSanPham.Add(
@@ -1568,20 +1984,25 @@ namespace CoffeeShopManagement.Controllers
                                 MaSP =
                                     0,
 
+
                                 TenSP =
                                     combo.TenCombo,
+
 
                                 HinhAnh =
                                     combo.HinhAnh,
 
+
                                 DonGia =
                                     ct.DonGia,
+
 
                                 SoLuong =
                                     ct.SoLuong
                             }
                         );
                     }
+
 
                     continue;
                 }
@@ -1601,6 +2022,7 @@ namespace CoffeeShopManagement.Controllers
                                     ct.MaSp.Value
                             );
 
+
                     if (sanPham != null)
                     {
                         dsSanPham.Add(
@@ -1609,14 +2031,18 @@ namespace CoffeeShopManagement.Controllers
                                 MaSP =
                                     sanPham.MaSp,
 
+
                                 TenSP =
                                     sanPham.TenSp,
+
 
                                 HinhAnh =
                                     sanPham.HinhAnh,
 
+
                                 DonGia =
                                     ct.DonGia,
+
 
                                 SoLuong =
                                     ct.SoLuong
@@ -1637,15 +2063,19 @@ namespace CoffeeShopManagement.Controllers
                     HoaDon =
                         hoaDon,
 
+
                     KhachHang =
                         khachHang,
+
 
                     SanPham =
                         dsSanPham
                 };
 
 
-            return View(model);
+            return View(
+                model
+            );
         }
     }
 }

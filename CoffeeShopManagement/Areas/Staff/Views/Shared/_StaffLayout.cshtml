@@ -3,25 +3,101 @@
         ViewData["Title"]?.ToString()
         ?? "Nhân viên";
 
+
+    // =====================================================
+    // STAFF SESSION
+    // DÙNG CHUNG SESSION ĐĂNG NHẬP ADMIN / STAFF
+    // =====================================================
+
     var staffFullName =
-        Context.Session.GetString("HoTen")
+        Context.Session.GetString("AdminFullName")
+        ?? Context.Session.GetString("HoTen")
         ?? User.Identity?.Name
-        ?? "Nhân viên";
+        ?? "Nhân viên Rosalie";
+
 
     var staffRole =
-        Context.Session.GetString("VaiTro")
-        ?? "NhanVien";
+        Context.Session.GetString("AdminRole")
+        ?? Context.Session.GetString("VaiTro")
+        ?? "Nhân viên";
+
 
     var staffUsername =
-        Context.Session.GetString("TenDangNhap")
+        Context.Session.GetString("AdminUsername")
+        ?? Context.Session.GetString("TenDangNhap")
         ?? User.Identity?.Name
-        ?? "staff";
+        ?? "nhanvien";
+
+
+    var staffAvatar =
+        Context.Session.GetString("AdminAvatar");
+
+
+    var permissionString =
+        Context.Session.GetString("AdminPermissions")
+        ?? "";
+
+
+    // =====================================================
+    // PERMISSIONS
+    // =====================================================
+
+    var permissions =
+        permissionString.Split(
+            '|',
+            StringSplitOptions.RemoveEmptyEntries
+        );
+
+
+    bool HasPermission(
+        string permission)
+    {
+        return permissions.Any(
+            x => string.Equals(
+                x,
+                permission,
+                StringComparison.OrdinalIgnoreCase
+            )
+        );
+    }
+
+
+    // =====================================================
+    // STAFF CHECK
+    // =====================================================
+
+    var isStaff =
+        staffRole.Equals(
+            "Nhân viên",
+            StringComparison.OrdinalIgnoreCase
+        )
+        ||
+        staffRole.Equals(
+            "NhanVien",
+            StringComparison.OrdinalIgnoreCase
+        )
+        ||
+        staffRole.Equals(
+            "Nhan Vien",
+            StringComparison.OrdinalIgnoreCase
+        )
+        ||
+        staffRole.Equals(
+            "Staff",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+
+    // =====================================================
+    // AVATAR FALLBACK
+    // =====================================================
 
     var avatarLetter =
         !string.IsNullOrWhiteSpace(staffFullName)
             ? staffFullName.Substring(0, 1).ToUpper()
             : "N";
 }
+
 
 <!DOCTYPE html>
 
@@ -33,6 +109,7 @@
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0" />
+
 
     <title>
         @title - Rosalie Coffee
@@ -86,6 +163,7 @@
 
 <body>
 
+
     <div class="admin-wrapper">
 
 
@@ -109,6 +187,7 @@
                 <img src="~/images/logo/logo.png"
                      alt="Rosalie Coffee" />
 
+
                 <div>
 
                     <h2>
@@ -131,125 +210,121 @@
             <nav class="admin-menu">
 
 
-                <!-- TỔNG QUAN -->
+                <!-- =============================================
+                     DASHBOARD
+                ============================================== -->
+                @if (HasPermission("DASHBOARD_VIEW"))
+                {
+                    <a asp-area="Staff"
+                       asp-controller="Dashboard"
+                       asp-action="Index"
+                       class="admin-menu-item">
 
-                <a asp-area="Staff"
-                   asp-controller="Dashboard"
-                   asp-action="Index"
-                   class="admin-menu-item">
+                        <i class="fa-solid fa-chart-pie"></i>
 
-                    <i class="fa-solid fa-chart-pie"></i>
+                        <span>
+                            Tổng quan
+                        </span>
 
-                    <span>
-                        Tổng quan
-                    </span>
-
-                </a>
-
-
-                <!-- ĐƠN HÀNG -->
-
-                <a asp-area="Staff"
-                   asp-controller="Order"
-                   asp-action="Index"
-                   class="admin-menu-item">
-
-                    <i class="fa-solid fa-receipt"></i>
-
-                    <span>
-                        Đơn hàng
-                    </span>
-
-                </a>
+                    </a>
+                }
 
 
-                <!-- SẢN PHẨM -->
+                <!-- =============================================
+                     ORDER
+                ============================================== -->
+                @if (HasPermission("ORDER_MANAGE"))
+                {
+                    <a asp-area="Staff"
+                       asp-controller="Order"
+                       asp-action="Index"
+                       class="admin-menu-item">
 
-                <a asp-area="Staff"
-                   asp-controller="Product"
-                   asp-action="Index"
-                   class="admin-menu-item">
+                        <i class="fa-solid fa-receipt"></i>
 
-                    <i class="fa-solid fa-mug-hot"></i>
+                        <span>
+                            Đơn hàng
+                        </span>
 
-                    <span>
-                        Sản phẩm
-                    </span>
-
-                </a>
-
-
-                <!-- KHÁCH HÀNG -->
-
-                <a asp-area="Staff"
-                   asp-controller="Customer"
-                   asp-action="Index"
-                   class="admin-menu-item">
-
-                    <i class="fa-solid fa-users"></i>
-
-                    <span>
-                        Khách hàng
-                    </span>
-
-                </a>
+                    </a>
+                }
 
 
-                <!-- ĐÁNH GIÁ -->
+                <!-- =============================================
+                     PRODUCT
+                ============================================== -->
+                @if (HasPermission("PRODUCT_MANAGE"))
+                {
+                    <a asp-area="Staff"
+                       asp-controller="Product"
+                       asp-action="Index"
+                       class="admin-menu-item">
 
-                <a asp-area="Staff"
-                   asp-controller="Review"
-                   asp-action="Index"
-                   class="admin-menu-item">
+                        <i class="fa-solid fa-mug-hot"></i>
 
-                    <i class="fa-solid fa-star"></i>
+                        <span>
+                            Sản phẩm
+                        </span>
 
-                    <span>
-                        Đánh giá
-                    </span>
+                    </a>
+                }
 
-                </a>
+
+                <!-- =============================================
+                     CUSTOMER
+                ============================================== -->
+                @if (HasPermission("CUSTOMER_VIEW"))
+                {
+                    <a asp-area="Staff"
+                       asp-controller="Customer"
+                       asp-action="Index"
+                       class="admin-menu-item">
+
+                        <i class="fa-solid fa-users"></i>
+
+                        <span>
+                            Khách hàng
+                        </span>
+
+                    </a>
+                }
+
+
+                <!-- =============================================
+                     REVIEW
+                     STAFF ĐƯỢC XỬ LÝ ĐÁNH GIÁ
+                ============================================== -->
+                @if (isStaff)
+                {
+                    <a asp-area="Staff"
+                       asp-controller="Review"
+                       asp-action="Index"
+                       class="admin-menu-item">
+
+                        <i class="fa-solid fa-star"></i>
+
+                        <span>
+                            Đánh giá
+                        </span>
+
+                    </a>
+                }
 
 
             </nav>
 
 
-            <!-- =================================================
-                 SIDEBAR BOTTOM
-            ================================================== -->
+            <!--
+                KHÔNG CÒN:
 
-            <div class="admin-sidebar-bottom">
+                Website
+                Đăng xuất
 
+                Ở cuối sidebar.
 
-                <a asp-area=""
-                   asp-controller="Home"
-                   asp-action="Index"
-                   class="admin-sidebar-logout">
-
-                    <i class="fa-solid fa-house"></i>
-
-                    <span>
-                        Website
-                    </span>
-
-                </a>
-
-
-                <a asp-area=""
-                   asp-controller="Account"
-                   asp-action="Logout"
-                   class="admin-sidebar-logout">
-
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-
-                    <span>
-                        Đăng xuất
-                    </span>
-
-                </a>
-
-
-            </div>
+                Xem website nằm ở Header.
+                Đăng xuất nằm trong Account Dropdown.
+            -->
 
 
         </aside>
@@ -269,7 +344,9 @@
             <header class="admin-header">
 
 
-                <!-- LEFT -->
+                <!-- =============================================
+                     LEFT
+                ============================================== -->
 
                 <div class="admin-header-left">
 
@@ -284,12 +361,16 @@
                 </div>
 
 
-                <!-- RIGHT -->
+                <!-- =============================================
+                     RIGHT
+                ============================================== -->
 
                 <div class="admin-header-right">
 
 
-                    <!-- WEBSITE -->
+                    <!-- =========================================
+                         VIEW WEBSITE
+                    ========================================== -->
 
                     <a asp-area=""
                        asp-controller="Home"
@@ -305,12 +386,16 @@
                     </a>
 
 
-                    <!-- =================================================
+                    <!-- =========================================
                          ACCOUNT DROPDOWN
-                    ================================================== -->
+                    ========================================== -->
 
                     <div class="admin-account-dropdown">
 
+
+                        <!-- =====================================
+                             ACCOUNT BUTTON
+                        ====================================== -->
 
                         <button type="button"
                                 class="admin-account admin-account-button"
@@ -319,14 +404,38 @@
                                 aria-controls="staffAccountMenu"
                                 aria-expanded="false">
 
+
+                            <!-- AVATAR -->
+
                             <div class="admin-avatar">
 
-                                <span>
-                                    @avatarLetter
-                                </span>
+                                @if (!string.IsNullOrWhiteSpace(staffAvatar))
+                                {
+                                    <img src="~/images/avatars/@staffAvatar"
+                                         alt="@staffFullName"
+                                         class="admin-avatar-image"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+
+                                    <span class="admin-avatar-fallback"
+                                          style="display:none;">
+
+                                        @avatarLetter
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="admin-avatar-fallback">
+
+                                        <i class="fa-solid fa-user-tie"></i>
+
+                                    </span>
+                                }
 
                             </div>
 
+
+                            <!-- INFO -->
 
                             <div class="admin-account-info">
 
@@ -341,28 +450,54 @@
                             </div>
 
 
+                            <!-- ARROW -->
+
                             <i class="fa-solid fa-chevron-down admin-account-arrow"></i>
 
                         </button>
 
 
-                        <!-- ACCOUNT MENU -->
+                        <!-- =====================================
+                             ACCOUNT MENU
+                        ====================================== -->
 
                         <div class="admin-account-menu"
                              id="staffAccountMenu">
 
 
+                            <!-- =================================
+                                 USER HEADER
+                            ================================== -->
+
                             <div class="admin-account-menu-header">
 
 
+                                <!-- AVATAR -->
+
                                 <div class="admin-dropdown-avatar">
 
-                                    <span>
-                                        @avatarLetter
-                                    </span>
+                                    @if (!string.IsNullOrWhiteSpace(staffAvatar))
+                                    {
+                                        <img src="~/images/avatars/@staffAvatar"
+                                             alt="@staffFullName"
+                                             class="admin-dropdown-avatar-image"
+                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+
+                                        <span style="display:none;">
+                                            @avatarLetter
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            @avatarLetter
+                                        </span>
+                                    }
 
                                 </div>
 
+
+                                <!-- USER INFO -->
 
                                 <div>
 
@@ -371,14 +506,17 @@
                                     </strong>
 
                                     <span>
-                                        @staffUsername
+                                        @($"@{staffUsername}")
                                     </span>
 
                                 </div>
 
-
                             </div>
 
+
+                            <!-- =================================
+                                 ROLE
+                            ================================== -->
 
                             <div class="admin-account-role">
 
@@ -393,45 +531,46 @@
                             </div>
 
 
+                            <!-- =================================
+                                 DIVIDER
+                            ================================== -->
+
                             <div class="admin-account-divider"></div>
 
 
-                            <a asp-area=""
-                               asp-controller="Home"
-                               asp-action="Index"
-                               class="admin-account-menu-item">
+                            <!-- =================================
+                                 LOGOUT
+                            ================================== -->
 
-                                <i class="fa-solid fa-house"></i>
+                            <form asp-area="Admin"
+                                  asp-controller="AdminLogin"
+                                  asp-action="Logout"
+                                  method="post"
+                                  class="admin-dropdown-logout-form">
 
-                                <span>
-                                    Xem website
-                                </span>
-
-                            </a>
+                                @Html.AntiForgeryToken()
 
 
-                            <a asp-area=""
-                               asp-controller="Account"
-                               asp-action="Logout"
-                               class="admin-account-menu-item">
+                                <button type="submit"
+                                        class="admin-account-menu-item admin-dropdown-logout">
 
-                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
 
-                                <span>
-                                    Đăng xuất
-                                </span>
+                                    <span>
+                                        Đăng xuất
+                                    </span>
 
-                            </a>
+                                </button>
+
+                            </form>
 
 
                         </div>
-
 
                     </div>
 
 
                 </div>
-
 
             </header>
 
@@ -463,106 +602,150 @@
 
 
     <!-- =====================================================
-         ACCOUNT DROPDOWN
+         STAFF ACCOUNT DROPDOWN
     ====================================================== -->
 
     <script>
 
             document.addEventListener(
-                    "DOMContentLoaded",
-                    function () {
+                "DOMContentLoaded",
+                function() {
 
-                            const button =
-                                    document.getElementById(
-                                            "staffAccountButton"
-                                    );
-
-                            const menu =
-                                    document.getElementById(
-                                            "staffAccountMenu"
-                                    );
+                    const button =
+                        document.getElementById(
+                            "staffAccountButton"
+                        );
 
 
-                                if (!button || !menu) {
+                    const menu =
+                        document.getElementById(
+                            "staffAccountMenu"
+                        );
+
+
+                    if (!button || !menu) {
+
+                        return;
+
+                    }
+
+
+                    // =================================================
+                    // OPEN / CLOSE
+                    // =================================================
+
+                    button.addEventListener(
+                        "click",
+                        function(event) {
+
+                            event.stopPropagation();
+
+
+                            const isOpen =
+                                menu.classList.toggle(
+                                    "show"
+                                );
+
+
+                            button.classList.toggle(
+                                "active",
+                                isOpen
+                            );
+
+
+                            button.setAttribute(
+                                "aria-expanded",
+                                isOpen
+                                    ? "true"
+                                    : "false"
+                            );
+
+                        }
+                    );
+
+
+                    // =================================================
+                    // CLICK INSIDE MENU
+                    // =================================================
+
+                    menu.addEventListener(
+                        "click",
+                        function(event) {
+
+                            event.stopPropagation();
+
+                        }
+                    );
+
+
+                    // =================================================
+                    // CLICK OUTSIDE
+                    // =================================================
+
+                    document.addEventListener(
+                        "click",
+                        function(event) {
+
+                            if (
+                                !menu.contains(event.target)
+                                &&
+                                !button.contains(event.target)
+                            ) {
+                                menu.classList.remove(
+                                    "show"
+                                );
+
+
+                                button.classList.remove(
+                                    "active"
+                                );
+
+
+                                button.setAttribute(
+                                    "aria-expanded",
+                                    "false"
+                                );
+                            }
+
+                        }
+                    );
+
+
+                    // =================================================
+                    // ESC CLOSE
+                    // =================================================
+
+                    document.addEventListener(
+                        "keydown",
+                        function(event) {
+
+                            if (event.key !== "Escape") {
 
                                 return;
 
                             }
 
 
-                                button.addEventListener(
-                                    "click",
-                                function (event) {
-
-                                    event.stopPropagation();
-
-                                                const isOpen =
-                                                        menu.classList.toggle(
-                                                        "show"
-                                        );
-
-                                                button.classList.toggle(
-                                                    "active",
-                                                isOpen
-                                    );
-
-                                                button.setAttribute(
-                                                    "aria-expanded",
-                                                        isOpen
-                                                            ? "true"
-                                                    : "false"
-                                        );
-
-                                }
+                            menu.classList.remove(
+                                "show"
                             );
 
 
-                            document.addEventListener(
-                                    "click",
-                                    function (event) {
-
-                                            if (
-                                                    !menu.contains(event.target)
-                                                    &&
-                                                    !button.contains(event.target)
-                                            ) {
-
-                                                    menu.classList.remove(
-                                                            "show"
-                                                    );
-
-                                                    button.classList.remove(
-                                                            "active"
-                                                    );
-
-                                                    button.setAttribute(
-                                                            "aria-expanded",
-                                                            "false"
-                                                    );
-
-                                        }
-
-                            }
-                    );
+                            button.classList.remove(
+                                "active"
+                            );
 
 
-                            document.addEventListener(
-                                "keydown",
-                                function (event) {
-
-                                    if (event.key !== "Escape") {
-                                        return;
-                                    }
-
-                                    menu.classList.remove("show");
-                                    button.classList.remove("active");
-                                    button.setAttribute("aria-expanded", "false");
-
-                                }
+                            button.setAttribute(
+                                "aria-expanded",
+                                "false"
                             );
 
                         }
                     );
+
+                }
+            );
 
     </script>
 

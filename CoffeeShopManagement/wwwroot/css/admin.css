@@ -769,3 +769,57 @@ body {
         object-position: center;
         border-radius: 50%;
     }
+/* =========================================================
+   ADMIN ACCOUNT DROPDOWN - EXTRA
+========================================================= */
+
+
+/* =========================================================
+   AVATAR FALLBACK
+========================================================= */
+
+.admin-avatar-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #875038;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   LOGOUT FORM
+========================================================= */
+
+.admin-dropdown-logout-form {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =========================================================
+   LOGOUT BUTTON
+========================================================= */
+
+.admin-dropdown-logout {
+    width: 100%;
+    border: none;
+    text-align: left;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+
+    .admin-dropdown-logout:hover {
+        color: #b44b46 !important;
+        background: #fbeceb !important;
+    }
+
+
+    .admin-dropdown-logout i {
+        color: #b44b46;
+    }
