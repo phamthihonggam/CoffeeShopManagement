@@ -424,3 +424,33 @@ input:-webkit-autofill:focus {
     -webkit-text-fill-color: #333;
     transition: background-color 5000s ease-in-out 0s;
 }
+/* =====================================================
+   GOOGLE RECAPTCHA
+===================================================== */
+
+.captcha-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 16px 0 14px;
+}
+
+    /* Giữ CAPTCHA cân giữa form */
+    .captcha-wrapper .g-recaptcha {
+        display: inline-block;
+    }
+
+/* Mobile */
+@media (max-width: 420px) {
+
+    .captcha-wrapper {
+        justify-content: flex-start;
+        overflow: hidden;
+    }
+
+        .captcha-wrapper .g-recaptcha {
+            transform: scale(0.90);
+            transform-origin: left center;
+        }
+}

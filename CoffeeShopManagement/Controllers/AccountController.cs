@@ -11,6 +11,8 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using CoffeeShopManagement.Services;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 
 namespace CoffeeShopManagement.Controllers
 {
@@ -19,15 +21,18 @@ namespace CoffeeShopManagement.Controllers
         private readonly CoffeeShopDbContext _context;
         private readonly EmailService _emailService;
         private readonly IStringLocalizer<SharedResource> _localizer;
+        private readonly IConfiguration _configuration;
 
         public AccountController(
             CoffeeShopDbContext context,
             EmailService emailService,
-            IStringLocalizer<SharedResource> localizer)
+            IStringLocalizer<SharedResource> localizer,
+            IConfiguration configuration)
         {
             _context = context;
             _emailService = emailService;
             _localizer = localizer;
+            _configuration = configuration;
         }
 
         // =========================================================
@@ -198,6 +203,10 @@ namespace CoffeeShopManagement.Controllers
                 model.Email = lastEmail;
             }
 
+            // Google reCAPTCHA Site Key cho giao diện Login
+            ViewBag.RecaptchaSiteKey =
+                _configuration["GoogleRecaptcha:SiteKey"];
+
             return View(model);
         }
 
@@ -210,10 +219,119 @@ namespace CoffeeShopManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(DangNhapViewModel model)
         {
+            // Giữ Site Key khi form Login được render lại do lỗi validation
+            ViewBag.RecaptchaSiteKey =
+                _configuration["GoogleRecaptcha:SiteKey"];
+
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+
+            // =====================================================
+            // GOOGLE RECAPTCHA - KIỂM TRA TOKEN
+            // =====================================================
+
+            string captchaToken =
+                Request.Form["g-recaptcha-response"].ToString();
+
+            if (string.IsNullOrWhiteSpace(captchaToken))
+            {
+                ModelState.AddModelError(
+                    "",
+                    "Vui lòng xác nhận bạn không phải robot."
+                );
+
+                return View(model);
+            }
+
+            string? secretKey =
+                _configuration["GoogleRecaptcha:SecretKey"];
+
+            if (string.IsNullOrWhiteSpace(secretKey))
+            {
+                ModelState.AddModelError(
+                    "",
+                    "reCAPTCHA chưa được cấu hình Secret Key."
+                );
+
+                return View(model);
+            }
+
+            try
+            {
+                using var httpClient = new HttpClient();
+
+                var verifyData =
+                    new Dictionary<string, string>
+                    {
+                        { "secret", secretKey },
+                        { "response", captchaToken }
+                    };
+
+                string? remoteIp =
+                    HttpContext.Connection.RemoteIpAddress?.ToString();
+
+                if (!string.IsNullOrWhiteSpace(remoteIp))
+                {
+                    verifyData.Add("remoteip", remoteIp);
+                }
+
+                using var verifyContent =
+                    new FormUrlEncodedContent(verifyData);
+
+                using var captchaResponse =
+                    await httpClient.PostAsync(
+                        "https://www.google.com/recaptcha/api/siteverify",
+                        verifyContent
+                    );
+
+                if (!captchaResponse.IsSuccessStatusCode)
+                {
+                    ModelState.AddModelError(
+                        "",
+                        "Không thể xác minh reCAPTCHA. Vui lòng thử lại."
+                    );
+
+                    return View(model);
+                }
+
+                string captchaJson =
+                    await captchaResponse.Content.ReadAsStringAsync();
+
+                var captchaResult =
+                    JsonSerializer.Deserialize<RecaptchaVerifyResponse>(
+                        captchaJson,
+                        new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        }
+                    );
+
+                if (captchaResult == null ||
+                    !captchaResult.Success)
+                {
+                    ModelState.AddModelError(
+                        "",
+                        "Xác minh reCAPTCHA không thành công. Vui lòng thử lại."
+                    );
+
+                    return View(model);
+                }
+            }
+            catch
+            {
+                ModelState.AddModelError(
+                    "",
+                    "Không thể kết nối dịch vụ reCAPTCHA. Vui lòng thử lại."
+                );
+
+                return View(model);
+            }
+
+            // =====================================================
+            // CAPTCHA HỢP LỆ -> TIẾP TỤC ĐĂNG NHẬP
+            // =====================================================
 
             string login = model.Email.Trim().ToLower();
 
@@ -1642,6 +1760,16 @@ namespace CoffeeShopManagement.Controllers
             return RedirectToAction(
                 nameof(OrderHistory)
             );
+        }
+
+
+        // =========================================================
+        // GOOGLE RECAPTCHA RESPONSE MODEL
+        // =========================================================
+
+        private sealed class RecaptchaVerifyResponse
+        {
+            public bool Success { get; set; }
         }
 
 

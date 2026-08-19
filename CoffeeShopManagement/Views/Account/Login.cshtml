@@ -43,6 +43,11 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
+    <!-- GOOGLE RECAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js"
+            async
+            defer>
+    </script>
 </head>
 
 
@@ -285,6 +290,13 @@
                     <!-- =============================================
                          LOGIN BUTTON
                     ============================================== -->
+                    
+                    <!-- GOOGLE RECAPTCHA -->
+                    <div class="captcha-wrapper">
+                        <div class="g-recaptcha"
+                             data-sitekey="@ViewBag.RecaptchaSiteKey">
+                        </div>
+                    </div>
 
                     <button type="submit"
                             id="loginBtn"
